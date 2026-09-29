@@ -51,3 +51,47 @@ loader is in-memory, and actual release compatibility remains unverified.
 **Next task:** at Aryan's request, first preserve and publish this work to the
 permanent GitHub repository and stable clone, update daily sync/push instructions,
 then finish the noted validation fix before P1.2 real-data ingestion.
+
+## 2026-09-28 — Persistent repository migration
+
+**Built:** the public GitHub repository, a stable clone, verified repository-local
+commit identity, and durable daily sync/push/recovery instructions. Updated the
+existing 8 AM Eastern task instead of creating a duplicate schedule. Preserved all
+19 project files in foundation commit `ba72f50` and seeded the review baseline with
+that same commit; no previous commits existed to rewrite or discard.
+
+**Why it matters:** project progress now survives a new Codex workspace. The
+remote history and roadmap carry the work, and the stable clone is recoverable.
+
+**Review:** `AGENTS.md`, `docs/DAILY_WORKFLOW.md`, `docs/STATUS.md`, and the roadmap.
+The foundation code and tests were preserved unchanged through the migration.
+
+**Sports concepts:** no new analytical claim. The existing EPA, dropback, and
+week-cutoff definitions remain unchanged and retain their synthetic-data limits.
+
+**Software concepts:** local versus remote state, commit identity versus login,
+upstream tracking, fast-forward synchronization, immutable commit hashes, and PR
+review. The GitHub no-reply address links work to the verified account without
+publishing a personal email address.
+
+**What to learn:** trace one commit from the original project to GitHub and the
+fresh stable clone. A successful push must be checked against the actual remote
+SHA; a local commit alone is not durable remote publication.
+
+**Three review questions:**
+
+1. How would you recover both merged and unmerged work if the local clone vanished?
+2. Why can the GitHub login succeed while a commit is still attributed incorrectly?
+3. What should a daily run do when local and remote branch histories diverge?
+
+**Verification/self-review:** original and cloned files matched, all 18 tests
+passed in the stable clone, local/remote foundation SHAs matched, and GitHub
+confirmed author and committer attribution to AryanParte. The working branch is
+`codex/opponent-intelligence-foundation`; no PR has been merged. Reviewed the sync
+instructions for user-change preservation, stale-backup risks, and missing-clone
+recovery. The filesystem grant separately required access to `.git` metadata.
+
+**Remaining/next task:** publish these migration instructions on the feature
+branch and open their PR; then address the recorded unknown-play-type validation
+finding before P1.2 real-season ingestion. Remote CI results must be checked and
+recorded separately from local test success.

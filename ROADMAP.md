@@ -3,8 +3,10 @@
 The original plan is a roughly 16-week direction at 10–15 hours/week, not a promise
 of delivery dates or a project-count target. Daily runs complete one coherent
 unit, preserve earlier work, and adjust estimates using evidence. The present
-implementation priority is Project 1. Local code and documents are authoritative;
-read the status file and latest commits before choosing work.
+implementation priority is Project 1. GitHub is the persistent source of truth:
+https://github.com/AryanParte/nfl-opponent-intelligence. Sync the canonical clone at
+`/Users/aryanparte/Documents/nfl-opponent-intelligence`, then read the status file
+and latest commits before choosing work. Do not recreate the project in new sessions.
 
 ## Project 1 — NFL Opponent Intelligence Platform
 
@@ -68,8 +70,13 @@ This is the next coherent unit. Do not begin UI or predictive work before it.
 ## GitHub and portfolio presentation (alongside Project 1)
 
 - [x] Professional project README, honest current scope, and reproducible demo.
-- [ ] Create/connect the intended GitHub repository, then push a feature branch
-      and prepare a PR where a base branch exists. Do not merge automatically.
+- [x] Create the permanent GitHub repository and preserve the initial snapshot on
+      main and `codex/opponent-intelligence-foundation`; clone the same history to
+      the stable local path and verify GitHub attributes it to AryanParte.
+- [x] Update the 8 AM Eastern automation to sync the stable clone and push verified
+      work, with explicit recovery, identity, and continuation instructions.
+- [ ] Publish the migration documentation PR against the preserved main baseline.
+      Do not merge automatically.
 - [ ] Review descriptions, topics, demo evidence, and README gaps in Aryan's
       existing two strongest engineering projects; propose focused improvements.
 - [ ] Prepare a profile README and a short engineering-focused biography using
