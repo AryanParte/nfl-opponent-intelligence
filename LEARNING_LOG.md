@@ -1,0 +1,53 @@
+# Learning log
+
+## 2026-09-28 — First working measurement pipeline
+
+**Built:** a local CSV loader, typed play records, an offense-summary CLI, source
+fingerprints, explicit cohort selection, down/distance splits, and an offline
+synthetic test suite. Added professional project documentation and a staged
+roadmap. The workspace was empty; no prior project commits existed.
+
+**Why it matters:** every later dashboard needs reliable definitions and data
+handling. An attractive chart cannot repair a wrong denominator or a report that
+includes the game it is supposed to help prepare for.
+
+**Review:** `src/opponent_intelligence/pbp.py` for input validation;
+`src/opponent_intelligence/report.py` for cohort selection and metric denominators;
+`tests/test_pipeline.py` for independent expected values; `docs/METRICS.md` for
+interpretation and limitations. Start with the README demo.
+
+**Sports concepts:** sacks and scrambles count as dropbacks; kneels, spikes,
+conversions and no-play rows are excluded; EPA measures value from the offense's
+perspective; success here means strictly positive EPA.
+
+**Software/statistical concepts:** data contracts, composite identities, duplicate
+rejection, immutable typed records, hashing exact input bytes, explicit nulls,
+separate metric denominators, regression tests, and temporal selection. A minimum
+sample warning does not constitute statistical significance.
+
+**What to learn:** manually reconcile six synthetic plays and five observed EPA
+values. Explain why the report has a 50% dropback rate, 0.04 EPA/play, and 60%
+success rate. Distinguish a tested descriptive calculation from a validated
+prediction or a production deployment.
+
+**Three review questions:**
+
+1. Why does a scramble count as a dropback even when `play_type` is `run`?
+2. Which denominators change when EPA is missing, and which must stay unchanged?
+3. Why does excluding the target week still not prove a historical forecast is
+   free of leakage from later source revisions or model training?
+
+**Verification:** 18 offline tests passed on Python 3.11.4. The command-line demo
+matched independently calculated fixture totals and repeated byte-for-byte. The
+staged diff passed Git's whitespace check. No real-season or remote CI validation
+has run yet.
+
+**Review findings and remaining issues:** all source, tests, configuration and
+documentation were inspected. Unknown `play_type` values currently enter the
+generic exclusion bucket, which could hide an upstream schema change; tighten that
+with a regression test after migration. Source labels are caller supplied, the
+loader is in-memory, and actual release compatibility remains unverified.
+
+**Next task:** at Aryan's request, first preserve and publish this work to the
+permanent GitHub repository and stable clone, update daily sync/push instructions,
+then finish the noted validation fix before P1.2 real-data ingestion.
