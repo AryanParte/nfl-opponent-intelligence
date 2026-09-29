@@ -99,3 +99,59 @@ the former outputs directory now points to the canonical repository.
 validation finding before P1.2 real-season ingestion. GitHub recognizes the CI
 workflow as active, but its Actions API returned zero workflow runs at handoff;
 remote CI remains unverified and must be checked separately from local test success.
+
+## 2026-09-29 — Explicit play-type validation
+
+**Built:** a closed vocabulary for nflverse play types, line-specific errors for
+unknown labels, and a separate `missing_play_type` exclusion count. Added seven
+regression-test methods and documented exclusion order and missingness. Synced
+the permanent clone, observed PR #1 merged, and started `codex/validate-play-types`
+from updated `origin/main` (`fac284b`). No project or history was recreated.
+
+**Why it matters:** a misspelled pass label previously disappeared as an exclusion,
+potentially changing play-call denominators without an error. The loader now
+distinguishes an invalid category from a documented exclusion or missing value.
+
+**Review:** `src/opponent_intelligence/pbp.py` (validation before filtering),
+`tests/test_pipeline.py` (independent category expectations and failure cases),
+`docs/DATA_CONTRACT.md` (accepted labels and precedence), and `docs/METRICS.md`.
+
+**Sports concepts:** sacks remain pass plays and scrambles remain run-shaped
+dropbacks. Documented special-teams, kneel/spike, and no-play types stay excluded.
+The upstream dictionary permits missing types on end-of-play rows, but this
+adapter does not infer why an individual value is missing. No real NFL observations
+or new performance claims were introduced.
+
+**Software/statistical concepts:** schema drift, explicit category validation,
+auditable missingness, identity checks before filtering, red/green regression
+tests, and all-or-nothing CLI output. Missing play type excludes a row from the
+eligible cohort; missing EPA on an eligible play still preserves its play-call
+denominator. These are different data-quality situations.
+
+**What to learn:** trace how a bad label could bias a rate if silently removed.
+Explain why missing-type rows are counted without imputing a category, and why
+the metric totals remain unchanged for valid input. Find the exact error line in
+a two-row synthetic input whose last row contains a typo.
+
+**Three review questions:**
+
+1. How could silently excluding a misspelled pass change the reported dropback rate?
+2. Why do missing play type and missing EPA affect different denominators?
+3. What exit status and stdout should the CLI produce when a valid row is followed
+   by an invalid play type, and which test verifies that behavior?
+
+**Verification/self-review:** all 18 baseline tests passed before changes. The new
+targeted tests then failed against the original loader (21 failing assertions
+across subtests and the CLI), demonstrating the regression. All 25 tests now pass
+on Python 3.11.9, 3.12.7, and 3.13.2. Reviewed category coverage against the nflreadr
+dictionary and nflfastR field construction on 2026-09-29. The self-review added a
+mixed-row reconciliation test to verify both the exclusion totals and unchanged
+metric denominators. Identity validation, documented missing types, strict case
+handling, and no partial CLI output were checked explicitly.
+
+**Remaining/next task:** verify the completed 2024 nflverse release and dataset
+terms, then build the bounded, cached fetcher and immutable source manifest with
+offline tests (P1.2). Real-release compatibility, temporal source availability,
+and downstream predictive validity remain unverified. At run start no GitHub
+Actions runs existed despite enabled repository settings; check remote CI after
+publication and keep its result distinct from the passing local version matrix.

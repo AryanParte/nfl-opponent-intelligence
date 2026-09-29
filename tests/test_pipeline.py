@@ -121,6 +121,86 @@ class PipelineTests(unittest.TestCase):
                 with self.assertRaisesRegex(DataValidationError, "CSV line 2:"):
                     load_csv(self.modified_csv(**change))
 
+    def test_unknown_play_types_fail_with_line_and_value(self):
+        for play_type in ("passs", "PASS", "Run", "sack", "kick_of", "unknown", "0", "N/A"):
+            with self.subTest(play_type=play_type):
+                with self.assertRaisesRegex(DataValidationError, "CSV line 2: play_type:") as error:
+                    load_csv(self.modified_csv(play_type=play_type))
+                self.assertIn(repr(play_type), str(error.exception))
+
+    def test_unknown_play_type_cannot_hide_behind_exclusions(self):
+        for change in ({"two_point_attempt": "1"}, {"qb_kneel": "1"}, {"qb_spike": "1"},
+                       {"season": "2025"}, {"week": "18"}, {"posteam": "ATL", "defteam": "CAR"}):
+            with self.subTest(change=change):
+                with self.assertRaisesRegex(DataValidationError, "play_type:"):
+                    load_csv(self.modified_csv(play_type="new_upstream_type", **change))
+
+    def test_documented_non_run_pass_types_remain_valid_exclusions(self):
+        # An independent contract list, not the implementation's allowlist.
+        for play_type in ("punt", "field_goal", "kickoff", "extra_point",
+                          "qb_kneel", "qb_spike", "no_play"):
+            with self.subTest(play_type=play_type):
+                dataset = load_csv(self.modified_csv(
+                    play_type=f" {play_type} ", down="", ydstogo="", posteam="", defteam="",
+                    epa="", qb_dropback="", qb_kneel="", qb_spike="", two_point_attempt="",
+                ))
+                self.assertEqual(dataset.plays, ())
+                self.assertEqual(dataset.input_rows, 1)
+                self.assertEqual(dataset.exclusions, {"non_run_pass": 1})
+
+    def test_missing_play_types_have_separate_audited_exclusions(self):
+        for play_type in ("", " ", "NA", "na", "NaN", " null "):
+            with self.subTest(play_type=play_type):
+                self.dataset = load_csv(self.modified_csv(
+                    play_type=play_type, down="", ydstogo="", posteam="", defteam="",
+                    epa="", qb_dropback="", qb_kneel="", qb_spike="", two_point_attempt="",
+                ))
+                report = self.report()
+                self.assertEqual(report["data_quality"], {
+                    "input_rows": 1, "eligible_rows_all_teams": 0,
+                    "eligible_rows_outside_cohort": 0,
+                    "excluded_rows_by_reason": {"missing_play_type": 1},
+                })
+                self.assertEqual(report["overall"]["plays"], 0)
+                self.assertIsNone(report["overall"]["dropback_rate"])
+                self.assertIsNone(report["overall"]["epa_per_play"])
+                self.assertIsNone(report["overall"]["success_rate"])
+
+    def test_play_type_filter_does_not_bypass_identity_validation(self):
+        for play_type in ("no_play", "qb_kneel", "NA"):
+            with self.subTest(play_type=play_type):
+                with self.assertRaisesRegex(DataValidationError, "game_id must be present"):
+                    load_csv(self.modified_csv(play_type=play_type, game_id=""))
+                path = self.modified_csv(play_type=play_type, play_id="1.0")
+                with FIXTURE.open(newline="") as source, path.open("a", newline="") as handle:
+                    row = next(csv.DictReader(source))
+                    csv.DictWriter(handle, fieldnames=REQUIRED_COLUMNS).writerow(row)
+                with self.assertRaisesRegex(DataValidationError, "CSV line 3: duplicate play key"):
+                    load_csv(path)
+
+    def test_recognized_exclusions_do_not_change_eligible_metrics(self):
+        before = self.report()
+        with FIXTURE.open(newline="") as source:
+            rows = list(csv.DictReader(source))
+        rows.extend((dict(rows[0], play_id="999", play_type="NA"),
+                     dict(rows[0], play_id="1000", play_type="field_goal")))
+        path = self.modified_csv()
+        with path.open("w", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=REQUIRED_COLUMNS)
+            writer.writeheader()
+            writer.writerows(rows)
+        self.dataset = load_csv(path)
+        after = self.report()
+        self.assertEqual(after["overall"], before["overall"])
+        self.assertEqual(after["situations"], before["situations"])
+        self.assertEqual(after["data_quality"], {
+            "input_rows": 16, "eligible_rows_all_teams": 10,
+            "eligible_rows_outside_cohort": 4,
+            "excluded_rows_by_reason": {"kneel": 1, "non_run_pass": 2,
+                                        "spike": 1, "two_point_attempt": 1,
+                                        "missing_play_type": 1},
+        })
+
     def test_duplicate_keys_fail_even_when_integer_serialization_differs(self):
         path = self.modified_csv(play_id="1.0")
         with path.open("a", newline="") as handle:
@@ -166,6 +246,21 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(failed.returncode, 2)
         self.assertEqual(failed.stdout, "")
         self.assertIn("error:", failed.stderr)
+
+    def test_cli_rejects_unknown_play_type_after_valid_rows(self):
+        path = self.modified_csv()
+        with FIXTURE.open(newline="") as source, path.open("a", newline="") as handle:
+            row = next(csv.DictReader(source))
+            row.update(play_id="999", play_type="passs")
+            csv.DictWriter(handle, fieldnames=REQUIRED_COLUMNS).writerow(row)
+        command = [sys.executable, "-m", "opponent_intelligence", "--csv", str(path),
+                   "--team", "CAR", "--season", "2024", "--before-week", "3",
+                   "--source-label", "Synthetic test fixture"]
+        failed = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(failed.returncode, 2)
+        self.assertEqual(failed.stdout, "")
+        self.assertIn("CSV line 3: play_type:", failed.stderr)
+        self.assertIn("'passs'", failed.stderr)
 
 
 if __name__ == "__main__":

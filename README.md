@@ -44,7 +44,9 @@ excluded. It produces these hand-checkable totals:
 
 JSON also includes down/distance splits, all input exclusion counts, the exact
 input SHA-256, and warnings. Empty rates are `null`. Invalid schema, malformed
-values, and duplicate play identities cause an error rather than silent repair.
+values, unknown play types, and duplicate play identities cause an error rather
+than silent repair. Recognized missing play types are excluded with a separate
+audit count; see the [input contract](docs/DATA_CONTRACT.md).
 
 ## The football decision
 
