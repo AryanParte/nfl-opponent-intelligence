@@ -9,6 +9,8 @@ football findings, predictive model, web interface, or production deployment exi
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/opponent-intelligence-foundation`
+- Open review: [PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1),
+  published and not merged.
 - Preserved foundation commit: `ba72f50700ff77f031e738f64c55217ffd5ad59c`
 - Review base: `main`, initially seeded with that exact preserved snapshot.
 - Author/committer: `Aryan Parte <134340600+AryanParte@users.noreply.github.com>`;
@@ -39,7 +41,9 @@ PYTHONPATH=src python3 -m opponent_intelligence \
 
 Both commands passed locally. The fixture yields six cohort plays, three
 dropbacks, five observed EPA values, 0.04 EPA/play, and 0.6 success rate. CI is
-configured for Python 3.11/3.12/3.13 but has not run remotely yet.
+configured for Python 3.11/3.12/3.13. GitHub recognizes the workflow as active, but
+its Actions API returned zero workflow runs at migration handoff. Remote CI is
+therefore unverified; local test success is not a remote CI result.
 
 ## Follow-up
 

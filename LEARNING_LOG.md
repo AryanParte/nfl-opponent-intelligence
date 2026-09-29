@@ -87,11 +87,15 @@ SHA; a local commit alone is not durable remote publication.
 **Verification/self-review:** original and cloned files matched, all 18 tests
 passed in the stable clone, local/remote foundation SHAs matched, and GitHub
 confirmed author and committer attribution to AryanParte. The working branch is
-`codex/opponent-intelligence-foundation`; no PR has been merged. Reviewed the sync
-instructions for user-change preservation, stale-backup risks, and missing-clone
-recovery. The filesystem grant separately required access to `.git` metadata.
+`codex/opponent-intelligence-foundation`, published in
+[PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1); no PR has
+been merged. Reviewed the complete migration diff and sync instructions for
+user-change preservation, stale-backup risks, and missing-clone recovery. The
+filesystem grant separately required access to `.git` metadata. The original
+checkout was moved intact into the dated task's `work/migration-backup` directory;
+the former outputs directory now points to the canonical repository.
 
-**Remaining/next task:** publish these migration instructions on the feature
-branch and open their PR; then address the recorded unknown-play-type validation
-finding before P1.2 real-season ingestion. Remote CI results must be checked and
-recorded separately from local test success.
+**Remaining/next task:** migration is complete. Address the recorded unknown-play-type
+validation finding before P1.2 real-season ingestion. GitHub recognizes the CI
+workflow as active, but its Actions API returned zero workflow runs at handoff;
+remote CI remains unverified and must be checked separately from local test success.

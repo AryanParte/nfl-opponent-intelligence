@@ -22,6 +22,8 @@ and latest commits before choosing work. Do not recreate the project in new sess
 
 ### P1.2 — Reproducible real-data ingestion (NEXT)
 
+- [ ] First address the recorded loader review finding: reject unrecognized
+      `play_type` values explicitly, with regression tests, before real ingestion.
 - [ ] Verify a completed-season nflverse CSV release and its dataset terms using
       primary sources; start with 2024 to keep the example fixed.
 - [ ] Add an explicit fetch command with bounded timeout/retries and local cache.
@@ -75,8 +77,9 @@ This is the next coherent unit. Do not begin UI or predictive work before it.
       the stable local path and verify GitHub attributes it to AryanParte.
 - [x] Update the 8 AM Eastern automation to sync the stable clone and push verified
       work, with explicit recovery, identity, and continuation instructions.
-- [ ] Publish the migration documentation PR against the preserved main baseline.
-      Do not merge automatically.
+- [x] Publish the migration documentation as
+      [PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1)
+      against the preserved main baseline. It remains open; do not merge automatically.
 - [ ] Review descriptions, topics, demo evidence, and README gaps in Aryan's
       existing two strongest engineering projects; propose focused improvements.
 - [ ] Prepare a profile README and a short engineering-focused biography using

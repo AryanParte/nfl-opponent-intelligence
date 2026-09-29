@@ -51,6 +51,12 @@ the foundation commit's author and committer to AryanParte; inspect attribution
 after publication if anything changes. Do not change global settings or backdate
 commits to manufacture activity.
 
+Correct attribution and contribution-graph eligibility are separate. Feature-branch
+commits normally count after they reach the default branch, and GitHub may take
+up to 24 hours to update the graph. See GitHub's
+[contribution guidance](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/troubleshooting-missing-contributions).
+Do not bypass PR review just to create contribution activity.
+
 Stage only reviewed files, commit a clear meaningful unit on the feature branch,
 and push it. Verify the remote branch SHA equals the local SHA. Open or update the
 appropriate PR against main, attach it to the task, and inspect CI. Never merge
