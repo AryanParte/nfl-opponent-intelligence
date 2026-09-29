@@ -13,7 +13,9 @@ Before a commit, inspect the complete diff and run the relevant verification.
 Update the roadmap, status, and learning log. Preserve raw input provenance, do
 not commit downloaded season files or secrets, and label all synthetic examples.
 
-Work on a `codex/` branch. No direct main/master commits, automatic merges, or
-force pushes. A repository remote and review base have not been configured yet;
-the initial feature branch is local. Once configured, inspect existing PRs and
-publish a coherent branch for review without merging it.
+The canonical repository is https://github.com/AryanParte/nfl-opponent-intelligence.
+Fetch origin and reconcile the existing branch before selecting work. Work on a
+`codex/` branch, push verified commits, and create/update its PR against main.
+No direct main/master commits, automatic merges, or force pushes. The one-time
+migration seeded main with the preserved foundation snapshot; later work requires
+review. See [daily workflow](docs/DAILY_WORKFLOW.md) for identity and recovery rules.

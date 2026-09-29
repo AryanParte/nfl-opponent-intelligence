@@ -1,9 +1,20 @@
 # Daily engineering instructions
 
-Read README.md, ROADMAP.md, docs/STATUS.md, and the latest LEARNING_LOG.md entry
-before changing code. Then inspect the actual branch, recent commits, working
-tree, tests, and configured remote work. Documentation is durable context, not
-proof that unverified work has passed.
+The persistent source of truth is https://github.com/AryanParte/nfl-opponent-intelligence.
+The canonical clone is `/Users/aryanparte/Documents/nfl-opponent-intelligence`.
+Always use this clone even when a session starts in a dated Codex directory.
+
+First verify the Git root and origin, inspect local changes, and fetch origin.
+Reconcile the working branch safely with its upstream before selecting work.
+Then read README.md, ROADMAP.md, docs/STATUS.md, and the latest LEARNING_LOG.md
+entry; inspect recent commits, tests, open PRs, reviews, and CI. Documentation is
+durable context, not proof that unverified work has passed.
+
+Never recreate the GitHub repository, initialize a replacement project, or work
+from the old task outputs. If the canonical clone is missing, recover by cloning
+the existing remote's full history. If filesystem access is denied, request the
+stable directory and its `.git` metadata rather than substituting a new workspace.
+See docs/DAILY_WORKFLOW.md for the exact sync, recovery, and publishing procedure.
 
 ## Scope and priorities
 
@@ -36,9 +47,14 @@ proof that unverified work has passed.
   to main/master, enable auto-merge, force-push, or discard user changes.
 - Stage explicit reviewed paths and commit meaningful verified work. Do not make
   filler commits, empty progress commits, or repeatedly rewrite history.
-- Inspect existing branches/PRs before creating another. Once a remote exists,
-  use a PR for review; never fabricate a remote URL or claim a local commit is
-  published. The initial repository has no remote or main branch.
+- Inspect existing branches/PRs before creating another. Continue the unmerged
+  working branch; once merged, begin the next unit from updated `origin/main`.
+- Commit as `Aryan Parte <134340600+AryanParte@users.noreply.github.com>` using
+  repository-local configuration. Verify effective author and committer identity.
+- Push completed commits to origin and verify the remote branch SHA matches the
+  local SHA. Create or update the relevant PR without merging. Report publication
+  failures precisely; retain local commits for retry. No fabricated contribution
+  history, backdating, or global identity changes.
 - On this host `/Library/Developer/CommandLineTools/usr/bin/git` works if the
   `/usr/bin/git` Xcode shim fails. Do not change global developer settings.
 
@@ -56,7 +72,7 @@ limitations, and the exact next unit. Append a dated entry to LEARNING_LOG.md:
 - tests run and findings from the complete-diff review;
 - remaining issues and recommended next task.
 
-If blocked, record the specific cause and a useful next step. Continue independent
-in-scope work if possible. Do not repeat identical logs or commits on unchanged
-blocked checks; amend the existing dated blocker entry only when there is new
-information. Meaningful completion is the measure of a run, not line count.
+If blocked, record the specific cause and a useful next step in that run's concise
+dated log entry. Continue independent in-scope work if possible. Do not manufacture
+activity commits or send repeated notifications for an unchanged blocker.
+Meaningful completion is the measure of a run, not line count.

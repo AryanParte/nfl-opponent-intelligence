@@ -9,6 +9,10 @@ edge-case tests work. Real-season ingestion, a web interface, opponent adjustmen
 and deployment are still on the [roadmap](ROADMAP.md). This is an independent
 portfolio project, with no NFL or team affiliation.
 
+[GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
+source of truth. The daily workflow continues existing branches and the roadmap,
+with tests, self-review, learning notes, and pushed commits for each completed unit.
+
 ## Try it
 
 Requires Python 3.11 or later. The current runtime and tests use only the standard
@@ -76,6 +80,7 @@ season. There is currently no database, external API dependency, or trained mode
 - [Metric definitions](docs/METRICS.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)
+- [Daily sync, commit identity, and recovery](docs/DAILY_WORKFLOW.md)
 
-The GitHub Actions workflow is ready for publication. It has not run remotely;
-local verification results are recorded in the status and learning log.
+The GitHub Actions workflow is committed. Local verification and observed remote
+CI results are recorded separately in the status and learning log.
