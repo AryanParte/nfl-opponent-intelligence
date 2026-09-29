@@ -15,6 +15,10 @@ REQUIRED_COLUMNS = (
     "two_point_attempt", "epa",
 )
 MISSING = {"", "NA", "NAN", "NULL"}
+KNOWN_PLAY_TYPES = frozenset({
+    "run", "pass", "punt", "field_goal", "kickoff", "extra_point",
+    "qb_kneel", "qb_spike", "no_play",
+})
 
 
 class DataValidationError(ValueError):
@@ -108,6 +112,12 @@ def load_csv(path: Path) -> Dataset:
                 raise DataValidationError(f"duplicate play key {key!r}")
             seen.add(key)
             play_type = values["play_type"]
+            # Upstream administrative rows may have no type; audit them separately.
+            if play_type.upper() in MISSING:
+                exclusions["missing_play_type"] += 1
+                continue
+            if play_type not in KNOWN_PLAY_TYPES:
+                raise DataValidationError(f"play_type: unrecognized value {play_type!r}")
             if play_type not in {"run", "pass"}:
                 exclusions["non_run_pass"] += 1
                 continue

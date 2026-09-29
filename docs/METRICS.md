@@ -16,6 +16,12 @@ in the upstream data remain included. See
 [nflfastR's guide](https://nflfastr.com/articles/beginners_guide.html) and
 [upstream field construction](https://github.com/nflverse/nflfastR/blob/master/R/helper_add_nflscrapr_mutations.R).
 
+Recognized missing play types are excluded and counted as `missing_play_type`;
+they do not increase play-call or EPA denominators. Unknown named types invalidate
+the input instead of silently becoming exclusions. See the
+[input contract](DATA_CONTRACT.md#play-type-validation-and-exclusion-order) for
+accepted categories, missing markers, and exclusion precedence.
+
 ## Definitions
 
 - **Plays:** count of the eligible cohort, regardless of EPA availability.

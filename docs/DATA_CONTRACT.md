@@ -15,7 +15,7 @@ provenance; retrieval/version manifests are the next milestone.
 | `game_id`, `play_id` | Unique pair across every row; nonempty game ID and integral play ID. Duplicate records fail even if IDs serialize as `1` versus `1.0`. |
 | `season`, `season_type`, `week` | NFL season year; REG/POST; nflverse week 1–22. January games belong to the source season, not necessarily their calendar year. |
 | `posteam`, `defteam` | Distinct uppercase abbreviations of 2–3 ASCII letters. This validates shape, not the historical franchise identity. |
-| `play_type` | Determines whether a row is in the supported run/pass cohort. |
+| `play_type` | A documented lowercase nflverse category or an explicit missing marker; unknown values fail. See the exclusion policy below. |
 | `down`, `ydstogo` | Integral down 1–4 and yards to go 0–100; not imputed. |
 | `qb_dropback` | Explicit 0/1 indicator; pass rows require 1. A run with 1 is treated as a scramble/dropback. |
 | `qb_kneel`, `qb_spike`, `two_point_attempt` | Explicit 0/1 indicators used to exclude special situations. |
@@ -26,11 +26,39 @@ accepted and ignored. Duplicate headers and wrong-width rows fail. Integral
 numeric strings like `1.0` are accepted. Row validation errors include CSV line
 numbers, and malformed rows are never silently dropped.
 
-Every row must have an identity. Non-run/pass rows may have blank down, team, EPA,
-and other fields; those are not parsed after exclusion. Two-point attempts are
-excluded before validating down, which is often missing for conversions. Raw
-source exclusion counts and the number outside the requested cohort remain in the
-report; an individual row has exactly one exclusion reason.
+Every row must have an identity. Recognized non-run/pass and missing-type rows may
+have blank down, team, EPA, and other fields; those are not parsed after exclusion.
+Two-point attempts are excluded before validating down, which is often missing
+for conversions. Raw source exclusion counts and the number outside the requested
+cohort remain in the report; an individual row has exactly one exclusion reason.
+
+## Play-type validation and exclusion order
+
+The [upstream dictionary](https://nflreadr.nflverse.com/articles/dictionary_pbp.html)
+and [field construction](https://github.com/nflverse/nflfastR/blob/master/R/helper_add_nflscrapr_mutations.R)
+were checked on 2026-09-29. This is a fixed adapter contract, not a promise to accept
+new upstream categories silently. Leading/trailing whitespace is trimmed. Named
+categories are case-sensitive: `PASS`, `sack`, and typos are errors, not aliases.
+
+| Input | Loader behavior |
+| --- | --- |
+| `run`, `pass` | Continue with conversion/kneel/spike flags and eligible-play validation. |
+| `punt`, `field_goal`, `kickoff`, `extra_point`, `qb_kneel`, `qb_spike`, `no_play` | Exclude under `non_run_pass`, preserving the existing classification. |
+| Blank, `NA`, `NaN`, `null` (missing markers are case-insensitive) | Exclude under `missing_play_type`, not the non-run/pass bucket. |
+| Any other value | Fail the entire load with CSV line number and offending value. The CLI exits with status 2 and emits no report. |
+
+Identity/duplicate checks run first, including on excluded rows. Play-type checks
+precede situation flags and the report's team/season/week filters; an unknown
+category cannot disappear simply because that row would be outside the cohort.
+The upstream dictionary permits missing types for end-of-play rows. The adapter
+does not infer the cause of missingness or impute a play type from other fields.
+Missing-type counts are source-wide and do not add observations to any denominator.
+
+For a `run`/`pass` row, the flag exclusion order remains conversion, kneel, spike.
+A `qb_kneel`/`qb_spike` type is already excluded by type, so its flags are not read.
+Exclusion-reason keys are data-dependent; consumers should read the returned map
+rather than assume a fixed list. Audit a new upstream category before extending
+this contract. Real-season compatibility is still a separate validation gate.
 
 ## Fixture provenance
 
