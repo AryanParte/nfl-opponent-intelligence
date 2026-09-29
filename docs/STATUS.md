@@ -11,6 +11,8 @@ predictive model, web interface, or production deployment exist.
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/validate-play-types`, started from updated `origin/main`
   at `fac284b` after observing the migration PR was merged.
+- Current review: [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2).
+  Implementation commit `19b5a09` is pushed and attributed to AryanParte.
 - Migration review: [PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1),
   merged on 2026-09-29. Inspect current open PRs before selecting new work.
 - Preserved foundation commit: `ba72f50700ff77f031e738f64c55217ffd5ad59c`
@@ -48,10 +50,13 @@ documented non-run/pass labels, missing-type counts, identity checks, unchanged
 cohort metrics, and CLI failure with no partial output. The new regression tests
 failed against the original loader before implementation.
 
-The offline suite also passed using `python3.11` and `python3.12`. CI is configured
-for Python 3.11/3.12/3.13. At the start of this run GitHub's Actions API returned
-zero runs, even though repository Actions are enabled and all actions are allowed.
-Remote CI has not yet been verified; do not infer remote success from local tests.
+The offline suite also passed using `python3.11` and `python3.12`. GitHub's
+[manual verification run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36566444248)
+passed on implementation commit `19b5a09`, running the suite and demo on Python
+3.11/3.12/3.13. Repository Actions are enabled and all actions are allowed, but no
+automatic run appeared after pushing or opening the PR. The existing workflow was
+dispatched manually; no repository settings or workflow code were changed. Its
+success verifies execution, not automatic triggering. Recheck triggers next run.
 
 ## Current data contract
 

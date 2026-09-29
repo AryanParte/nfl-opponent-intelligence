@@ -149,9 +149,17 @@ mixed-row reconciliation test to verify both the exclusion totals and unchanged
 metric denominators. Identity validation, documented missing types, strict case
 handling, and no partial CLI output were checked explicitly.
 
+**Publication/CI:** implementation commit `19b5a09` was pushed to the existing
+GitHub repository with matching local/remote SHAs and confirmed AryanParte author
+and committer attribution. [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2)
+is open, not merged. No automatic CI appeared after the push/PR, despite enabled
+repository settings. Manually dispatching the existing Verify workflow succeeded:
+[run 36566444248](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36566444248)
+passed the test suite and synthetic demo on Python 3.11/3.12/3.13. No repository
+settings or workflow code were changed to obtain this result.
+
 **Remaining/next task:** verify the completed 2024 nflverse release and dataset
 terms, then build the bounded, cached fetcher and immutable source manifest with
 offline tests (P1.2). Real-release compatibility, temporal source availability,
-and downstream predictive validity remain unverified. At run start no GitHub
-Actions runs existed despite enabled repository settings; check remote CI after
-publication and keep its result distinct from the passing local version matrix.
+and downstream predictive validity remain unverified. Recheck automatic CI
+triggering on future pushes; a successful manual run does not explain its absence.
