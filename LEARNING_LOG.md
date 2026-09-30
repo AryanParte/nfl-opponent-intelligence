@@ -269,7 +269,15 @@ calculations within `1e-12`. Tests exercise corruption, mutation between reads,
 wrong seasons, conflicting metadata, same-count/wrong-identity disagreement, and
 no partial CLI output. Review preserved identity-first validation precedence and
 the original synthetic contract. Raw data was not edited or committed; the small
-derived audit records its source and limits. Remote CI is checked after publishing.
+derived audit records its source and limits.
+
+**Publication:** implementation `24f61c6` is pushed with matching local/remote SHAs
+and confirmed AryanParte author/committer attribution.
+[PR #4](https://github.com/AryanParte/nfl-opponent-intelligence/pull/4) is open and
+unmerged. [Implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36786252031)
+passed the suite and synthetic demo on all three Python versions. Manual dispatch
+was needed because no automatic run appeared. The PR description records final-head
+verification after this documentation update.
 
 **Remaining/next task:** P1.2 is complete for this snapshot. Add P1.3's defense-side
 cohort with explicit offense-perspective EPA and time-bound tests. Independent

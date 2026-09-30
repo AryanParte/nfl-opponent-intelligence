@@ -13,6 +13,9 @@ validation, external gamebook reconciliation, a web interface, or deployment.
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/audit-real-pbp-snapshot`, started from updated `origin/main`
   at `78623c6` after observing PR #3 was merged. Continue its PR while unmerged.
+- Current review: [PR #4](https://github.com/AryanParte/nfl-opponent-intelligence/pull/4),
+  open and unmerged. Implementation `24f61c6` is pushed with matching local/remote
+  SHAs and confirmed AryanParte author/committer attribution.
 - Previous acquisition review: [PR #3](https://github.com/AryanParte/nfl-opponent-intelligence/pull/3),
   merged at `78623c6`. No open PRs or review feedback remained at this run's start.
 - Previous review: [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2),
@@ -58,11 +61,12 @@ new snapshot integration tests cover verified provenance, corruption/mutation,
 season matching, raw/adapter reconciliation, missingness, empty data, and CLI
 errors. No real dataset is required by the test suite.
 
-The last observed CI before this unit is the successful
-[PR #3 final-head run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36651429362)
-on `75e67f7`. Earlier pushes needed manual dispatch because no automatic run
-appeared. This branch needs its own remote CI after publication; local success is
-not remote evidence. No workflow code or repository settings were changed.
+The [PR #4 implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36786252031)
+passed on `24f61c6`: all three Python versions succeeded in the offline regression
+suite and synthetic demo. No automatic run appeared after push/PR creation, so the
+existing workflow was dispatched manually. Final-head verification after this
+documentation update is recorded in the PR description. No workflow code,
+repository settings, or daily automation were changed.
 
 ## Raw acquisition evidence
 
