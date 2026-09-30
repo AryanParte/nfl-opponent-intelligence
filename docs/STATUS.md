@@ -13,6 +13,10 @@ or production deployment exist.
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/immutable-pbp-snapshots`, started from updated `origin/main`
   at `635ee9a` after observing PR #2 was merged.
+- Current review: [PR #3](https://github.com/AryanParte/nfl-opponent-intelligence/pull/3),
+  open and intentionally unmerged. Implementation commit `f1cb37d` is pushed;
+  its local/remote SHAs matched and GitHub linked both author and committer to
+  `AryanParte`. Continue this PR while unmerged; do not recreate this unit.
 - Previous review: [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2),
   merged on 2026-09-29. Continue the current branch/PR if still unmerged.
 - Migration review: [PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1),
@@ -53,11 +57,13 @@ metadata, hashes, retries, interrupted bodies, byte limits, gzip errors, cache
 corruption, revision retention, atomic publication failures, and CLI behavior.
 Network is blocked in acquisition tests, including their CLI subprocess.
 
-The last verified CI before this unit is the
-[PR #2 final-head run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36566743986).
-Automatic triggering did not run for that PR; manual workflow dispatch succeeded.
-The new branch's CI must be checked separately after publication. No automation,
-repository settings, or workflow code were changed during this manual run.
+The [PR #3 implementation CI run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36651274225)
+passed on commit `f1cb37d`: the offline regression suite and synthetic demo
+succeeded on Python 3.11/3.12/3.13. No automatic run appeared after push/PR creation,
+so the existing workflow was dispatched manually, matching the earlier PR #2
+verification workaround. The PR description records final-head CI evidence after
+this documentation update. No automation, repository settings, or workflow code
+were changed during this manual run.
 
 ## Raw acquisition evidence
 

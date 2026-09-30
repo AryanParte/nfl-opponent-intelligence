@@ -215,9 +215,17 @@ diff review also found malformed numeric headers and deeply invalid JSON could
 escape clean error handling; fixed those paths and added regression cases. No
 existing measurement definitions or fixtures were changed.
 
+**Publication:** implementation commit `f1cb37d` is pushed on
+`codex/immutable-pbp-snapshots`, with matching local/remote SHAs and GitHub author
+and committer attribution to `AryanParte`.
+[PR #3](https://github.com/AryanParte/nfl-opponent-intelligence/pull/3) is open for
+review, not merged. The existing workflow needed manual dispatch because no
+automatic run appeared; [implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36651274225)
+passed the suite and synthetic demo on all three Python versions. Final-head
+verification after this documentation update is recorded in the PR description.
+
 **Remaining/next task:** wire this exact snapshot into the analytical loader with
 provenance; audit full-season schemas, missingness, identities and exclusions;
 reconcile cohort totals before publishing real findings. CSV semantics, historical
 information availability, durable external data backup, and automatic CI triggering
-remain separate open issues. Check this branch's remote CI after publication; keep
-the PR unmerged for Aryan's review.
+remain separate open issues. Keep the PR unmerged for Aryan's review.
