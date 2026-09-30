@@ -7,12 +7,15 @@ from pathlib import Path
 import sys
 
 from .pbp import load_csv
+from .ingestion import load_snapshot
 from .report import build_report
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Create an auditable NFL offense tendency report.")
-    parser.add_argument("--csv", required=True, type=Path, help="Local nflverse-shaped UTF-8 CSV")
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--csv", type=Path, help="Local uncompressed nflverse-shaped UTF-8 CSV")
+    inputs.add_argument("--snapshot", type=Path, help="Verified local snapshot directory; never downloads")
     parser.add_argument("--source-label", required=True, help="Describe data origin; label synthetic fixtures explicitly")
     parser.add_argument("--team", required=True, help="Offense abbreviation, e.g. CAR")
     parser.add_argument("--season", required=True, type=int)
@@ -22,7 +25,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         report = build_report(
-            load_csv(args.csv), team=args.team, season=args.season,
+            load_snapshot(args.snapshot) if args.snapshot is not None else load_csv(args.csv),
+            team=args.team, season=args.season,
             before_week=args.before_week, season_type=args.season_type,
             minimum_plays=args.minimum_plays, source_label=args.source_label,
         )

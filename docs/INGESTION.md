@@ -1,9 +1,10 @@
 # Immutable raw play-by-play snapshots
 
-This increment acquires and verifies the published **2024** nflverse gzip CSV.
-It does not yet certify CSV schemas, season completeness, play classifications,
-or analytical metrics on real data. The existing report CLI remains offline and
-accepts uncompressed CSV only; do not pass its `--csv` option a gzip archive yet.
+The acquisition command verifies the published **2024** nflverse gzip CSV bytes.
+It does not itself certify CSV semantics or season completeness. Offline reporting
+now accepts an explicit snapshot directory through `--snapshot`; `--csv` still
+requires uncompressed CSV. The recorded artifact's analytical checks are documented
+in [REAL_DATA_AUDIT.md](REAL_DATA_AUDIT.md), separately from raw acquisition.
 
 ## Acquire and reuse
 
@@ -110,7 +111,7 @@ byte-for-byte copy of the local acquisition manifest. It records:
 The compressed hash matched the release asset digest. The decoded hash also
 matched the separately listed uncompressed CSV asset (ID 512957834). Reusing the
 real cache with network access blocked succeeded without rewriting its manifest.
-The 44-test offline suite covers acquisition errors, publication, and cache policy
+The offline suite covers acquisition errors, publication, and cache policy
 with entirely synthetic responses; live availability is not a CI prerequisite.
 
 The public release can be revised or removed. A recorded hash detects changes but
@@ -119,10 +120,11 @@ Durable external archival storage is not implemented, and Git contains only the
 small manifest, not the 19 MB archive. In particular, **a 2024 season file retrieved
 or revised in 2026 is not evidence of what was available before a 2024 game**.
 
-## Next validation gate
+## Analytical validation and next stage
 
-Read this exact snapshot through a gzip-aware analytical adapter or auditable
-extraction step; verify required fields, game/season/week coverage, duplicates,
-play types, missingness, and exclusion totals. Reconcile selected cohorts and
-metric denominators before publishing real football findings. Preserve the
-snapshot's provenance in reports and keep the synthetic demo network-free.
+The 2026-09-30 unit read this exact snapshot through the gzip-aware analytical
+adapter, carried its manifest into reports, audited required fields and observed
+coverage, and reconciled exclusions and selected cohort denominators. See the
+[audit evidence](REAL_DATA_AUDIT.md) for replay commands and remaining limits.
+Repeat that audit for new snapshots. The next product unit is an opponent-defense
+view, not a claim of predictive validity or a production deployment.

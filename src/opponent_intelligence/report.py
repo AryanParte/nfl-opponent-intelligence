@@ -1,6 +1,7 @@
 """Descriptive offense summaries with explicit cohorts and denominators."""
 
 from collections import defaultdict
+from copy import deepcopy
 from math import fsum
 
 from .pbp import Dataset, Play, _team
@@ -51,6 +52,8 @@ def build_report(
         raise ValueError("season_type must be REG/POST and minimum_plays must be positive")
     if not source_label.strip():
         raise ValueError("source_label must describe the input data")
+    if dataset.source_manifest is not None and season != dataset.source_manifest["season"]:
+        raise ValueError("requested season differs from snapshot manifest")
     selected = [play for play in dataset.plays if (
         play.offense == team and play.season == season
         and play.season_type == season_type and play.week < before_week
@@ -68,9 +71,12 @@ def build_report(
     if any(play.epa is None for play in selected):
         warnings.append("Missing EPA is excluded only from EPA and success-rate denominators.")
     distance_order = {"short": 0, "medium": 1, "long": 2}
+    source = {"label": source_label, "sha256": dataset.source_sha256}
+    if dataset.source_manifest is not None:
+        source["snapshot"] = deepcopy(dataset.source_manifest)
     return {
         "schema_version": 1,
-        "source": {"label": source_label, "sha256": dataset.source_sha256},
+        "source": source,
         "cohort": {"offense": team, "season": season, "season_type": season_type,
                    "before_week_exclusive": before_week, "minimum_plays_warning": minimum_plays},
         "data_quality": {"input_rows": dataset.input_rows,

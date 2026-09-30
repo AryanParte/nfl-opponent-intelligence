@@ -1,15 +1,25 @@
 # Input contract and provenance
 
-The analytical adapter accepts an uncompressed UTF-8 CSV in the nflverse
-play-by-play shape. A UTF-8 BOM is accepted. A separate
-[raw snapshot command](INGESTION.md) downloads and byte-verifies the 2024 gzip CSV;
-gzip-aware analytical integration is the next gate. Analytical parsing still reads
-the file into memory; streaming larger datasets is future work, not a scale claim.
+The analytical adapter accepts an uncompressed UTF-8 CSV, or an explicit verified
+2024 [raw snapshot directory](INGESTION.md) containing gzip CSV and its manifest.
+A UTF-8 BOM is accepted. Analytical parsing still reads decoded CSV into memory;
+snapshot expansion is capped at 256 MiB, but memory use exceeds decoded size.
+Streaming larger datasets is future work, not a scale claim.
 
 The source SHA-256 is computed from exactly the bytes parsed. Source labels are
 required at the command line. Labels are supplied by the caller, not certified
-provenance. Raw snapshots now have retrieval/version manifests, but that metadata
-is not yet automatically propagated through the manual-CSV reporting command.
+provenance. Snapshot reports add `source.snapshot`, retaining the acquisition
+manifest with source URLs, IDs, timestamps, attribution, and archive/decoded
+fingerprints. `source.sha256` means decoded CSV bytes (including any BOM), not gzip
+bytes; it matches `source.snapshot.decoded_csv.sha256`. Manual `--csv` reports keep
+their original shape and do not claim verified acquisition provenance.
+
+`--snapshot` is mutually exclusive with `--csv`, never downloads, and never follows
+`current.json`. It verifies the stored archive/manifest, then rechecks the decoded
+bytes actually parsed to detect changes between reads. Every snapshot row's season,
+including excluded rows, must match its manifest. The requested report season must
+also match. Empty cohorts remain valid. The copied manifest describes the unchanged
+raw archive; report metrics and audit summaries are derived work, not raw data.
 
 ## Required columns
 
@@ -61,7 +71,22 @@ For a `run`/`pass` row, the flag exclusion order remains conversion, kneel, spik
 A `qb_kneel`/`qb_spike` type is already excluded by type, so its flags are not read.
 Exclusion-reason keys are data-dependent; consumers should read the returned map
 rather than assume a fixed list. Audit a new upstream category before extending
-this contract. Real-season compatibility is still a separate validation gate.
+this contract. The recorded 2024 snapshot passed without relaxing this policy.
+
+## Snapshot audit
+
+`python -m opponent_intelligence.audit --snapshot DIRECTORY` verifies bytes and
+parses through the same strict adapter, then independently enumerates raw eligible
+identities and checks exact set equality and row accounting. It counts missing
+markers across all required columns before exclusions, and records types and
+observed games/rows per week. The audit additionally validates REG/POST and week
+on every row and rejects conflicting game contexts, even on excluded rows.
+These are explicit audit checks; ordinary reporting does not run the whole audit.
+
+Duplicate keys, malformed inputs, and audit disagreements fail the entire command
+with no partial JSON. Zero duplicate keys in a successful audit means validation
+passed, not that duplicates were silently removed. A header-only snapshot can
+produce an empty audit; coverage is reported, not assumed complete.
 
 ## Fixture provenance
 
@@ -71,7 +96,7 @@ contains a negative-EPA sack-shaped row, a run-shaped scramble, kneel/spike and
 conversion flags, a no-play row, missing and zero EPA, another offense, a target
 week, playoffs, and another season. None is a downloaded game observation.
 
-## Source references and next validation gate
+## Source references and verification scope
 
 - [nflreadr play-by-play dictionary](https://nflreadr.nflverse.com/articles/dictionary_pbp.html)
 - [nflfastR beginner guide](https://nflfastr.com/articles/beginners_guide.html)
@@ -80,8 +105,9 @@ week, playoffs, and another season. None is a downloaded game observation.
 - [nflverse data releases](https://github.com/nflverse/nflverse-data/releases)
 
 These primary sources informed the field contract. The 2024 release and data terms
-have now been reviewed, and an immutable raw snapshot acquired (see INGESTION.md).
-Compatibility with the analytical adapter remains unverified. The next run must
-audit actual field values, coverage, missingness, and exclusions, preserve source
-provenance through reporting, and justify any contract changes. A source package's
-code license does not itself grant all rights to redistribute its underlying data.
+have been reviewed, and the recorded immutable snapshot passes the analytical
+adapter and cohort reconciliation (see [REAL_DATA_AUDIT.md](REAL_DATA_AUDIT.md)).
+That evidence does not certify every extra field, prove externally complete game
+coverage, or validate upstream EPA training. Audit new snapshots before using
+their findings. A source package's code license does not itself grant all rights
+to redistribute its underlying data.

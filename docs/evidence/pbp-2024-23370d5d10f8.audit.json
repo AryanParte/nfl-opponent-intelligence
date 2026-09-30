@@ -1,0 +1,290 @@
+{
+  "adapter": {
+    "by_season_type": [
+      {
+        "dropbacks": 20116,
+        "eligible_games": 272,
+        "eligible_rows": 33335,
+        "epa_observations": 33335,
+        "input_games": 272,
+        "offenses": [
+          "ARI",
+          "ATL",
+          "BAL",
+          "BUF",
+          "CAR",
+          "CHI",
+          "CIN",
+          "CLE",
+          "DAL",
+          "DEN",
+          "DET",
+          "GB",
+          "HOU",
+          "IND",
+          "JAX",
+          "KC",
+          "LA",
+          "LAC",
+          "LV",
+          "MIA",
+          "MIN",
+          "NE",
+          "NO",
+          "NYG",
+          "NYJ",
+          "PHI",
+          "PIT",
+          "SEA",
+          "SF",
+          "TB",
+          "TEN",
+          "WAS"
+        ],
+        "season_type": "REG"
+      },
+      {
+        "dropbacks": 914,
+        "eligible_games": 13,
+        "eligible_rows": 1567,
+        "epa_observations": 1567,
+        "input_games": 13,
+        "offenses": [
+          "BAL",
+          "BUF",
+          "DEN",
+          "DET",
+          "GB",
+          "HOU",
+          "KC",
+          "LA",
+          "LAC",
+          "MIN",
+          "PHI",
+          "PIT",
+          "TB",
+          "WAS"
+        ],
+        "season_type": "POST"
+      }
+    ],
+    "eligible_rows": 34902,
+    "excluded_rows_by_reason": {
+      "missing_play_type": 1446,
+      "non_run_pass": 12996,
+      "two_point_attempt": 148
+    }
+  },
+  "input": {
+    "column_count": 372,
+    "coverage": [
+      {
+        "games": 16,
+        "rows": 2740,
+        "season_type": "REG",
+        "week": 1
+      },
+      {
+        "games": 16,
+        "rows": 2721,
+        "season_type": "REG",
+        "week": 2
+      },
+      {
+        "games": 16,
+        "rows": 2732,
+        "season_type": "REG",
+        "week": 3
+      },
+      {
+        "games": 16,
+        "rows": 2748,
+        "season_type": "REG",
+        "week": 4
+      },
+      {
+        "games": 14,
+        "rows": 2522,
+        "season_type": "REG",
+        "week": 5
+      },
+      {
+        "games": 14,
+        "rows": 2450,
+        "season_type": "REG",
+        "week": 6
+      },
+      {
+        "games": 15,
+        "rows": 2566,
+        "season_type": "REG",
+        "week": 7
+      },
+      {
+        "games": 16,
+        "rows": 2815,
+        "season_type": "REG",
+        "week": 8
+      },
+      {
+        "games": 15,
+        "rows": 2651,
+        "season_type": "REG",
+        "week": 9
+      },
+      {
+        "games": 14,
+        "rows": 2401,
+        "season_type": "REG",
+        "week": 10
+      },
+      {
+        "games": 14,
+        "rows": 2424,
+        "season_type": "REG",
+        "week": 11
+      },
+      {
+        "games": 13,
+        "rows": 2291,
+        "season_type": "REG",
+        "week": 12
+      },
+      {
+        "games": 16,
+        "rows": 2848,
+        "season_type": "REG",
+        "week": 13
+      },
+      {
+        "games": 13,
+        "rows": 2271,
+        "season_type": "REG",
+        "week": 14
+      },
+      {
+        "games": 16,
+        "rows": 2780,
+        "season_type": "REG",
+        "week": 15
+      },
+      {
+        "games": 16,
+        "rows": 2764,
+        "season_type": "REG",
+        "week": 16
+      },
+      {
+        "games": 16,
+        "rows": 2766,
+        "season_type": "REG",
+        "week": 17
+      },
+      {
+        "games": 16,
+        "rows": 2784,
+        "season_type": "REG",
+        "week": 18
+      },
+      {
+        "games": 6,
+        "rows": 978,
+        "season_type": "POST",
+        "week": 19
+      },
+      {
+        "games": 4,
+        "rows": 688,
+        "season_type": "POST",
+        "week": 20
+      },
+      {
+        "games": 2,
+        "rows": 376,
+        "season_type": "POST",
+        "week": 21
+      },
+      {
+        "games": 1,
+        "rows": 176,
+        "season_type": "POST",
+        "week": 22
+      }
+    ],
+    "play_type_counts": {
+      "<missing>": 1446,
+      "extra_point": 1308,
+      "field_goal": 1166,
+      "kickoff": 2955,
+      "no_play": 4936,
+      "pass": 20007,
+      "punt": 2119,
+      "qb_kneel": 437,
+      "qb_spike": 75,
+      "run": 15043
+    },
+    "required_column_missing_counts": {
+      "defteam": 2713,
+      "down": 8009,
+      "epa": 570,
+      "game_id": 0,
+      "play_id": 0,
+      "play_type": 1446,
+      "posteam": 2713,
+      "qb_dropback": 1446,
+      "qb_kneel": 0,
+      "qb_spike": 0,
+      "season": 0,
+      "season_type": 0,
+      "two_point_attempt": 1517,
+      "week": 0,
+      "ydstogo": 0
+    },
+    "rows": 49492
+  },
+  "limits": [
+    "Coverage is observed in this snapshot, not matched to an independent schedule.",
+    "Validation covers required adapter fields, not every extra upstream column.",
+    "Retrospective source revisions and EPA training may use later information."
+  ],
+  "reconciliation": {
+    "accounted_rows": 49492,
+    "duplicate_play_keys": 0,
+    "raw_and_adapter_eligible_identities_match": true
+  },
+  "schema_version": 1,
+  "source": {
+    "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+    "snapshot": {
+      "archive": {
+        "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+        "size_bytes": 19362351
+      },
+      "decoded_csv": {
+        "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+        "size_bytes": 99483794
+      },
+      "license": {
+        "attribution": "nflverse play-by-play data",
+        "identifier": "CC-BY-4.0",
+        "modifications": "Archive retained byte-for-byte; no data transformations.",
+        "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "retrieved_at_utc": "2026-09-30T00:19:00.168819+00:00",
+      "schema_version": 1,
+      "season": 2024,
+      "source": {
+        "asset_id": 512957856,
+        "asset_name": "play_by_play_2024.csv.gz",
+        "asset_updated_at_utc": "2026-08-13T12:26:27Z",
+        "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+        "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+        "release_id": 58152862,
+        "release_tag": "pbp",
+        "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+        "size_bytes": 19362351
+      }
+    }
+  }
+}

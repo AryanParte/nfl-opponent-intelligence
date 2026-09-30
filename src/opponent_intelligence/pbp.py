@@ -46,6 +46,7 @@ class Dataset:
     source_sha256: str
     input_rows: int
     exclusions: dict[str, int]
+    source_manifest: dict | None = None
 
 
 def _integer(value: str, name: str, minimum: int, maximum: int) -> int:
@@ -84,7 +85,11 @@ def load_csv(path: Path) -> Dataset:
     Hash the same bytes that are parsed. Duplicate play keys fail instead of
     guessing which revision is authoritative. Extra upstream columns are allowed.
     """
-    raw = path.read_bytes()
+    return _load_csv_bytes(path.read_bytes())
+
+
+def _load_csv_bytes(raw: bytes, *, expected_season: int | None = None) -> Dataset:
+    """Parse and hash the same decoded CSV bytes, including any UTF-8 BOM."""
     reader = csv.DictReader(StringIO(raw.decode("utf-8-sig")), strict=True)
     columns = reader.fieldnames or []
     if len(columns) != len(set(columns)):
@@ -111,6 +116,10 @@ def load_csv(path: Path) -> Dataset:
             if key in seen:
                 raise DataValidationError(f"duplicate play key {key!r}")
             seen.add(key)
+            if expected_season is not None:
+                season = _integer(values["season"], "season", 1999, 9999)
+                if season != expected_season:
+                    raise DataValidationError("row season differs from snapshot manifest")
             play_type = values["play_type"]
             # Upstream administrative rows may have no type; audit them separately.
             if play_type.upper() in MISSING:

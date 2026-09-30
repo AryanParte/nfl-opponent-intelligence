@@ -1,24 +1,25 @@
 # Engineering status
 
-As of the additional manual run on 2026-09-29, the measurement foundation,
-explicit play-type validation, and immutable raw acquisition are implemented.
-All 44 offline tests pass on Python 3.11/3.12/3.13. A real 2024 raw artifact has
-been downloaded and byte-verified, but analytical reports still use synthetic
-data. No validated real-season football findings, predictive model, web interface,
-or production deployment exist.
+As of the scheduled run on 2026-09-30, P1.2 acquisition and analytical integration
+are complete for the recorded 2024 snapshot. All 60 offline tests pass on Python
+3.11/3.12/3.13. The 49,492-row real artifact passes the adapter audit; its 34,902
+eligible identities and four selected cohort calculations reconcile. Reports
+retain source provenance. These are retrospective descriptive checks, not model
+validation, external gamebook reconciliation, a web interface, or deployment.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/immutable-pbp-snapshots`, started from updated `origin/main`
-  at `635ee9a` after observing PR #2 was merged.
-- Current review: [PR #3](https://github.com/AryanParte/nfl-opponent-intelligence/pull/3),
-  open and intentionally unmerged. Implementation commit `f1cb37d` is pushed;
-  its local/remote SHAs matched and GitHub linked both author and committer to
-  `AryanParte`. Continue this PR while unmerged; do not recreate this unit.
+- Working branch: `codex/audit-real-pbp-snapshot`, started from updated `origin/main`
+  at `78623c6` after observing PR #3 was merged. Continue its PR while unmerged.
+- Current review: [PR #4](https://github.com/AryanParte/nfl-opponent-intelligence/pull/4),
+  open and unmerged. Implementation `24f61c6` is pushed with matching local/remote
+  SHAs and confirmed AryanParte author/committer attribution.
+- Previous acquisition review: [PR #3](https://github.com/AryanParte/nfl-opponent-intelligence/pull/3),
+  merged at `78623c6`. No open PRs or review feedback remained at this run's start.
 - Previous review: [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2),
-  merged on 2026-09-29. Continue the current branch/PR if still unmerged.
+  merged on 2026-09-29.
 - Migration review: [PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1),
   merged on 2026-09-29. Inspect current open PRs before selecting new work.
 - Preserved foundation commit: `ba72f50700ff77f031e738f64c55217ffd5ad59c`
@@ -36,7 +37,7 @@ The existing `daily-sports-portfolio-engineering` task remains active at 8 AM
 America/New_York. Its prompt now requires remote sync, stable-clone recovery,
 verified commit identity, one meaningful unit, tests, complete-diff self-review,
 updated documents, commit, push, remote-SHA verification, and PR review.
-This additional manual run did not modify, duplicate, disable, or reschedule it.
+This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
 
@@ -52,18 +53,20 @@ PYTHONPATH=src python3 -m opponent_intelligence \
 
 Both commands passed locally. The fixture yields six cohort plays, three
 dropbacks, five observed EPA values, 0.04 EPA/play, and 0.6 success rate. The 25
-existing pipeline tests remain intact. Nineteen new acquisition tests cover source
+existing pipeline tests remain intact. Nineteen acquisition tests cover source
 metadata, hashes, retries, interrupted bodies, byte limits, gzip errors, cache
 corruption, revision retention, atomic publication failures, and CLI behavior.
-Network is blocked in acquisition tests, including their CLI subprocess.
+Network is blocked in acquisition tests, including their CLI subprocess. Sixteen
+new snapshot integration tests cover verified provenance, corruption/mutation,
+season matching, raw/adapter reconciliation, missingness, empty data, and CLI
+errors. No real dataset is required by the test suite.
 
-The [PR #3 implementation CI run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36651274225)
-passed on commit `f1cb37d`: the offline regression suite and synthetic demo
-succeeded on Python 3.11/3.12/3.13. No automatic run appeared after push/PR creation,
-so the existing workflow was dispatched manually, matching the earlier PR #2
-verification workaround. The PR description records final-head CI evidence after
-this documentation update. No automation, repository settings, or workflow code
-were changed during this manual run.
+The [PR #4 implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36786252031)
+passed on `24f61c6`: all three Python versions succeeded in the offline regression
+suite and synthetic demo. No automatic run appeared after push/PR creation, so the
+existing workflow was dispatched manually. Final-head verification after this
+documentation update is recorded in the PR description. No workflow code,
+repository settings, or daily automation were changed.
 
 ## Raw acquisition evidence
 
@@ -76,9 +79,13 @@ with the network blocked passed and preserved the original manifest.
 See [INGESTION.md](INGESTION.md) and the
 [committed manifest](evidence/pbp-2024-23370d5d10f8.manifest.json) for IDs, hashes,
 retrieval/update times, source terms, limits, and replay instructions. Raw data
-remains ignored by Git. The fetcher currently supports only 2024 and validates
-bytes/gzip integrity, not analytical CSV semantics. It does not automatically
-propagate provenance into the existing reporting CLI.
+remains ignored by Git. Acquisition supports only 2024 and validates bytes/gzip
+integrity. The new offline `--snapshot` report path separately validates required
+analytical fields, checks all row seasons, and includes the source manifest.
+
+See [REAL_DATA_AUDIT.md](REAL_DATA_AUDIT.md) and its committed JSON evidence for
+observed coverage, missingness, exact row reconciliation, replay commands, and
+four independently cross-checked cohort totals. No contract relaxation was needed.
 
 ## Current data contract
 
@@ -91,12 +98,12 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Continue P1.2 with the exact acquired snapshot: add gzip-aware analytical loading
-or an auditable extraction adapter; audit schemas, seasons/games/weeks, duplicate
-identities, missingness, categories, and exclusions; reconcile selected totals and
-metric denominators. Carry the source manifest into reports. Preserve the existing
-cohort policy unless actual evidence justifies a documented change, and keep the
-synthetic demo network-free. Do not move to UI/predictive work yet.
+Begin P1.3 with an explicit opponent-defense cohort view: preserve offense-perspective
+EPA, identify the side selected, keep exclusive week cutoffs and denominator audits,
+and test reciprocal offense/defense selections. Context filters and matched league
+baselines follow. Do not move to UI/predictive work yet. External schedule/gamebook
+reconciliation, historical availability, backup, automatic CI triggering, and
+larger-than-memory ingestion remain documented limitations, not completed claims.
 
 The host's `/usr/bin/git` Xcode shim fails. The installed
 `/Library/Developer/CommandLineTools/usr/bin/git` works. An unrelated ancestor Git

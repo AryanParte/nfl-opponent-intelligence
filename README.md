@@ -4,10 +4,11 @@ A reproducible foundation for weekly NFL opponent preparation: turn play-by-play
 data into offense tendencies with explicit sample sizes, metric definitions,
 source fingerprints, and a cutoff that excludes the week being prepared for.
 
-**Status:** the local CSV-to-JSON pipeline and immutable 2024 raw-data acquisition
-work. Full real-season analytical validation, a web interface, opponent adjustment,
-and deployment are still on the [roadmap](ROADMAP.md). This is an independent
-portfolio project, with no NFL or team affiliation.
+**Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
+acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
+cohort reconciliations. Opponent-defense views, a web interface, adjustment, and
+deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
+project, with no NFL or team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
 source of truth. The daily workflow continues existing branches and the roadmap,
@@ -61,9 +62,24 @@ PYTHONPATH=src python3 -m opponent_intelligence.fetch --season 2024
 ```
 
 [Acquisition, attribution, and verification evidence](docs/INGESTION.md) explains
-the limits. Byte integrity is verified, not full-season statistical correctness.
-The report CLI still requires uncompressed CSV; gzip-aware analytical integration
-and whole-season reconciliation are the next unit. The synthetic demo above stays
+the cache. Use the explicit snapshot directory printed by acquisition to audit or
+report offline; neither command fetches data or follows the mutable cache pointer:
+
+```sh
+snapshot_dir=data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06
+PYTHONPATH=src python3 -m opponent_intelligence.audit --snapshot "$snapshot_dir"
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --snapshot "$snapshot_dir" \
+  --source-label 'nflverse 2024 retrospective snapshot; acquired 2026-09-30 UTC' \
+  --team CAR --season 2024 --before-week 3
+```
+
+This pinned example requires the recorded snapshot to be present. If upstream has
+changed, a fresh acquisition produces a different directory; do not relabel it as
+this snapshot. [Real-data audit and limits](docs/REAL_DATA_AUDIT.md) records the
+49,492-row reconciliation and independently checked cohort denominators.
+Snapshot reports include the source manifest and both byte fingerprints.
+`--csv` remains the uncompressed, caller-labeled path; the synthetic demo stays
 independent of GitHub availability and credentials.
 
 ## The football decision
@@ -86,13 +102,16 @@ inclusion policy and why the current output is descriptive rather than a forecas
 3. `src/opponent_intelligence/__main__.py` exposes the workflow as a JSON command.
 4. `src/opponent_intelligence/fetch.py` and `snapshots.py` acquire and verify raw
    data separately from analytical reporting.
-5. `tests/test_pipeline.py` checks independently calculated results, malformed
+5. `ingestion.py` binds parsed gzip bytes to provenance; `audit.py` reconciles raw
+   coverage, missingness, and eligible identities against the adapter.
+6. `tests/test_pipeline.py` checks independently calculated results, malformed
    inputs, time boundaries, and command-line behavior.
-   `tests/test_snapshots.py` tests acquisition and cache failure cases offline.
+   `tests/test_snapshots.py` tests acquisition and cache failure cases offline;
+   `tests/test_ingestion.py` tests provenance, audit, and report integration.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
-the React interface will be added after the pipeline works on a verified real
-season. The reporting core has no database, runtime API dependency, or trained
+the React interface remain deferred until useful opponent briefs exist.
+The reporting core has no database, runtime API dependency, or trained
 model; only the explicit acquisition command contacts GitHub.
 
 ## Project records
@@ -102,6 +121,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Daily learning log](LEARNING_LOG.md)
 - [Data contract and provenance](docs/DATA_CONTRACT.md)
 - [Raw snapshots, source terms, and acquisition evidence](docs/INGESTION.md)
+- [Real-season audit and cohort reconciliation](docs/REAL_DATA_AUDIT.md)
 - [Metric definitions](docs/METRICS.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)

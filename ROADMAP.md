@@ -20,7 +20,7 @@ and latest commits before choosing work. Do not recreate the project in new sess
 - [x] Missing-data and exclusion accounting; synthetic fixture and offline tests.
 - [x] CI configuration for publication; local checks performed.
 
-### P1.2 — Reproducible real-data ingestion (NEXT)
+### P1.2 — Reproducible real-data ingestion (complete, 2026-09-30)
 
 - [x] Address the loader review finding (2026-09-29): reject unrecognized
       `play_type` values with regression tests, preserve documented categories,
@@ -30,21 +30,23 @@ and latest commits before choosing work. Do not recreate the project in new sess
 - [x] Add an explicit fetch command with bounded timeout/retries and local cache.
       Record URL, retrieval timestamp, source/version identifiers and SHA-256.
       Treat an upstream revision as a new snapshot; do not silently overwrite it.
-- [ ] Support the actual release format and audit real schemas/missingness before
+- [x] Support the actual release format and audit real schemas/missingness before
       relaxing any contract. Keep big/raw data out of Git.
 - [x] Test the fetcher offline with controlled responses, corruption, retries,
       atomic publication failures, immutable revisions, and verified cache reuse.
-- [ ] Run the acquired real-season snapshot through the analytical adapter and
+- [x] Run the acquired real-season snapshot through the analytical adapter and
       reconcile exclusions and selected totals;
       record evidence and source limitations without calling it model validation.
 - [x] Preserve the zero-network synthetic demo for contributors and CI.
 
-The raw acquisition unit is complete (2026-09-29 manual run); see
-[ingestion evidence](docs/INGESTION.md). NEXT: gzip-aware analytical integration
-and whole-season schema/missingness/exclusion reconciliation using the exact
-recorded snapshot. Do not begin UI or predictive work before that validation gate.
+The raw acquisition unit (2026-09-29) and snapshot-to-report integration/audit
+(2026-09-30) are complete; see [real-data evidence](docs/REAL_DATA_AUDIT.md).
+All 49,492 rows reconcile, with 34,902 eligible plays. Four selected cohorts were
+cross-checked directly from source CSV using decimal EPA sums. No eligibility
+rules were relaxed. This is one retrospective snapshot's adapter validation, not
+external schedule/box-score reconciliation, a scale benchmark, or model validation.
 
-### P1.3 — Useful opponent brief
+### P1.3 — Useful opponent brief (NEXT)
 
 - [ ] Add opponent-defense summaries and field position/score/time filters with
       consistent pre-play context and auditable cohort counts.
@@ -54,6 +56,11 @@ recorded snapshot. Do not begin UI or predictive work before that validation gat
 - [ ] Produce a readable static historical matchup brief with traceable findings.
 - [ ] Validate personnel/motion data availability and licensing separately. The
       initial play-by-play contract does not guarantee these fields exist.
+
+Next coherent unit: add an explicit opponent-defense cohort view with unchanged
+offense-perspective EPA, labeled denominators, exclusive week cutoffs, and tests
+that reconcile offense/defense selections. Add context filters and matched league
+baselines afterward; do not skip directly to a UI or predictive model.
 
 ### P1.4 — Product surface
 
