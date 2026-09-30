@@ -163,3 +163,61 @@ terms, then build the bounded, cached fetcher and immutable source manifest with
 offline tests (P1.2). Real-release compatibility, temporal source availability,
 and downstream predictive validity remain unverified. Recheck automatic CI
 triggering on future pushes; a successful manual run does not explain its absence.
+
+## 2026-09-29 — Additional manual run: immutable raw snapshots
+
+**Built:** a separate 2024 raw-data fetch command with bounded socket timeouts,
+retries, byte limits, published-digest checks, gzip validation, immutable snapshot
+directories, and provenance manifests. Default cache reuse is verified and offline;
+explicit refresh preserves earlier versions. Started `codex/immutable-pbp-snapshots`
+from merged PR #2's updated main (`635ee9a`). The 8 AM automation was not changed.
+
+**Why it matters:** a season name or download URL does not identify stable data.
+Hashes, source IDs, and retrieval times make an analysis traceable to exact bytes
+and keep upstream revisions from silently replacing yesterday's evidence.
+
+**Review:** `src/opponent_intelligence/snapshots.py` (download, verification, and
+publication), `src/opponent_intelligence/fetch.py` (explicit network CLI),
+`tests/test_snapshots.py` (synthetic failure cases), `docs/INGESTION.md` (source
+terms and limits), and its linked real acquisition manifest.
+
+**Sports concepts:** raw data acquisition is not validation of play classifications,
+season coverage, EPA, or tendency denominators. The 2024 artifact was updated in
+2026; it cannot establish what was available before a particular 2024 game.
+
+**Software/statistical concepts:** content-addressed storage, source provenance,
+compressed versus decoded hashes, bounded retries, atomic publication, cache
+integrity, repeatable tests, and the distinction between event time and retrieval
+time. Data-license review is separate from client-library licensing.
+
+**What to learn:** follow one artifact from release metadata through a verified
+download into an immutable manifest. Explain the only mutable pointer, why stale
+cache reuse is deliberate, and what checks are still needed before reporting real
+football results. A hash detects a changed artifact but does not archive its bytes.
+
+**Three review questions:**
+
+1. Why record both compressed and decoded SHA-256 hashes, plus the upstream asset ID?
+2. Which files may change during refresh, and what happens if download or pointer
+   publication fails after an older valid snapshot already exists?
+3. Why does downloading a completed 2024 season in 2026 not justify a leakage-free
+   historical forecast or prove the season's analytical denominators are correct?
+
+**Verification/self-review:** all 44 tests pass on Python 3.11/3.12/3.13, including
+19 new acquisition tests with blocked network. Acquired the real 19,362,351-byte
+gzip artifact and matched its published digest; its 99,483,794 decoded bytes also
+match the separately published CSV digest. Offline reuse passed without modifying
+the manifest. The committed small manifest matches the local copy; raw data is
+ignored. Self-review tightened type/boundary checks, verified the archive hash
+before decompression, blocked network inside CLI tests, and added tests for
+concurrent identical publication and filesystem publication failure. The complete
+diff review also found malformed numeric headers and deeply invalid JSON could
+escape clean error handling; fixed those paths and added regression cases. No
+existing measurement definitions or fixtures were changed.
+
+**Remaining/next task:** wire this exact snapshot into the analytical loader with
+provenance; audit full-season schemas, missingness, identities and exclusions;
+reconcile cohort totals before publishing real findings. CSV semantics, historical
+information availability, durable external data backup, and automatic CI triggering
+remain separate open issues. Check this branch's remote CI after publication; keep
+the PR unmerged for Aryan's review.

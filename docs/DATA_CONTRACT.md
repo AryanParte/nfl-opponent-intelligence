@@ -1,12 +1,15 @@
 # Input contract and provenance
 
-The first adapter accepts an uncompressed UTF-8 CSV in the nflverse play-by-play
-shape. A UTF-8 BOM is accepted. It has no downloader yet. Runtime parsing reads
+The analytical adapter accepts an uncompressed UTF-8 CSV in the nflverse
+play-by-play shape. A UTF-8 BOM is accepted. A separate
+[raw snapshot command](INGESTION.md) downloads and byte-verifies the 2024 gzip CSV;
+gzip-aware analytical integration is the next gate. Analytical parsing still reads
 the file into memory; streaming larger datasets is future work, not a scale claim.
 
 The source SHA-256 is computed from exactly the bytes parsed. Source labels are
 required at the command line. Labels are supplied by the caller, not certified
-provenance; retrieval/version manifests are the next milestone.
+provenance. Raw snapshots now have retrieval/version manifests, but that metadata
+is not yet automatically propagated through the manual-CSV reporting command.
 
 ## Required columns
 
@@ -76,8 +79,9 @@ week, playoffs, and another season. None is a downloaded game observation.
 - [nflreadr release loader](https://github.com/nflverse/nflreadr/blob/main/R/load_pbp.R)
 - [nflverse data releases](https://github.com/nflverse/nflverse-data/releases)
 
-These primary sources informed the field contract; compatibility with a complete
-real-season release is not yet verified. The next run must inspect actual source
-coverage and terms, preserve an immutable snapshot manifest, and explain any
-required contract changes. A source package's code license does not itself grant
-all rights to redistribute its underlying data.
+These primary sources informed the field contract. The 2024 release and data terms
+have now been reviewed, and an immutable raw snapshot acquired (see INGESTION.md).
+Compatibility with the analytical adapter remains unverified. The next run must
+audit actual field values, coverage, missingness, and exclusions, preserve source
+provenance through reporting, and justify any contract changes. A source package's
+code license does not itself grant all rights to redistribute its underlying data.

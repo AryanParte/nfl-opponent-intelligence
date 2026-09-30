@@ -25,19 +25,24 @@ and latest commits before choosing work. Do not recreate the project in new sess
 - [x] Address the loader review finding (2026-09-29): reject unrecognized
       `play_type` values with regression tests, preserve documented categories,
       and separately audit missing types without changing metric denominators.
-- [ ] Verify a completed-season nflverse CSV release and its dataset terms using
-      primary sources; start with 2024 to keep the example fixed.
-- [ ] Add an explicit fetch command with bounded timeout/retries and local cache.
+- [x] Verify the published 2024 nflverse gzip CSV asset and dataset terms using
+      primary sources; record exact acquisition evidence and attribution.
+- [x] Add an explicit fetch command with bounded timeout/retries and local cache.
       Record URL, retrieval timestamp, source/version identifiers and SHA-256.
       Treat an upstream revision as a new snapshot; do not silently overwrite it.
 - [ ] Support the actual release format and audit real schemas/missingness before
       relaxing any contract. Keep big/raw data out of Git.
-- [ ] Test the fetcher offline with controlled responses, corruption, and retries.
-- [ ] Run one real-season ingestion and reconcile exclusions and selected totals;
+- [x] Test the fetcher offline with controlled responses, corruption, retries,
+      atomic publication failures, immutable revisions, and verified cache reuse.
+- [ ] Run the acquired real-season snapshot through the analytical adapter and
+      reconcile exclusions and selected totals;
       record evidence and source limitations without calling it model validation.
-- [ ] Preserve the zero-network synthetic demo for contributors and CI.
+- [x] Preserve the zero-network synthetic demo for contributors and CI.
 
-This is the next coherent unit. Do not begin UI or predictive work before it.
+The raw acquisition unit is complete (2026-09-29 manual run); see
+[ingestion evidence](docs/INGESTION.md). NEXT: gzip-aware analytical integration
+and whole-season schema/missingness/exclusion reconciliation using the exact
+recorded snapshot. Do not begin UI or predictive work before that validation gate.
 
 ### P1.3 — Useful opponent brief
 
