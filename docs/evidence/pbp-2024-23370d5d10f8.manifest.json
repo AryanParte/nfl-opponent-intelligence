@@ -1,0 +1,31 @@
+{
+  "archive": {
+    "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+    "size_bytes": 19362351
+  },
+  "decoded_csv": {
+    "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+    "size_bytes": 99483794
+  },
+  "license": {
+    "attribution": "nflverse play-by-play data",
+    "identifier": "CC-BY-4.0",
+    "modifications": "Archive retained byte-for-byte; no data transformations.",
+    "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "retrieved_at_utc": "2026-09-30T00:19:00.168819+00:00",
+  "schema_version": 1,
+  "season": 2024,
+  "source": {
+    "asset_id": 512957856,
+    "asset_name": "play_by_play_2024.csv.gz",
+    "asset_updated_at_utc": "2026-08-13T12:26:27Z",
+    "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+    "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+    "release_id": 58152862,
+    "release_tag": "pbp",
+    "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+    "size_bytes": 19362351
+  }
+}

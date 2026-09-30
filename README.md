@@ -4,8 +4,8 @@ A reproducible foundation for weekly NFL opponent preparation: turn play-by-play
 data into offense tendencies with explicit sample sizes, metric definitions,
 source fingerprints, and a cutoff that excludes the week being prepared for.
 
-**Status:** first working increment. The local CSV-to-JSON pipeline and synthetic
-edge-case tests work. Real-season ingestion, a web interface, opponent adjustment,
+**Status:** the local CSV-to-JSON pipeline and immutable 2024 raw-data acquisition
+work. Full real-season analytical validation, a web interface, opponent adjustment,
 and deployment are still on the [roadmap](ROADMAP.md). This is an independent
 portfolio project, with no NFL or team affiliation.
 
@@ -48,6 +48,24 @@ values, unknown play types, and duplicate play identities cause an error rather
 than silent repair. Recognized missing play types are excluded with a separate
 audit count; see the [input contract](docs/DATA_CONTRACT.md).
 
+## Acquire a reproducible raw snapshot
+
+The optional acquisition command downloads the reviewed 2024 nflverse gzip CSV,
+checks the published digest, and saves an immutable snapshot with a provenance
+manifest. Its first run requires network access; subsequent runs verify the cache
+offline. Explicit `--refresh` acquires changed upstream bytes without overwriting
+older snapshots. Raw data stays out of Git.
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence.fetch --season 2024
+```
+
+[Acquisition, attribution, and verification evidence](docs/INGESTION.md) explains
+the limits. Byte integrity is verified, not full-season statistical correctness.
+The report CLI still requires uncompressed CSV; gzip-aware analytical integration
+and whole-season reconciliation are the next unit. The synthetic demo above stays
+independent of GitHub availability and credentials.
+
 ## The football decision
 
 The eventual user is an analyst preparing an opponent brief: how often does an
@@ -66,12 +84,16 @@ inclusion policy and why the current output is descriptive rather than a forecas
 2. `src/opponent_intelligence/report.py` selects the historical cohort and computes
    totals and down/distance splits.
 3. `src/opponent_intelligence/__main__.py` exposes the workflow as a JSON command.
-4. `tests/test_pipeline.py` checks independently calculated results, malformed
+4. `src/opponent_intelligence/fetch.py` and `snapshots.py` acquire and verify raw
+   data separately from analytical reporting.
+5. `tests/test_pipeline.py` checks independently calculated results, malformed
    inputs, time boundaries, and command-line behavior.
+   `tests/test_snapshots.py` tests acquisition and cache failure cases offline.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface will be added after the pipeline works on a verified real
-season. There is currently no database, external API dependency, or trained model.
+season. The reporting core has no database, runtime API dependency, or trained
+model; only the explicit acquisition command contacts GitHub.
 
 ## Project records
 
@@ -79,6 +101,7 @@ season. There is currently no database, external API dependency, or trained mode
 - [Current engineering status](docs/STATUS.md)
 - [Daily learning log](LEARNING_LOG.md)
 - [Data contract and provenance](docs/DATA_CONTRACT.md)
+- [Raw snapshots, source terms, and acquisition evidence](docs/INGESTION.md)
 - [Metric definitions](docs/METRICS.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)

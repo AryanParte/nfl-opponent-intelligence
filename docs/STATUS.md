@@ -1,18 +1,24 @@
 # Engineering status
 
-As of 2026-09-29, the CSV-to-JSON measurement foundation and explicit play-type
-validation are implemented. All 25 offline tests pass on Python 3.11.9, 3.12.7,
-and 3.13.2. The demo uses only synthetic data. No real football findings,
-predictive model, web interface, or production deployment exist.
+As of the additional manual run on 2026-09-29, the measurement foundation,
+explicit play-type validation, and immutable raw acquisition are implemented.
+All 44 offline tests pass on Python 3.11/3.12/3.13. A real 2024 raw artifact has
+been downloaded and byte-verified, but analytical reports still use synthetic
+data. No validated real-season football findings, predictive model, web interface,
+or production deployment exist.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/validate-play-types`, started from updated `origin/main`
-  at `fac284b` after observing the migration PR was merged.
-- Current review: [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2).
-  Implementation commit `19b5a09` is pushed and attributed to AryanParte.
+- Working branch: `codex/immutable-pbp-snapshots`, started from updated `origin/main`
+  at `635ee9a` after observing PR #2 was merged.
+- Current review: [PR #3](https://github.com/AryanParte/nfl-opponent-intelligence/pull/3),
+  open and intentionally unmerged. Implementation commit `f1cb37d` is pushed;
+  its local/remote SHAs matched and GitHub linked both author and committer to
+  `AryanParte`. Continue this PR while unmerged; do not recreate this unit.
+- Previous review: [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2),
+  merged on 2026-09-29. Continue the current branch/PR if still unmerged.
 - Migration review: [PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1),
   merged on 2026-09-29. Inspect current open PRs before selecting new work.
 - Preserved foundation commit: `ba72f50700ff77f031e738f64c55217ffd5ad59c`
@@ -30,6 +36,7 @@ The existing `daily-sports-portfolio-engineering` task remains active at 8 AM
 America/New_York. Its prompt now requires remote sync, stable-clone recovery,
 verified commit identity, one meaningful unit, tests, complete-diff self-review,
 updated documents, commit, push, remote-SHA verification, and PR review.
+This additional manual run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
 
@@ -44,19 +51,34 @@ PYTHONPATH=src python3 -m opponent_intelligence \
 ```
 
 Both commands passed locally. The fixture yields six cohort plays, three
-dropbacks, five observed EPA values, 0.04 EPA/play, and 0.6 success rate, unchanged
-by this fix. The seven added test methods cover unknown labels, exclusion order,
-documented non-run/pass labels, missing-type counts, identity checks, unchanged
-cohort metrics, and CLI failure with no partial output. The new regression tests
-failed against the original loader before implementation.
+dropbacks, five observed EPA values, 0.04 EPA/play, and 0.6 success rate. The 25
+existing pipeline tests remain intact. Nineteen new acquisition tests cover source
+metadata, hashes, retries, interrupted bodies, byte limits, gzip errors, cache
+corruption, revision retention, atomic publication failures, and CLI behavior.
+Network is blocked in acquisition tests, including their CLI subprocess.
 
-The offline suite also passed using `python3.11` and `python3.12`. GitHub's
-[manual verification run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36566444248)
-passed on implementation commit `19b5a09`, running the suite and demo on Python
-3.11/3.12/3.13. Repository Actions are enabled and all actions are allowed, but no
-automatic run appeared after pushing or opening the PR. The existing workflow was
-dispatched manually; no repository settings or workflow code were changed. Its
-success verifies execution, not automatic triggering. Recheck triggers next run.
+The [PR #3 implementation CI run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36651274225)
+passed on commit `f1cb37d`: the offline regression suite and synthetic demo
+succeeded on Python 3.11/3.12/3.13. No automatic run appeared after push/PR creation,
+so the existing workflow was dispatched manually, matching the earlier PR #2
+verification workaround. The PR description records final-head CI evidence after
+this documentation update. No automation, repository settings, or workflow code
+were changed during this manual run.
+
+## Raw acquisition evidence
+
+`PYTHONPATH=src python3 -m opponent_intelligence.fetch --season 2024` downloaded
+the real archive, matched GitHub's published digest, and recorded an immutable
+manifest. The 19,362,351-byte compressed artifact decodes to 99,483,794 bytes;
+the decoded hash also matches the separately published CSV asset. Offline reuse
+with the network blocked passed and preserved the original manifest.
+
+See [INGESTION.md](INGESTION.md) and the
+[committed manifest](evidence/pbp-2024-23370d5d10f8.manifest.json) for IDs, hashes,
+retrieval/update times, source terms, limits, and replay instructions. Raw data
+remains ignored by Git. The fetcher currently supports only 2024 and validates
+bytes/gzip integrity, not analytical CSV semantics. It does not automatically
+propagate provenance into the existing reporting CLI.
 
 ## Current data contract
 
@@ -69,10 +91,12 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Continue P1.2 in ROADMAP.md: verify the completed 2024 nflverse release and its
-dataset terms, then implement immutable ingestion with source manifests and
-offline fetcher tests. Audit actual schemas, missingness, categories, and exclusions
-before claiming real-season compatibility. Keep the zero-network synthetic demo.
+Continue P1.2 with the exact acquired snapshot: add gzip-aware analytical loading
+or an auditable extraction adapter; audit schemas, seasons/games/weeks, duplicate
+identities, missingness, categories, and exclusions; reconcile selected totals and
+metric denominators. Carry the source manifest into reports. Preserve the existing
+cohort policy unless actual evidence justifies a documented change, and keep the
+synthetic demo network-free. Do not move to UI/predictive work yet.
 
 The host's `/usr/bin/git` Xcode shim fails. The installed
 `/Library/Developer/CommandLineTools/usr/bin/git` works. An unrelated ancestor Git
