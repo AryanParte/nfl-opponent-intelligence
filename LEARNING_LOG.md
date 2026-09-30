@@ -229,3 +229,50 @@ provenance; audit full-season schemas, missingness, identities and exclusions;
 reconcile cohort totals before publishing real findings. CSV semantics, historical
 information availability, durable external data backup, and automatic CI triggering
 remain separate open issues. Keep the PR unmerged for Aryan's review.
+
+## 2026-09-30 — Verified snapshots reach analytical reports
+
+**Built:** offline `--snapshot` reporting with the acquisition manifest attached,
+bounded gzip decoding, actual-parsed-byte hash checks, and an audit command for
+coverage, required-field missingness, and raw/adapter identity reconciliation.
+Started `codex/audit-real-pbp-snapshot` from merged PR #3's `78623c6`. No automation
+changes or new project checkout were made.
+
+**Why it matters:** a report can now identify its exact raw inputs, and every
+eligible/excluded source row is accounted for before real findings are used.
+
+**Review:** `ingestion.py` (verified bytes), `audit.py` (independent selection),
+`report.py` (provenance), `tests/test_ingestion.py`, and `docs/REAL_DATA_AUDIT.md`.
+
+**Sports concepts:** 2024 REG and POST remain separate; sacks/scrambles are
+dropbacks; type-labeled kneels/spikes are already excluded. Source missingness
+is not the same as missingness among eligible plays. No eligibility rule changed.
+
+**Software/statistical concepts:** content identity versus file encoding, explicit
+version selection, check/read races, set equality versus matching counts, decimal
+cross-checks, and retrospective data versus historical information availability.
+
+**What to learn:** trace a report's decoded hash back to its compressed snapshot
+and receipt. Reconcile `49,492 = 34,902 + 12,996 + 1,446 + 148`. Use the independent
+CSV recipe to reproduce CAR's pre-week-3 numerators and denominators.
+
+**Three review questions:**
+
+1. Why do gzip and decoded CSV have different hashes, and which does the report use?
+2. How can 570 raw rows lack EPA while all 34,902 eligible plays have observed EPA?
+3. Why do matching eligible counts and an exclusive week cutoff still fall short
+   of proving correct identities or leakage-free forecasting?
+
+**Verification/self-review:** 60 tests pass on Python 3.11/3.12/3.13 (16 new).
+The full artifact audit passes; four cohorts match independent CSV/Decimal
+calculations within `1e-12`. Tests exercise corruption, mutation between reads,
+wrong seasons, conflicting metadata, same-count/wrong-identity disagreement, and
+no partial CLI output. Review preserved identity-first validation precedence and
+the original synthetic contract. Raw data was not edited or committed; the small
+derived audit records its source and limits. Remote CI is checked after publishing.
+
+**Remaining/next task:** P1.2 is complete for this snapshot. Add P1.3's defense-side
+cohort with explicit offense-perspective EPA and time-bound tests. Independent
+schedule/gamebook matching, upstream annotation accuracy, historical availability,
+external backup, automatic CI triggering, and large-scale streaming remain open
+limits. Keep the new PR unmerged for Aryan's review.
