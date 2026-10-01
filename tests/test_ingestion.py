@@ -267,6 +267,24 @@ class IngestionTests(unittest.TestCase):
                 self.assertEqual(stdout.getvalue(), "")
                 self.assertIn("CSV line 2:", stderr.getvalue())
 
+    def test_snapshot_defense_cli_preserves_manifest_and_metric_perspective(self):
+        directory, raw = self.snapshot()
+        stdout = io.StringIO()
+        with redirect_stdout(stdout):
+            code = main(["--snapshot", str(directory), "--team", "ATL", "--side", "defense",
+                         "--season", "2024", "--before-week", "3", "--source-label", "Synthetic"])
+        self.assertEqual(code, 0)
+        report = json.loads(stdout.getvalue())
+        self.assertEqual(report["schema_version"], 2)
+        self.assertEqual(report["cohort"]["side"], "defense")
+        self.assertEqual(report["metric_context"]["perspective"], "offense")
+        self.assertEqual(report["source"]["sha256"], sha256(raw).hexdigest())
+        self.assertEqual(report["source"]["snapshot"], json.loads((directory / "manifest.json").read_text()))
+        self.assertEqual(report["source"]["snapshot"]["schema_version"], 1)
+        self.assertEqual(report["overall"]["plays"], 5)
+        self.assertEqual(report["overall"]["epa_observations"], 4)
+        self.assertAlmostEqual(report["overall"]["epa_per_play"], 0.05)
+
 
 if __name__ == "__main__":
     unittest.main()

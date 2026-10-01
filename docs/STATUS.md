@@ -1,23 +1,27 @@
 # Engineering status
 
-As of the scheduled run on 2026-09-30, P1.2 acquisition and analytical integration
-are complete for the recorded 2024 snapshot. All 60 offline tests pass on Python
-3.11/3.12/3.13. The 49,492-row real artifact passes the adapter audit; its 34,902
-eligible identities and four selected cohort calculations reconcile. Reports
-retain source provenance. These are retrospective descriptive checks, not model
-validation, external gamebook reconciliation, a web interface, or deployment.
+As of the scheduled run on 2026-10-01, P1.3's explicit defense-side reports are
+implemented. All 75 offline tests pass on Python 3.11/3.12/3.13. `--side defense`
+selects the offenses facing a team, with EPA still offense-relative. Report schema
+v2 names the selected team/side and metric interpretation; existing default-offense
+measurements and source provenance are unchanged. P1.2 remains complete for the
+recorded 2024 snapshot. These are retrospective descriptive checks, not model
+validation, opponent adjustment, a web interface, or deployment.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/audit-real-pbp-snapshot`, started from updated `origin/main`
-  at `78623c6` after observing PR #3 was merged. Continue its PR while unmerged.
-- Current review: [PR #4](https://github.com/AryanParte/nfl-opponent-intelligence/pull/4),
-  open and unmerged. Implementation `24f61c6` is pushed with matching local/remote
-  SHAs and confirmed AryanParte author/committer attribution.
+- Working branch: `codex/defense-cohort-reports`, started from updated `origin/main`
+  at `8ed98e6` after observing PR #4 was merged. Continue its PR while unmerged.
+- Current review: [PR #5](https://github.com/AryanParte/nfl-opponent-intelligence/pull/5),
+  open and unmerged. Implementation `208fb90` is pushed with matching local/remote
+  SHAs and confirmed AryanParte author/committer attribution. Do not enable auto-merge.
+- Previous analytical integration review:
+  [PR #4](https://github.com/AryanParte/nfl-opponent-intelligence/pull/4), merged at
+  `8ed98e6`. No open PRs or review feedback remained at this run's start.
 - Previous acquisition review: [PR #3](https://github.com/AryanParte/nfl-opponent-intelligence/pull/3),
-  merged at `78623c6`. No open PRs or review feedback remained at this run's start.
+  merged at `78623c6`.
 - Previous review: [PR #2](https://github.com/AryanParte/nfl-opponent-intelligence/pull/2),
   merged on 2026-09-29.
 - Migration review: [PR #1](https://github.com/AryanParte/nfl-opponent-intelligence/pull/1),
@@ -56,16 +60,34 @@ dropbacks, five observed EPA values, 0.04 EPA/play, and 0.6 success rate. The 25
 existing pipeline tests remain intact. Nineteen acquisition tests cover source
 metadata, hashes, retries, interrupted bodies, byte limits, gzip errors, cache
 corruption, revision retention, atomic publication failures, and CLI behavior.
-Network is blocked in acquisition tests, including their CLI subprocess. Sixteen
-new snapshot integration tests cover verified provenance, corruption/mutation,
-season matching, raw/adapter reconciliation, missingness, empty data, and CLI
-errors. No real dataset is required by the test suite.
+Network is blocked in acquisition tests, including their CLI subprocess. Seventeen
+snapshot integration tests cover verified provenance, corruption/mutation,
+season matching, raw/adapter reconciliation, missingness, empty data, CLI errors,
+and defense reports retaining manifest schema v1 inside report schema v2. Fourteen
+defense tests check independent numerical expectations, multiple opponents, default
+offense compatibility, situations, positive/negative/zero/missing EPA, cutoffs,
+empty cohorts, reciprocal selections, count partitions, and API/CLI validation.
+No real dataset is required by the test suite.
 
-The [PR #4 implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36786252031)
-passed on `24f61c6`: all three Python versions succeeded in the offline regression
+The new synthetic defense command in README.md also passes: five plays, three
+dropbacks, four observed EPA values, 0.05 EPA/play, and 0.75 offensive success
+allowed. Self-review corrected reduced typed test fixtures to keep input-row
+accounting consistent and documented the breaking report schema change explicitly.
+
+With the existing real snapshot verified and network blocked, 256 reports (32
+teams × two sides × four season/cutoff combinations) match independent counters
+over the eligible typed records. Both offense and defense partitions sum to zero
+plays for REG before week 1, 3,811 for REG before week 3, 33,335 for REG before week
+19, and 1,567 for POST before week 23. Every report retains the unchanged manifest.
+This is an integration check of role selection, not a new independent raw-data
+audit, gamebook check, defensive ranking, or forecast evaluation. Games/rates are
+not additive across team partitions.
+
+The [PR #5 implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36877565779)
+passed on `208fb90`: Python 3.11/3.12/3.13 each succeeded in the offline regression
 suite and synthetic demo. No automatic run appeared after push/PR creation, so the
 existing workflow was dispatched manually. Final-head verification after this
-documentation update is recorded in the PR description. No workflow code,
+publication-record update is recorded in the PR description. No workflow code,
 repository settings, or daily automation were changed.
 
 ## Raw acquisition evidence
@@ -98,10 +120,13 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Begin P1.3 with an explicit opponent-defense cohort view: preserve offense-perspective
-EPA, identify the side selected, keep exclusive week cutoffs and denominator audits,
-and test reciprocal offense/defense selections. Context filters and matched league
-baselines follow. Do not move to UI/predictive work yet. External schedule/gamebook
+Continue P1.3 with an optional pre-play field-position filter (`yardline_100`):
+verify the definition and missingness, define range boundaries, preserve unfiltered
+results, and test both roles and missing-field accounting. Score/time filters and
+matched league baselines follow. The current adapter does not yet parse these
+context fields. Report JSON consumers must migrate from `cohort.offense` to
+`cohort.team`/`cohort.side`; see [METRICS.md](METRICS.md#report-schema-v2).
+Do not move to UI/predictive work yet. External schedule/gamebook
 reconciliation, historical availability, backup, automatic CI triggering, and
 larger-than-memory ingestion remain documented limitations, not completed claims.
 

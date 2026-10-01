@@ -46,10 +46,13 @@ cross-checked directly from source CSV using decimal EPA sums. No eligibility
 rules were relaxed. This is one retrospective snapshot's adapter validation, not
 external schedule/box-score reconciliation, a scale benchmark, or model validation.
 
-### P1.3 — Useful opponent brief (NEXT)
+### P1.3 — Useful opponent brief (in progress)
 
-- [ ] Add opponent-defense summaries and field position/score/time filters with
-      consistent pre-play context and auditable cohort counts.
+- [x] Add explicit opponent-defense summaries (2026-10-01): offense-relative EPA,
+      role-labeled report schema v2, denominator accounting, exclusive week cutoffs,
+      reciprocal selection tests, and unchanged default offense measurements.
+- [ ] Add field position/score/time filters with consistent pre-play context,
+      explicit missingness handling, and auditable cohort counts for both sides.
 - [ ] Compare an offense's tendencies with league baselines in matching contexts.
 - [ ] Add game-level uncertainty estimates and sample warnings; explain dependence
       among plays and the limits of small numbers of games.
@@ -57,10 +60,12 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
 - [ ] Validate personnel/motion data availability and licensing separately. The
       initial play-by-play contract does not guarantee these fields exist.
 
-Next coherent unit: add an explicit opponent-defense cohort view with unchanged
-offense-perspective EPA, labeled denominators, exclusive week cutoffs, and tests
-that reconcile offense/defense selections. Add context filters and matched league
-baselines afterward; do not skip directly to a UI or predictive model.
+Next coherent unit: add an optional pre-play field-position filter based on
+`yardline_100`. Verify the source definition and missingness, define range boundaries,
+and test offense/defense selection and missing-field accounting without changing
+unfiltered results. Score/time filters and matched league baselines follow; do not
+skip directly to a UI or predictive model. Today's defense view passes 75 offline
+tests on Python 3.11/3.12/3.13; see [status](docs/STATUS.md) for verification scope.
 
 ### P1.4 — Product surface
 

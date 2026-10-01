@@ -1,4 +1,4 @@
-"""Descriptive offense summaries with explicit cohorts and denominators."""
+"""Descriptive team cohorts; all metrics retain the offense's perspective."""
 
 from collections import defaultdict
 from copy import deepcopy
@@ -33,16 +33,20 @@ def build_report(
     team: str,
     season: int,
     before_week: int,
+    side: str = "offense",
     season_type: str = "REG",
     minimum_plays: int = 30,
     source_label: str,
 ) -> dict:
-    """Use only the requested offense/season/type and weeks < before_week.
+    """Select a team's offense or defense, season/type, and weeks < before_week.
 
+    Selecting defense changes the team predicate, not EPA signs or denominators.
     The week boundary prevents including target-week outcomes. It cannot ensure
     historical availability of subsequently revised upstream values.
     """
     _team(team, "team")
+    if side not in ("offense", "defense"):
+        raise ValueError("side must be offense or defense")
     for name, value in (("season", season), ("before_week", before_week), ("minimum_plays", minimum_plays)):
         if type(value) is not int:
             raise ValueError(f"{name} must be an integer")
@@ -55,7 +59,7 @@ def build_report(
     if dataset.source_manifest is not None and season != dataset.source_manifest["season"]:
         raise ValueError("requested season differs from snapshot manifest")
     selected = [play for play in dataset.plays if (
-        play.offense == team and play.season == season
+        (play.offense if side == "offense" else play.defense) == team and play.season == season
         and play.season_type == season_type and play.week < before_week
     )]
     groups: dict[tuple[int, str], list[Play]] = defaultdict(list)
@@ -66,6 +70,9 @@ def build_report(
         "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
         "Week filtering does not reconstruct historical source availability or EPA model training.",
     ]
+    if side == "defense":
+        warnings.append("Defense view describes opposing offenses: EPA is not sign-flipped; "
+                        "success still means offensive EPA > 0, not a defensive stop rate.")
     if not selected:
         warnings.append("No eligible plays match this cohort; rates are null, not zero.")
     if any(play.epa is None for play in selected):
@@ -75,10 +82,13 @@ def build_report(
     if dataset.source_manifest is not None:
         source["snapshot"] = deepcopy(dataset.source_manifest)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "source": source,
-        "cohort": {"offense": team, "season": season, "season_type": season_type,
+        "cohort": {"team": team, "side": side, "season": season, "season_type": season_type,
                    "before_week_exclusive": before_week, "minimum_plays_warning": minimum_plays},
+        "metric_context": {"perspective": "offense",
+                           "interpretation": "allowed" if side == "defense" else "produced",
+                           "success_condition": "epa > 0"},
         "data_quality": {"input_rows": dataset.input_rows,
                          "eligible_rows_all_teams": len(dataset.plays),
                          "excluded_rows_by_reason": dict(sorted(dataset.exclusions.items())),

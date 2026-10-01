@@ -1,12 +1,14 @@
 # NFL Opponent Intelligence
 
 A reproducible foundation for weekly NFL opponent preparation: turn play-by-play
-data into offense tendencies with explicit sample sizes, metric definitions,
-source fingerprints, and a cutoff that excludes the week being prepared for.
+data into offense tendencies and defense-side summaries with explicit sample sizes,
+metric definitions, source fingerprints, and a cutoff that excludes the week being
+prepared for.
 
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
 acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
-cohort reconciliations. Opponent-defense views, a web interface, adjustment, and
+cohort reconciliations. Reports can select a team's offense or defense while
+keeping EPA offense-relative. Context filters, a web interface, adjustment, and
 deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
@@ -48,6 +50,28 @@ input SHA-256, and warnings. Empty rates are `null`. Invalid schema, malformed
 values, unknown play types, and duplicate play identities cause an error rather
 than silent repair. Recognized missing play types are excluded with a separate
 audit count; see the [input contract](docs/DATA_CONTRACT.md).
+
+### Select the defense
+
+`--side offense` is the default. To describe the offenses facing a selected defense:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --csv tests/fixtures/synthetic_pbp.csv \
+  --source-label 'Synthetic verification fixture; not real NFL observations' \
+  --team ATL --side defense --season 2024 --before-week 3
+```
+
+This invented example contains five plays, three dropbacks, and four observed EPA
+values: 0.05 EPA/play and 75% offensive success allowed. EPA is **not sign-flipped**;
+success still means offensive EPA > 0, not defensive stops. Down/distance describes
+the opposing offense. Denominator rules, missing-data handling, and the exclusive
+week cutoff are unchanged.
+
+Reports now use JSON schema v2: `cohort.team` and `cohort.side` replace
+`cohort.offense`, with explicit `metric_context`. Existing commands still default
+to offense and retain the same measurements, but JSON consumers must migrate;
+see [schema and interpretation](docs/METRICS.md#report-schema-v2).
 
 ## Acquire a reproducible raw snapshot
 
@@ -108,6 +132,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
    inputs, time boundaries, and command-line behavior.
    `tests/test_snapshots.py` tests acquisition and cache failure cases offline;
    `tests/test_ingestion.py` tests provenance, audit, and report integration.
+   `tests/test_defense_reports.py` checks role selection, reciprocal measurements,
+   denominator accounting, and unaltered EPA interpretation.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.

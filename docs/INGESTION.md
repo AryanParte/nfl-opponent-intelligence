@@ -126,5 +126,6 @@ The 2026-09-30 unit read this exact snapshot through the gzip-aware analytical
 adapter, carried its manifest into reports, audited required fields and observed
 coverage, and reconciled exclusions and selected cohort denominators. See the
 [audit evidence](REAL_DATA_AUDIT.md) for replay commands and remaining limits.
-Repeat that audit for new snapshots. The next product unit is an opponent-defense
-view, not a claim of predictive validity or a production deployment.
+Repeat that audit for new snapshots. Defense-side reporting followed on 2026-10-01;
+see the [current roadmap](../ROADMAP.md) for the next product unit. Neither step
+establishes predictive validity or a production deployment.

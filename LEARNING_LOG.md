@@ -284,3 +284,73 @@ cohort with explicit offense-perspective EPA and time-bound tests. Independent
 schedule/gamebook matching, upstream annotation accuracy, historical availability,
 external backup, automatic CI triggering, and large-scale streaming remain open
 limits. Keep the new PR unmerged for Aryan's review.
+
+## 2026-10-01 — Explicit defense-side opponent reports
+
+**Built:** `--side defense` and the matching Python API select plays by defending
+team while preserving offense-relative EPA and all metric formulas. Report schema
+v2 identifies team, role, and interpretation; the default remains offense, but JSON
+consumers must migrate from `cohort.offense`. Started `codex/defense-cohort-reports`
+from merged PR #4's `8ed98e6`; no open review feedback remained. The stable clone,
+existing history, raw snapshot, and 8 AM automation were preserved.
+
+**Why it matters:** an analyst can now inspect what offenses did against a chosen
+defense, with traceable denominators and no misleading EPA sign reversal. This is
+the first P1.3 unit, not a completed matchup brief or opponent-adjusted evaluation.
+
+**Review:** `src/opponent_intelligence/report.py` (selection and schema),
+`src/opponent_intelligence/__main__.py` (explicit CLI choice),
+`tests/test_defense_reports.py` (hand-calculated and reciprocal expectations),
+`tests/test_ingestion.py` (snapshot provenance), and `docs/METRICS.md` (migration).
+
+**Sports concepts:** possession-relative EPA; offensive success allowed versus
+defensive stops; sacks/scrambles in dropbacks; opposing offense down/distance;
+opponent mix; separate regular/postseason cohorts and exclusive week boundaries.
+
+**Software/statistical concepts:** selection versus measurement, versioned JSON
+contracts, reciprocal/mirrored tests, additive counts versus non-additive rates,
+and missing-EPA denominators. Plays within games remain dependent; these summaries
+do not provide uncertainty estimates, causal attribution, or predictive validation.
+
+**What to learn:** trace `--side` from CLI to the team predicate, explain why
+`_metrics` is unchanged, and reproduce the synthetic ATL defense's 0.2 / 4 EPA
+and 3 / 4 success calculations. Inspect schema metadata before labeling output.
+
+**Three review questions:**
+
+1. Why does selecting a defense change the team predicate but not the EPA sign or
+   the success condition?
+2. How do zero and missing EPA affect success, EPA, and dropback denominators, and
+   why is `1 - success_rate` not a drive-level defensive stop rate?
+3. How must a v1 JSON consumer migrate, and why do matching offense/defense play
+   totals not justify adding team rates or claiming opponent-adjusted quality?
+
+**Verification/self-review:** 60 baseline tests passed. The 14 new defense tests
+failed before implementation; all 75 tests (including one new snapshot integration
+test) now pass on Python 3.11/3.12/3.13. Both README demos pass. Coverage includes
+multiple opponents, empty cohorts, season/week cutoffs, source exclusions, invalid
+side/no partial JSON, default offense compatibility, and positive/negative/zero/
+missing EPA. Review corrected reduced typed fixtures' input-row accounting and
+made report-v2 versus manifest-v1 compatibility explicit. No source fields or
+eligibility rules were changed; no duplicated metric implementation was added.
+
+With network blocked, 256 reports from the existing verified real snapshot matched
+independent team counters over typed eligible plays. Each side's partitions total
+0, 3,811, 33,335, and 1,567 plays for REG before weeks 1/3/19 and POST before week
+23 respectively; manifests remain intact. This is a role-selection integration
+check, not a new raw CSV audit, external gamebook comparison, or forecast test.
+
+**Publication:** implementation `208fb90` is pushed with matching local/remote SHAs
+and confirmed AryanParte author/committer attribution.
+[PR #5](https://github.com/AryanParte/nfl-opponent-intelligence/pull/5) is open,
+unmerged, and attached to the task. [Implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36877565779)
+passed the offline regression suite and synthetic demo on all three Python versions.
+Manual dispatch was needed because no automatic run appeared. The PR description
+records final-head verification after this publication-record update. Workflow
+configuration, repository settings, and the existing daily automation are unchanged.
+
+**Remaining/next task:** add an optional pre-play field-position filter using a
+reviewed `yardline_100` contract, explicit boundaries/missingness, and tests for
+both roles without changing unfiltered results. Score/time filters, matched league
+baselines, game-level uncertainty, and a readable brief remain unfinished. Keep
+the feature PR unmerged for Aryan's review; prior source/CI limitations still apply.
