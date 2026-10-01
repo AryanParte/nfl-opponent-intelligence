@@ -118,8 +118,9 @@ not a replacement for the strict adapter or its missing/invalid-input handling.
 
 ## Verification and limits
 
-All 60 synthetic offline tests pass on Python 3.11/3.12/3.13. Sixteen integration
-tests add provenance/hash agreement, bounded rereads, corruption and mutation
+At the 2026-09-30 audit, all 60 synthetic offline tests passed on Python
+3.11/3.12/3.13. Sixteen integration tests add provenance/hash agreement, bounded
+rereads, corruption and mutation
 handling, wrong-season rejection, audit disagreement detection, empty cohorts,
 missingness, and deterministic all-or-nothing CLIs. The existing synthetic fixture
 and its measurement expectations remain unchanged; CI never downloads this season.
@@ -136,6 +137,6 @@ bounded but in-memory, not a
 large-scale streaming claim. Empty or incomplete snapshots are described honestly,
 not automatically certified complete. New snapshots need a fresh audit.
 
-Next: P1.3 opponent-defense cohorts with explicit EPA perspective and time cutoffs,
-then context filters and matched league baselines. UI and predictive work remain
-deferred.
+P1.3 opponent-defense cohorts followed on 2026-10-01, preserving EPA perspective
+and time cutoffs. See the [current roadmap](../ROADMAP.md) for context filters and
+matched league baselines. UI and predictive work remain deferred.

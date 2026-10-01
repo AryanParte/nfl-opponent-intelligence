@@ -12,7 +12,9 @@ provenance. Snapshot reports add `source.snapshot`, retaining the acquisition
 manifest with source URLs, IDs, timestamps, attribution, and archive/decoded
 fingerprints. `source.sha256` means decoded CSV bytes (including any BOM), not gzip
 bytes; it matches `source.snapshot.decoded_csv.sha256`. Manual `--csv` reports keep
-their original shape and do not claim verified acquisition provenance.
+their original source block and do not claim verified acquisition provenance.
+Both input paths now emit [report schema v2](METRICS.md#report-schema-v2), with
+explicit team/side and offense-relative metric context; the manifest schema is unchanged.
 
 `--snapshot` is mutually exclusive with `--csv`, never downloads, and never follows
 `current.json`. It verifies the stored archive/manifest, then rechecks the decoded
