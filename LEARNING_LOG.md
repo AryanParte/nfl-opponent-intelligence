@@ -340,8 +340,14 @@ independent team counters over typed eligible plays. Each side's partitions tota
 23 respectively; manifests remain intact. This is a role-selection integration
 check, not a new raw CSV audit, external gamebook comparison, or forecast test.
 
-**Publication:** local verification is complete; pushed SHA, PR, attribution, and
-remote CI results will be recorded after publication.
+**Publication:** implementation `208fb90` is pushed with matching local/remote SHAs
+and confirmed AryanParte author/committer attribution.
+[PR #5](https://github.com/AryanParte/nfl-opponent-intelligence/pull/5) is open,
+unmerged, and attached to the task. [Implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36877565779)
+passed the offline regression suite and synthetic demo on all three Python versions.
+Manual dispatch was needed because no automatic run appeared. The PR description
+records final-head verification after this publication-record update. Workflow
+configuration, repository settings, and the existing daily automation are unchanged.
 
 **Remaining/next task:** add an optional pre-play field-position filter using a
 reviewed `yardline_100` contract, explicit boundaries/missingness, and tests for

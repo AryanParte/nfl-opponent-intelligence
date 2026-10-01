@@ -14,8 +14,9 @@ validation, opponent adjustment, a web interface, or deployment.
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/defense-cohort-reports`, started from updated `origin/main`
   at `8ed98e6` after observing PR #4 was merged. Continue its PR while unmerged.
-- Publication: local verification is complete; push, PR, attribution, and new-head
-  CI evidence will be recorded after publication. Do not infer publication from tests.
+- Current review: [PR #5](https://github.com/AryanParte/nfl-opponent-intelligence/pull/5),
+  open and unmerged. Implementation `208fb90` is pushed with matching local/remote
+  SHAs and confirmed AryanParte author/committer attribution. Do not enable auto-merge.
 - Previous analytical integration review:
   [PR #4](https://github.com/AryanParte/nfl-opponent-intelligence/pull/4), merged at
   `8ed98e6`. No open PRs or review feedback remained at this run's start.
@@ -82,8 +83,11 @@ This is an integration check of role selection, not a new independent raw-data
 audit, gamebook check, defensive ranking, or forecast evaluation. Games/rates are
 not additive across team partitions.
 
-The [merged PR #4 final-head run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36786438246)
-passed before this work. New-head CI is pending publication. No workflow code,
+The [PR #5 implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36877565779)
+passed on `208fb90`: Python 3.11/3.12/3.13 each succeeded in the offline regression
+suite and synthetic demo. No automatic run appeared after push/PR creation, so the
+existing workflow was dispatched manually. Final-head verification after this
+publication-record update is recorded in the PR description. No workflow code,
 repository settings, or daily automation were changed.
 
 ## Raw acquisition evidence
