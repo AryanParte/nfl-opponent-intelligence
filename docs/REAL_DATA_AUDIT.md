@@ -140,3 +140,60 @@ not automatically certified complete. New snapshots need a fresh audit.
 P1.3 opponent-defense cohorts followed on 2026-10-01, preserving EPA perspective
 and time cutoffs. See the [current roadmap](../ROADMAP.md) for context filters and
 matched league baselines. UI and predictive work remain deferred.
+
+## Field-position extension (2026-10-02)
+
+The same unchanged snapshot contains `yardline_100`. A direct raw-CSV check found
+3,542 missing values across 49,492 source rows, but zero missing or invalid values
+among 34,902 eligible plays. Eligible values span 1..99 yards, all integral; the
+adapter's broader 0..100/fractional contract is exercised with synthetic tests.
+Every eligible `(game_id, play_id, yardline_100)` agreed between raw CSV and the
+updated adapter. Rerunning the audit now exposes raw and eligible optional-field
+missingness separately; the earlier committed audit JSON remains dated evidence.
+
+With network blocked, 576 filtered reports were checked: 32 teams × two roles ×
+three season/cutoff combinations × three inclusive ranges. Direct source
+selection and Decimal EPA sums matched play/game/dropback/EPA counts, EPA means
+within `1e-12`, offensive success rates, range-removal counts, and retained
+manifests. The 192 corresponding unfiltered reports matched merged PR #5's output
+exactly. Neither the original synthetic fixture nor raw source files changed.
+
+Summing play counts across teams gives the same total for either role:
+
+| Season and exclusive cutoff | 0..20 yards | 80..100 yards | Exactly 20 yards |
+| --- | ---: | ---: | ---: |
+| REG before week 3 | 590 | 331 | 34 |
+| REG before week 19 | 5,147 | 2,967 | 302 |
+| POST before week 23 | 233 | 136 | 12 |
+
+Columns overlap (exactly 20 is part of 0..20); they are not disjoint totals.
+Do not sum team game counts or rates as if they were play counts. These are
+software reconciliation checks, not adjusted defense rankings, external gamebook
+validation, or a forecast evaluation.
+
+After verifying the pinned snapshot with the audit command above, this independent
+recipe reproduces the table directly from raw records:
+
+```python
+import csv
+from decimal import Decimal
+import gzip
+from pathlib import Path
+
+root = Path("data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06")
+with gzip.open(root / "play_by_play_2024.csv.gz", "rt", encoding="utf-8-sig", newline="") as source:
+    eligible = [r for r in csv.DictReader(source) if r["season"] == "2024"
+                and r["play_type"] in {"run", "pass"}
+                and all(float(r[f]) == 0 for f in ("two_point_attempt", "qb_kneel", "qb_spike"))]
+assert all(r["yardline_100"].strip().upper() not in {"", "NA", "NAN", "NULL"} for r in eligible)
+for kind, cutoff in (("REG", 3), ("REG", 19), ("POST", 23)):
+    counts = [sum(r["season_type"] == kind and int(r["week"]) < cutoff
+                  and low <= Decimal(r["yardline_100"]) <= high for r in eligible)
+              for low, high in ((0, 20), (80, 100), (20, 20))]
+    print(kind, cutoff, counts)
+```
+
+For an individual filtered cohort, add the same range predicate to the earlier
+independent EPA recipe; use `posteam` for offense or `defteam` for defense. The
+normal report CLI uses `--yardline-min` and `--yardline-max`. The recipes are
+checks of this artifact, not replacements for production missing-data validation.

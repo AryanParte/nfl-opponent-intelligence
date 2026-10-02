@@ -8,8 +8,9 @@ prepared for.
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
 acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
 cohort reconciliations. Reports can select a team's offense or defense while
-keeping EPA offense-relative. Context filters, a web interface, adjustment, and
-deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
+keeping EPA offense-relative, with optional pre-play field-position ranges.
+Score/time filters, a web interface, adjustment, and deployment remain on the
+[roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
@@ -106,6 +107,27 @@ Snapshot reports include the source manifest and both byte fingerprints.
 `--csv` remains the uncompressed, caller-labeled path; the synthetic demo stays
 independent of GitHub availability and credentials.
 
+### Limit field position
+
+Using that same pinned snapshot, select plays where opposing offenses faced CAR
+at or within 20 yards of CAR's goal line:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --snapshot "$snapshot_dir" \
+  --source-label 'nflverse 2024 retrospective snapshot; acquired 2026-09-30 UTC' \
+  --team CAR --side defense --season 2024 --before-week 3 \
+  --yardline-min 0 --yardline-max 20
+```
+
+Bounds are inclusive and use the offense's `yardline_100` coordinates for either
+side. Omit one bound to use 0 or 100; omit both to leave the cohort unfiltered.
+Missing positions are excluded only when filtering, with explicit counts and a
+warning. Filtering requires the source column, even for an otherwise empty cohort.
+The original synthetic fixture omits it intentionally; the offline field-position
+tests generate separate synthetic inputs. See [definitions](docs/METRICS.md#pre-play-field-position-ranges)
+and the [real-data check](docs/REAL_DATA_AUDIT.md#field-position-extension-2026-10-02).
+
 ## The football decision
 
 The eventual user is an analyst preparing an opponent brief: how often does an
@@ -134,6 +156,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
    `tests/test_ingestion.py` tests provenance, audit, and report integration.
    `tests/test_defense_reports.py` checks role selection, reciprocal measurements,
    denominator accounting, and unaltered EPA interpretation.
+   `tests/test_field_position.py` checks optional-field validation, inclusive bounds,
+   scoped missingness, legacy compatibility, and CLI failures.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.

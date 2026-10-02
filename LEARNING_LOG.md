@@ -354,3 +354,73 @@ reviewed `yardline_100` contract, explicit boundaries/missingness, and tests for
 both roles without changing unfiltered results. Score/time filters, matched league
 baselines, game-level uncertainty, and a readable brief remain unfinished. Keep
 the feature PR unmerged for Aryan's review; prior source/CI limitations still apply.
+
+## 2026-10-02 — Pre-play field-position filters
+
+**Built:** optional `yardline_100` parsing and inclusive `--yardline-min` /
+`--yardline-max` filters for both roles. Reports expose effective bounds and the
+base/missing/outside/selected play counts. Audits distinguish raw and eligible
+optional-field missingness. Started `codex/field-position-filters` from merged
+PR #5's `de354ac`, with no outstanding PRs or reviews. No automation changes.
+
+**Why it matters:** analysts can compare defined regions of the field without
+confusing offense/defense coordinates, treating unknown positions as zero, or
+hiding the plays removed from a cohort. Existing valid unfiltered output is intact.
+
+**Review:** `src/opponent_intelligence/pbp.py` (optional-field contract),
+`report.py` (range selection and accounting), `audit.py` (missingness populations),
+`__main__.py` (flags), `tests/test_field_position.py`, the two new snapshot tests
+in `tests/test_ingestion.py`, and the field-position section in `docs/REAL_DATA_AUDIT.md`.
+
+**Sports concepts:** pre-play position versus post-play outcomes; 20 means 20 yards
+from the offense's opponent's goal line for either role; selected plays are not
+drive-level red-zone opportunities. EPA and success retain the offense perspective.
+
+**Software/statistical concepts:** optional headers versus missing observations,
+finite inclusive bounds, backward-compatible output extensions, independent raw
+selection/Decimal checks, and conditional missing-data denominators. A 0..100
+filter excludes unknown positions; no filter retains them. Samples still mix
+score/time/opponents and contain within-game dependence.
+
+**What to learn:** follow a source row through eligibility, team/time selection,
+range selection, then measurement. Reconcile the synthetic six-play base as
+`6 = 1 missing position + 2 outside range + 3 selected`, then explain why only
+two selected plays supply EPA while all three supply the dropback denominator.
+
+**Three review questions:**
+
+1. Why must a defense's 0..20 filter use the offense's coordinates without flipping
+   them, and why should it avoid end-of-play positions?
+2. How do an absent column, a missing position, zero yards, and missing EPA differ
+   in errors, selection, and metric denominators?
+3. How do the nested field-filter counts reconcile with global exclusions without
+   double-counting, and why do the raw 3,542 missing positions not reduce this
+   snapshot's 34,902 eligible plays?
+
+**Verification/self-review:** the 75-test baseline passed. New range/validation
+cases failed against the prior implementation; all 93 offline tests now pass on
+Python 3.11/3.12/3.13. Sixteen field tests and two snapshot tests cover absent and
+all-missing fields, fractional/equal/zero/end bounds, malformed values even outside
+the requested cohort, exclusions, reciprocal roles, time boundaries, provenance,
+and no partial CLI output. Review removed silent extra-key dropping from the test
+CSV writer and strengthened scoped-missingness and filtered sample-warning
+assertions; optional-field availability survives empty input and snapshot loading.
+Existing fixture bytes, eligibility rules, and formulas remain
+unchanged. Schema additions and the stricter newly recognized column are documented.
+
+The read-only spreadsheet audit kept raw bytes untouched and separated source-wide
+from eligible missingness: 3,542 versus zero; eligible positions span 1..99. All
+34,902 position/identity pairs reconcile. With network blocked, 576 filtered reports
+match independent raw selection and Decimal calculations (EPA tolerance `1e-12`),
+and 192 unfiltered reports exactly match the merged predecessor. The evidence and
+replay recipe are committed in the existing audit document, not presented as model
+validation, external gamebook matching, or opponent-adjusted performance.
+
+**Publication:** local verification is complete; pushed SHA, attribution, PR, and
+remote CI evidence will be recorded after publication.
+
+**Remaining/next task:** optional pre-play `score_differential` filtering, keeping
+the offense-relative sign for both roles and testing combined field/score ranges,
+missingness, and unchanged defaults. Time filtering, matched baselines, game-level
+uncertainty, and the actual brief remain unfinished. Existing snapshot availability,
+automatic CI triggering, and scale limits remain; leave this PR unmerged for review.

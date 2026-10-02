@@ -285,6 +285,43 @@ class IngestionTests(unittest.TestCase):
         self.assertEqual(report["overall"]["epa_observations"], 4)
         self.assertAlmostEqual(report["overall"]["epa_per_play"], 0.05)
 
+    def test_optional_field_audit_separates_raw_and_eligible_missingness(self):
+        # The second row is eligible with missing position; the last one is an
+        # excluded no-play row. Missingness has different populations in the audit.
+        rows = [dict(self.rows[0], yardline_100="20"),
+                dict(self.rows[1], yardline_100="NA"),
+                dict(self.rows[0], play_id="999", play_type="no_play", yardline_100="")]
+        buffer = io.StringIO(newline="")
+        writer = csv.DictWriter(buffer, fieldnames=REQUIRED_COLUMNS + ("yardline_100",))
+        writer.writeheader()
+        writer.writerows(rows)
+        directory, raw = self.snapshot(raw=buffer.getvalue().encode())
+        dataset = ingestion.load_snapshot(directory)
+        self.assertEqual(dataset.optional_columns, ("yardline_100",))
+        result = audit.audit_snapshot(directory)
+        self.assertEqual(result["input"]["optional_column_missing_counts"], {"yardline_100": 2})
+        self.assertEqual(result["adapter"]["optional_column_missing_counts"], {"yardline_100": 1})
+        self.assertTrue(result["reconciliation"]["raw_and_adapter_eligible_identities_match"])
+        stdout = io.StringIO()
+        with redirect_stdout(stdout):
+            code = main(["--snapshot", str(directory), "--team", "ATL", "--side", "defense",
+                         "--season", "2024", "--before-week", "3", "--source-label", "Synthetic",
+                         "--yardline-min", "0", "--yardline-max", "20"])
+        self.assertEqual(code, 0)
+        report = json.loads(stdout.getvalue())
+        self.assertEqual(report["overall"]["plays"], 1)
+        self.assertEqual(report["overall"]["epa_per_play"], 0.8)
+        self.assertEqual(report["source"]["sha256"], sha256(raw).hexdigest())
+        self.assertEqual(report["source"]["snapshot"], json.loads((directory / "manifest.json").read_text()))
+        self.assertEqual(report["data_quality"]["field_position_filter"]["missing_yardline_100"], 1)
+
+    def test_audit_identifies_absent_optional_column_without_inventing_missing_counts(self):
+        directory, _ = self.snapshot()
+        result = audit.audit_snapshot(directory)
+        self.assertEqual(result["input"]["optional_column_missing_counts"], {})
+        self.assertEqual(result["adapter"]["optional_column_missing_counts"], {})
+        self.assertEqual(self.report(ingestion.load_snapshot(directory))["overall"]["plays"], 6)
+
 
 if __name__ == "__main__":
     unittest.main()
