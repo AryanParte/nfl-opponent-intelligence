@@ -14,8 +14,9 @@ opponent adjustment, uncertainty, a finished brief, UI, and deployment remain op
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/field-position-filters`, started from updated `origin/main`
   at `de354ac` after observing PR #5 was merged. Continue its PR while unmerged.
-- Publication: local verification is complete; new PR, pushed SHA, attribution,
-  and CI results will be recorded after publication. Do not infer a push from tests.
+- Current review: [PR #6](https://github.com/AryanParte/nfl-opponent-intelligence/pull/6),
+  open and unmerged. Implementation `b71789c` is pushed with matching local/remote
+  SHAs and confirmed AryanParte author/committer attribution. Do not enable auto-merge.
 - Previous defense-side review:
   [PR #5](https://github.com/AryanParte/nfl-opponent-intelligence/pull/5), merged at
   `de354ac`. No open PRs or review feedback remained at this run's start.
@@ -88,9 +89,12 @@ unfiltered reports match the previous merged implementation exactly. See the
 [field-position evidence and replay](REAL_DATA_AUDIT.md#field-position-extension-2026-10-02)
 for ranges, counts, tolerance, and limits. No raw data was changed or committed.
 
-The [merged PR #5 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/36877781004)
-was green at this run's start. New-head CI awaits publication. No workflow code,
-repository settings, or daily automation were changed.
+The [PR #6 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37020736183)
+passed on `b71789c`: Python 3.11/3.12/3.13 each succeeded in the offline regression
+suite and synthetic demo. No automatic run appeared after push/PR creation, so the
+existing workflow was dispatched manually. The PR description records final-head
+verification after this publication-record update. No workflow code, repository
+settings, or daily automation were changed.
 
 ## Raw acquisition evidence
 

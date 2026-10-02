@@ -416,8 +416,14 @@ and 192 unfiltered reports exactly match the merged predecessor. The evidence an
 replay recipe are committed in the existing audit document, not presented as model
 validation, external gamebook matching, or opponent-adjusted performance.
 
-**Publication:** local verification is complete; pushed SHA, attribution, PR, and
-remote CI evidence will be recorded after publication.
+**Publication:** implementation `b71789c` is pushed with matching local/remote SHAs
+and confirmed AryanParte author/committer attribution.
+[PR #6](https://github.com/AryanParte/nfl-opponent-intelligence/pull/6) is open,
+unmerged, and attached to the task. [Implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37020736183)
+passed the offline regression suite and synthetic demo on Python 3.11/3.12/3.13.
+Manual dispatch was needed because no automatic run appeared. The PR description
+records final-head verification after this publication-record update. Workflow
+configuration, repository settings, and the existing daily automation are unchanged.
 
 **Remaining/next task:** optional pre-play `score_differential` filtering, keeping
 the offense-relative sign for both roles and testing combined field/score ranges,
