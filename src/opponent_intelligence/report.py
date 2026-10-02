@@ -36,11 +36,14 @@ def build_report(
     side: str = "offense",
     season_type: str = "REG",
     minimum_plays: int = 30,
+    yardline_min: float | None = None,
+    yardline_max: float | None = None,
     source_label: str,
 ) -> dict:
     """Select a team's offense or defense, season/type, and weeks < before_week.
 
     Selecting defense changes the team predicate, not EPA signs or denominators.
+    Optional inclusive yardline_100 bounds also retain the offense's coordinates.
     The week boundary prevents including target-week outcomes. It cannot ensure
     historical availability of subsequently revised upstream values.
     """
@@ -58,10 +61,34 @@ def build_report(
         raise ValueError("source_label must describe the input data")
     if dataset.source_manifest is not None and season != dataset.source_manifest["season"]:
         raise ValueError("requested season differs from snapshot manifest")
+    field_position = None
+    if yardline_min is not None or yardline_max is not None:
+        for name, value in (("yardline_min", yardline_min), ("yardline_max", yardline_max)):
+            if value is not None and (type(value) not in (int, float) or not 0 <= value <= 100):
+                raise ValueError(f"{name} must be a finite number in 0..100")
+        lower = 0.0 if yardline_min is None else float(yardline_min)
+        upper = 100.0 if yardline_max is None else float(yardline_max)
+        if lower > upper:
+            raise ValueError("yardline_min must not exceed yardline_max")
+        if "yardline_100" not in dataset.optional_columns:
+            raise ValueError("field-position filtering requires the yardline_100 source column")
+        field_position = {"field": "yardline_100", "minimum_inclusive": lower,
+                          "maximum_inclusive": upper, "perspective": "offense",
+                          "missing_policy": "exclude"}
     selected = [play for play in dataset.plays if (
         (play.offense if side == "offense" else play.defense) == team and play.season == season
         and play.season_type == season_type and play.week < before_week
     )]
+    field_quality = None
+    if field_position is not None:
+        before_count = len(selected)
+        missing_count = sum(play.yardline_100 is None for play in selected)
+        selected = [play for play in selected if play.yardline_100 is not None
+                    and lower <= play.yardline_100 <= upper]
+        field_quality = {"plays_before_filter": before_count,
+                         "missing_yardline_100": missing_count,
+                         "outside_range": before_count - missing_count - len(selected),
+                         "plays_after_filter": len(selected)}
     groups: dict[tuple[int, str], list[Play]] = defaultdict(list)
     for play in selected:
         distance = "short" if play.yards_to_go <= 3 else "medium" if play.yards_to_go <= 6 else "long"
@@ -77,11 +104,15 @@ def build_report(
         warnings.append("No eligible plays match this cohort; rates are null, not zero.")
     if any(play.epa is None for play in selected):
         warnings.append("Missing EPA is excluded only from EPA and success-rate denominators.")
+    if field_quality is not None and field_quality["missing_yardline_100"]:
+        warnings.append("Missing yardline_100 excluded by field-position filter: "
+                        f"{field_quality['missing_yardline_100']} of "
+                        f"{field_quality['plays_before_filter']} base-cohort plays; no imputation.")
     distance_order = {"short": 0, "medium": 1, "long": 2}
     source = {"label": source_label, "sha256": dataset.source_sha256}
     if dataset.source_manifest is not None:
         source["snapshot"] = deepcopy(dataset.source_manifest)
-    return {
+    report = {
         "schema_version": 2,
         "source": source,
         "cohort": {"team": team, "side": side, "season": season, "season_type": season_type,
@@ -102,3 +133,7 @@ def build_report(
         ],
         "warnings": warnings,
     }
+    if field_position is not None:
+        report["cohort"]["field_position"] = field_position
+        report["data_quality"]["field_position_filter"] = field_quality
+    return report

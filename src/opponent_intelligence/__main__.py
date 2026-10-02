@@ -24,6 +24,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--before-week", required=True, type=int, help="Exclusive cutoff: target week is not included")
     parser.add_argument("--season-type", choices=("REG", "POST"), default="REG")
     parser.add_argument("--minimum-plays", type=int, default=30, help="Warning threshold, not a significance test")
+    parser.add_argument("--yardline-min", type=float,
+                        help="Inclusive minimum pre-play yardline_100 (offense's distance to opposing goal line)")
+    parser.add_argument("--yardline-max", type=float,
+                        help="Inclusive maximum pre-play yardline_100; bounds are 0..100 for either side")
     args = parser.parse_args(argv)
     try:
         report = build_report(
@@ -31,6 +35,7 @@ def main(argv: list[str] | None = None) -> int:
             team=args.team, side=args.side, season=args.season,
             before_week=args.before_week, season_type=args.season_type,
             minimum_plays=args.minimum_plays, source_label=args.source_label,
+            yardline_min=args.yardline_min, yardline_max=args.yardline_max,
         )
         payload = json.dumps(report, indent=2, sort_keys=True, allow_nan=False)
     except (OSError, ValueError, csv.Error) as exc:

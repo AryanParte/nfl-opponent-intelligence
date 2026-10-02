@@ -14,6 +14,7 @@ REQUIRED_COLUMNS = (
     "play_type", "down", "ydstogo", "qb_dropback", "qb_kneel", "qb_spike",
     "two_point_attempt", "epa",
 )
+OPTIONAL_COLUMNS = ("yardline_100",)
 MISSING = {"", "NA", "NAN", "NULL"}
 KNOWN_PLAY_TYPES = frozenset({
     "run", "pass", "punt", "field_goal", "kickoff", "extra_point",
@@ -38,6 +39,7 @@ class Play:
     yards_to_go: int
     dropback: bool
     epa: float | None
+    yardline_100: float | None = None
 
 
 @dataclass(frozen=True)
@@ -47,6 +49,7 @@ class Dataset:
     input_rows: int
     exclusions: dict[str, int]
     source_manifest: dict | None = None
+    optional_columns: tuple[str, ...] = ()
 
 
 def _integer(value: str, name: str, minimum: int, maximum: int) -> int:
@@ -79,11 +82,24 @@ def _epa(value: str) -> float | None:
     return number
 
 
+def _yardline_100(value: str) -> float | None:
+    if value.upper() in MISSING:
+        return None
+    try:
+        number = float(value)
+    except ValueError as exc:
+        raise DataValidationError(f"yardline_100: expected a number or missing value, got {value!r}") from exc
+    if not 0 <= number <= 100:
+        raise DataValidationError(f"yardline_100: expected a finite number in 0..100, got {value!r}")
+    return number
+
+
 def load_csv(path: Path) -> Dataset:
     """Keep completed run/pass plays; see docs/METRICS.md for exclusions.
 
     Hash the same bytes that are parsed. Duplicate play keys fail instead of
-    guessing which revision is authoritative. Extra upstream columns are allowed.
+    guessing which revision is authoritative. Recognized optional columns are
+    validated on eligible rows; other extra upstream columns are ignored.
     """
     return _load_csv_bytes(path.read_bytes())
 
@@ -161,8 +177,10 @@ def _load_csv_bytes(raw: bytes, *, expected_season: int | None = None) -> Datase
                 yards_to_go=_integer(values["ydstogo"], "ydstogo", 0, 100),
                 dropback=dropback,
                 epa=_epa(values["epa"]),
+                yardline_100=_yardline_100(values.get("yardline_100", "")),
             ))
         except DataValidationError as exc:
             raise DataValidationError(f"CSV line {reader.line_num}: {exc}") from exc
 
-    return Dataset(tuple(plays), sha256(raw).hexdigest(), input_rows, dict(exclusions))
+    return Dataset(tuple(plays), sha256(raw).hexdigest(), input_rows, dict(exclusions),
+                   optional_columns=tuple(name for name in OPTIONAL_COLUMNS if name in columns))

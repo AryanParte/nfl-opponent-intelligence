@@ -24,6 +24,45 @@ the input instead of silently becoming exclusions. See the
 [input contract](DATA_CONTRACT.md#play-type-validation-and-exclusion-order) for
 accepted categories, missing markers, and exclusion precedence.
 
+## Pre-play field-position ranges
+
+`--yardline-min` / `--yardline-max` (Python: `yardline_min` / `yardline_max`) select
+an inclusive `yardline_100` range after the team, role, season/type, and exclusive
+week filters. Values must be finite numbers in 0..100 with minimum <= maximum.
+One omitted bound defaults to 0 or 100; both omitted means **no field filter**.
+Bounds may be equal or fractional. The [input contract](DATA_CONTRACT.md#optional-field-position)
+defines the source field and its validation.
+Python bounds accept built-in integers/floats, not booleans or numeric strings;
+the CLI parses numeric arguments before applying the same range checks.
+
+Coordinates remain offense-relative even for a defense report: 20 means 20 yards
+from the offense's opponent's goal line, while 80 means the offense's own 20.
+Do not substitute `100 - yardline_100` when selecting defense. Selection uses the
+pre-play position, not yards gained, touchdown flags, or an end-of-play location.
+The explicit 0..20 range is a play cohort, not a drive-level red-zone efficiency
+statistic or a claim of an NFL-standard metric definition.
+
+A requested filter excludes missing positions, with a warning and counts. Without
+a filter, missing positions do not remove plays. Consequently, explicitly asking
+for 0..100 is **not** equivalent to omitting both flags if positions are missing.
+An absent column causes an error when filtering; a present but all-missing column
+can validly yield zero plays and null rates. Missing EPA among selected plays still
+affects only EPA/success denominators.
+
+Filtered reports add `cohort.field_position` with the field, effective inclusive
+bounds, offense perspective, and missing policy. They also add
+`data_quality.field_position_filter` with `plays_before_filter`,
+`missing_yardline_100`, `outside_range`, and `plays_after_filter`. These satisfy
+`before = missing + outside_range + after` within the otherwise selected cohort.
+The global `eligible_rows_outside_cohort` already includes those removed by the
+field filter; do not add the nested counts again. Situations, rates, games, and
+sample warnings are calculated on the final selected plays.
+
+These optional fields are additive within report schema v2 and absent when no
+range is requested. Valid unfiltered reports retain their previous JSON output.
+Recognizing the optional source field does intentionally reject malformed observed
+values that were previously ignored. The metric formulas themselves are unchanged.
+
 ## Definitions
 
 - **Plays:** count of the eligible cohort, regardless of EPA availability.
@@ -99,6 +138,12 @@ dropbacks and two designed runs. Its four observed EPA values are 0.8, 0.2, -1.2
 and 0.4, giving 0.2 / 4 = 0.05 EPA/play and 3 / 4 = 75% offensive success allowed.
 The fifth play has missing EPA. The defense tests also use separate synthetic typed
 records to cover multiple opponents; those are not additional NFL observations.
+
+`test_field_position.py` generates a separate synthetic CAR cohort with six plays:
+positions 0, 20, 20.5, 100, missing, and 10. The 0..20 filter leaves three plays,
+one dropback, and EPA 0.8, -0.4, and missing. Thus EPA/play is 0.4 / 2 = 0.2,
+success is 1 / 2, and dropback rate is 1 / 3. One missing position and two known
+out-of-range positions reconcile the three removals; none is a real team finding.
 
 ## Limits on interpretation
 

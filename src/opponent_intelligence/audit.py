@@ -16,13 +16,15 @@ def audit_snapshot(directory: Path) -> dict:
     """Validate the adapter, then independently enumerate eligible raw identities.
 
     Coverage counts describe this artifact, not agreement with an external game
-    schedule. Missingness is measured before exclusions, across required fields.
+    schedule. Raw missingness covers required and recognized optional fields;
+    optional-field missingness is also counted separately on eligible plays.
     """
     raw, manifest = _read_snapshot(directory)
     dataset = _snapshot_dataset(raw, manifest)
     reader = csv.DictReader(StringIO(raw.decode("utf-8-sig")), strict=True)
     columns = reader.fieldnames
     missing = Counter({column: 0 for column in REQUIRED_COLUMNS})
+    optional_missing = Counter({column: 0 for column in dataset.optional_columns})
     types: Counter[str] = Counter()
     coverage_rows: Counter[tuple[str, int]] = Counter()
     coverage_games: dict[tuple[str, int], set[str]] = defaultdict(set)
@@ -32,6 +34,8 @@ def audit_snapshot(directory: Path) -> dict:
         values = {key: value.strip() for key, value in row.items()}
         for column in REQUIRED_COLUMNS:
             missing[column] += values[column].upper() in MISSING
+        for column in dataset.optional_columns:
+            optional_missing[column] += values[column].upper() in MISSING
         kind = values["play_type"]
         types["<missing>" if kind.upper() in MISSING else kind] += 1
         try:
@@ -80,6 +84,7 @@ def audit_snapshot(directory: Path) -> dict:
         "input": {
             "rows": dataset.input_rows, "column_count": len(columns),
             "required_column_missing_counts": dict(sorted(missing.items())),
+            "optional_column_missing_counts": dict(sorted(optional_missing.items())),
             "play_type_counts": dict(sorted(types.items())),
             "coverage": [{"season_type": kind, "week": week,
                           "rows": coverage_rows[(kind, week)],
@@ -90,13 +95,17 @@ def audit_snapshot(directory: Path) -> dict:
             "eligible_rows": len(dataset.plays),
             "excluded_rows_by_reason": dict(sorted(dataset.exclusions.items())),
             "by_season_type": by_type,
+            "optional_column_missing_counts": {
+                column: sum(getattr(play, column) is None for play in dataset.plays)
+                for column in dataset.optional_columns
+            },
         },
         "reconciliation": {"raw_and_adapter_eligible_identities_match": True,
                            "accounted_rows": len(parsed_keys) + excluded,
                            "duplicate_play_keys": 0},
         "limits": [
             "Coverage is observed in this snapshot, not matched to an independent schedule.",
-            "Validation covers required adapter fields, not every extra upstream column.",
+            "Validation covers required and recognized optional adapter fields, not every extra upstream column.",
             "Retrospective source revisions and EPA training may use later information.",
         ],
     }

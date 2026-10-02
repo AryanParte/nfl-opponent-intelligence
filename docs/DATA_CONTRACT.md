@@ -36,8 +36,9 @@ raw archive; report metrics and audit summaries are derived work, not raw data.
 | `qb_kneel`, `qb_spike`, `two_point_attempt` | Explicit 0/1 indicators used to exclude special situations. |
 | `epa` | Finite numeric value, or blank/NA/NaN/null for missing. No zero imputation. |
 
-Required headers must exist even if every row is excluded. Additional columns are
-accepted and ignored. Duplicate headers and wrong-width rows fail. Integral
+Required headers must exist even if every row is excluded. Recognized optional
+columns are validated as described below; other additional columns are ignored.
+Duplicate headers and wrong-width rows fail. Integral
 numeric strings like `1.0` are accepted. Row validation errors include CSV line
 numbers, and malformed rows are never silently dropped.
 
@@ -46,6 +47,29 @@ have blank down, team, EPA, and other fields; those are not parsed after exclusi
 Two-point attempts are excluded before validating down, which is often missing
 for conversions. Raw source exclusion counts and the number outside the requested
 cohort remain in the report; an individual row has exactly one exclusion reason.
+
+## Optional field position
+
+`yardline_100` is recognized as of 2026-10-02. It is the offense's pre-play distance
+in yards to the opposing goal line, not yards gained or an end-of-play location.
+The [nflreadr dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv)
+defines its possession-relative direction; nflfastR's
+[starting-position example](https://nflfastr.com/articles/nflfastR.html) uses 80 for
+an offense at its own 20. The parser accepts finite numbers in **0..100 inclusive**,
+including fractional yards. These are explicit adapter bounds, not a claim that
+every boundary occurs in the recorded data. Blank/NA/NaN/null mean missing, not zero.
+
+The header may be absent for backward-compatible unfiltered reports. If present,
+malformed or out-of-range values on eligible rows fail with CSV line context even
+when the row is outside the requested team/week. Already-excluded rows do not need
+valid field-position values, matching the down/EPA validation precedence.
+
+`Play.yardline_100` defaults to `None`. `Dataset.optional_columns` records recognized
+headers, including on empty inputs, so an absent field is distinct from a present
+field with all values missing. Direct typed-dataset callers must populate this
+metadata when supplying the field. Requested range filters require the column;
+an absent column fails instead of presenting an unavailable result as an empty one.
+No source data is imputed, and the original synthetic fixture is unchanged.
 
 ## Play-type validation and exclusion order
 
@@ -84,6 +108,10 @@ markers across all required columns before exclusions, and records types and
 observed games/rows per week. The audit additionally validates REG/POST and week
 on every row and rejects conflicting game contexts, even on excluded rows.
 These are explicit audit checks; ordinary reporting does not run the whole audit.
+Audit schema v1 now also includes `input.optional_column_missing_counts` (all raw
+rows) and `adapter.optional_column_missing_counts` (eligible plays). Only recognized
+headers actually present appear in these maps; `{}` means absent, not zero missing
+values. Required-field counts and source provenance retain their existing meanings.
 
 Duplicate keys, malformed inputs, and audit disagreements fail the entire command
 with no partial JSON. Zero duplicate keys in a successful audit means validation
