@@ -197,3 +197,70 @@ For an individual filtered cohort, add the same range predicate to the earlier
 independent EPA recipe; use `posteam` for offense or `defteam` for defense. The
 normal report CLI uses `--yardline-min` and `--yardline-max`. The recipes are
 checks of this artifact, not replacements for production missing-data validation.
+
+## Score extension (2026-10-03)
+
+The same unchanged pinned snapshot contains `score_differential`. Across 49,492
+raw rows, 2,713 scores are missing. All 34,902 eligible plays have observed whole
+scores, serialized as integer strings, ranging from -46 to 46. Every eligible
+identity and score matches the adapter exactly, and every eligible score equals
+the source's pre-play `posteam_score - defteam_score`. There are 1,456 eligible
+plays whose pre/post-play scores differ. This checks internal source consistency,
+not independently reconstructed gamebook scores. The source's broader numeric
+dictionary is narrowed to the explicit [whole-point contract](DATA_CONTRACT.md#optional-pre-play-score).
+
+With snapshot loading/auditing blocked from network access, 2,304 reports matched
+independent raw selections and Decimal EPA calculations: 32 teams × two roles ×
+REG before 3 / REG before 19 / POST before 23 × no field range / 0..20 / 80..100 ×
+scores <= -1 / exactly 0 / >= 1 / -7..7 inclusive. Exact play/game/dropback/EPA
+counts, filter-stage removals, source manifests, and situation play totals agree;
+means/rates agree within absolute tolerance `1e-12`. The 576 corresponding reports
+without score filtering (including field-only reports) exactly match merged
+PR #6's implementation at `5d12321`.
+
+For either role, summing team play counts without a field restriction gives:
+
+| Season and exclusive cutoff | Offense trailing | Tied | Offense leading | Score -7..7 |
+| --- | ---: | ---: | ---: | ---: |
+| REG before week 3 | 1,863 | 696 | 1,252 | 2,546 |
+| REG before week 19 | 16,011 | 6,097 | 11,227 | 21,486 |
+| POST before week 23 | 785 | 188 | 594 | 955 |
+
+The first three columns partition the eligible cohort for this complete-score
+snapshot; -7..7 overlaps them and must not be added to their sum. A defense's
+trailing column still means the **opposing offense** trails. These counts are
+reconciliation checks, not opponent-adjusted rankings or predictive validation.
+
+After verifying the pinned snapshot with the audit command above, this independent
+raw-record recipe reproduces the table and component check:
+
+```python
+import csv
+import gzip
+from pathlib import Path
+
+root = Path("data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06")
+with gzip.open(root / "play_by_play_2024.csv.gz", "rt", encoding="utf-8-sig", newline="") as source:
+    rows = [r for r in csv.DictReader(source) if r["season"] == "2024"
+            and r["play_type"] in {"run", "pass"}
+            and all(r[f] == "0" for f in ("two_point_attempt", "qb_kneel", "qb_spike"))]
+assert len(rows) == 34902
+assert all(int(r["score_differential"]) == int(r["posteam_score"]) - int(r["defteam_score"]) for r in rows)
+assert sum(r["score_differential"] != r["score_differential_post"] for r in rows) == 1456
+for kind, cutoff in (("REG", 3), ("REG", 19), ("POST", 23)):
+    scores = [int(r["score_differential"]) for r in rows
+              if r["season_type"] == kind and int(r["week"]) < cutoff]
+    print(kind, cutoff, [sum(s < 0 for s in scores), sum(s == 0 for s in scores),
+                         sum(s > 0 for s in scores), sum(-7 <= s <= 7 for s in scores)])
+```
+
+This recipe relies on verified serialization/missingness in this artifact; it is
+not a general parser. To replay the README score example using the earlier
+independent EPA recipe, additionally select `posteam == "CAR"`, REG before week 3,
+`0 <= yardline_100 <= 20`, and `score_differential <= -1`. The stages contain
+101 → 7 → 7 plays, with two games, seven dropbacks, seven observed EPA values,
+one positive EPA, and Decimal EPA sum `-5.474402579713683`. No missing-context
+removals occur in this snapshot, so synthetic tests exercise those failure paths.
+No raw bytes or previous dated evidence were changed. Time context, historical
+availability, external gamebooks, uncertainty, and forecast evaluation remain
+outside this unit's verification scope.

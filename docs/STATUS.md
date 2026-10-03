@@ -1,22 +1,26 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-02, P1.3 has optional pre-play field-position
-ranges for both offense and defense. All 93 offline tests pass on Python
-3.11/3.12/3.13. Inclusive bounds, missing positions, and range removals are explicit;
-valid unfiltered reports and offense-relative metrics are unchanged. Report schema
-v2 gains optional filter metadata; audit schema v1 gains raw/eligible optional-field
-missingness. P1.2 remains complete for the recorded snapshot. Score/time filters,
-opponent adjustment, uncertainty, a finished brief, UI, and deployment remain open.
+As of the scheduled run on 2026-10-03, P1.3 has optional pre-play field-position
+and score-differential ranges for both roles. All 112 offline tests pass on Python
+3.11/3.12/3.13. Scores remain offense-relative whole points; filters account for
+missing/outside-range plays in fixed order without double-counting. Valid reports
+without a score filter are unchanged. Report schema v2 adds score metadata;
+audit schema v1 includes raw/eligible score missingness. P1.2 remains complete for
+the recorded snapshot. Clock filters, opponent adjustment, uncertainty, a finished
+brief, UI, and deployment remain open.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/field-position-filters`, started from updated `origin/main`
-  at `de354ac` after observing PR #5 was merged. Continue its PR while unmerged.
-- Current review: [PR #6](https://github.com/AryanParte/nfl-opponent-intelligence/pull/6),
-  open and unmerged. Implementation `b71789c` is pushed with matching local/remote
-  SHAs and confirmed AryanParte author/committer attribution. Do not enable auto-merge.
+- Working branch: `codex/pre-play-score-filters`, started from updated `origin/main`
+  at `5d12321` after observing PR #6 was merged. Continue its PR while unmerged.
+- Current unit: locally verified score filters; publication/CI receipt will be
+  recorded after push and PR creation. Do not enable auto-merge.
+- Previous field-position review:
+  [PR #6](https://github.com/AryanParte/nfl-opponent-intelligence/pull/6), merged at
+  `5d12321`. Its final-head CI passed; no open PRs or review feedback remained at
+  this run's start. The clean preceding branch matched its upstream exactly.
 - Previous defense-side review:
   [PR #5](https://github.com/AryanParte/nfl-opponent-intelligence/pull/5), merged at
   `de354ac`. No open PRs or review feedback remained at this run's start.
@@ -64,7 +68,7 @@ existing pipeline tests remain intact. Nineteen acquisition tests cover source
 metadata, hashes, retries, interrupted bodies, byte limits, gzip errors, cache
 corruption, revision retention, atomic publication failures, and CLI behavior.
 Network is blocked in acquisition tests, including their CLI subprocess. Nineteen
-snapshot integration tests cover verified provenance, corruption/mutation,
+snapshot integration tests covered verified provenance, corruption/mutation,
 season matching, raw/adapter reconciliation, missingness, empty data, CLI errors,
 defense/field-position reports retaining manifests, and raw versus eligible optional
 missingness. Fourteen defense tests check independent numerical expectations,
@@ -74,6 +78,14 @@ empty cohorts, reciprocal selections, count partitions, and API/CLI validation.
 Sixteen field-position tests cover bounds (including zero/equal/fractional values),
 missing versus absent columns, scoped missingness, invalid inputs, no partial JSON,
 reciprocal selection, and unfiltered compatibility. No real dataset is required.
+
+Eighteen score-filter tests now cover signed/equal/open-ended bounds, ties versus
+missing, precise whole-point parsing, absent columns, invalid values, exclusion
+precedence, pre/post-play separation, scoped/overlapping missingness, both roles,
+combined counts, retained EPA denominators, cutoffs, empty results, unchanged
+unfiltered/field-only JSON, and all-or-nothing CLI errors. A twentieth snapshot
+integration test adds raw/eligible score missingness, combined CLI filtering, and
+manifest/hash preservation. The existing 93 tests pass unchanged.
 
 The synthetic defense command in README.md also passes: five plays, three
 dropbacks, four observed EPA values, 0.05 EPA/play, and 0.75 offensive success
@@ -89,12 +101,17 @@ unfiltered reports match the previous merged implementation exactly. See the
 [field-position evidence and replay](REAL_DATA_AUDIT.md#field-position-extension-2026-10-02)
 for ranges, counts, tolerance, and limits. No raw data was changed or committed.
 
-The [PR #6 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37020736183)
-passed on `b71789c`: Python 3.11/3.12/3.13 each succeeded in the offline regression
-suite and synthetic demo. No automatic run appeared after push/PR creation, so the
-existing workflow was dispatched manually. The PR description records final-head
-verification after this publication-record update. No workflow code, repository
-settings, or daily automation were changed.
+The score extension found 2,713 raw missing scores, zero among eligible plays,
+and eligible scores -46..46. All 34,902 raw/adapter score identities and source
+`posteam_score - defteam_score` values match. Pre/post scores differ on 1,456
+eligible plays. Independent raw selection and Decimal EPA calculations match 2,304
+score-only/combined reports across both roles, and 576 reports without a score
+filter exactly match merged PR #6. See the
+[score evidence and replay](REAL_DATA_AUDIT.md#score-extension-2026-10-03).
+
+The preceding [PR #6 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37020990797)
+passed on `cab20c9`. This unit's local checks are complete; its remote CI is pending
+publication. No workflow code, repository settings, or daily automation changed.
 
 ## Raw acquisition evidence
 
@@ -126,12 +143,12 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Continue P1.3 with an optional pre-play score-differential filter. Review the source
-`score_differential` definition and missingness (never use the post-play field),
-retain offense-relative signs for both roles, and test combined field-position/
-score selection with explicit counts and unchanged unfiltered results. Time filters
-and matched league baselines follow. The adapter does not yet parse score/time
-context. See [METRICS.md](METRICS.md) for existing role/filter contracts.
+Continue P1.3 with optional pre-play quarter/clock filtering. Review source timing
+semantics and regulation/overtime boundaries before choosing parameters. Keep
+both roles, exclusive week cutoffs, explicit missingness/counts through combined
+field/score/time filters, and unchanged defaults. Matched league baselines follow.
+The adapter does not yet parse clock context. See [METRICS.md](METRICS.md) for
+existing role/filter contracts.
 Do not move to UI/predictive work yet. External schedule/gamebook
 reconciliation, historical availability, backup, automatic CI triggering, and
 larger-than-memory ingestion remain documented limitations, not completed claims.

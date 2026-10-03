@@ -322,6 +322,40 @@ class IngestionTests(unittest.TestCase):
         self.assertEqual(result["adapter"]["optional_column_missing_counts"], {})
         self.assertEqual(self.report(ingestion.load_snapshot(directory))["overall"]["plays"], 6)
 
+    def test_score_audit_and_combined_snapshot_report_preserve_counts_and_provenance(self):
+        rows = [dict(self.rows[0], score_differential="-7", yardline_100="20"),
+                dict(self.rows[1], score_differential="NA", yardline_100="20"),
+                dict(self.rows[0], play_id="998", score_differential="NA", yardline_100="80"),
+                dict(self.rows[0], play_id="999", play_type="no_play", score_differential="", yardline_100="")]
+        buffer = io.StringIO(newline="")
+        writer = csv.DictWriter(buffer, fieldnames=REQUIRED_COLUMNS + ("yardline_100", "score_differential"))
+        writer.writeheader()
+        writer.writerows(rows)
+        directory, raw = self.snapshot(raw=buffer.getvalue().encode())
+        dataset = ingestion.load_snapshot(directory)
+        self.assertEqual(dataset.optional_columns, ("yardline_100", "score_differential"))
+        result = audit.audit_snapshot(directory)
+        self.assertEqual(result["input"]["optional_column_missing_counts"],
+                         {"yardline_100": 1, "score_differential": 3})
+        self.assertEqual(result["adapter"]["optional_column_missing_counts"],
+                         {"yardline_100": 0, "score_differential": 2})
+        self.assertTrue(result["reconciliation"]["raw_and_adapter_eligible_identities_match"])
+        stdout = io.StringIO()
+        with redirect_stdout(stdout):
+            code = main(["--snapshot", str(directory), "--team", "ATL", "--side", "defense",
+                         "--season", "2024", "--before-week", "3", "--source-label", "Synthetic",
+                         "--yardline-max", "20", "--score-min", "-7", "--score-max", "0"])
+        self.assertEqual(code, 0)
+        report = json.loads(stdout.getvalue())
+        self.assertEqual(report["overall"]["plays"], 1)
+        self.assertEqual(report["overall"]["epa_per_play"], 0.8)
+        self.assertEqual(report["source"]["sha256"], sha256(raw).hexdigest())
+        self.assertEqual(report["source"]["snapshot"], json.loads((directory / "manifest.json").read_text()))
+        self.assertEqual(report["data_quality"]["field_position_filter"]["plays_after_filter"], 2)
+        self.assertEqual(report["data_quality"]["score_differential_filter"], {
+            "plays_before_filter": 2, "missing_score_differential": 1, "outside_range": 0, "plays_after_filter": 1,
+        })
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -71,6 +71,34 @@ metadata when supplying the field. Requested range filters require the column;
 an absent column fails instead of presenting an unavailable result as an empty one.
 No source data is imputed, and the original synthetic fixture is unchanged.
 
+## Optional pre-play score
+
+`score_differential` is recognized as of 2026-10-03. It is possession-team points
+minus defensive-team points **at the start of the play**, as confirmed by the
+[dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv)
+and [nflfastR construction](https://github.com/nflverse/nflfastR/blob/master/R/helper_add_nflscrapr_mutations.R)
+reviewed that day. Negative means the offense trails, zero means tied, and positive
+means the offense leads, for both report roles. `score_differential_post` describes
+the end of the play and is ignored, never a fallback for absent/missing pre-play
+context. The adapter does not reconstruct scores from outcomes.
+
+Observed values must be signed whole points in ASCII decimal notation (`-7`,
+`+7`, `0`, and `-7.00` are accepted). Fractions, scientific notation, separators,
+infinities, and other malformed values fail. Parsing does not pass through float,
+so tiny fractions cannot round to whole points and large integers retain precision.
+No football score cap is inferred from this snapshot's observed range; Python's
+integer-string safety limit still applies. Blank/NA/NaN/null remain missing, not
+ties. `Play.score_differential` is an integer or `None`.
+
+Like field position, the header is optional without its filter, but a requested
+score filter requires it even if other filters leave no plays. Present values are
+validated on every eligible row, including rows outside the requested cohort;
+already-excluded rows do not need valid score context. `Dataset.optional_columns`
+retains availability even with no rows. Raw/eligible audit missingness automatically
+includes this recognized column when present. Valid reports without a score filter
+are unchanged; malformed values in this newly recognized field now fail instead
+of being ignored. See [score filtering](METRICS.md#pre-play-score-ranges).
+
 ## Play-type validation and exclusion order
 
 The [upstream dictionary](https://nflreadr.nflverse.com/articles/dictionary_pbp.html)

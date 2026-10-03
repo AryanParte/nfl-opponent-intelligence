@@ -54,7 +54,10 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
 - [x] Add optional pre-play field-position ranges (2026-10-02): validated
       `yardline_100`, inclusive bounds, both roles, missingness/count reconciliation,
       and unchanged valid unfiltered reports. Pinned-snapshot cross-checks passed.
-- [ ] Add score/time filters with consistent pre-play context,
+- [x] Add optional pre-play score ranges (2026-10-03): signed whole points,
+      unbounded ends, both roles without sign reversal, ordered field/score
+      missingness accounting, unchanged defaults, and pinned-snapshot checks.
+- [ ] Add time filters with consistent pre-play context,
       explicit missingness handling, and auditable cohort counts for both sides.
 - [ ] Compare an offense's tendencies with league baselines in matching contexts.
 - [ ] Add game-level uncertainty estimates and sample warnings; explain dependence
@@ -63,12 +66,13 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
 - [ ] Validate personnel/motion data availability and licensing separately. The
       initial play-by-play contract does not guarantee these fields exist.
 
-Next coherent unit: add an optional pre-play score-differential filter. Review
-`score_differential` (not the post-play field), preserve the offense-relative sign
-for both roles, and audit missingness and combined field-position/score selection
-without changing unfiltered results. Time filters and matched league baselines
-follow; do not skip directly to a UI or predictive model. The current unit passes
-93 offline tests on Python 3.11/3.12/3.13; see [status](docs/STATUS.md) for scope.
+Next coherent unit: optional pre-play quarter/clock filtering. Review source clock
+semantics and regulation/overtime boundaries before choosing parameters; do not
+assume a regulation game clock describes overtime correctly. Preserve exclusive
+week cutoffs, both roles, ordered missingness accounting when combined with field/
+score filters, and unchanged defaults. Matched league baselines follow; do not skip
+to a UI or predictive model. The current unit passes 112 offline tests on Python
+3.11/3.12/3.13; see [status](docs/STATUS.md) for evidence and limitations.
 
 ### P1.4 — Product surface
 

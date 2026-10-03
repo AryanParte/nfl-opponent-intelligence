@@ -63,6 +63,44 @@ range is requested. Valid unfiltered reports retain their previous JSON output.
 Recognizing the optional source field does intentionally reject malformed observed
 values that were previously ignored. The metric formulas themselves are unchanged.
 
+## Pre-play score ranges
+
+`--score-min` / `--score-max` (Python: `score_min` / `score_max`) select an inclusive
+range of **pre-play** `score_differential`, offense points minus defense points.
+The [source contract](DATA_CONTRACT.md#optional-pre-play-score) requires whole points.
+API bounds must be built-in integers, not booleans, floats, or numeric strings;
+CLI bounds use integer notation. Minimum must not exceed maximum. One omitted
+end is unbounded and is recorded as JSON `null`, not a fabricated maximum score.
+Both omitted means no score filter. Zero is a real bound, not an omitted value.
+
+Use maximum -1 for a trailing offense, both bounds 0 for a tie, or minimum 1 for
+a leading offense. The sign is **not reversed** for defense selection: -7 means
+the opposing offense trails the selected defense by seven. These are point ranges,
+not inferred possession counts, win probabilities, or a definition of neutral
+game situations. Never substitute post-play scores, which can select on outcomes.
+
+Missing scores are excluded only when a score range is requested. A present but
+all-missing column yields zero plays and null rates; an absent column is an error,
+including in empty cohorts. No zero/tie imputation or post-play fallback occurs.
+Missing EPA on retained plays still affects only EPA/success denominators.
+
+Score-filtered reports add `cohort.score_differential` (field, inclusive bounds,
+offense perspective, missing policy), `data_quality.score_differential_filter`
+(`plays_before_filter`, `missing_score_differential`, `outside_range`,
+`plays_after_filter`), and `data_quality.filter_order`. Order is fixed: team/role/
+season/week selection, then field position if requested, then score. The order
+list names only active optional filters; it appears when score filtering is used,
+preserving the earlier unfiltered and field-only JSON shapes.
+
+Each stage satisfies `before = missing + outside_range + after`. The score
+stage's input is the field stage's output when both are active. A play missing
+both fields is counted only at the field stage; score missingness here is
+conditional, not the total missing scores in the base cohort. The dataset audit
+provides source-wide/eligible missingness separately. These removals are already
+inside global `eligible_rows_outside_cohort`; do not add them again. Final metrics,
+situations, games, and sample warnings use the intersection of all requested
+filters. These additive schema-v2 keys do not change the metric formulas.
+
 ## Definitions
 
 - **Plays:** count of the eligible cohort, regardless of EPA availability.
@@ -145,12 +183,20 @@ one dropback, and EPA 0.8, -0.4, and missing. Thus EPA/play is 0.4 / 2 = 0.2,
 success is 1 / 2, and dropback rate is 1 / 3. One missing position and two known
 out-of-range positions reconcile the three removals; none is a real team finding.
 
+`test_score_filters.py` uses a separate nine-play synthetic base. A 0..20 field
+range removes two unknown positions and one outside position, leaving six.
+A -7..0 score range then removes one unknown score and one leading-offense play,
+leaving four plays: two dropbacks and EPA 0.8, -0.4, 0, and missing. EPA/play is
+0.4 / 3, success 1 / 3, and dropback rate 2 / 4. One record missing both contexts
+is removed once, not twice. The original fixture remains unchanged.
+
 ## Limits on interpretation
 
 The report is descriptive. It does not estimate play-call intent perfectly,
 adjust for opponents on either side, isolate player skill, or recommend a play.
-Situational buckets still mix score, time, field position, personnel, and game
-strategy. Repeated plays within a game are dependent; later uncertainty work
+Even with requested field/score ranges, situational buckets still mix clock time,
+personnel, opponents, and game strategy (and positions/scores within each range).
+Repeated plays within a game are dependent; later uncertainty work
 must respect that structure instead of assuming independent observations.
 
 The exclusive week cutoff keeps target-week outcomes out of the cohort. It does

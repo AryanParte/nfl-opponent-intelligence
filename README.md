@@ -8,8 +8,8 @@ prepared for.
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
 acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
 cohort reconciliations. Reports can select a team's offense or defense while
-keeping EPA offense-relative, with optional pre-play field-position ranges.
-Score/time filters, a web interface, adjustment, and deployment remain on the
+keeping EPA offense-relative, with optional pre-play field-position and score ranges.
+Time filters, a web interface, adjustment, and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
@@ -128,6 +128,33 @@ The original synthetic fixture omits it intentionally; the offline field-positio
 tests generate separate synthetic inputs. See [definitions](docs/METRICS.md#pre-play-field-position-ranges)
 and the [real-data check](docs/REAL_DATA_AUDIT.md#field-position-extension-2026-10-02).
 
+### Limit the pre-play score
+
+Select CAR offensive plays while trailing, within 20 yards of the opposing goal
+line, using the same pinned snapshot:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --snapshot "$snapshot_dir" \
+  --source-label 'nflverse 2024 retrospective snapshot; acquired 2026-09-30 UTC' \
+  --team CAR --season 2024 --before-week 3 \
+  --yardline-max 20 --score-max -1
+```
+
+`--score-min` / `--score-max` are inclusive whole-point bounds on pre-play
+`score_differential` (offense minus defense). One omitted end is unbounded; omit
+both for no score filter. Use `--score-min 0 --score-max 0` for ties, or
+`--score-min 1` for an offense leading. For `--side defense`, the sign still refers
+to the **opposing offense**, not the selected defense. Post-play scores are never
+used as a substitute.
+
+Both optional filters exclude unknown context only when requested. Field position
+runs first, then score, with explicit order and separate before/missing/outside/
+after counts so overlaps are not counted twice. This example selects seven plays
+from two games; it is a retrospective software check, not a scouting conclusion.
+See [score semantics](docs/METRICS.md#pre-play-score-ranges) and
+[reconciliation evidence](docs/REAL_DATA_AUDIT.md#score-extension-2026-10-03).
+
 ## The football decision
 
 The eventual user is an analyst preparing an opponent brief: how often does an
@@ -158,6 +185,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
    denominator accounting, and unaltered EPA interpretation.
    `tests/test_field_position.py` checks optional-field validation, inclusive bounds,
    scoped missingness, legacy compatibility, and CLI failures.
+   `tests/test_score_filters.py` checks signed whole-point bounds, pre/post-play
+   separation, combined-filter accounting, reciprocal roles, and compatibility.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.

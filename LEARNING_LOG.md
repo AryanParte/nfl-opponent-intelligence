@@ -430,3 +430,76 @@ the offense-relative sign for both roles and testing combined field/score ranges
 missingness, and unchanged defaults. Time filtering, matched baselines, game-level
 uncertainty, and the actual brief remain unfinished. Existing snapshot availability,
 automatic CI triggering, and scale limits remain; leave this PR unmerged for review.
+
+## 2026-10-03 — Pre-play score filters and combined cohort accounting
+
+**Built:** optional whole-point `score_differential` parsing and inclusive
+`--score-min` / `--score-max` filters with unbounded omitted ends. Both roles keep
+the offense-relative sign. Combined filters run field position then score, expose
+the order, and count each removed play once. Started `codex/pre-play-score-filters`
+from merged PR #6's `5d12321`; preceding branch/upstream matched and no outstanding
+PRs or review feedback remained. The existing history and canonical clone are
+preserved; the automation is unchanged.
+
+**Why it matters:** analysts can separate trailing/tied/leading offensive plays
+without selecting on post-play outcomes, confusing defense perspective, or hiding
+missing-context removals. This is another P1.3 component, not a completed brief.
+
+**Review:** `src/opponent_intelligence/pbp.py` (exact whole-point parsing),
+`report.py` (validation, selection order, counts), `__main__.py` (CLI flags),
+`tests/test_score_filters.py`, the new snapshot test in `tests/test_ingestion.py`,
+and `docs/METRICS.md` / the score section in `docs/REAL_DATA_AUDIT.md`.
+
+**Sports concepts:** score at the start versus end of a play; possession-relative
+leads/deficits for either role; ties versus unknown scores; no inferred possession
+counts or neutral-game labels; unaltered offensive EPA/success interpretation.
+
+**Software/statistical concepts:** exact parsing rather than float rounding,
+nullable unbounded ends, optional header availability, backward-compatible JSON
+extensions, conditional missingness, non-overlapping removal counts, independent
+raw/Decimal checks, and source provenance. Filtering is not opponent adjustment
+and does not make plays within a game independent.
+
+**What to learn:** trace the synthetic nine-play base through `9 = 2 missing
+position + 1 outside position + 6`, then `6 = 1 missing score + 1 outside score + 4`.
+Explain why the four retained plays have only three EPA observations and why a
+play missing both fields is removed only at the first stage.
+
+**Three review questions:**
+
+1. For a defense report, what does `score_max=-1` select, and why would using
+   `score_differential_post` change the question being measured?
+2. How do an omitted bound, a bound of zero, missing score, and missing EPA differ
+   in selection and denominator handling?
+3. Why are score-filter missingness counts conditional on any field filter, and
+   how do both stage counts reconcile with global exclusions without double-counting?
+
+**Verification/self-review:** the 93-test baseline passed; new feature cases failed
+against the predecessor. All 112 tests now pass on Python 3.11/3.12/3.13 (18 score
+tests plus one snapshot test). Coverage includes fractions that float would round,
+large exact integers, negative/equal/open ends, absent/all-missing columns,
+overlapping missing contexts, all-missing EPA, reciprocal roles, exclusive cutoffs,
+empty cohorts, unchanged no-score output, provenance, and CLI errors without JSON.
+Review strengthened all-missing-EPA checks, false-versus-zero validation, and
+CLI-order invariance; availability is validated even if another filter empties
+the cohort. The stricter newly recognized source
+column and score-only metadata are documented. Metric formulas, eligibility rules,
+and original fixture bytes are unchanged.
+
+The read-only CSV audit separated 2,713 raw missing scores from zero among 34,902
+eligible plays. Every eligible score agrees with its raw identity and the source's
+pre-play point difference; 1,456 eligible pre/post values differ. Independent raw
+selection and Decimal arithmetic matched 2,304 filtered reports; 576 no-score
+reports exactly matched merged PR #6. Replay evidence is in the audit document.
+These checks validate selection/internal source consistency, not gamebooks, model
+training, forecast quality, or historical availability.
+
+**Publication:** local verification is complete; push, PR, attribution, remote-SHA,
+and CI receipts will be recorded after publication. No workflow/repository settings
+or daily automation changes are part of this unit.
+
+**Remaining/next task:** optional pre-play quarter/clock filtering, beginning with
+source semantics and regulation/overtime boundaries. Preserve both roles, existing
+filters/defaults, exclusive week cutoffs, and explicit ordered missingness. Matched
+league baselines, game-level uncertainty, and the actual brief follow. Keep this
+unit's PR unmerged for Aryan's review; existing source/CI/scale limitations remain.

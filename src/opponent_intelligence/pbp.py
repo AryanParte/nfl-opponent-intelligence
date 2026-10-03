@@ -7,6 +7,7 @@ from hashlib import sha256
 from io import StringIO
 import math
 from pathlib import Path
+import re
 
 
 REQUIRED_COLUMNS = (
@@ -14,7 +15,7 @@ REQUIRED_COLUMNS = (
     "play_type", "down", "ydstogo", "qb_dropback", "qb_kneel", "qb_spike",
     "two_point_attempt", "epa",
 )
-OPTIONAL_COLUMNS = ("yardline_100",)
+OPTIONAL_COLUMNS = ("yardline_100", "score_differential")
 MISSING = {"", "NA", "NAN", "NULL"}
 KNOWN_PLAY_TYPES = frozenset({
     "run", "pass", "punt", "field_goal", "kickoff", "extra_point",
@@ -40,6 +41,7 @@ class Play:
     dropback: bool
     epa: float | None
     yardline_100: float | None = None
+    score_differential: int | None = None
 
 
 @dataclass(frozen=True)
@@ -92,6 +94,19 @@ def _yardline_100(value: str) -> float | None:
     if not 0 <= number <= 100:
         raise DataValidationError(f"yardline_100: expected a finite number in 0..100, got {value!r}")
     return number
+
+
+def _score_differential(value: str) -> int | None:
+    if value.upper() in MISSING:
+        return None
+    # Whole-point decimal notation only. Avoid float rounding of fractions or
+    # large integers; no cap inferred from historical scores and no imputation.
+    if not re.fullmatch(r"[+-]?[0-9]+(?:\.0+)?", value):
+        raise DataValidationError(f"score_differential: expected whole points or missing, got {value!r}")
+    try:
+        return int(value.split(".", 1)[0])
+    except ValueError as exc:
+        raise DataValidationError("score_differential: integer representation is too long") from exc
 
 
 def load_csv(path: Path) -> Dataset:
@@ -178,6 +193,7 @@ def _load_csv_bytes(raw: bytes, *, expected_season: int | None = None) -> Datase
                 dropback=dropback,
                 epa=_epa(values["epa"]),
                 yardline_100=_yardline_100(values.get("yardline_100", "")),
+                score_differential=_score_differential(values.get("score_differential", "")),
             ))
         except DataValidationError as exc:
             raise DataValidationError(f"CSV line {reader.line_num}: {exc}") from exc
