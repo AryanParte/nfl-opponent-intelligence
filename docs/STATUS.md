@@ -15,8 +15,10 @@ brief, UI, and deployment remain open.
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/pre-play-score-filters`, started from updated `origin/main`
   at `5d12321` after observing PR #6 was merged. Continue its PR while unmerged.
-- Current unit: locally verified score filters; publication/CI receipt will be
-  recorded after push and PR creation. Do not enable auto-merge.
+- Current review: [PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7),
+  open, unmerged, and attached to the task. Implementation `16f637f` is pushed with
+  matching local/remote SHAs and confirmed AryanParte author/committer attribution.
+  Do not enable auto-merge.
 - Previous field-position review:
   [PR #6](https://github.com/AryanParte/nfl-opponent-intelligence/pull/6), merged at
   `5d12321`. Its final-head CI passed; no open PRs or review feedback remained at
@@ -109,9 +111,12 @@ score-only/combined reports across both roles, and 576 reports without a score
 filter exactly match merged PR #6. See the
 [score evidence and replay](REAL_DATA_AUDIT.md#score-extension-2026-10-03).
 
-The preceding [PR #6 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37020990797)
-passed on `cab20c9`. This unit's local checks are complete; its remote CI is pending
-publication. No workflow code, repository settings, or daily automation changed.
+The [PR #7 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37134408317)
+passed on `16f637f`: Python 3.11/3.12/3.13 each succeeded in the offline regression
+suite and synthetic demo. No automatic run appeared after push/PR creation, so
+the existing workflow was dispatched manually. The PR description records the
+final-head verification after this publication-record update. No workflow code,
+repository settings, or daily automation changed.
 
 ## Raw acquisition evidence
 

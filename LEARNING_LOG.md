@@ -494,9 +494,14 @@ reports exactly matched merged PR #6. Replay evidence is in the audit document.
 These checks validate selection/internal source consistency, not gamebooks, model
 training, forecast quality, or historical availability.
 
-**Publication:** local verification is complete; push, PR, attribution, remote-SHA,
-and CI receipts will be recorded after publication. No workflow/repository settings
-or daily automation changes are part of this unit.
+**Publication:** implementation `16f637f` is pushed with matching local/remote SHAs
+and confirmed AryanParte author/committer attribution.
+[PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7) is open,
+unmerged, and attached to the task. [Implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37134408317)
+passed the offline regression suite and synthetic demo on Python 3.11/3.12/3.13.
+Manual dispatch was needed because no automatic run appeared. The PR description
+records final-head verification after this publication-record update. No workflow
+code, repository settings, or daily automation changed.
 
 **Remaining/next task:** optional pre-play quarter/clock filtering, beginning with
 source semantics and regulation/overtime boundaries. Preserve both roles, existing
