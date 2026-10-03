@@ -38,12 +38,15 @@ def build_report(
     minimum_plays: int = 30,
     yardline_min: float | None = None,
     yardline_max: float | None = None,
+    score_min: int | None = None,
+    score_max: int | None = None,
     source_label: str,
 ) -> dict:
     """Select a team's offense or defense, season/type, and weeks < before_week.
 
     Selecting defense changes the team predicate, not EPA signs or denominators.
-    Optional inclusive yardline_100 bounds also retain the offense's coordinates.
+    Optional pre-play position and score bounds retain the offense's perspective.
+    Filters run in fixed order: team/time, field position, then score differential.
     The week boundary prevents including target-week outcomes. It cannot ensure
     historical availability of subsequently revised upstream values.
     """
@@ -75,6 +78,18 @@ def build_report(
         field_position = {"field": "yardline_100", "minimum_inclusive": lower,
                           "maximum_inclusive": upper, "perspective": "offense",
                           "missing_policy": "exclude"}
+    score_context = None
+    if score_min is not None or score_max is not None:
+        for name, value in (("score_min", score_min), ("score_max", score_max)):
+            if value is not None and type(value) is not int:
+                raise ValueError(f"{name} must be an integer number of points")
+        if score_min is not None and score_max is not None and score_min > score_max:
+            raise ValueError("score_min must not exceed score_max")
+        if "score_differential" not in dataset.optional_columns:
+            raise ValueError("score filtering requires the score_differential source column")
+        score_context = {"field": "score_differential", "minimum_inclusive": score_min,
+                         "maximum_inclusive": score_max, "perspective": "offense",
+                         "missing_policy": "exclude"}
     selected = [play for play in dataset.plays if (
         (play.offense if side == "offense" else play.defense) == team and play.season == season
         and play.season_type == season_type and play.week < before_week
@@ -87,6 +102,19 @@ def build_report(
                     and lower <= play.yardline_100 <= upper]
         field_quality = {"plays_before_filter": before_count,
                          "missing_yardline_100": missing_count,
+                         "outside_range": before_count - missing_count - len(selected),
+                         "plays_after_filter": len(selected)}
+    score_quality = None
+    if score_context is not None:
+        # Count only plays surviving the previous filter, so overlapping missing
+        # context and out-of-range values never create duplicate removals.
+        before_count = len(selected)
+        missing_count = sum(play.score_differential is None for play in selected)
+        selected = [play for play in selected if play.score_differential is not None
+                    and (score_min is None or play.score_differential >= score_min)
+                    and (score_max is None or play.score_differential <= score_max)]
+        score_quality = {"plays_before_filter": before_count,
+                         "missing_score_differential": missing_count,
                          "outside_range": before_count - missing_count - len(selected),
                          "plays_after_filter": len(selected)}
     groups: dict[tuple[int, str], list[Play]] = defaultdict(list)
@@ -108,6 +136,11 @@ def build_report(
         warnings.append("Missing yardline_100 excluded by field-position filter: "
                         f"{field_quality['missing_yardline_100']} of "
                         f"{field_quality['plays_before_filter']} base-cohort plays; no imputation.")
+    if score_quality is not None and score_quality["missing_score_differential"]:
+        warnings.append("Missing score_differential excluded by score filter: "
+                        f"{score_quality['missing_score_differential']} of "
+                        f"{score_quality['plays_before_filter']} plays after team/time and any "
+                        "field-position filter; no imputation.")
     distance_order = {"short": 0, "medium": 1, "long": 2}
     source = {"label": source_label, "sha256": dataset.source_sha256}
     if dataset.source_manifest is not None:
@@ -136,4 +169,10 @@ def build_report(
     if field_position is not None:
         report["cohort"]["field_position"] = field_position
         report["data_quality"]["field_position_filter"] = field_quality
+    if score_context is not None:
+        report["cohort"]["score_differential"] = score_context
+        report["data_quality"]["score_differential_filter"] = score_quality
+        report["data_quality"]["filter_order"] = (
+            (["field_position"] if field_position is not None else []) + ["score_differential"]
+        )
     return report

@@ -28,6 +28,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="Inclusive minimum pre-play yardline_100 (offense's distance to opposing goal line)")
     parser.add_argument("--yardline-max", type=float,
                         help="Inclusive maximum pre-play yardline_100; bounds are 0..100 for either side")
+    parser.add_argument("--score-min", type=int,
+                        help="Inclusive minimum pre-play score_differential in whole points; omitted end is unbounded")
+    parser.add_argument("--score-max", type=int,
+                        help="Inclusive maximum pre-play score_differential (offense minus defense for either side)")
     args = parser.parse_args(argv)
     try:
         report = build_report(
@@ -36,6 +40,7 @@ def main(argv: list[str] | None = None) -> int:
             before_week=args.before_week, season_type=args.season_type,
             minimum_plays=args.minimum_plays, source_label=args.source_label,
             yardline_min=args.yardline_min, yardline_max=args.yardline_max,
+            score_min=args.score_min, score_max=args.score_max,
         )
         payload = json.dumps(report, indent=2, sort_keys=True, allow_nan=False)
     except (OSError, ValueError, csv.Error) as exc:
