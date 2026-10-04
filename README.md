@@ -8,9 +8,9 @@ prepared for.
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
 acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
 cohort reconciliations. Reports can select a team's offense or defense while
-keeping EPA offense-relative, with optional pre-play field-position and score ranges.
-Time filters, a web interface, adjustment, and deployment remain on the
-[roadmap](ROADMAP.md). This is an independent portfolio
+keeping EPA offense-relative, with optional pre-play field-position, score, and
+period/clock filters. Matched baselines, a web interface, adjustment, and deployment
+remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
@@ -148,12 +148,41 @@ both for no score filter. Use `--score-min 0 --score-max 0` for ties, or
 to the **opposing offense**, not the selected defense. Post-play scores are never
 used as a substitute.
 
-Both optional filters exclude unknown context only when requested. Field position
+These optional filters exclude unknown context only when requested. Field position
 runs first, then score, with explicit order and separate before/missing/outside/
 after counts so overlaps are not counted twice. This example selects seven plays
 from two games; it is a retrospective software check, not a scouting conclusion.
 See [score semantics](docs/METRICS.md#pre-play-score-ranges) and
 [reconciliation evidence](docs/REAL_DATA_AUDIT.md#score-extension-2026-10-03).
+
+### Select a period and pre-play clock
+
+Select CAR offensive plays starting with at most 120 seconds left in Q4:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --snapshot "$snapshot_dir" \
+  --source-label 'nflverse 2024 retrospective snapshot; acquired 2026-09-30 UTC' \
+  --team CAR --season 2024 --before-week 3 \
+  --period Q4 --clock-max 120
+```
+
+`--period` accepts `Q1`, `Q2`, `Q3`, `Q4`, or `OT` (all overtime periods).
+Clock bounds are inclusive whole seconds remaining **at the start of the play**,
+not elapsed time or the end-of-play clock. An explicit period is required with
+`--clock-min` / `--clock-max`; one omitted end defaults to 0 or 900. Zero is valid.
+Period-only selection does not require an observed clock. With neither period nor
+clock flags, previous output is unchanged.
+
+The example excludes OT; it is not a "last two minutes of the game" definition.
+An OT range applies separately within each overtime period, not to cumulative
+overtime elapsed time. Field/score filters can be combined: selection order is
+field position → score → period → clock, after team/season/week selection. Missing
+context is excluded only by its requested filter, with separate counts/warnings.
+Absent required source columns are errors, not empty results. The original fixture
+has no time columns; clock tests generate explicitly synthetic inputs. See
+[clock semantics](docs/METRICS.md#pre-play-period-and-clock) and
+[pinned-snapshot evidence](docs/REAL_DATA_AUDIT.md#clock-extension-2026-10-04).
 
 ## The football decision
 
@@ -187,6 +216,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
    scoped missingness, legacy compatibility, and CLI failures.
    `tests/test_score_filters.py` checks signed whole-point bounds, pre/post-play
    separation, combined-filter accounting, reciprocal roles, and compatibility.
+   `tests/test_clock_filters.py` checks period/clock bounds, OT separation,
+   zero versus missing, four-stage accounting, and unchanged defaults.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.

@@ -7,6 +7,9 @@ from math import fsum
 from .pbp import Dataset, Play, _team
 
 
+PERIODS = ("Q1", "Q2", "Q3", "Q4", "OT")
+
+
 def _metrics(plays: list[Play], minimum_plays: int) -> dict:
     observed_epa = [play.epa for play in plays if play.epa is not None]
     count = len(plays)
@@ -40,13 +43,17 @@ def build_report(
     yardline_max: float | None = None,
     score_min: int | None = None,
     score_max: int | None = None,
+    period: str | None = None,
+    clock_min: int | None = None,
+    clock_max: int | None = None,
     source_label: str,
 ) -> dict:
     """Select a team's offense or defense, season/type, and weeks < before_week.
 
     Selecting defense changes the team predicate, not EPA signs or denominators.
     Optional pre-play position and score bounds retain the offense's perspective.
-    Filters run in fixed order: team/time, field position, then score differential.
+    Filters run in fixed order: team/week, field position, score, period, clock.
+    Clock bounds require a period; OT groups all overtime periods (qtr >= 5).
     The week boundary prevents including target-week outcomes. It cannot ensure
     historical availability of subsequently revised upstream values.
     """
@@ -90,6 +97,33 @@ def build_report(
         score_context = {"field": "score_differential", "minimum_inclusive": score_min,
                          "maximum_inclusive": score_max, "perspective": "offense",
                          "missing_policy": "exclude"}
+    period_context = None
+    if period is not None:
+        if period not in PERIODS:
+            raise ValueError("period must be Q1, Q2, Q3, Q4, or OT")
+        if "qtr" not in dataset.optional_columns:
+            raise ValueError("period filtering requires the qtr source column")
+        period_lower = 5 if period == "OT" else int(period[1])
+        period_upper = None if period == "OT" else period_lower
+        period_context = {"field": "qtr", "label": period,
+                          "minimum_inclusive": period_lower, "maximum_inclusive": period_upper,
+                          "missing_policy": "exclude"}
+    clock_context = None
+    if clock_min is not None or clock_max is not None:
+        if period is None:
+            raise ValueError("clock filtering requires an explicit period (Q1..Q4 or OT)")
+        for name, value in (("clock_min", clock_min), ("clock_max", clock_max)):
+            if value is not None and (type(value) is not int or not 0 <= value <= 900):
+                raise ValueError(f"{name} must be an integer number of seconds in 0..900")
+        clock_lower = 0 if clock_min is None else clock_min
+        clock_upper = 900 if clock_max is None else clock_max
+        if clock_lower > clock_upper:
+            raise ValueError("clock_min must not exceed clock_max")
+        if "quarter_seconds_remaining" not in dataset.optional_columns:
+            raise ValueError("clock filtering requires the quarter_seconds_remaining source column")
+        clock_context = {"field": "quarter_seconds_remaining", "minimum_inclusive": clock_lower,
+                         "maximum_inclusive": clock_upper, "unit": "seconds", "timing": "pre_play",
+                         "missing_policy": "exclude"}
     selected = [play for play in dataset.plays if (
         (play.offense if side == "offense" else play.defense) == team and play.season == season
         and play.season_type == season_type and play.week < before_week
@@ -117,6 +151,25 @@ def build_report(
                          "missing_score_differential": missing_count,
                          "outside_range": before_count - missing_count - len(selected),
                          "plays_after_filter": len(selected)}
+    period_quality = None
+    if period_context is not None:
+        before_count = len(selected)
+        missing_count = sum(play.qtr is None for play in selected)
+        selected = [play for play in selected if play.qtr is not None
+                    and play.qtr >= period_lower and (period_upper is None or play.qtr <= period_upper)]
+        period_quality = {"plays_before_filter": before_count, "missing_qtr": missing_count,
+                          "outside_period": before_count - missing_count - len(selected),
+                          "plays_after_filter": len(selected)}
+    clock_quality = None
+    if clock_context is not None:
+        before_count = len(selected)
+        missing_count = sum(play.quarter_seconds_remaining is None for play in selected)
+        selected = [play for play in selected if play.quarter_seconds_remaining is not None
+                    and clock_lower <= play.quarter_seconds_remaining <= clock_upper]
+        clock_quality = {"plays_before_filter": before_count,
+                         "missing_quarter_seconds_remaining": missing_count,
+                         "outside_range": before_count - missing_count - len(selected),
+                         "plays_after_filter": len(selected)}
     groups: dict[tuple[int, str], list[Play]] = defaultdict(list)
     for play in selected:
         distance = "short" if play.yards_to_go <= 3 else "medium" if play.yards_to_go <= 6 else "long"
@@ -141,6 +194,15 @@ def build_report(
                         f"{score_quality['missing_score_differential']} of "
                         f"{score_quality['plays_before_filter']} plays after team/time and any "
                         "field-position filter; no imputation.")
+    if period_quality is not None and period_quality["missing_qtr"]:
+        warnings.append("Missing qtr excluded by period filter: "
+                        f"{period_quality['missing_qtr']} of {period_quality['plays_before_filter']} "
+                        "plays after team/week and any field/score filters; no imputation.")
+    if clock_quality is not None and clock_quality["missing_quarter_seconds_remaining"]:
+        warnings.append("Missing quarter_seconds_remaining excluded by clock filter: "
+                        f"{clock_quality['missing_quarter_seconds_remaining']} of "
+                        f"{clock_quality['plays_before_filter']} plays after period selection "
+                        "and any field/score filters; no imputation.")
     distance_order = {"short": 0, "medium": 1, "long": 2}
     source = {"label": source_label, "sha256": dataset.source_sha256}
     if dataset.source_manifest is not None:
@@ -172,7 +234,16 @@ def build_report(
     if score_context is not None:
         report["cohort"]["score_differential"] = score_context
         report["data_quality"]["score_differential_filter"] = score_quality
-        report["data_quality"]["filter_order"] = (
-            (["field_position"] if field_position is not None else []) + ["score_differential"]
-        )
+    if period_context is not None:
+        report["cohort"]["period"] = period_context
+        report["data_quality"]["period_filter"] = period_quality
+    if clock_context is not None:
+        report["cohort"]["clock"] = clock_context
+        report["data_quality"]["clock_filter"] = clock_quality
+    if score_context is not None or period_context is not None:
+        report["data_quality"]["filter_order"] = [
+            name for name, context in (("field_position", field_position), ("score_differential", score_context),
+                                       ("period", period_context), ("clock", clock_context))
+            if context is not None
+        ]
     return report

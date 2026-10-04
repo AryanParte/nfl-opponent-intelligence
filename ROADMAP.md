@@ -57,8 +57,9 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
 - [x] Add optional pre-play score ranges (2026-10-03): signed whole points,
       unbounded ends, both roles without sign reversal, ordered field/score
       missingness accounting, unchanged defaults, and pinned-snapshot checks.
-- [ ] Add time filters with consistent pre-play context,
-      explicit missingness handling, and auditable cohort counts for both sides.
+- [x] Add optional pre-play period/clock filters (2026-10-04): explicit Q1–Q4/OT,
+      inclusive seconds with a required period, zero/missing distinction, ordered
+      four-stage accounting for both roles, and unchanged valid defaults.
 - [ ] Compare an offense's tendencies with league baselines in matching contexts.
 - [ ] Add game-level uncertainty estimates and sample warnings; explain dependence
       among plays and the limits of small numbers of games.
@@ -66,13 +67,15 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
 - [ ] Validate personnel/motion data availability and licensing separately. The
       initial play-by-play contract does not guarantee these fields exist.
 
-Next coherent unit: optional pre-play quarter/clock filtering. Review source clock
-semantics and regulation/overtime boundaries before choosing parameters; do not
-assume a regulation game clock describes overtime correctly. Preserve exclusive
-week cutoffs, both roles, ordered missingness accounting when combined with field/
-score filters, and unchanged defaults. Matched league baselines follow; do not skip
-to a UI or predictive model. The current unit passes 112 offline tests on Python
-3.11/3.12/3.13; see [status](docs/STATUS.md) for evidence and limitations.
+Next coherent unit: matched league baselines for descriptive offense tendencies.
+Define the comparison population explicitly (including whether the selected team
+is excluded), share season/type/week and requested context filters, and expose
+baseline play/game/EPA denominators plus null/small-sample behavior. Compare
+down/distance like-for-like; do not call pooled descriptive differences opponent
+adjustment or prediction. Preserve defense interpretation and current output when
+comparison is not requested. Game-level uncertainty and the static brief follow;
+do not skip to a UI or predictive model. The current unit passes 130 offline tests
+on Python 3.11/3.12/3.13; see [status](docs/STATUS.md) for evidence and limitations.
 
 ### P1.4 — Product surface
 

@@ -99,6 +99,39 @@ includes this recognized column when present. Valid reports without a score filt
 are unchanged; malformed values in this newly recognized field now fail instead
 of being ignored. See [score filtering](METRICS.md#pre-play-score-ranges).
 
+## Optional pre-play period and clock
+
+`qtr` and `quarter_seconds_remaining` are recognized as of 2026-10-04. The
+[nflreadr dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv)
+describes the period and seconds remaining in it. The reviewed
+[nflfastR construction](https://github.com/nflverse/nflfastR/blob/master/R/helper_add_nflscrapr_mutations.R)
+derives quarter seconds from `time`, the dictionary's **start-of-play** `MM:SS`
+clock. The adapter reads the numeric source columns, not `time`, `end_clock_time`,
+or a reconstruction from later outcomes. Source consistency was checked on the
+[pinned artifact](REAL_DATA_AUDIT.md#clock-extension-2026-10-04), not all releases.
+
+- `qtr`: positive whole integer, or missing. Values 1–4 denote regulation;
+  the application's OT selection groups **all values >= 5**, with no arbitrary
+  maximum period count. This grouping does not promise period-level OT comparisons.
+- `quarter_seconds_remaining`: whole seconds **0..900 inclusive**, or missing.
+  This broad adapter bound admits both 10- and 15-minute periods; it does not
+  certify year/season-type-specific overtime legality. Zero is observed, not missing.
+  Clock context is not checked for monotonicity, and no elapsed game clock is inferred.
+
+Whole-value ASCII notation (`4`, `+4`, `120.0`) is accepted without float rounding;
+fractions, scientific notation, infinities, and malformed values fail. As for score,
+Python's integer-string safety limit applies. Blank/NA/NaN/null remain `None`, never
+zero or an inferred period. Both `Play` fields default to `None`, and their headers
+are independently recorded in `Dataset.optional_columns`, including on empty input.
+
+Headers are optional for reports without time filters. Period filtering requires
+`qtr`; a clock range additionally requires `quarter_seconds_remaining`. Present
+values are validated on all eligible rows, even outside the requested cohort;
+excluded rows do not need valid clocks. Thus newly recognized malformed columns
+fail instead of being ignored even without a time filter. Audit schema v1 exposes
+raw and eligible missingness for each header present. Neither raw bytes nor earlier
+dated evidence changes. See [selection and count rules](METRICS.md#pre-play-period-and-clock).
+
 ## Play-type validation and exclusion order
 
 The [upstream dictionary](https://nflreadr.nflverse.com/articles/dictionary_pbp.html)
