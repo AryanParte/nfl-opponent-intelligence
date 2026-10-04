@@ -89,8 +89,8 @@ offense perspective, missing policy), `data_quality.score_differential_filter`
 (`plays_before_filter`, `missing_score_differential`, `outside_range`,
 `plays_after_filter`), and `data_quality.filter_order`. Order is fixed: team/role/
 season/week selection, then field position if requested, then score. The order
-list names only active optional filters; it appears when score filtering is used,
-preserving the earlier unfiltered and field-only JSON shapes.
+list names only active optional filters; it appears when score or period filtering
+is used, preserving the earlier unfiltered and field-only JSON shapes.
 
 Each stage satisfies `before = missing + outside_range + after`. The score
 stage's input is the field stage's output when both are active. A play missing
@@ -100,6 +100,52 @@ provides source-wide/eligible missingness separately. These removals are already
 inside global `eligible_rows_outside_cohort`; do not add them again. Final metrics,
 situations, games, and sample warnings use the intersection of all requested
 filters. These additive schema-v2 keys do not change the metric formulas.
+
+## Pre-play period and clock
+
+`--period Q1|Q2|Q3|Q4|OT` (Python: `period`) selects pre-play `qtr`.
+Q1–Q4 each select one regulation period; OT groups all `qtr >= 5`. With a period
+selected, optional `--clock-min` / `--clock-max` (Python: `clock_min` / `clock_max`)
+select **inclusive seconds remaining in that period at play start**. Bounds must
+be built-in integers in 0..900, not booleans/floats/strings; CLI bounds use integer
+notation. Minimum cannot exceed maximum. One omitted end defaults to 0 or 900;
+both omitted means no clock filter, not an implicit complete-clock requirement.
+Clock bounds require an explicit period, even for otherwise empty data.
+
+For example, Q4 with maximum 120 includes clocks 120 and 0, but excludes Q2 and
+OT even at the same clock value. Period-only Q4 retains missing clocks. An explicit
+0..900 range removes them. Unknown periods are excluded only when period selection
+is requested; absent headers are errors, distinct from present/all-missing values.
+No missing context is imputed from another clock. See the [source contract](DATA_CONTRACT.md#optional-pre-play-period-and-clock).
+
+An OT clock is time left **within each overtime period**, not cumulative time;
+Q4 0..120 is not a claim about the final two minutes of a game that may go to OT.
+The source's `game_seconds_remaining` resets to the period clock in OT, so it is
+not a safe substitute for explicit regulation/OT selection. No season-specific
+overtime duration or strategy is inferred from a clock range.
+
+Time-filtered reports add these schema-v2 keys only when requested:
+
+| Key | Meaning |
+| --- | --- |
+| `cohort.period` | `field=qtr`, requested `label`, inclusive bounds (OT: 5 to `null`), missing policy `exclude` |
+| `cohort.clock` | `field=quarter_seconds_remaining`, effective inclusive bounds, `unit=seconds`, `timing=pre_play`, missing policy `exclude` |
+| `data_quality.period_filter` | `plays_before_filter`, `missing_qtr`, `outside_period`, `plays_after_filter` |
+| `data_quality.clock_filter` | `plays_before_filter`, `missing_quarter_seconds_remaining`, `outside_range`, `plays_after_filter` |
+
+Order is fixed regardless of CLI flag order: team/role/season/week → field position
+→ score → period → clock. `filter_order` lists active optional stages when score
+or period is requested, preserving previous unfiltered/field-only output. Each
+stage receives only the previous stage's survivors; before = missing + outside +
+after. A play missing both period and clock is removed at the period stage, not
+counted twice. These counts are conditional, not source-wide missingness, and
+already belong in global `eligible_rows_outside_cohort`. Final metrics/situations
+use survivors, and missing EPA affects only EPA/success denominators. Neither
+defense selection nor time filtering reverses EPA or score signs.
+
+Valid reports without these options retain their previous JSON output. All metric
+formulas, exclusive week cutoffs, and provenance meanings are unchanged. Optional
+source fields that are present but malformed now fail validation.
 
 ## Definitions
 
@@ -190,12 +236,20 @@ leaving four plays: two dropbacks and EPA 0.8, -0.4, 0, and missing. EPA/play is
 0.4 / 3, success 1 / 3, and dropback rate 2 / 4. One record missing both contexts
 is removed once, not twice. The original fixture remains unchanged.
 
+`test_clock_filters.py` supplies another invented cohort: 13 base plays become
+8 after Q4 selection (2 unknown periods, 3 other periods), then 5 with clock 0..120
+(1 unknown clock, 2 outside). Those five have 3 dropbacks and 4 observed EPA values
+0.8, -0.4, 0.3, 0.7: EPA/play 0.35 and success 3/4. Combining field 0..20, score
+-7..0, Q4, and clock 0..120 gives the staged counts 13 → 10 → 9 → 5 → 3. The final
+three plays have one dropback and EPA 0.8, -0.4, and missing, hence EPA/play 0.2,
+success 1/2, and dropback rate 1/3. These are test expectations, not team findings.
+
 ## Limits on interpretation
 
 The report is descriptive. It does not estimate play-call intent perfectly,
 adjust for opponents on either side, isolate player skill, or recommend a play.
-Even with requested field/score ranges, situational buckets still mix clock time,
-personnel, opponents, and game strategy (and positions/scores within each range).
+Even with requested field/score/period/clock filters, situational buckets still mix
+personnel, opponents, and game strategy (and context values within each range).
 Repeated plays within a game are dependent; later uncertainty work
 must respect that structure instead of assuming independent observations.
 

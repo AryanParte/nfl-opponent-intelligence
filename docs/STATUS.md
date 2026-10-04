@@ -1,24 +1,30 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-03, P1.3 has optional pre-play field-position
-and score-differential ranges for both roles. All 112 offline tests pass on Python
-3.11/3.12/3.13. Scores remain offense-relative whole points; filters account for
-missing/outside-range plays in fixed order without double-counting. Valid reports
-without a score filter are unchanged. Report schema v2 adds score metadata;
-audit schema v1 includes raw/eligible score missingness. P1.2 remains complete for
-the recorded snapshot. Clock filters, opponent adjustment, uncertainty, a finished
-brief, UI, and deployment remain open.
+As of the scheduled run on 2026-10-04, P1.3 has optional pre-play field-position,
+score, and period/clock filters for both roles. All 130 offline tests pass on Python
+3.11/3.12/3.13. Clock bounds require Q1–Q4 or explicit OT selection and count seconds
+remaining within that period; zero remains valid. Filters account for missing/
+outside-range plays in fixed order without double-counting. Valid reports without
+time options are unchanged. Report schema v2 adds requested period/clock metadata;
+audit schema v1 includes raw/eligible time-field missingness. P1.2 remains complete
+for the pinned snapshot. Matched league baselines, opponent adjustment, uncertainty,
+a finished brief, UI, and deployment remain open.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/pre-play-score-filters`, started from updated `origin/main`
-  at `5d12321` after observing PR #6 was merged. Continue its PR while unmerged.
-- Current review: [PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7),
-  open, unmerged, and attached to the task. Implementation `16f637f` is pushed with
+- Working branch: `codex/pre-play-clock-filters`, started from updated `origin/main`
+  at `7f4bfb3` after observing PR #7 was merged. Continue its PR while unmerged.
+- Current review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
+  open, unmerged, and attached to the task. Implementation `e85ad85` is pushed with
   matching local/remote SHAs and confirmed AryanParte author/committer attribution.
-  Do not enable auto-merge.
+  No review submissions or threads were present at publication. Do not enable
+  auto-merge.
+- Previous score review: [PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7),
+  merged at `7f4bfb3`. Its final-head CI passed at `98bd84d`; the preceding branch
+  was clean and matched upstream. No open PRs or review feedback remained at this
+  run's start.
 - Previous field-position review:
   [PR #6](https://github.com/AryanParte/nfl-opponent-intelligence/pull/6), merged at
   `5d12321`. Its final-head CI passed; no open PRs or review feedback remained at
@@ -111,10 +117,28 @@ score-only/combined reports across both roles, and 576 reports without a score
 filter exactly match merged PR #6. See the
 [score evidence and replay](REAL_DATA_AUDIT.md#score-extension-2026-10-03).
 
-The [PR #7 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37134408317)
-passed on `16f637f`: Python 3.11/3.12/3.13 each succeeded in the offline regression
+Seventeen new clock tests and a twenty-first snapshot integration test bring the
+suite to 130. They cover exact parsing, inclusive/equal/one-sided bounds, Q1–Q4
+versus all OT periods, zero and missing values, absent headers (including empty
+cohorts), exclusions, multiple missing contexts, both roles, unchanged no-time
+JSON, retained EPA denominators, exclusive cutoffs, and CLI/snapshot provenance.
+Review added malformed-clock CLI coverage even without a requested time filter,
+and made the `--clock-max` help explicit about requiring a period. The preexisting
+112 tests and original fixture remain unchanged.
+
+The read-only CSV audit found five missing raw clocks, zero missing raw periods,
+and neither missing among 34,902 eligible plays. Every eligible period/clock pair
+matches the adapter, and quarter seconds match source start-of-play `time`.
+Two eligible plays start at zero seconds. There are 174 REG OT plays, all qtr 5;
+multi-period OT is synthetic coverage, not a finding from this artifact. Independent
+raw/Decimal calculations match 7,680 period/clock reports and all their situation
+measurements; 768 no-time reports exactly match merged PR #7. See the
+[clock evidence and replay](REAL_DATA_AUDIT.md#clock-extension-2026-10-04).
+
+The [PR #8 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219835829)
+passed on `e85ad85`: Python 3.11/3.12/3.13 each succeeded in the offline regression
 suite and synthetic demo. No automatic run appeared after push/PR creation, so
-the existing workflow was dispatched manually. The PR description records the
+the existing workflow was dispatched manually. The PR description records
 final-head verification after this publication-record update. No workflow code,
 repository settings, or daily automation changed.
 
@@ -148,12 +172,14 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Continue P1.3 with optional pre-play quarter/clock filtering. Review source timing
-semantics and regulation/overtime boundaries before choosing parameters. Keep
-both roles, exclusive week cutoffs, explicit missingness/counts through combined
-field/score/time filters, and unchanged defaults. Matched league baselines follow.
-The adapter does not yet parse clock context. See [METRICS.md](METRICS.md) for
-existing role/filter contracts.
+Continue P1.3 with matched league baselines for descriptive offense tendencies.
+Explicitly define whether the selected team belongs in the comparison population;
+match season/type/week and requested field/score/period/clock context, plus down/
+distance buckets. Expose baseline play/game/EPA denominators, null and small-sample
+states, and preserve current output unless comparison is requested. Pooled league
+differences are not opponent adjustment, independent observations, or prediction.
+Keep defense interpretation explicit and proceed to game-level uncertainty and the
+static brief afterward. See [METRICS.md](METRICS.md) for current contracts.
 Do not move to UI/predictive work yet. External schedule/gamebook
 reconciliation, historical availability, backup, automatic CI triggering, and
 larger-than-memory ingestion remain documented limitations, not completed claims.

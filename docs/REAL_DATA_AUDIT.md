@@ -264,3 +264,81 @@ removals occur in this snapshot, so synthetic tests exercise those failure paths
 No raw bytes or previous dated evidence were changed. Time context, historical
 availability, external gamebooks, uncertainty, and forecast evaluation remain
 outside this unit's verification scope.
+
+## Clock extension (2026-10-04)
+
+The same unchanged artifact contains `qtr` and `quarter_seconds_remaining`.
+There are zero raw missing periods and five raw missing clocks; neither field
+is missing among the 34,902 eligible plays. All eligible values are integer
+strings and match the adapter by `(game_id, play_id)` exactly. Every eligible
+quarter clock equals `60 * minutes + seconds` from the source's start-of-play
+`time` string. This is internal source consistency, not official gamebook review.
+
+Eligible regulation clocks span 0..900, including **two eligible plays at zero**.
+All 174 eligible OT plays are REG `qtr=5`, with clocks 70..600; there is no POST
+OT in this artifact. For all 174, `game_seconds_remaining` equals the quarter
+clock, supporting explicit period selection rather than treating that field as
+a regulation-only game countdown. Multiple OT periods and the broader 0..900 OT
+contract are synthetic test coverage, not observed findings from this season.
+
+With socket creation blocked for snapshot loading/auditing, 7,680 reports match
+independent raw selection and Decimal EPA calculations: 32 teams × two roles ×
+REG before 3 / REG before 19 / POST before 23 × four context selections × ten
+time selections. Contexts are no field/score filter, yardline <=20, score <=-1,
+and yardline >=80 with score -7..7. Times are each of Q1/Q2/Q3/Q4/OT alone,
+Q2/Q4/OT with clock 0..120, Q4 exactly 0, and Q4 clock 600..900.
+
+Play/game/dropback/EPA counts, period/clock-stage removals, provenance, situation
+keys, and every situation's measurements agree; rates/means use absolute tolerance
+`1e-12`. The 768 corresponding reports without time options exactly match merged
+PR #7's report implementation at `7f4bfb3`, including field/score-filtered output.
+All 130 offline tests pass on Python 3.11/3.12/3.13; no test needs this real season.
+Missing and invalid contexts are exercised synthetically, since eligible contexts
+are complete in the recorded artifact. No raw files or dated evidence were changed.
+
+For either role, summing team play counts without field/score filters gives:
+
+| Season and exclusive cutoff | Q2 clock 0..120 | Q4 clock 0..120 | All OT | OT clock 0..120 |
+| --- | ---: | ---: | ---: | ---: |
+| REG before week 3 | 256 | 175 | 18 | 0 |
+| REG before week 19 | 2,443 | 1,519 | 174 | 4 |
+| POST before week 23 | 108 | 48 | 0 | 0 |
+
+OT 0..120 is a subset of all OT; do not add those columns. These are counts of
+eligible completed plays, not all snaps, independent observations, or forecasts.
+
+After verifying the pinned snapshot with the audit command above, this read-only
+recipe reproduces the table directly from source records:
+
+```python
+import csv
+import gzip
+from pathlib import Path
+
+root = Path("data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06")
+with gzip.open(root / "play_by_play_2024.csv.gz", "rt", encoding="utf-8-sig", newline="") as source:
+    rows = [{k: r[k] for k in ("season_type", "week", "qtr", "quarter_seconds_remaining", "time")}
+            for r in csv.DictReader(source) if r["season"] == "2024"
+            and r["play_type"] in {"run", "pass"}
+            and all(r[f] == "0" for f in ("two_point_attempt", "qb_kneel", "qb_spike"))]
+assert len(rows) == 34902
+for r in rows:
+    minute, second = map(int, r["time"].split(":"))
+    assert int(r["quarter_seconds_remaining"]) == 60 * minute + second
+for kind, cutoff in (("REG", 3), ("REG", 19), ("POST", 23)):
+    pairs = [(int(r["qtr"]), int(r["quarter_seconds_remaining"])) for r in rows
+             if r["season_type"] == kind and int(r["week"]) < cutoff]
+    print(kind, cutoff, [sum(q == 2 and 0 <= c <= 120 for q, c in pairs),
+                         sum(q == 4 and 0 <= c <= 120 for q, c in pairs),
+                         sum(q >= 5 for q, c in pairs),
+                         sum(q >= 5 and 0 <= c <= 120 for q, c in pairs)])
+```
+
+This recipe uses the verified serialization and completeness of this artifact;
+it is not a general-purpose loader. For the README time example, add `qtr == 4`
+and `0 <= quarter_seconds_remaining <= 120` to the earlier independent EPA
+recipe (CAR offense, REG before week 3). It selects four plays from one game,
+one dropback, four observed EPA, zero positive EPA, and Decimal EPA sum
+`-3.350863943167499`. These tiny samples are software checks, not tactical advice.
+Historical availability, upstream model training, external gamebooks, matched
+baselines, and game-level uncertainty remain outside this verification scope.

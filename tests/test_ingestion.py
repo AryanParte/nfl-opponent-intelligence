@@ -356,6 +356,46 @@ class IngestionTests(unittest.TestCase):
             "plays_before_filter": 2, "missing_score_differential": 1, "outside_range": 0, "plays_after_filter": 1,
         })
 
+    def test_time_audit_and_filtered_snapshot_cli_retain_missingness_and_provenance(self):
+        base = dict(self.rows[0], qtr="4", quarter_seconds_remaining="120")
+        rows = [base, dict(base, play_id="997", quarter_seconds_remaining="NA"),
+                dict(base, play_id="998", qtr="NA", quarter_seconds_remaining=""),
+                dict(base, play_id="999", play_type="no_play", qtr="", quarter_seconds_remaining="")]
+        buffer = io.StringIO(newline="")
+        writer = csv.DictWriter(buffer, fieldnames=REQUIRED_COLUMNS + ("qtr", "quarter_seconds_remaining"))
+        writer.writeheader()
+        writer.writerows(rows)
+        directory, raw = self.snapshot(raw=buffer.getvalue().encode())
+        dataset = ingestion.load_snapshot(directory)
+        self.assertEqual(dataset.optional_columns, ("qtr", "quarter_seconds_remaining"))
+        result = audit.audit_snapshot(directory)
+        self.assertEqual(result["input"]["optional_column_missing_counts"],
+                         {"qtr": 2, "quarter_seconds_remaining": 3})
+        self.assertEqual(result["adapter"]["optional_column_missing_counts"],
+                         {"qtr": 1, "quarter_seconds_remaining": 2})
+        self.assertTrue(result["reconciliation"]["raw_and_adapter_eligible_identities_match"])
+        args = ["--snapshot", str(directory), "--team", "ATL", "--side", "defense",
+                "--season", "2024", "--before-week", "3", "--source-label", "Synthetic",
+                "--period", "Q4", "--clock-max", "120"]
+        outputs = []
+        for _ in range(2):
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                self.assertEqual(main(args), 0)
+            outputs.append(stdout.getvalue())
+        self.assertEqual(outputs[0], outputs[1])
+        report = json.loads(outputs[0])
+        self.assertEqual(report["overall"]["plays"], 1)
+        self.assertEqual(report["overall"]["epa_per_play"], 0.8)
+        self.assertEqual(report["source"]["sha256"], sha256(raw).hexdigest())
+        self.assertEqual(report["source"]["snapshot"], json.loads((directory / "manifest.json").read_text()))
+        self.assertEqual(report["data_quality"]["period_filter"], {
+            "plays_before_filter": 3, "missing_qtr": 1, "outside_period": 0, "plays_after_filter": 2,
+        })
+        self.assertEqual(report["data_quality"]["clock_filter"], {
+            "plays_before_filter": 2, "missing_quarter_seconds_remaining": 1, "outside_range": 0, "plays_after_filter": 1,
+        })
+
 
 if __name__ == "__main__":
     unittest.main()

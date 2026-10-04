@@ -15,7 +15,7 @@ REQUIRED_COLUMNS = (
     "play_type", "down", "ydstogo", "qb_dropback", "qb_kneel", "qb_spike",
     "two_point_attempt", "epa",
 )
-OPTIONAL_COLUMNS = ("yardline_100", "score_differential")
+OPTIONAL_COLUMNS = ("yardline_100", "score_differential", "qtr", "quarter_seconds_remaining")
 MISSING = {"", "NA", "NAN", "NULL"}
 KNOWN_PLAY_TYPES = frozenset({
     "run", "pass", "punt", "field_goal", "kickoff", "extra_point",
@@ -42,6 +42,8 @@ class Play:
     epa: float | None
     yardline_100: float | None = None
     score_differential: int | None = None
+    qtr: int | None = None
+    quarter_seconds_remaining: int | None = None
 
 
 @dataclass(frozen=True)
@@ -96,17 +98,23 @@ def _yardline_100(value: str) -> float | None:
     return number
 
 
-def _score_differential(value: str) -> int | None:
+def _optional_integer(
+    value: str, name: str, *, minimum: int | None = None, maximum: int | None = None,
+) -> int | None:
     if value.upper() in MISSING:
         return None
-    # Whole-point decimal notation only. Avoid float rounding of fractions or
-    # large integers; no cap inferred from historical scores and no imputation.
+    # Accept whole-value decimal notation without rounding through a float.
     if not re.fullmatch(r"[+-]?[0-9]+(?:\.0+)?", value):
-        raise DataValidationError(f"score_differential: expected whole points or missing, got {value!r}")
+        raise DataValidationError(f"{name}: expected a whole integer or missing, got {value!r}")
     try:
-        return int(value.split(".", 1)[0])
+        number = int(value.split(".", 1)[0])
     except ValueError as exc:
-        raise DataValidationError("score_differential: integer representation is too long") from exc
+        raise DataValidationError(f"{name}: integer representation is too long") from exc
+    if minimum is not None and number < minimum:
+        raise DataValidationError(f"{name}: expected at least {minimum}, got {value!r}")
+    if maximum is not None and number > maximum:
+        raise DataValidationError(f"{name}: expected at most {maximum}, got {value!r}")
+    return number
 
 
 def load_csv(path: Path) -> Dataset:
@@ -193,7 +201,12 @@ def _load_csv_bytes(raw: bytes, *, expected_season: int | None = None) -> Datase
                 dropback=dropback,
                 epa=_epa(values["epa"]),
                 yardline_100=_yardline_100(values.get("yardline_100", "")),
-                score_differential=_score_differential(values.get("score_differential", "")),
+                score_differential=_optional_integer(values.get("score_differential", ""), "score_differential"),
+                qtr=_optional_integer(values.get("qtr", ""), "qtr", minimum=1),
+                quarter_seconds_remaining=_optional_integer(
+                    values.get("quarter_seconds_remaining", ""), "quarter_seconds_remaining",
+                    minimum=0, maximum=900,
+                ),
             ))
         except DataValidationError as exc:
             raise DataValidationError(f"CSV line {reader.line_num}: {exc}") from exc

@@ -508,3 +508,86 @@ source semantics and regulation/overtime boundaries. Preserve both roles, existi
 filters/defaults, exclusive week cutoffs, and explicit ordered missingness. Matched
 league baselines, game-level uncertainty, and the actual brief follow. Keep this
 unit's PR unmerged for Aryan's review; existing source/CI/scale limitations remain.
+
+## 2026-10-04 — Explicit pre-play periods and clock ranges
+
+**Built:** optional `qtr` / `quarter_seconds_remaining` parsing, `--period`
+Q1–Q4/OT, and inclusive `--clock-min` / `--clock-max` seconds. A clock range requires
+a period; OT groups all overtime periods. Four-stage field/score/period/clock
+selection reports conditional missing/outside counts without duplicate removals.
+Started `codex/pre-play-clock-filters` from updated `origin/main` at `7f4bfb3`,
+after confirming PR #7 merged with passing final-head CI and no outstanding review
+feedback. The preceding branch was clean and matched upstream. History, canonical
+clone, source bytes, and the existing 8 AM automation are preserved.
+
+**Why it matters:** analysts can isolate comparable portions of a period without
+mixing regulation and overtime, using end-of-play information, or silently dropping
+unknown clocks. This completes the planned P1.3 context filters, not the whole brief.
+
+**Review:** `src/opponent_intelligence/pbp.py` (exact nullable integers),
+`report.py` (period/range validation, ordered filters and counts), `__main__.py`,
+`tests/test_clock_filters.py`, the new snapshot test in `tests/test_ingestion.py`,
+and the clock sections in `docs/METRICS.md` / `docs/REAL_DATA_AUDIT.md`.
+
+**Sports concepts:** start-of-play versus end-of-play clocks; regulation period
+versus OT; seconds remaining versus cumulative elapsed time; eligible zero-clock
+plays; unchanged offense-relative score/EPA on either side. Q4 0..120 is not a
+definition of the final two minutes of a game that may continue into overtime.
+
+**Software/statistical concepts:** exact whole-value parsing, optional header
+availability, explicit API validation, backwards-compatible optional JSON keys,
+conditional missingness and ordered count partitions, independent raw/Decimal
+checks, and immutable provenance. Context selection does not adjust for opponents,
+remove within-game dependence, or prove historical information availability.
+
+**What to learn:** trace the invented 13-play cohort through all four optional
+filters: 13 → 10 → 9 → 5 → 3. Explain why the final three plays contain only two
+EPA observations (0.8 and -0.4), so EPA/play is 0.2, success 1/2, and dropback rate
+1/3. Contrast period-only selection with an explicit full 0..900 clock range when
+clock values are missing.
+
+**Three review questions:**
+
+1. Why must a clock range name a period, and why is `game_seconds_remaining <= 120`
+   not a safe substitute for Q4 selection?
+2. How do a zero clock, missing clock, absent clock header, and omitted clock filter
+   affect selection and denominators differently?
+3. When a play lacks both period and clock, where is its removal counted, and how
+   do the stage counts relate to global `eligible_rows_outside_cohort`?
+
+**Verification/self-review:** the 112-test baseline passed. All 130 offline tests
+now pass on Python 3.11/3.12/3.13 (17 clock tests and one snapshot integration test).
+They exercise fractions float would round, exact boundaries, all OT periods,
+overlapping missingness, absent columns even on empty inputs, retained missing EPA,
+both roles, exclusive cutoffs, unchanged no-time reports, and deterministic CLI
+output. Complete-diff review strengthened malformed-clock CLI coverage without
+time flags, and clarified clock-max help and the docs' regulation/OT limitations.
+No metric formula, eligibility rule, or original fixture changed.
+
+The read-only spreadsheet/CSV audit informed acceptance of clock zero and kept raw
+missingness separate from eligible missingness: five raw missing clocks versus
+zero eligible; no missing periods. All 34,902 raw/adapter period-clock identities
+and source start-time conversions match. Two eligible plays start at zero seconds.
+The artifact has 174 REG OT plays in qtr 5; synthetic tests cover additional OT
+periods and 900-second clocks without claiming those occur here. Independent raw
+selection and Decimal EPA sums match 7,680 filtered reports and their situation
+measurements; 768 no-time reports exactly match merged PR #7. Replay evidence is
+documented; this is source consistency/selection verification, not gamebook or
+predictive validation. No raw data or prior dated evidence was edited.
+
+**Publication:** implementation `e85ad85` is pushed with matching local/remote SHAs
+and confirmed AryanParte author/committer attribution.
+[PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8) is open,
+unmerged, and attached to the task, with no review submissions or threads at
+publication. [Implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219835829)
+passed the offline regression suite and synthetic demo on Python 3.11/3.12/3.13.
+The existing workflow needed manual dispatch because no automatic run appeared.
+The PR description records final-head verification after this publication-record
+update. No workflow code, repository settings, or daily automation changed.
+
+**Remaining/next task:** matched league baselines for offense tendencies with an
+explicit comparison population and matching season/type/week, context filters,
+and down/distance. Report baseline denominators and null/small-sample behavior;
+do not call descriptive differences opponent adjustment. Game-level uncertainty
+and the static brief follow; UI stays deferred. Known source-availability,
+automatic-CI-triggering, and in-memory scale limitations remain.

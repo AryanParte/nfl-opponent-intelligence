@@ -8,7 +8,7 @@ import sys
 
 from .pbp import load_csv
 from .ingestion import load_snapshot
-from .report import build_report
+from .report import PERIODS, build_report
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -32,6 +32,12 @@ def main(argv: list[str] | None = None) -> int:
                         help="Inclusive minimum pre-play score_differential in whole points; omitted end is unbounded")
     parser.add_argument("--score-max", type=int,
                         help="Inclusive maximum pre-play score_differential (offense minus defense for either side)")
+    parser.add_argument("--period", choices=PERIODS,
+                        help="Pre-play period; OT includes every overtime period (qtr >= 5)")
+    parser.add_argument("--clock-min", type=int,
+                        help="Inclusive minimum seconds remaining in the selected period (requires --period)")
+    parser.add_argument("--clock-max", type=int,
+                        help="Inclusive maximum seconds remaining (requires --period); bounds 0..900, omitted ends 0/900")
     args = parser.parse_args(argv)
     try:
         report = build_report(
@@ -41,6 +47,7 @@ def main(argv: list[str] | None = None) -> int:
             minimum_plays=args.minimum_plays, source_label=args.source_label,
             yardline_min=args.yardline_min, yardline_max=args.yardline_max,
             score_min=args.score_min, score_max=args.score_max,
+            period=args.period, clock_min=args.clock_min, clock_max=args.clock_max,
         )
         payload = json.dumps(report, indent=2, sort_keys=True, allow_nan=False)
     except (OSError, ValueError, csv.Error) as exc:
