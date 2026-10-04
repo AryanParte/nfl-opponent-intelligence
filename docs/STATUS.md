@@ -16,8 +16,11 @@ a finished brief, UI, and deployment remain open.
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
 - Working branch: `codex/pre-play-clock-filters`, started from updated `origin/main`
   at `7f4bfb3` after observing PR #7 was merged. Continue its PR while unmerged.
-- Current review: publication pending this unit's final diff review, commit, and
-  push. Do not merge or enable auto-merge.
+- Current review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
+  open, unmerged, and attached to the task. Implementation `e85ad85` is pushed with
+  matching local/remote SHAs and confirmed AryanParte author/committer attribution.
+  No review submissions or threads were present at publication. Do not enable
+  auto-merge.
 - Previous score review: [PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7),
   merged at `7f4bfb3`. Its final-head CI passed at `98bd84d`; the preceding branch
   was clean and matched upstream. No open PRs or review feedback remained at this
@@ -132,12 +135,12 @@ raw/Decimal calculations match 7,680 period/clock reports and all their situatio
 measurements; 768 no-time reports exactly match merged PR #7. See the
 [clock evidence and replay](REAL_DATA_AUDIT.md#clock-extension-2026-10-04).
 
-Current-unit remote CI will be checked after publication. The prior
-[PR #7 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37134547459)
-passed Python 3.11/3.12/3.13. Earlier PRs needed explicit dispatch of the existing
-workflow because no automatic run appeared; do not equate a committed workflow
-with a successful run. No workflow code, repository settings, or daily automation
-changed in this unit.
+The [PR #8 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219835829)
+passed on `e85ad85`: Python 3.11/3.12/3.13 each succeeded in the offline regression
+suite and synthetic demo. No automatic run appeared after push/PR creation, so
+the existing workflow was dispatched manually. The PR description records
+final-head verification after this publication-record update. No workflow code,
+repository settings, or daily automation changed.
 
 ## Raw acquisition evidence
 

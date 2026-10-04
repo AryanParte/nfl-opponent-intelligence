@@ -575,8 +575,15 @@ measurements; 768 no-time reports exactly match merged PR #7. Replay evidence is
 documented; this is source consistency/selection verification, not gamebook or
 predictive validation. No raw data or prior dated evidence was edited.
 
-**Publication:** pending final review, commit, push, PR creation, attribution/SHA
-checks, and remote CI. Do not merge the feature branch.
+**Publication:** implementation `e85ad85` is pushed with matching local/remote SHAs
+and confirmed AryanParte author/committer attribution.
+[PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8) is open,
+unmerged, and attached to the task, with no review submissions or threads at
+publication. [Implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219835829)
+passed the offline regression suite and synthetic demo on Python 3.11/3.12/3.13.
+The existing workflow needed manual dispatch because no automatic run appeared.
+The PR description records final-head verification after this publication-record
+update. No workflow code, repository settings, or daily automation changed.
 
 **Remaining/next task:** matched league baselines for offense tendencies with an
 explicit comparison population and matching season/type/week, context filters,
