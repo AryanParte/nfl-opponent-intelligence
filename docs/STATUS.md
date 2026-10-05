@@ -18,8 +18,11 @@ remain open; league comparison is descriptive, not adjustment or prediction.
   `origin/main` at `bbf4299` after observing PR #8 was merged. Continue its PR while
   unmerged. No outstanding PRs/reviews remained; the preceding branch was clean
   and matched its upstream.
-- Current review: pending complete-diff review, commit, push, and PR publication.
-  Do not merge or enable auto-merge.
+- Current review: [PR #9](https://github.com/AryanParte/nfl-opponent-intelligence/pull/9),
+  open, unmerged, and attached to the task. Implementation `55601b0` is pushed with
+  matching local/remote SHAs and confirmed AryanParte author/committer attribution.
+  No review submissions or threads were present at publication. Do not enable
+  auto-merge.
 - Previous clock review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
   merged at `bbf4299`; final-head CI passed at `d82316a`.
 - Previous score review: [PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7),
@@ -151,7 +154,12 @@ the corresponding CAR defense cohort is empty while its baseline remains valid.
 Observed coverage is never silently labeled a complete league. See the
 [baseline evidence and replay](REAL_DATA_AUDIT.md#league-baseline-extension-2026-10-05).
 
-Current-unit remote CI will be checked after publication. The prior
+The [PR #9 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37372593882)
+was dispatched manually after no automatic run appeared. GitHub currently reports
+all three jobs queued without assigned runners or executed steps; remote CI is
+pending, not a passing result. The PR description will record final-head verification
+after this publication-record update. Local verification remains 146 passing tests
+on all three Python versions. The prior
 [PR #8 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219963174)
 passed Python 3.11/3.12/3.13. Prior runs needed manual dispatch of the existing
 workflow when no automatic run appeared. No workflow code, repository settings,
@@ -186,6 +194,10 @@ the adapter does not silently repair typos or infer categories from other fields
 See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
+
+First recheck pending PR #9 CI and any review feedback; fix change-caused failures
+before selecting new feature work. Do not replace the repository or branch to
+resolve an external runner delay.
 
 Continue P1.3 with reproducible game-level uncertainty. Define resampling units,
 support thresholds, estimands, seed/repetitions, and undefined-result behavior

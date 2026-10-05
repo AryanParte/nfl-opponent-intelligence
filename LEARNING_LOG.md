@@ -654,9 +654,18 @@ output exposes coverage and null differences explicitly. Replay evidence is in
 the audit document. No raw data, source contract, original fixture, or existing
 metric formula changed. This is selection verification, not model validation.
 
-**Publication:** pending review, commit/push, PR creation, identity/SHA checks, and
-remote CI. Leave the PR unmerged; the existing 8 AM automation is unchanged.
+**Publication:** implementation `55601b0` is pushed on `codex/matched-league-baselines`;
+local/remote SHAs match, and GitHub attributes both author and committer to
+AryanParte. [PR #9](https://github.com/AryanParte/nfl-opponent-intelligence/pull/9)
+is open, unmerged, and attached; no review submissions or threads were present.
+No automatic CI run appeared, so the existing workflow was dispatched:
+[implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37372593882).
+All three jobs are currently queued without runners or executed steps; do not
+treat this as passed or failed. The PR description will record final-head CI after
+the publication-receipt update. The existing 8 AM automation is unchanged.
 
-**Remaining / next:** reproducible game-level uncertainty respecting shared games,
+**Remaining / next:** check pending remote CI before new development; fix any
+change-caused failures without discarding published work. Then implement
+reproducible game-level uncertainty respecting shared games,
 explicit support thresholds, and opt-in behavior; then the static historical brief.
 Known source availability, automatic-CI-triggering, and in-memory scale limits remain.

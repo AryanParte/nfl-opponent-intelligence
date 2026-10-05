@@ -78,6 +78,8 @@ not an interval or significance test. Keep uncertainty opt-in and preserve curre
 descriptive output. The static historical brief follows; do not skip to a UI or
 predictive model. The current unit passes 146 offline tests
 on Python 3.11/3.12/3.13; see [status](docs/STATUS.md) for evidence and limitations.
+Before new development, recheck the pending remote CI in PR #9 and address any
+change-caused failures. Queued checks are not a passing result.
 
 ### P1.4 — Product surface
 
