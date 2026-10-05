@@ -60,22 +60,26 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
 - [x] Add optional pre-play period/clock filters (2026-10-04): explicit Q1–Q4/OT,
       inclusive seconds with a required period, zero/missing distinction, ordered
       four-stage accounting for both roles, and unchanged valid defaults.
-- [ ] Compare an offense's tendencies with league baselines in matching contexts.
+- [x] Add optional matched league baselines (2026-10-05): exclude the selected
+      team in the same role, pool available plays under identical filters, match
+      down/distance buckets, and expose coverage, denominators, and null differences.
 - [ ] Add game-level uncertainty estimates and sample warnings; explain dependence
       among plays and the limits of small numbers of games.
 - [ ] Produce a readable static historical matchup brief with traceable findings.
 - [ ] Validate personnel/motion data availability and licensing separately. The
       initial play-by-play contract does not guarantee these fields exist.
 
-Next coherent unit: matched league baselines for descriptive offense tendencies.
-Define the comparison population explicitly (including whether the selected team
-is excluded), share season/type/week and requested context filters, and expose
-baseline play/game/EPA denominators plus null/small-sample behavior. Compare
-down/distance like-for-like; do not call pooled descriptive differences opponent
-adjustment or prediction. Preserve defense interpretation and current output when
-comparison is not requested. Game-level uncertainty and the static brief follow;
-do not skip to a UI or predictive model. The current unit passes 130 offline tests
+Next coherent unit: reproducible game-level uncertainty for cohort measurements
+and requested league differences. Define the resampling population and minimum
+game support before implementation; preserve within-game dependence and shared
+games across comparison populations, with explicit undefined/low-support results.
+Record method, seed, repetitions, and limitations; a play-count warning alone is
+not an interval or significance test. Keep uncertainty opt-in and preserve current
+descriptive output. The static historical brief follows; do not skip to a UI or
+predictive model. The current unit passes 146 offline tests
 on Python 3.11/3.12/3.13; see [status](docs/STATUS.md) for evidence and limitations.
+Before new development, recheck the pending remote CI in PR #9 and address any
+change-caused failures. Queued checks are not a passing result.
 
 ### P1.4 — Product surface
 

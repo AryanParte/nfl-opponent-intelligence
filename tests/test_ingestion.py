@@ -356,6 +356,31 @@ class IngestionTests(unittest.TestCase):
             "plays_before_filter": 2, "missing_score_differential": 1, "outside_range": 0, "plays_after_filter": 1,
         })
 
+    def test_league_snapshot_cli_is_offline_and_preserves_shared_source_and_denominators(self):
+        directory, raw = self.snapshot()
+        outputs = []
+        for _ in range(2):
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                code = main(["--snapshot", str(directory), "--team", "CAR", "--season", "2024",
+                             "--before-week", "3", "--source-label", "Synthetic snapshot",
+                             "--minimum-plays", "2", "--compare-league"])
+            self.assertEqual(code, 0)
+            outputs.append(stdout.getvalue())
+        self.assertEqual(outputs[0], outputs[1])
+        result = json.loads(outputs[0])
+        self.assertEqual(result["source"]["sha256"], sha256(raw).hexdigest())
+        self.assertEqual(result["source"]["snapshot"], json.loads((directory / "manifest.json").read_text()))
+        self.assertEqual(result["overall"]["plays"], 6)
+        comparison = result["league_comparison"]
+        self.assertEqual(comparison["overall"]["plays"], 1)
+        self.assertEqual(comparison["overall"]["epa_observations"], 1)
+        self.assertEqual(comparison["population"]["teams"], ["ATL"])
+        self.assertEqual(comparison["population"]["shared_games_with_selected"], 1)
+        self.assertTrue(comparison["overall"]["small_sample"])
+        self.assertTrue(comparison["overall"]["small_epa_sample"])
+        self.assertAlmostEqual(comparison["overall_difference"]["epa_per_play"], -2.96)
+
     def test_time_audit_and_filtered_snapshot_cli_retain_missingness_and_provenance(self):
         base = dict(self.rows[0], qtr="4", quarter_seconds_remaining="120")
         rows = [base, dict(base, play_id="997", quarter_seconds_remaining="NA"),

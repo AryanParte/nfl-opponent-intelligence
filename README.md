@@ -9,8 +9,9 @@ prepared for.
 acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
 cohort reconciliations. Reports can select a team's offense or defense while
 keeping EPA offense-relative, with optional pre-play field-position, score, and
-period/clock filters. Matched baselines, a web interface, adjustment, and deployment
-remain on the [roadmap](ROADMAP.md). This is an independent portfolio
+period/clock filters and optional matched league baselines. Uncertainty, a web
+interface, adjustment, and deployment remain on the [roadmap](ROADMAP.md).
+This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
@@ -73,6 +74,35 @@ Reports now use JSON schema v2: `cohort.team` and `cohort.side` replace
 `cohort.offense`, with explicit `metric_context`. Existing commands still default
 to offense and retain the same measurements, but JSON consumers must migrate;
 see [schema and interpretation](docs/METRICS.md#report-schema-v2).
+
+### Compare with other teams
+
+Add `--compare-league` to include a pooled baseline excluding the selected team
+in the same role. This example is entirely synthetic and still needs no network:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --csv tests/fixtures/synthetic_pbp.csv \
+  --source-label 'Synthetic verification fixture; not real NFL observations' \
+  --team CAR --season 2024 --before-week 3 --compare-league
+```
+
+The invented baseline has just one ATL offensive play with EPA 3, compared with
+CAR's six plays and EPA/play 0.04: the difference is -2.96. Its tiny sample warning
+is intentional; this fixture is not league coverage or evidence about either team.
+
+Both populations use the same season/type, exclusive week cutoff, and requested
+field/score/period/clock filters. Each selected down/distance bucket gets its own
+matching baseline; missing matches produce null differences, not a fallback to
+the league-wide rate. Rate differences are **percentage points**, and EPA
+differences remain offense-relative. Defense mode compares production allowed by
+other defenses, without reversing EPA or success.
+
+The JSON exposes observed baseline teams, play/game/EPA counts, missingness,
+shared games, and selected-minus-baseline differences. It pools individual plays,
+not team averages; overall context mixes may still differ. No comparison is added
+unless requested. See the [comparison contract](docs/METRICS.md#matched-league-baselines)
+and [real-data verification](docs/REAL_DATA_AUDIT.md#league-baseline-extension-2026-10-05).
 
 ## Acquire a reproducible raw snapshot
 
@@ -218,6 +248,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
    separation, combined-filter accounting, reciprocal roles, and compatibility.
    `tests/test_clock_filters.py` checks period/clock bounds, OT separation,
    zero versus missing, four-stage accounting, and unchanged defaults.
+   `tests/test_league_comparison.py` checks leave-team-out pooling, matching buckets,
+   explicit difference units, independent population counts, and unavailable results.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.

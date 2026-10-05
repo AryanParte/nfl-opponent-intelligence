@@ -147,6 +147,69 @@ Valid reports without these options retain their previous JSON output. All metri
 formulas, exclusive week cutoffs, and provenance meanings are unchanged. Optional
 source fields that are present but malformed now fail validation.
 
+## Matched league baselines
+
+`--compare-league` (Python: `compare_league=True`, a strict boolean) adds
+`league_comparison` within report schema v2. Omitted/false leaves the previous
+report unchanged, including warnings. No extra source columns or network are needed.
+
+The comparison population consists of **other teams in the same role**, from
+the same supplied dataset, season, REG/POST type, and exclusive week window:
+
+- Offense: select `posteam != team`; exclude the selected offense's plays.
+- Defense: select `defteam != team`; compare offensive production allowed by
+  other defenses. The selected franchise's offensive plays can still belong to
+  this baseline. Exclusion is by role, not every game involving that franchise.
+
+The role/EPA meanings follow the [nflreadr dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv)
+and [nflfastR's team summaries](https://nflfastr.com/articles/beginners_guide.html),
+rechecked on 2026-10-05. Leave-team-out pooling is this application's explicit
+comparison policy, not a claimed upstream or NFL-standard metric.
+
+The same validated field/score/period/clock filters run in the same order for
+both populations. No missing context is imputed. Baseline metrics use the existing
+formulas: dropbacks / eligible plays, mean observed EPA, and positive EPA / observed
+EPA. Pool counts/sums across plays; **do not average team or game averages**.
+Baseline `small_sample` and `small_epa_sample` use the requested play threshold
+separately. They are not uncertainty intervals or significance tests.
+
+| Comparison key | Contract |
+| --- | --- |
+| `population` | Excluded team, role/source team field, `available_source_only` scope, `pooled_plays` weighting, sorted observed teams and count **after filters**, and number of games shared with the selected cohort |
+| `cohort` | The report's season/type/week, role, threshold, and effective requested contexts, without a selected `team` field |
+| `overall` | Baseline measurements with play/game/EPA denominators and sample flags |
+| `overall_difference` | Selected overall minus baseline overall |
+| `situations` | Only the selected team's observed down/distance buckets, each with matching `baseline` metrics and `difference` |
+| `data_quality` | Same-season/type/window eligible rows, selected-team rows excluded before context filtering, baseline rows before/after filters, ordered conditional filter counts |
+| `warnings` | Baseline-specific coverage, interpretation, dependence, empty/missing-data notices |
+
+Differences have keys `dropback_rate_pp` and `success_rate_pp` (100 × rate
+difference in **percentage points**, not percent change), and `epa_per_play`
+(difference in expected points per observed play). Positive means numerically
+higher than baseline, not universally better. Defense retains the offense's sign.
+`difference_convention` is `selected_minus_baseline`.
+
+If either side lacks the relevant denominator, its difference is `null`. An empty
+matching baseline bucket stays empty even if overall league data exists. Baseline-only
+buckets are not invented as selected-team observations; the displayed baseline
+situation counts therefore need not sum to baseline overall plays. No selected
+plays means no comparison situation rows, but a baseline overall may still exist.
+
+The population ledger satisfies `same-season/type/window rows = selected-team
+rows + baseline rows before context filters`. Each active baseline filter then
+satisfies `before = missing + outside + after`. The top-level data quality still
+describes the selected team; its outside-cohort count already includes baseline
+plays. Do not add the two ledgers as if they were disjoint source totals.
+
+"League" is a baseline label, not a completeness certificate: a manual file may
+contain one other team or none, and narrow filters may remove many teams. Overall
+differences match requested ranges but do not reweight down/distance or other
+within-range context mixes; use the matched bucket rows. Neither these differences
+nor the baseline adjust for opponent strength or justify causal/predictive claims.
+The two populations have disjoint plays but may share games and opponents. Later
+uncertainty work must respect those dependencies. The exclusive cutoff does not
+reconstruct historical source availability or upstream model training.
+
 ## Definitions
 
 - **Plays:** count of the eligible cohort, regardless of EPA availability.

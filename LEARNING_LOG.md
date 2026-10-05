@@ -591,3 +591,81 @@ and down/distance. Report baseline denominators and null/small-sample behavior;
 do not call descriptive differences opponent adjustment. Game-level uncertainty
 and the static brief follow; UI stays deferred. Known source-availability,
 automatic-CI-triggering, and in-memory scale limitations remain.
+
+## 2026-10-05 — Matched leave-team-out league baselines
+
+**Built / why:** `--compare-league` adds a pooled baseline of other teams in the
+same role, with identical season/type/week and context filters, matching down/
+distance buckets, explicit sample sizes/coverage, and selected-minus-baseline
+differences. It makes tendencies interpretable against available peers without
+presenting them as opponent-adjusted rankings. Started `codex/matched-league-baselines`
+from updated `origin/main` at `bbf4299` after PR #8 merged with passing final CI;
+the preceding branch was clean and no open PRs/reviews remained.
+
+**Review:** `src/opponent_intelligence/report.py` (shared ordered filters,
+comparison population, bucket matching, null-safe differences), `__main__.py`,
+`tests/test_league_comparison.py`, the snapshot integration test, and
+`docs/METRICS.md` / the baseline section of `docs/REAL_DATA_AUDIT.md`.
+
+**Sports concepts:** compare offenses with other offenses and defenses with other
+defenses while preserving offensive EPA/signs. Match down/distance and pre-play
+contexts. Excluding one role does not exclude every game involving that franchise.
+Both populations can share games and opponents; broad context ranges still mix
+different situations and are not opponent adjustment.
+
+**Software/statistical concepts:** one shared selection implementation prevents
+filter drift; pooled numerators/denominators differ from averages of team rates.
+Rate deltas are percentage points, not percent change. Null denominators propagate
+to differences; an absent matching bucket never falls back to the overall rate.
+Observed coverage, conditional missingness, and immutable provenance stay explicit.
+
+**What to learn:** in the invented comparison, target dropbacks are 2/3 versus
+baseline 3/5 (about +6.67 percentage points). Target EPA is 0/2 versus baseline
+1/4, so the difference is -0.25, despite three versus five eligible plays. Missing
+EPA is retained in dropback denominators. Baseline team rates 0/1 and 3/4 must not
+be averaged to 0.375; pooling yields 0.6.
+
+**Three review questions:**
+
+1. In a CAR defense comparison, which plays are excluded from the baseline, and
+   why can the selected cohort and baseline still share games?
+2. Why does pooling baseline dropbacks/plays differ from averaging team rates, and
+   why can EPA and play-call denominators differ within the same cohort?
+3. What should the difference be when a matching down/distance baseline bucket is
+   empty but the overall league baseline has plays, and why?
+
+**Verification/self-review:** baseline 130 tests passed; 146 now pass on Python
+3.11/3.12/3.13 (15 comparison tests plus one snapshot test). Coverage includes both
+roles, all context stages and missingness, exclusive cutoffs, matching/absent
+buckets, independent sample flags, empty populations, missing EPA, unmodified
+non-comparison reports, deterministic CLI output, and snapshot provenance.
+Complete-diff review checked role exclusion, pooled versus averaged rates, nulls
+versus zero, filter order, time cutoffs, coverage, dependence, and documentation.
+It found that the immutability test kept the same dataset reference; a deep copy
+now makes that assertion sensitive to in-place changes. Added an explicit
+after-filter team-coverage assertion and kept the socket-blocked offline guarantee
+in the snapshot test, separate from the subprocess CLI determinism check.
+
+The read-only spreadsheet/CSV audit compared 2,048 reports to independent source
+selection and Decimal arithmetic, including bucket deltas and population ledgers;
+2,048 non-comparison outputs exactly match merged PR #8. It confirmed variable
+filtered team coverage and empty selected cohorts with nonempty baselines, so the
+output exposes coverage and null differences explicitly. Replay evidence is in
+the audit document. No raw data, source contract, original fixture, or existing
+metric formula changed. This is selection verification, not model validation.
+
+**Publication:** implementation `55601b0` is pushed on `codex/matched-league-baselines`;
+local/remote SHAs match, and GitHub attributes both author and committer to
+AryanParte. [PR #9](https://github.com/AryanParte/nfl-opponent-intelligence/pull/9)
+is open, unmerged, and attached; no review submissions or threads were present.
+No automatic CI run appeared, so the existing workflow was dispatched:
+[implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37372593882).
+All three jobs are currently queued without runners or executed steps; do not
+treat this as passed or failed. The PR description will record final-head CI after
+the publication-receipt update. The existing 8 AM automation is unchanged.
+
+**Remaining / next:** check pending remote CI before new development; fix any
+change-caused failures without discarding published work. Then implement
+reproducible game-level uncertainty respecting shared games,
+explicit support thresholds, and opt-in behavior; then the static historical brief.
+Known source availability, automatic-CI-triggering, and in-memory scale limits remain.
