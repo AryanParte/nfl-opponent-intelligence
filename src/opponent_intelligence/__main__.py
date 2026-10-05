@@ -20,6 +20,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--team", required=True, help="Selected team abbreviation, e.g. CAR")
     parser.add_argument("--side", choices=("offense", "defense"), default="offense",
                         help="Team's role to select (default: offense); EPA stays offense-relative")
+    parser.add_argument("--compare-league", action="store_true",
+                        help="Compare with pooled plays of other teams in the same role and requested contexts")
     parser.add_argument("--season", required=True, type=int)
     parser.add_argument("--before-week", required=True, type=int, help="Exclusive cutoff: target week is not included")
     parser.add_argument("--season-type", choices=("REG", "POST"), default="REG")
@@ -48,6 +50,7 @@ def main(argv: list[str] | None = None) -> int:
             yardline_min=args.yardline_min, yardline_max=args.yardline_max,
             score_min=args.score_min, score_max=args.score_max,
             period=args.period, clock_min=args.clock_min, clock_max=args.clock_max,
+            compare_league=args.compare_league,
         )
         payload = json.dumps(report, indent=2, sort_keys=True, allow_nan=False)
     except (OSError, ValueError, csv.Error) as exc:

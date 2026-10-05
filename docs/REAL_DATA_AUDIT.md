@@ -342,3 +342,76 @@ one dropback, four observed EPA, zero positive EPA, and Decimal EPA sum
 `-3.350863943167499`. These tiny samples are software checks, not tactical advice.
 Historical availability, upstream model training, external gamebooks, matched
 baselines, and game-level uncertainty remain outside this verification scope.
+
+## League-baseline extension (2026-10-05)
+
+The unchanged pinned snapshot was checked against independent raw-record
+leave-team-out selections and Decimal EPA calculations. All **2,048** requested
+comparisons agree: 32 teams × two roles × REG before 1/3/19 or POST before 23 ×
+eight context selections. Contexts were unrestricted; yardline <=20; yardline >=80;
+score exactly 0; score <=-1; Q4 clock 0..120; combined yardline <=20, score <=-1,
+Q2 clock 0..120; and OT clock 0..900.
+
+Overall and matching down/distance counts, rates, EPA means, and differences
+reconcile (counts/categories exact; floating-point absolute tolerance `1e-12`).
+Checks also cover the baseline population ledger, every active filter stage,
+observed teams, shared-game counts, disjoint selected/baseline identities, empty
+cohorts, and snapshot provenance. The corresponding 2,048 reports without the
+option exactly match merged PR #8 at `bbf4299`, despite the shared-filter refactor.
+Snapshot loading was checked with socket creation blocked. All 146 offline tests
+pass on Python 3.11/3.12/3.13; synthetic tests supply the missing EPA/context cases
+that this complete-context eligible snapshot does not contain.
+
+These CAR/2024/REG-before-week-3 checks show why coverage and denominators matter:
+
+| Selected role/context | Selected plays | Baseline plays / games | Baseline teams | Baseline dropbacks | Shared games |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Offense, no optional contexts | 101 | 3,710 / 32 | 31 | 2,171 | 2 |
+| Offense, Q4 clock 0..120 | 4 | 171 / 29 | 27 | 112 | 0 |
+| Defense, no optional contexts | 124 | 3,687 / 32 | 31 | 2,191 | 2 |
+| Defense, Q4 clock 0..120 | 0 | 175 / 30 | 29 | 113 | 0 |
+
+Every listed baseline play has observed EPA. The unrestricted offensive baseline
+has 1,590 positive EPA values and Decimal sum `-76.2939792890668281486`; its
+EPA/play is about -0.0205644. CAR's existing -0.4877802 minus that baseline is
+about -0.4672157 expected points per observed play. These are unadjusted historical
+software checks, not a team-strength estimate. The last row has real baseline
+observations but **null differences**, because the selected defense cohort is empty.
+Team counts are observed after filtering, not assumed to be 31. Shared games are
+intersections; do not add selected and baseline game counts as distinct games.
+
+After verifying this snapshot, the following independent source recipe reproduces
+the first row and its EPA calculation. Use `role="defteam"` for defense and set
+`late_q4=True` for the last two-minute Q4 clock range. The range is pre-play and
+does not include overtime. Run with the existing CLI plus `--compare-league` to
+compare against the report; do not use generated report metrics as expectations.
+
+```python
+import csv
+from decimal import Decimal
+import gzip
+from pathlib import Path
+
+root = Path("data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06")
+role, late_q4 = "posteam", False
+with gzip.open(root / "play_by_play_2024.csv.gz", "rt", encoding="utf-8-sig", newline="") as source:
+    rows = [{k: r[k] for k in (role, "game_id", "qb_dropback", "epa")}
+            for r in csv.DictReader(source) if r["season"] == "2024" and r["season_type"] == "REG"
+            and int(r["week"]) < 3 and r["play_type"] in {"run", "pass"}
+            and all(r[f] == "0" for f in ("two_point_attempt", "qb_kneel", "qb_spike"))
+            and (not late_q4 or (int(r["qtr"]) == 4 and 0 <= int(r["quarter_seconds_remaining"]) <= 120))]
+selected = [r for r in rows if r[role] == "CAR"]
+baseline = [r for r in rows if r[role] != "CAR"]
+assert len(selected) + len(baseline) == len(rows)
+epa = [Decimal(r["epa"]) for r in baseline]
+print(len(selected), len(baseline), len({r["game_id"] for r in baseline}),
+      len({r[role] for r in baseline}), sum(r["qb_dropback"] == "1" for r in baseline),
+      len({r["game_id"] for r in selected} & {r["game_id"] for r in baseline}),
+      len(epa), sum(v > 0 for v in epa), sum(epa), sum(epa) / len(epa) if epa else None)
+```
+
+The recipe depends on this artifact's verified serialization and observed complete
+EPA/context fields, not a replacement for the strict loader. No raw data, manifest,
+or previous dated evidence was changed. Matching broad ranges and buckets is not
+opponent adjustment, historical-information reconstruction, or game-independent
+inference. Game-level uncertainty and the static brief remain unfinished.

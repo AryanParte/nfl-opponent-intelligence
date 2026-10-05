@@ -1,26 +1,27 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-04, P1.3 has optional pre-play field-position,
-score, and period/clock filters for both roles. All 130 offline tests pass on Python
-3.11/3.12/3.13. Clock bounds require Q1–Q4 or explicit OT selection and count seconds
-remaining within that period; zero remains valid. Filters account for missing/
-outside-range plays in fixed order without double-counting. Valid reports without
-time options are unchanged. Report schema v2 adds requested period/clock metadata;
-audit schema v1 includes raw/eligible time-field missingness. P1.2 remains complete
-for the pinned snapshot. Matched league baselines, opponent adjustment, uncertainty,
-a finished brief, UI, and deployment remain open.
+As of the scheduled run on 2026-10-05, P1.3 supports optional matched league
+baselines on top of the existing offense/defense and context filters. All 146
+offline tests pass on Python 3.11/3.12/3.13. `--compare-league` pools other teams'
+plays in the same role and requested contexts, excluding the selected team. Reports
+show observed coverage, baseline denominators, matching down/distance buckets,
+selected-minus-baseline differences, and null results when unavailable. Valid
+reports without comparison remain unchanged. P1.2 stays complete for the pinned
+snapshot. Uncertainty, opponent adjustment, the finished brief, UI, and deployment
+remain open; league comparison is descriptive, not adjustment or prediction.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/pre-play-clock-filters`, started from updated `origin/main`
-  at `7f4bfb3` after observing PR #7 was merged. Continue its PR while unmerged.
-- Current review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
-  open, unmerged, and attached to the task. Implementation `e85ad85` is pushed with
-  matching local/remote SHAs and confirmed AryanParte author/committer attribution.
-  No review submissions or threads were present at publication. Do not enable
-  auto-merge.
+- Working branch: `codex/matched-league-baselines`, started from updated
+  `origin/main` at `bbf4299` after observing PR #8 was merged. Continue its PR while
+  unmerged. No outstanding PRs/reviews remained; the preceding branch was clean
+  and matched its upstream.
+- Current review: pending complete-diff review, commit, push, and PR publication.
+  Do not merge or enable auto-merge.
+- Previous clock review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
+  merged at `bbf4299`; final-head CI passed at `d82316a`.
 - Previous score review: [PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7),
   merged at `7f4bfb3`. Its final-head CI passed at `98bd84d`; the preceding branch
   was clean and matched upstream. No open PRs or review feedback remained at this
@@ -135,12 +136,26 @@ raw/Decimal calculations match 7,680 period/clock reports and all their situatio
 measurements; 768 no-time reports exactly match merged PR #7. See the
 [clock evidence and replay](REAL_DATA_AUDIT.md#clock-extension-2026-10-04).
 
-The [PR #8 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219835829)
-passed on `e85ad85`: Python 3.11/3.12/3.13 each succeeded in the offline regression
-suite and synthetic demo. No automatic run appeared after push/PR creation, so
-the existing workflow was dispatched manually. The PR description records
-final-head verification after this publication-record update. No workflow code,
-repository settings, or daily automation changed.
+Fifteen new comparison tests and a twenty-second snapshot integration test bring
+the suite to 146. Independently calculated synthetic expectations distinguish
+pooled rates from team-average rates; leave-team-out role selection; shared games;
+matching versus absent buckets; missing EPA; empty populations; percentage-point
+units; separate play/EPA warnings; and four-stage baseline missingness accounting.
+Opt-in adds only the comparison block. The original 130 tests remain intact.
+
+The read-only CSV audit matched 2,048 comparisons and their bucket differences to
+raw selections/Decimal calculations, with exact count/coverage/ledger checks and
+floating tolerance `1e-12`. The corresponding 2,048 ordinary reports match merged
+PR #8 exactly. The CAR late-Q4 example has only 27 other offenses after filtering;
+the corresponding CAR defense cohort is empty while its baseline remains valid.
+Observed coverage is never silently labeled a complete league. See the
+[baseline evidence and replay](REAL_DATA_AUDIT.md#league-baseline-extension-2026-10-05).
+
+Current-unit remote CI will be checked after publication. The prior
+[PR #8 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219963174)
+passed Python 3.11/3.12/3.13. Prior runs needed manual dispatch of the existing
+workflow when no automatic run appeared. No workflow code, repository settings,
+or daily automation changed.
 
 ## Raw acquisition evidence
 
@@ -172,14 +187,14 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Continue P1.3 with matched league baselines for descriptive offense tendencies.
-Explicitly define whether the selected team belongs in the comparison population;
-match season/type/week and requested field/score/period/clock context, plus down/
-distance buckets. Expose baseline play/game/EPA denominators, null and small-sample
-states, and preserve current output unless comparison is requested. Pooled league
-differences are not opponent adjustment, independent observations, or prediction.
-Keep defense interpretation explicit and proceed to game-level uncertainty and the
-static brief afterward. See [METRICS.md](METRICS.md) for current contracts.
+Continue P1.3 with reproducible game-level uncertainty. Define resampling units,
+support thresholds, estimands, seed/repetitions, and undefined-result behavior
+before implementation. Preserve within-game dependence and shared games when
+estimating selected-minus-baseline uncertainty; independently resampling the two
+populations can lose that structure. Keep it opt-in, preserve existing counts and
+role interpretation, and do not turn a small-play-count flag into a significance
+claim. The readable static historical brief follows. See [METRICS.md](METRICS.md)
+for the comparison population and current contracts.
 Do not move to UI/predictive work yet. External schedule/gamebook
 reconciliation, historical availability, backup, automatic CI triggering, and
 larger-than-memory ingestion remain documented limitations, not completed claims.

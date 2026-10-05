@@ -30,6 +30,100 @@ def _metrics(plays: list[Play], minimum_plays: int) -> dict:
     }
 
 
+def _filter_context(plays: list[Play], contexts: dict) -> tuple[list[Play], dict]:
+    """Apply the same ordered, validated bounds to either comparison population."""
+    quality = {}
+    for name, context in contexts.items():
+        field = context["field"]
+        lower, upper = context["minimum_inclusive"], context["maximum_inclusive"]
+        before = len(plays)
+        known = [play for play in plays if getattr(play, field) is not None]
+        selected = [play for play in known
+                    if (lower is None or getattr(play, field) >= lower)
+                    and (upper is None or getattr(play, field) <= upper)]
+        quality[name + "_filter"] = {
+            "plays_before_filter": before, "missing_" + field: before - len(known),
+            "outside_period" if name == "period" else "outside_range": len(known) - len(selected),
+            "plays_after_filter": len(selected),
+        }
+        plays = selected
+    return plays, quality
+
+
+def _group_situations(plays: list[Play]) -> dict[tuple[int, str], list[Play]]:
+    groups: dict[tuple[int, str], list[Play]] = defaultdict(list)
+    for play in plays:
+        distance = "short" if play.yards_to_go <= 3 else "medium" if play.yards_to_go <= 6 else "long"
+        groups[(play.down, distance)].append(play)
+    return groups
+
+
+def _differences(selected: dict, baseline: dict) -> dict:
+    differences = {}
+    for metric, output, scale in (("dropback_rate", "dropback_rate_pp", 100),
+                                  ("success_rate", "success_rate_pp", 100),
+                                  ("epa_per_play", "epa_per_play", 1)):
+        left, right = selected[metric], baseline[metric]
+        differences[output] = None if left is None or right is None else (left - right) * scale
+    return differences
+
+
+def _league_comparison(
+    report: dict, selected: list[Play], others: list[Play], temporal_count: int,
+    selected_base_count: int, contexts: dict, minimum_plays: int, role_field: str,
+) -> dict:
+    before_count = len(others)
+    baseline, quality = _filter_context(others, contexts)
+    teams = sorted({getattr(play, role_field) for play in baseline})
+    baseline_metrics = _metrics(baseline, minimum_plays)
+    baseline_groups = _group_situations(baseline)
+    situations = []
+    # Only the selected team's observed buckets are compared; never fall back
+    # to overall league values when a matching baseline bucket is unavailable.
+    for situation in report["situations"]:
+        key = (situation["down"], situation["distance"])
+        metrics = _metrics(baseline_groups.get(key, []), minimum_plays)
+        situations.append({"down": key[0], "distance": key[1], "baseline": metrics,
+                           "difference": _differences(situation, metrics)})
+    warnings = [
+        "Baseline uses only available source plays; full league coverage is not certified.",
+        "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+        "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+        "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+    ]
+    if not baseline:
+        warnings.append("No eligible baseline plays match; baseline rates and differences are null.")
+    if any(play.epa is None for play in baseline):
+        warnings.append("Missing baseline EPA affects only EPA and success-rate denominators.")
+    for name, context in contexts.items():
+        stage = quality[name + "_filter"]
+        missing = stage["missing_" + context["field"]]
+        if missing:
+            warnings.append(f"Baseline {name} filter excluded {missing} of "
+                            f"{stage['plays_before_filter']} surviving plays with missing "
+                            f"{context['field']}; no imputation.")
+    return {
+        "population": {"scope": "available_source_only", "side": report["cohort"]["side"],
+                       "excluded_team": report["cohort"]["team"],
+                       "team_field": "posteam" if role_field == "offense" else "defteam",
+                       "teams": teams, "team_count": len(teams), "weighting": "pooled_plays",
+                       "shared_games_with_selected": len({p.game_id for p in selected}
+                                                         & {p.game_id for p in baseline})},
+        "cohort": deepcopy({key: value for key, value in report["cohort"].items() if key != "team"}),
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {"eligible_rows_same_season_type_before_week": temporal_count,
+                         "excluded_selected_team_rows": selected_base_count,
+                         "plays_before_context_filters": before_count,
+                         "plays_after_context_filters": len(baseline),
+                         "filter_order": list(contexts), **quality},
+        "overall": baseline_metrics,
+        "overall_difference": _differences(report["overall"], baseline_metrics),
+        "situations": situations,
+        "warnings": warnings,
+    }
+
+
 def build_report(
     dataset: Dataset,
     *,
@@ -46,6 +140,7 @@ def build_report(
     period: str | None = None,
     clock_min: int | None = None,
     clock_max: int | None = None,
+    compare_league: bool = False,
     source_label: str,
 ) -> dict:
     """Select a team's offense or defense, season/type, and weeks < before_week.
@@ -60,6 +155,8 @@ def build_report(
     _team(team, "team")
     if side not in ("offense", "defense"):
         raise ValueError("side must be offense or defense")
+    if type(compare_league) is not bool:
+        raise ValueError("compare_league must be a boolean")
     for name, value in (("season", season), ("before_week", before_week), ("minimum_plays", minimum_plays)):
         if type(value) is not int:
             raise ValueError(f"{name} must be an integer")
@@ -124,56 +221,21 @@ def build_report(
         clock_context = {"field": "quarter_seconds_remaining", "minimum_inclusive": clock_lower,
                          "maximum_inclusive": clock_upper, "unit": "seconds", "timing": "pre_play",
                          "missing_policy": "exclude"}
-    selected = [play for play in dataset.plays if (
-        (play.offense if side == "offense" else play.defense) == team and play.season == season
-        and play.season_type == season_type and play.week < before_week
+    temporal = [play for play in dataset.plays if (
+        play.season == season and play.season_type == season_type and play.week < before_week
     )]
-    field_quality = None
-    if field_position is not None:
-        before_count = len(selected)
-        missing_count = sum(play.yardline_100 is None for play in selected)
-        selected = [play for play in selected if play.yardline_100 is not None
-                    and lower <= play.yardline_100 <= upper]
-        field_quality = {"plays_before_filter": before_count,
-                         "missing_yardline_100": missing_count,
-                         "outside_range": before_count - missing_count - len(selected),
-                         "plays_after_filter": len(selected)}
-    score_quality = None
-    if score_context is not None:
-        # Count only plays surviving the previous filter, so overlapping missing
-        # context and out-of-range values never create duplicate removals.
-        before_count = len(selected)
-        missing_count = sum(play.score_differential is None for play in selected)
-        selected = [play for play in selected if play.score_differential is not None
-                    and (score_min is None or play.score_differential >= score_min)
-                    and (score_max is None or play.score_differential <= score_max)]
-        score_quality = {"plays_before_filter": before_count,
-                         "missing_score_differential": missing_count,
-                         "outside_range": before_count - missing_count - len(selected),
-                         "plays_after_filter": len(selected)}
-    period_quality = None
-    if period_context is not None:
-        before_count = len(selected)
-        missing_count = sum(play.qtr is None for play in selected)
-        selected = [play for play in selected if play.qtr is not None
-                    and play.qtr >= period_lower and (period_upper is None or play.qtr <= period_upper)]
-        period_quality = {"plays_before_filter": before_count, "missing_qtr": missing_count,
-                          "outside_period": before_count - missing_count - len(selected),
-                          "plays_after_filter": len(selected)}
-    clock_quality = None
-    if clock_context is not None:
-        before_count = len(selected)
-        missing_count = sum(play.quarter_seconds_remaining is None for play in selected)
-        selected = [play for play in selected if play.quarter_seconds_remaining is not None
-                    and clock_lower <= play.quarter_seconds_remaining <= clock_upper]
-        clock_quality = {"plays_before_filter": before_count,
-                         "missing_quarter_seconds_remaining": missing_count,
-                         "outside_range": before_count - missing_count - len(selected),
-                         "plays_after_filter": len(selected)}
-    groups: dict[tuple[int, str], list[Play]] = defaultdict(list)
-    for play in selected:
-        distance = "short" if play.yards_to_go <= 3 else "medium" if play.yards_to_go <= 6 else "long"
-        groups[(play.down, distance)].append(play)
+    role_field = "offense" if side == "offense" else "defense"
+    selected_base = [play for play in temporal if getattr(play, role_field) == team]
+    contexts = {name: context for name, context in (
+        ("field_position", field_position), ("score_differential", score_context),
+        ("period", period_context), ("clock", clock_context),
+    ) if context is not None}
+    selected, quality = _filter_context(selected_base, contexts)
+    field_quality = quality.get("field_position_filter")
+    score_quality = quality.get("score_differential_filter")
+    period_quality = quality.get("period_filter")
+    clock_quality = quality.get("clock_filter")
+    groups = _group_situations(selected)
     warnings = [
         "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
         "Week filtering does not reconstruct historical source availability or EPA model training.",
@@ -241,9 +303,10 @@ def build_report(
         report["cohort"]["clock"] = clock_context
         report["data_quality"]["clock_filter"] = clock_quality
     if score_context is not None or period_context is not None:
-        report["data_quality"]["filter_order"] = [
-            name for name, context in (("field_position", field_position), ("score_differential", score_context),
-                                       ("period", period_context), ("clock", clock_context))
-            if context is not None
-        ]
+        report["data_quality"]["filter_order"] = list(contexts)
+    if compare_league:
+        others = [play for play in temporal if getattr(play, role_field) != team]
+        report["league_comparison"] = _league_comparison(
+            report, selected, others, len(temporal), len(selected_base), contexts, minimum_plays, role_field,
+        )
     return report
