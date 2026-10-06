@@ -738,8 +738,16 @@ and the separate raw-record support recipe replayed successfully. `git diff --ch
 passed. No remaining verified defect was found in this unit; methodological limits
 remain explicit below.
 
-**Publication:** pending commit/push, PR creation, attribution/SHA checks, and CI.
-No workflow configuration, repository settings, or 8 AM automation changed.
+**Publication:** implementation `f07b378` is pushed on
+`codex/game-cluster-uncertainty` with matching local/remote SHAs and GitHub-confirmed
+AryanParte author/committer attribution. [PR #10](https://github.com/AryanParte/nfl-opponent-intelligence/pull/10)
+is open, unmerged, and attached; no review threads/submissions were present.
+The manually dispatched existing [verification workflow](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37473511186)
+passed on that exact SHA. All three job logs confirm 161 tests and the synthetic
+demo passed. No automatic run appeared; that trigger issue remains separate from
+the now-resolved runner allocation failure. The PR description records verification
+for the later documentation-only publication head. No workflow configuration,
+repository settings, or 8 AM automation changed.
 
 **Remaining / next:** deterministic JSON-to-Markdown static historical opponent
 brief with source/cohort/role traceability, denominators, baseline coverage, and

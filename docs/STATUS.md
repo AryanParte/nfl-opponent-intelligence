@@ -19,8 +19,11 @@ are exploratory, not validated significance or prediction.
   unmerged. No open PRs or review feedback remained. The preceding checkout was
   clean with no unpublished commits; its remote feature branch had been deleted
   after merging. Full history is preserved.
-- Current review: complete-diff self-review passed; commit/push and PR publication pending.
-  Do not merge or enable auto-merge.
+- Current review: [PR #10](https://github.com/AryanParte/nfl-opponent-intelligence/pull/10),
+  open, unmerged, and attached to the task. Complete-diff self-review passed.
+  Implementation `f07b378` is pushed with matching local/remote SHAs and confirmed
+  AryanParte author/committer attribution. No review submissions or threads were
+  present at publication. Do not merge or enable auto-merge.
 - Previous comparison review: [PR #9](https://github.com/AryanParte/nfl-opponent-intelligence/pull/9),
   merged at `af19425`; merged-main CI passed on that exact SHA.
 - Previous clock review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
@@ -176,7 +179,11 @@ could not allocate hosted runners, with an internal server error. After the merg
 [main verification](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37382909725)
 passed all 146 then-current tests and the synthetic demo on Python 3.11/3.12/3.13
 at `af19425`. This resolves the previous pending CI note without a code change.
-Current-unit remote CI will be checked after publication. The prior
+The [PR #10 implementation verification](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37473511186)
+passed all three Python jobs at `f07b378`; each job's logs confirm 161 tests and
+the synthetic demo passed. The existing workflow was dispatched manually after
+no automatic run appeared. See the PR description for verification of any later
+documentation-only publication head. The prior
 [PR #8 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219963174)
 passed Python 3.11/3.12/3.13. Prior runs needed manual dispatch of the existing
 workflow when no automatic run appeared. No workflow code, repository settings,
