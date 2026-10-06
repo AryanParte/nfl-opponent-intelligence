@@ -669,3 +669,80 @@ change-caused failures without discarding published work. Then implement
 reproducible game-level uncertainty respecting shared games,
 explicit support thresholds, and opt-in behavior; then the static historical brief.
 Known source availability, automatic-CI-triggering, and in-memory scale limits remain.
+
+## 2026-10-06 — Exploratory whole-game uncertainty
+
+**Built / why:** opt-in seeded game-cluster percentile intervals for the selected
+cohort, matching league baseline, and paired differences, overall and by observed
+down/distance. Game support, undefined replicates, low-support/degenerate states,
+and limitations prevent a large play count from masquerading as strong evidence.
+Started `codex/game-cluster-uncertainty` from updated `origin/main` at `af19425`;
+PR #9 was merged, the checkout was clean, and no open PRs or review feedback remained.
+
+**Prior CI resolved:** October 5's two attempts failed before tests because hosted
+runners were not assigned. The user-authorized retry on merged `main`
+[passed all three jobs](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37382909725)
+at `af19425`, with 146 tests and the synthetic demo per version. That supersedes
+the prior entry's pending status without rewriting its dated account.
+
+**Review:** `src/opponent_intelligence/uncertainty.py`, the opt-in integration in
+`report.py` / `__main__.py`, `tests/test_uncertainty.py`, the snapshot integration
+test, and `docs/UNCERTAINTY.md` / the new real-data audit section.
+
+**Sports concepts:** plays share a game's context; a team's season provides few
+games even when it has hundreds of plays. EPA remains offense-relative for defense.
+Pre-play filters and temporal cutoffs precede resampling. Both sides can contain
+plays from the same game, while repeated teams also create unresolved cross-game
+dependence. These intervals are descriptive, not scouting or predictive validation.
+
+**Software/statistical concepts:** aggregate sufficient per-game counts/sums,
+resample entire games with replacement, share each game's multiplicity across
+populations/buckets, and pool denominators rather than average game means. Local
+seeded RNG and sorted identities make replay stable without global random-state
+changes. Percentile bounds are pointwise and conditional on defined replicates.
+Five-game, 95%-valid, and few-game warning thresholds are explicit application
+policies, not guarantees of statistical coverage.
+
+**What to learn:** in the unequal-size synthetic example, pooled EPA is 10/15,
+not the unweighted mean of five game means (zero). If baseline EPA equals selected
+EPA plus three within every shared game, the paired difference is always -3;
+independent game draws would invent variability in that contrast. A zero-width
+bootstrap interval is withheld rather than called certainty. More repetitions
+reduce Monte Carlo noise but cannot add observed games.
+
+**Three review questions:**
+
+1. Why must both populations use the same multiplicity when a shared game is
+   drawn, and why does pooling differ from averaging game averages?
+2. How can a cohort have five play-supporting games but only one EPA-supporting
+   game, and what happens to its intervals and undefined replicate counts?
+3. Why are the five-game gate and nominal 95% bounds not a guarantee of reliable
+   NFL inference, even if all software tests pass?
+
+**Verification/self-review:** the original 146 tests passed before implementation;
+161 now pass on Python 3.11/3.12/3.13. Fourteen new tests include exhaustive
+enumeration of all 3,125 five-game draws and independently expanded play arithmetic
+with a separate quantile routine. A twenty-third snapshot test preserves hashes
+and manifests with sockets blocked. The raw read-only audit reconciled eight
+1,000-replicate reports and all their buckets to Decimal/NumPy expectations, plus
+eight unchanged legacy reports. It confirmed why early one/two-game cohorts need
+withheld intervals and visible undefined counts. Complete-diff review checked
+pairing, per-metric denominators, cutoff/filter order, empty populations, option
+validation, provenance, and unsupported coverage claims. Clarified the README's
+low-support example as overall intervals (missing buckets can instead be undefined),
+used named per-game totals and explicit EPA units, and documented conditional
+replicates, comparison-frame changes, and uncalibrated support policies. After
+review, all 161 tests passed again on all three runtimes; a 1,000-draw synthetic
+report had identical serialized SHA-256 across them. Both documented CLI examples
+and the separate raw-record support recipe replayed successfully. `git diff --check`
+passed. No remaining verified defect was found in this unit; methodological limits
+remain explicit below.
+
+**Publication:** pending commit/push, PR creation, attribution/SHA checks, and CI.
+No workflow configuration, repository settings, or 8 AM automation changed.
+
+**Remaining / next:** deterministic JSON-to-Markdown static historical opponent
+brief with source/cohort/role traceability, denominators, baseline coverage, and
+all uncertainty states preserved. Coverage calibration, cross-game dependence,
+historical availability, automatic CI triggering, and larger-than-memory scale
+remain explicit limitations. Do not skip to a UI or call this calibrated inference.

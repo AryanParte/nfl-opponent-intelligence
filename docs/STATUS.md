@@ -1,28 +1,28 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-05, P1.3 supports optional matched league
-baselines on top of the existing offense/defense and context filters. All 146
-offline tests pass on Python 3.11/3.12/3.13. `--compare-league` pools other teams'
-plays in the same role and requested contexts, excluding the selected team. Reports
-show observed coverage, baseline denominators, matching down/distance buckets,
-selected-minus-baseline differences, and null results when unavailable. Valid
-reports without comparison remain unchanged. P1.2 stays complete for the pinned
-snapshot. Uncertainty, opponent adjustment, the finished brief, UI, and deployment
-remain open; league comparison is descriptive, not adjustment or prediction.
+As of the scheduled run on 2026-10-06, P1.3 supports opt-in exploratory game-cluster
+uncertainty alongside offense/defense reports, context filters, and matched league
+baselines. All 161 offline tests pass on Python 3.11/3.12/3.13. Whole-game draws are
+shared across selected/baseline populations and situations; reports expose game
+support, undefined resamples, and unavailable/degenerate interval states. Existing
+reports are unchanged without the option. P1.2 stays complete for the pinned
+snapshot. Statistical coverage calibration, cross-game dependence, opponent
+adjustment, the finished brief, UI, and deployment remain open. These intervals
+are exploratory, not validated significance or prediction.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/matched-league-baselines`, started from updated
-  `origin/main` at `bbf4299` after observing PR #8 was merged. Continue its PR while
-  unmerged. No outstanding PRs/reviews remained; the preceding branch was clean
-  and matched its upstream.
-- Current review: [PR #9](https://github.com/AryanParte/nfl-opponent-intelligence/pull/9),
-  open, unmerged, and attached to the task. Implementation `55601b0` is pushed with
-  matching local/remote SHAs and confirmed AryanParte author/committer attribution.
-  No review submissions or threads were present at publication. Do not enable
-  auto-merge.
+- Working branch: `codex/game-cluster-uncertainty`, started from updated
+  `origin/main` at `af19425` after observing PR #9 was merged. Continue its PR while
+  unmerged. No open PRs or review feedback remained. The preceding checkout was
+  clean with no unpublished commits; its remote feature branch had been deleted
+  after merging. Full history is preserved.
+- Current review: complete-diff self-review passed; commit/push and PR publication pending.
+  Do not merge or enable auto-merge.
+- Previous comparison review: [PR #9](https://github.com/AryanParte/nfl-opponent-intelligence/pull/9),
+  merged at `af19425`; merged-main CI passed on that exact SHA.
 - Previous clock review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
   merged at `bbf4299`; final-head CI passed at `d82316a`.
 - Previous score review: [PR #7](https://github.com/AryanParte/nfl-opponent-intelligence/pull/7),
@@ -154,12 +154,29 @@ the corresponding CAR defense cohort is empty while its baseline remains valid.
 Observed coverage is never silently labeled a complete league. See the
 [baseline evidence and replay](REAL_DATA_AUDIT.md#league-baseline-extension-2026-10-05).
 
-The [PR #9 implementation CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37372593882)
-was dispatched manually after no automatic run appeared. GitHub currently reports
-all three jobs queued without assigned runners or executed steps; remote CI is
-pending, not a passing result. The PR description will record final-head verification
-after this publication-record update. Local verification remains 146 passing tests
-on all three Python versions. The prior
+Fourteen new uncertainty tests and a twenty-third snapshot integration test bring
+the suite to 161. All 3,125 ordered resamples of a five-game synthetic population
+match independently expanded play arithmetic and a separate quantile routine.
+Cases cover unequal game sizes, shared-game contrasts, every support/validity
+boundary, missing EPA, empty cohorts and matching buckets, degenerate intervals,
+unchanged report fields, temporal/context selection, both roles, seeded replay,
+row-order invariance, global RNG isolation, and offline CLI/snapshot provenance.
+
+The read-only pinned CSV check reconciled eight requested reports and every
+reported situation against independent raw selections, Decimal game sums, joint
+weight matrices, and NumPy percentiles (exact counts/statuses; `1e-12` absolute
+numeric tolerance). Eight ordinary reports match merged PR #9 exactly. The check
+exposes one/two-game early cohorts and a zero-game defense cohort, with intervals
+correctly withheld. Full-season intervals retain the few-game warning. See the
+[uncertainty evidence and replay](REAL_DATA_AUDIT.md#uncertainty-extension-2026-10-06)
+and [method contract](UNCERTAINTY.md). These checks do not validate coverage.
+
+The two PR #9 CI attempts on October 5 failed before test execution because GitHub
+could not allocate hosted runners, with an internal server error. After the merge,
+[main verification](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37382909725)
+passed all 146 then-current tests and the synthetic demo on Python 3.11/3.12/3.13
+at `af19425`. This resolves the previous pending CI note without a code change.
+Current-unit remote CI will be checked after publication. The prior
 [PR #8 final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37219963174)
 passed Python 3.11/3.12/3.13. Prior runs needed manual dispatch of the existing
 workflow when no automatic run appeared. No workflow code, repository settings,
@@ -195,18 +212,13 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-First recheck pending PR #9 CI and any review feedback; fix change-caused failures
-before selecting new feature work. Do not replace the repository or branch to
-resolve an external runner delay.
-
-Continue P1.3 with reproducible game-level uncertainty. Define resampling units,
-support thresholds, estimands, seed/repetitions, and undefined-result behavior
-before implementation. Preserve within-game dependence and shared games when
-estimating selected-minus-baseline uncertainty; independently resampling the two
-populations can lose that structure. Keep it opt-in, preserve existing counts and
-role interpretation, and do not turn a small-play-count flag into a significance
-claim. The readable static historical brief follows. See [METRICS.md](METRICS.md)
-for the comparison population and current contracts.
+Inspect current PR CI and reviews first. Next, continue P1.3 with a deterministic
+static historical opponent brief from existing JSON: traceable source/cohort/role,
+counts, matching baseline coverage, and support-aware uncertainty. Test synthetic
+rendering without network and retain unavailable intervals, few-game warnings,
+and descriptive limits in the prose. See [METRICS.md](METRICS.md) and
+[UNCERTAINTY.md](UNCERTAINTY.md) for the interpretation contracts. Coverage
+simulation and improved cross-game/small-sample methods are still unverified.
 Do not move to UI/predictive work yet. External schedule/gamebook
 reconciliation, historical availability, backup, automatic CI triggering, and
 larger-than-memory ingestion remain documented limitations, not completed claims.

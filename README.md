@@ -9,9 +9,9 @@ prepared for.
 acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
 cohort reconciliations. Reports can select a team's offense or defense while
 keeping EPA offense-relative, with optional pre-play field-position, score, and
-period/clock filters and optional matched league baselines. Uncertainty, a web
-interface, adjustment, and deployment remain on the [roadmap](ROADMAP.md).
-This is an independent portfolio
+period/clock filters, matched league baselines, and opt-in exploratory game-level
+resampling intervals. A finished brief, web interface, adjustment, and deployment
+remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
@@ -103,6 +103,28 @@ shared games, and selected-minus-baseline differences. It pools individual plays
 not team averages; overall context mixes may still differ. No comparison is added
 unless requested. See the [comparison contract](docs/METRICS.md#matched-league-baselines)
 and [real-data verification](docs/REAL_DATA_AUDIT.md#league-baseline-extension-2026-10-05).
+
+### Check game-level support and uncertainty
+
+Add `--bootstrap-repetitions 1000 --bootstrap-seed 0` for reproducible whole-game
+resampling. With comparison enabled, both populations use the same game draws:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --csv tests/fixtures/synthetic_pbp.csv \
+  --source-label 'Synthetic verification fixture; not real NFL observations' \
+  --team CAR --season 2024 --before-week 3 --compare-league \
+  --bootstrap-repetitions 1000 --bootstrap-seed 0
+```
+
+The invented fixture has only two selected games and one baseline game: its
+overall intervals are deliberately `null` with `insufficient_games`, while existing
+point estimates remain available. More resamples cannot fix insufficient observed games.
+Supported cohorts can have nominal 95% percentile intervals, but these are
+exploratory—not calibrated coverage, significance tests, or predictions. Reports
+show per-metric game support, undefined draws, small-game warnings, and degenerate
+interval states. See the [method and JSON contract](docs/UNCERTAINTY.md), including
+the limits of repeated teams/opponents across games.
 
 ## Acquire a reproducible raw snapshot
 
@@ -250,6 +272,9 @@ inclusion policy and why the current output is descriptive rather than a forecas
    zero versus missing, four-stage accounting, and unchanged defaults.
    `tests/test_league_comparison.py` checks leave-team-out pooling, matching buckets,
    explicit difference units, independent population counts, and unavailable results.
+7. `uncertainty.py` resamples shared whole games with optional support-aware intervals.
+   `tests/test_uncertainty.py` checks all 3,125 resamples of a five-game synthetic
+   example independently, plus missingness, support, pairing, and reproducibility.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.
@@ -265,6 +290,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Raw snapshots, source terms, and acquisition evidence](docs/INGESTION.md)
 - [Real-season audit and cohort reconciliation](docs/REAL_DATA_AUDIT.md)
 - [Metric definitions](docs/METRICS.md)
+- [Exploratory uncertainty method](docs/UNCERTAINTY.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)
 - [Daily sync, commit identity, and recovery](docs/DAILY_WORKFLOW.md)

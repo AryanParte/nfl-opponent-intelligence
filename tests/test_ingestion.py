@@ -381,6 +381,20 @@ class IngestionTests(unittest.TestCase):
         self.assertTrue(comparison["overall"]["small_epa_sample"])
         self.assertAlmostEqual(comparison["overall_difference"]["epa_per_play"], -2.96)
 
+    def test_uncertainty_snapshot_is_offline_additive_and_preserves_provenance(self):
+        directory, raw = self.snapshot()
+        source = ingestion.load_snapshot(directory)
+        ordinary = self.report(source, compare_league=True)
+        with patch("socket.socket", side_effect=AssertionError("network forbidden")):
+            enabled = self.report(ingestion.load_snapshot(directory), compare_league=True,
+                                  bootstrap_repetitions=200, bootstrap_seed=0)
+        uncertainty = enabled.pop("uncertainty")
+        self.assertEqual(enabled, ordinary)
+        self.assertEqual(enabled["source"]["sha256"], sha256(raw).hexdigest())
+        self.assertEqual(enabled["source"]["snapshot"], json.loads((directory / "manifest.json").read_text()))
+        self.assertEqual(uncertainty["overall"]["selected"]["epa_per_play"]["support_games"], {"selected": 2})
+        self.assertEqual(uncertainty["overall"]["difference"]["epa_per_play"]["status"], "insufficient_games")
+
     def test_time_audit_and_filtered_snapshot_cli_retain_missingness_and_provenance(self):
         base = dict(self.rows[0], qtr="4", quarter_seconds_remaining="120")
         rows = [base, dict(base, play_id="997", quarter_seconds_remaining="NA"),

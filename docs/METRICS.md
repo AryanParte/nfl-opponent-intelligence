@@ -206,9 +206,20 @@ contain one other team or none, and narrow filters may remove many teams. Overal
 differences match requested ranges but do not reweight down/distance or other
 within-range context mixes; use the matched bucket rows. Neither these differences
 nor the baseline adjust for opponent strength or justify causal/predictive claims.
-The two populations have disjoint plays but may share games and opponents. Later
-uncertainty work must respect those dependencies. The exclusive cutoff does not
+The two populations have disjoint plays but may share games and opponents. The
+optional [game-level bootstrap](UNCERTAINTY.md) preserves shared-game weights but
+does not resolve repeated-team dependence across games. The exclusive cutoff does not
 reconstruct historical source availability or upstream model training.
+
+## Game-level uncertainty
+
+`--bootstrap-repetitions` adds an optional `uncertainty` block for the existing
+overall/situational metrics and requested league comparisons. Point estimates,
+metric contract v1, report schema v2, and every preexisting output field stay
+unchanged. Whole-game resampling is distinct from the existing play-count warnings.
+Game support, undefined replicate counts, and interval status must remain visible.
+See [method, cutoffs, units, and limitations](UNCERTAINTY.md); these exploratory
+pointwise intervals are not calibrated confidence, significance, or prediction.
 
 ## Definitions
 
@@ -313,8 +324,8 @@ The report is descriptive. It does not estimate play-call intent perfectly,
 adjust for opponents on either side, isolate player skill, or recommend a play.
 Even with requested field/score/period/clock filters, situational buckets still mix
 personnel, opponents, and game strategy (and context values within each range).
-Repeated plays within a game are dependent; later uncertainty work
-must respect that structure instead of assuming independent observations.
+Repeated plays within a game are dependent; the optional bootstrap resamples whole
+games. Dependence across games, especially repeated teams/opponents, is unresolved.
 
 The exclusive week cutoff keeps target-week outcomes out of the cohort. It does
 not guarantee a leakage-free historical prediction: current releases may revise
