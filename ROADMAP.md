@@ -63,23 +63,24 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
 - [x] Add optional matched league baselines (2026-10-05): exclude the selected
       team in the same role, pool available plays under identical filters, match
       down/distance buckets, and expose coverage, denominators, and null differences.
-- [ ] Add game-level uncertainty estimates and sample warnings; explain dependence
-      among plays and the limits of small numbers of games.
+- [x] Add opt-in exploratory game-level uncertainty (2026-10-06): paired whole-game
+      resampling, seeded percentile bounds, per-metric support/undefined counts,
+      withheld low-support/degenerate intervals, and explicit cross-game limitations.
 - [ ] Produce a readable static historical matchup brief with traceable findings.
 - [ ] Validate personnel/motion data availability and licensing separately. The
       initial play-by-play contract does not guarantee these fields exist.
 
-Next coherent unit: reproducible game-level uncertainty for cohort measurements
-and requested league differences. Define the resampling population and minimum
-game support before implementation; preserve within-game dependence and shared
-games across comparison populations, with explicit undefined/low-support results.
-Record method, seed, repetitions, and limitations; a play-count warning alone is
-not an interval or significance test. Keep uncertainty opt-in and preserve current
-descriptive output. The static historical brief follows; do not skip to a UI or
-predictive model. The current unit passes 146 offline tests
-on Python 3.11/3.12/3.13; see [status](docs/STATUS.md) for evidence and limitations.
-Before new development, recheck the pending remote CI in PR #9 and address any
-change-caused failures. Queued checks are not a passing result.
+Next coherent unit: a deterministic, readable static historical opponent brief
+from the existing report JSON. Trace every displayed finding to its source,
+cohort, role, counts, and metric; carry matching baseline coverage and uncertainty
+statuses into the text, including withheld intervals and few-game warnings. Start
+with a network-free synthetic rendering test and a clearly retrospective example.
+Do not imply opponent adjustment, validated significance, or prediction, and do
+not skip to a web UI. Method calibration and cross-game dependence remain open
+research limitations, not claimed achievements. The current unit passes 161 offline
+tests on Python 3.11/3.12/3.13; see [status](docs/STATUS.md) for evidence.
+PR #9's earlier runner-allocation failure was resolved by successful verification
+of merged `main`; inspect current PR/CI results before the next unit.
 
 ### P1.4 — Product surface
 

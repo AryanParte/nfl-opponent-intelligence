@@ -415,3 +415,79 @@ EPA/context fields, not a replacement for the strict loader. No raw data, manife
 or previous dated evidence was changed. Matching broad ranges and buckets is not
 opponent adjustment, historical-information reconstruction, or game-independent
 inference. Game-level uncertainty and the static brief remain unfinished.
+
+## Uncertainty extension (2026-10-06)
+
+The same pinned artifact was loaded with socket creation blocked. Its 34,902
+eligible raw records and decoded SHA-256 remain unchanged. Eight comparisons were
+checked: CAR offense/defense × REG before week 3/19 × unrestricted/Q4 clock 0..120,
+each with 1,000 bootstrap repetitions and seed 20261006.
+
+An independent read-only verifier selected raw CSV records, constructed game-level
+numerators/denominators and Decimal EPA sums, and multiplied them by the joint
+seeded game-multiplicity matrix. NumPy's linear quantiles provided a separate
+interval implementation. Overall and every reported down/distance bucket agree:
+support, statuses, and defined/undefined counts exactly; interval bounds within
+`1e-12` absolute tolerance. Eight reports without uncertainty exactly match merged
+PR #9 (`af19425`). NumPy was used only for this check; reporting/tests remain
+standard-library-only. This is implementation verification, not coverage calibration.
+
+| CAR role and REG cutoff | Context | Selected contributing EPA games | Defined / requested replicates | Selected EPA interval |
+| --- | --- | ---: | ---: | --- |
+| Offense, before week 3 | Unrestricted | 2 | 879 / 1,000 | Withheld: insufficient games |
+| Offense, before week 3 | Q4 clock 0..120 | 1 | 644 / 1,000 | Withheld: insufficient games |
+| Defense, before week 3 | Q4 clock 0..120 | 0 | 0 / 1,000 | Withheld: undefined estimate |
+| Offense, before week 19 | Unrestricted | 17 | 1,000 / 1,000 | Approximately -0.1752253 to 0.0616823 |
+| Defense, before week 19 | Unrestricted | 17 | 1,000 / 1,000 | Approximately 0.0898787 to 0.2311647 |
+
+Both full-season rows still warn `few_games=true`. Their resampling frame contains
+272 distinct games when comparison is on, not 17 + 272 independent games. EPA is
+offense-relative, including the defense row. These are nominal exploratory
+resampling intervals for descriptive means, not validated significance or team
+strength. Early-season undefined draws arise when the union-game sample contains
+no selected-team game; they are not retried or silently turned into zeros.
+
+Replay the unrestricted offense example using the existing pinned snapshot:
+
+```sh
+snapshot_dir=data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --snapshot "$snapshot_dir" \
+  --source-label 'nflverse 2024 retrospective snapshot; acquired 2026-09-30 UTC' \
+  --team CAR --season 2024 --before-week 19 --compare-league \
+  --bootstrap-repetitions 1000 --bootstrap-seed 20261006
+```
+
+Use `--side defense`, `--before-week 3`, and/or `--period Q4 --clock-max 120`
+for the remaining cases. The following separate raw-record recipe reproduces the
+early unrestricted offense's two supporting games, 32-game union, and 879 defined
+versus 121 undefined draws; it does not read generated report values:
+
+```python
+import csv
+import gzip
+from pathlib import Path
+from random import Random
+
+root = Path("data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06")
+with gzip.open(root / "play_by_play_2024.csv.gz", "rt", encoding="utf-8-sig", newline="") as source:
+    rows = [(r["game_id"], r["posteam"]) for r in csv.DictReader(source)
+            if r["season"] == "2024" and r["season_type"] == "REG" and int(r["week"]) < 3
+            and r["play_type"] in {"run", "pass"}
+            and all(r[f] == "0" for f in ("two_point_attempt", "qb_kneel", "qb_spike"))]
+games = sorted({game for game, _ in rows})
+selected = {game for game, team in rows if team == "CAR"}
+rng, valid = Random(20261006), 0
+for _ in range(1000):
+    # Consume all G draws even if a selected game is encountered early.
+    drawn = {games[rng.randrange(len(games))] for _ in games}
+    valid += bool(selected & drawn)
+print(len(selected), len(games), valid, 1000 - valid)  # 2 32 879 121
+```
+
+This recipe relies on the pinned artifact's verified complete eligible EPA fields;
+it is not a replacement for loader validation or a missing-EPA support check.
+Report-only generation observed 0.014–0.625 seconds for these eight requests on
+this host, excluding load/verification time. That is a smoke check, not a scale
+benchmark or a cross-machine performance guarantee. No raw source, manifest,
+original fixture, or previous dated evidence was modified.

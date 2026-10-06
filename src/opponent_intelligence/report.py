@@ -5,6 +5,7 @@ from copy import deepcopy
 from math import fsum
 
 from .pbp import Dataset, Play, _team
+from .uncertainty import build_uncertainty, validate_bootstrap
 
 
 PERIODS = ("Q1", "Q2", "Q3", "Q4", "OT")
@@ -141,6 +142,8 @@ def build_report(
     clock_min: int | None = None,
     clock_max: int | None = None,
     compare_league: bool = False,
+    bootstrap_repetitions: int | None = None,
+    bootstrap_seed: int | None = None,
     source_label: str,
 ) -> dict:
     """Select a team's offense or defense, season/type, and weeks < before_week.
@@ -157,6 +160,7 @@ def build_report(
         raise ValueError("side must be offense or defense")
     if type(compare_league) is not bool:
         raise ValueError("compare_league must be a boolean")
+    effective_seed = validate_bootstrap(bootstrap_repetitions, bootstrap_seed)
     for name, value in (("season", season), ("before_week", before_week), ("minimum_plays", minimum_plays)):
         if type(value) is not int:
             raise ValueError(f"{name} must be an integer")
@@ -308,5 +312,13 @@ def build_report(
         others = [play for play in temporal if getattr(play, role_field) != team]
         report["league_comparison"] = _league_comparison(
             report, selected, others, len(temporal), len(selected_base), contexts, minimum_plays, role_field,
+        )
+    if bootstrap_repetitions is not None:
+        baseline_groups = None
+        if compare_league:
+            baseline, _ = _filter_context(others, contexts)
+            baseline_groups = _group_situations(baseline)
+        report["uncertainty"] = build_uncertainty(
+            groups, baseline_groups, repetitions=bootstrap_repetitions, seed=effective_seed,
         )
     return report

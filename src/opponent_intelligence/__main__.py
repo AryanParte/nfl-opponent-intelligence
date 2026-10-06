@@ -22,6 +22,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="Team's role to select (default: offense); EPA stays offense-relative")
     parser.add_argument("--compare-league", action="store_true",
                         help="Compare with pooled plays of other teams in the same role and requested contexts")
+    parser.add_argument("--bootstrap-repetitions", type=int,
+                        help="Opt in to exploratory whole-game uncertainty with 200..10000 resamples")
+    parser.add_argument("--bootstrap-seed", type=int,
+                        help="Reproducible seed, 0..4294967295 (default 0); requires --bootstrap-repetitions")
     parser.add_argument("--season", required=True, type=int)
     parser.add_argument("--before-week", required=True, type=int, help="Exclusive cutoff: target week is not included")
     parser.add_argument("--season-type", choices=("REG", "POST"), default="REG")
@@ -51,6 +55,7 @@ def main(argv: list[str] | None = None) -> int:
             score_min=args.score_min, score_max=args.score_max,
             period=args.period, clock_min=args.clock_min, clock_max=args.clock_max,
             compare_league=args.compare_league,
+            bootstrap_repetitions=args.bootstrap_repetitions, bootstrap_seed=args.bootstrap_seed,
         )
         payload = json.dumps(report, indent=2, sort_keys=True, allow_nan=False)
     except (OSError, ValueError, csv.Error) as exc:
