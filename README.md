@@ -10,7 +10,8 @@ acquisition work. The recorded 2024 snapshot passes the adapter audit and select
 cohort reconciliations. Reports can select a team's offense or defense while
 keeping EPA offense-relative, with optional pre-play field-position, score, and
 period/clock filters, matched league baselines, and opt-in exploratory game-level
-resampling intervals. A finished brief, web interface, adjustment, and deployment
+resampling intervals. A separate offline JSON-to-Markdown command produces a
+traceable historical brief. A web interface, adjustment, and deployment
 remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
@@ -125,6 +126,37 @@ exploratory—not calibrated coverage, significance tests, or predictions. Repor
 show per-metric game support, undefined draws, small-game warnings, and degenerate
 interval states. See the [method and JSON contract](docs/UNCERTAINTY.md), including
 the limits of repeated teams/opponents across games.
+
+### Read a historical opponent brief
+
+Open the [synthetic brief](docs/examples/synthetic.md) or the
+[retrospective CAR offense example](docs/examples/car-2024-reg-before-week-19.md).
+The latter summarizes 984 eligible plays across 17 games from the pinned 2024
+snapshot, acquired in 2026—not a forecast or a historically available 2024 scouting
+report. Both include source fingerprints, denominators, matching baselines,
+unavailable intervals, few-game warnings, and interpretation limits.
+
+Replay the committed aggregate JSON without downloading raw data:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence.brief \
+  --report docs/examples/car-2024-reg-before-week-19.report.json
+```
+
+Or pipe a newly generated synthetic report directly into the renderer:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence \
+  --csv tests/fixtures/synthetic_pbp.csv \
+  --source-label 'Synthetic verification fixture; not real NFL observations' \
+  --team CAR --season 2024 --before-week 3 --compare-league \
+  --bootstrap-repetitions 200 --bootstrap-seed 0 \
+  | PYTHONPATH=src python3 -m opponent_intelligence.brief --report -
+```
+
+Markdown goes to stdout; existing JSON commands are unchanged. Invalid saved
+reports fail before any brief is printed. See the [brief contract and replay
+instructions](docs/BRIEFS.md), including what a fingerprint does **not** prove.
 
 ## Acquire a reproducible raw snapshot
 
@@ -275,6 +307,9 @@ inclusion policy and why the current output is descriptive rather than a forecas
 7. `uncertainty.py` resamples shared whole games with optional support-aware intervals.
    `tests/test_uncertainty.py` checks all 3,125 resamples of a five-game synthetic
    example independently, plus missingness, support, pairing, and reproducibility.
+8. `brief.py` renders saved JSON as deterministic Markdown; `brief_validation.py`
+   checks the consumed schema and cross-field relationships. `tests/test_brief.py`
+   covers units, support, unsafe text, invalid saved inputs, and byte-exact examples.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.
@@ -291,6 +326,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Real-season audit and cohort reconciliation](docs/REAL_DATA_AUDIT.md)
 - [Metric definitions](docs/METRICS.md)
 - [Exploratory uncertainty method](docs/UNCERTAINTY.md)
+- [Historical brief format and examples](docs/BRIEFS.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)
 - [Daily sync, commit identity, and recovery](docs/DAILY_WORKFLOW.md)

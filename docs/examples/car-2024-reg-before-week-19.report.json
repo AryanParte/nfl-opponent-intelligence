@@ -1,0 +1,2405 @@
+{
+  "cohort": {
+    "before_week_exclusive": 19,
+    "minimum_plays_warning": 30,
+    "season": 2024,
+    "season_type": "REG",
+    "side": "offense",
+    "team": "CAR"
+  },
+  "data_quality": {
+    "eligible_rows_all_teams": 34902,
+    "eligible_rows_outside_cohort": 33918,
+    "excluded_rows_by_reason": {
+      "missing_play_type": 1446,
+      "non_run_pass": 12996,
+      "two_point_attempt": 148
+    },
+    "input_rows": 49492
+  },
+  "league_comparison": {
+    "cohort": {
+      "before_week_exclusive": 19,
+      "minimum_plays_warning": 30,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense"
+    },
+    "data_quality": {
+      "eligible_rows_same_season_type_before_week": 33335,
+      "excluded_selected_team_rows": 984,
+      "filter_order": [],
+      "plays_after_context_filters": 32351,
+      "plays_before_context_filters": 32351
+    },
+    "difference_convention": "selected_minus_baseline",
+    "overall": {
+      "designed_runs": 12861,
+      "dropback_rate": 0.6024543290779265,
+      "dropbacks": 19490,
+      "epa_observations": 32351,
+      "epa_per_play": 0.011131948580842627,
+      "games": 272,
+      "missing_epa": 0,
+      "plays": 32351,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.43970820067385863
+    },
+    "overall_difference": {
+      "dropback_rate_pp": 3.3724532710691424,
+      "epa_per_play": -0.06361751096025617,
+      "success_rate_pp": -2.6090314494996827
+    },
+    "population": {
+      "excluded_team": "CAR",
+      "scope": "available_source_only",
+      "shared_games_with_selected": 17,
+      "side": "offense",
+      "team_count": 31,
+      "team_field": "posteam",
+      "teams": [
+        "ARI",
+        "ATL",
+        "BAL",
+        "BUF",
+        "CHI",
+        "CIN",
+        "CLE",
+        "DAL",
+        "DEN",
+        "DET",
+        "GB",
+        "HOU",
+        "IND",
+        "JAX",
+        "KC",
+        "LA",
+        "LAC",
+        "LV",
+        "MIA",
+        "MIN",
+        "NE",
+        "NO",
+        "NYG",
+        "NYJ",
+        "PHI",
+        "PIT",
+        "SEA",
+        "SF",
+        "TB",
+        "TEN",
+        "WAS"
+      ],
+      "weighting": "pooled_plays"
+    },
+    "situation_scope": "selected_team_observed_buckets",
+    "situations": [
+      {
+        "baseline": {
+          "designed_runs": 233,
+          "dropback_rate": 0.26031746031746034,
+          "dropbacks": 82,
+          "epa_observations": 315,
+          "epa_per_play": 0.08773653039871346,
+          "games": 189,
+          "missing_epa": 0,
+          "plays": 315,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.5174603174603175
+        },
+        "difference": {
+          "dropback_rate_pp": 13.968253968253968,
+          "epa_per_play": 0.04954732691357269,
+          "success_rate_pp": -11.746031746031749
+        },
+        "distance": "short",
+        "down": 1
+      },
+      {
+        "baseline": {
+          "designed_runs": 214,
+          "dropback_rate": 0.3649851632047478,
+          "dropbacks": 123,
+          "epa_observations": 337,
+          "epa_per_play": -0.054106084237120974,
+          "games": 194,
+          "missing_epa": 0,
+          "plays": 337,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.516320474777448
+        },
+        "difference": {
+          "dropback_rate_pp": 13.501483679525222,
+          "epa_per_play": 0.09320611891369071,
+          "success_rate_pp": -9.965380811078134
+        },
+        "distance": "medium",
+        "down": 1
+      },
+      {
+        "baseline": {
+          "designed_runs": 6741,
+          "dropback_rate": 0.5028761061946903,
+          "dropbacks": 6819,
+          "epa_observations": 13560,
+          "epa_per_play": -0.003361768450594956,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 13560,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.4191740412979351
+        },
+        "difference": {
+          "dropback_rate_pp": 1.5827135700571593,
+          "epa_per_play": 0.027644675261027835,
+          "success_rate_pp": 0.9753639500069855
+        },
+        "distance": "long",
+        "down": 1
+      },
+      {
+        "baseline": {
+          "designed_runs": 1123,
+          "dropback_rate": 0.37402452619843923,
+          "dropbacks": 671,
+          "epa_observations": 1794,
+          "epa_per_play": 0.017938930137866214,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 1794,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.5473801560758083
+        },
+        "difference": {
+          "dropback_rate_pp": 0.8954197205816083,
+          "epa_per_play": -0.04311072551108414,
+          "success_rate_pp": 0.5811333285893894
+        },
+        "distance": "short",
+        "down": 2
+      },
+      {
+        "baseline": {
+          "designed_runs": 1169,
+          "dropback_rate": 0.5320256204963971,
+          "dropbacks": 1329,
+          "epa_observations": 2498,
+          "epa_per_play": 0.07337464779631771,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 2498,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.48158526821457165
+        },
+        "difference": {
+          "dropback_rate_pp": 3.615619768542111,
+          "epa_per_play": -0.11704277889130202,
+          "success_rate_pp": -2.703981366911712
+        },
+        "distance": "medium",
+        "down": 2
+      },
+      {
+        "baseline": {
+          "designed_runs": 1780,
+          "dropback_rate": 0.7259852216748769,
+          "dropbacks": 4716,
+          "epa_observations": 6496,
+          "epa_per_play": 0.03163669741971915,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 6496,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.42302955665024633
+        },
+        "difference": {
+          "dropback_rate_pp": 1.4555318865663636,
+          "epa_per_play": -0.12483655390620532,
+          "success_rate_pp": -7.708361070430037
+        },
+        "distance": "long",
+        "down": 2
+      },
+      {
+        "baseline": {
+          "designed_runs": 940,
+          "dropback_rate": 0.5104166666666666,
+          "dropbacks": 980,
+          "epa_observations": 1920,
+          "epa_per_play": -0.03612113931078254,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 1920,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.5901041666666667
+        },
+        "difference": {
+          "dropback_rate_pp": 7.140151515151516,
+          "epa_per_play": -0.01440001226660017,
+          "success_rate_pp": -6.283143939393943
+        },
+        "distance": "short",
+        "down": 3
+      },
+      {
+        "baseline": {
+          "designed_runs": 145,
+          "dropback_rate": 0.9123867069486404,
+          "dropbacks": 1510,
+          "epa_observations": 1655,
+          "epa_per_play": 0.05584007430974171,
+          "games": 271,
+          "missing_epa": 0,
+          "plays": 1655,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.4513595166163142
+        },
+        "difference": {
+          "dropback_rate_pp": 2.0946626384692912,
+          "epa_per_play": -0.07365990728847945,
+          "success_rate_pp": -3.4692849949647497
+        },
+        "distance": "medium",
+        "down": 3
+      },
+      {
+        "baseline": {
+          "designed_runs": 251,
+          "dropback_rate": 0.9174884944115713,
+          "dropbacks": 2791,
+          "epa_observations": 3042,
+          "epa_per_play": -0.08477374345126594,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 3042,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.32018408941485865
+        },
+        "difference": {
+          "dropback_rate_pp": 3.042817225509531,
+          "epa_per_play": -0.22605351946316177,
+          "success_rate_pp": -2.8517422748191965
+        },
+        "distance": "long",
+        "down": 3
+      },
+      {
+        "baseline": {
+          "designed_runs": 254,
+          "dropback_rate": 0.483739837398374,
+          "dropbacks": 238,
+          "epa_observations": 492,
+          "epa_per_play": 0.5113393469939361,
+          "games": 231,
+          "missing_epa": 0,
+          "plays": 492,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.6524390243902439
+        },
+        "difference": {
+          "dropback_rate_pp": 20.04706889174155,
+          "epa_per_play": -0.1864594985895408,
+          "success_rate_pp": -7.349165596919127
+        },
+        "distance": "short",
+        "down": 4
+      },
+      {
+        "baseline": {
+          "designed_runs": 6,
+          "dropback_rate": 0.9487179487179487,
+          "dropbacks": 111,
+          "epa_observations": 117,
+          "epa_per_play": 0.2452520177622377,
+          "games": 95,
+          "missing_epa": 0,
+          "plays": 117,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.48717948717948717
+        },
+        "difference": {
+          "dropback_rate_pp": 5.128205128205132,
+          "epa_per_play": -2.4920386134530794,
+          "success_rate_pp": -32.05128205128205
+        },
+        "distance": "medium",
+        "down": 4
+      },
+      {
+        "baseline": {
+          "designed_runs": 5,
+          "dropback_rate": 0.96,
+          "dropbacks": 120,
+          "epa_observations": 125,
+          "epa_per_play": -0.5610140638893932,
+          "games": 98,
+          "missing_epa": 0,
+          "plays": 125,
+          "small_epa_sample": false,
+          "small_sample": false,
+          "success_rate": 0.312
+        },
+        "difference": {
+          "dropback_rate_pp": 4.0000000000000036,
+          "epa_per_play": 0.5685817393010932,
+          "success_rate_pp": 8.800000000000002
+        },
+        "distance": "long",
+        "down": 4
+      }
+    ],
+    "warnings": [
+      "Baseline uses only available source plays; full league coverage is not certified.",
+      "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+      "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+      "Plays within games are dependent; selected and baseline populations may share games and opponents."
+    ]
+  },
+  "metric_context": {
+    "interpretation": "produced",
+    "perspective": "offense",
+    "success_condition": "epa > 0"
+  },
+  "overall": {
+    "designed_runs": 358,
+    "dropback_rate": 0.6361788617886179,
+    "dropbacks": 626,
+    "epa_observations": 984,
+    "epa_per_play": -0.05248556237941355,
+    "games": 17,
+    "missing_epa": 0,
+    "plays": 984,
+    "small_epa_sample": false,
+    "small_sample": false,
+    "success_rate": 0.4136178861788618
+  },
+  "schema_version": 2,
+  "situations": [
+    {
+      "designed_runs": 6,
+      "distance": "short",
+      "down": 1,
+      "dropback_rate": 0.4,
+      "dropbacks": 4,
+      "epa_observations": 10,
+      "epa_per_play": 0.13728385731228615,
+      "games": 6,
+      "missing_epa": 0,
+      "plays": 10,
+      "small_epa_sample": true,
+      "small_sample": true,
+      "success_rate": 0.4
+    },
+    {
+      "designed_runs": 6,
+      "distance": "medium",
+      "down": 1,
+      "dropback_rate": 0.5,
+      "dropbacks": 6,
+      "epa_observations": 12,
+      "epa_per_play": 0.03910003467656974,
+      "games": 9,
+      "missing_epa": 0,
+      "plays": 12,
+      "small_epa_sample": true,
+      "small_sample": true,
+      "success_rate": 0.4166666666666667
+    },
+    {
+      "designed_runs": 193,
+      "distance": "long",
+      "down": 1,
+      "dropback_rate": 0.5187032418952618,
+      "dropbacks": 208,
+      "epa_observations": 401,
+      "epa_per_play": 0.02428290681043288,
+      "games": 17,
+      "missing_epa": 0,
+      "plays": 401,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.428927680798005
+    },
+    {
+      "designed_runs": 29,
+      "distance": "short",
+      "down": 2,
+      "dropback_rate": 0.3829787234042553,
+      "dropbacks": 18,
+      "epa_observations": 47,
+      "epa_per_play": -0.02517179537321793,
+      "games": 16,
+      "missing_epa": 0,
+      "plays": 47,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.5531914893617021
+    },
+    {
+      "designed_runs": 38,
+      "distance": "medium",
+      "down": 2,
+      "dropback_rate": 0.5681818181818182,
+      "dropbacks": 50,
+      "epa_observations": 88,
+      "epa_per_play": -0.043668131094984304,
+      "games": 17,
+      "missing_epa": 0,
+      "plays": 88,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.45454545454545453
+    },
+    {
+      "designed_runs": 48,
+      "distance": "long",
+      "down": 2,
+      "dropback_rate": 0.7405405405405405,
+      "dropbacks": 137,
+      "epa_observations": 185,
+      "epa_per_play": -0.09319985648648618,
+      "games": 17,
+      "missing_epa": 0,
+      "plays": 185,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.34594594594594597
+    },
+    {
+      "designed_runs": 23,
+      "distance": "short",
+      "down": 3,
+      "dropback_rate": 0.5818181818181818,
+      "dropbacks": 32,
+      "epa_observations": 55,
+      "epa_per_play": -0.05052115157738271,
+      "games": 16,
+      "missing_epa": 0,
+      "plays": 55,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.5272727272727272
+    },
+    {
+      "designed_runs": 4,
+      "distance": "medium",
+      "down": 3,
+      "dropback_rate": 0.9333333333333333,
+      "dropbacks": 56,
+      "epa_observations": 60,
+      "epa_per_play": -0.017819832978737734,
+      "games": 16,
+      "missing_epa": 0,
+      "plays": 60,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.4166666666666667
+    },
+    {
+      "designed_runs": 5,
+      "distance": "long",
+      "down": 3,
+      "dropback_rate": 0.9479166666666666,
+      "dropbacks": 91,
+      "epa_observations": 96,
+      "epa_per_play": -0.3108272629144277,
+      "games": 17,
+      "missing_epa": 0,
+      "plays": 96,
+      "small_epa_sample": false,
+      "small_sample": false,
+      "success_rate": 0.2916666666666667
+    },
+    {
+      "designed_runs": 6,
+      "distance": "short",
+      "down": 4,
+      "dropback_rate": 0.6842105263157895,
+      "dropbacks": 13,
+      "epa_observations": 19,
+      "epa_per_play": 0.3248798484043953,
+      "games": 10,
+      "missing_epa": 0,
+      "plays": 19,
+      "small_epa_sample": true,
+      "small_sample": true,
+      "success_rate": 0.5789473684210527
+    },
+    {
+      "designed_runs": 0,
+      "distance": "medium",
+      "down": 4,
+      "dropback_rate": 1.0,
+      "dropbacks": 6,
+      "epa_observations": 6,
+      "epa_per_play": -2.2467865956908417,
+      "games": 3,
+      "missing_epa": 0,
+      "plays": 6,
+      "small_epa_sample": true,
+      "small_sample": true,
+      "success_rate": 0.16666666666666666
+    },
+    {
+      "designed_runs": 0,
+      "distance": "long",
+      "down": 4,
+      "dropback_rate": 1.0,
+      "dropbacks": 5,
+      "epa_observations": 5,
+      "epa_per_play": 0.007567675411700048,
+      "games": 4,
+      "missing_epa": 0,
+      "plays": 5,
+      "small_epa_sample": true,
+      "small_sample": true,
+      "success_rate": 0.4
+    }
+  ],
+  "source": {
+    "label": "nflverse 2024 retrospective snapshot; acquired 2026-09-30 UTC",
+    "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+    "snapshot": {
+      "archive": {
+        "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+        "size_bytes": 19362351
+      },
+      "decoded_csv": {
+        "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+        "size_bytes": 99483794
+      },
+      "license": {
+        "attribution": "nflverse play-by-play data",
+        "identifier": "CC-BY-4.0",
+        "modifications": "Archive retained byte-for-byte; no data transformations.",
+        "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "retrieved_at_utc": "2026-09-30T00:19:00.168819+00:00",
+      "schema_version": 1,
+      "season": 2024,
+      "source": {
+        "asset_id": 512957856,
+        "asset_name": "play_by_play_2024.csv.gz",
+        "asset_updated_at_utc": "2026-08-13T12:26:27Z",
+        "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+        "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+        "release_id": 58152862,
+        "release_tag": "pbp",
+        "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+        "size_bytes": 19362351
+      }
+    }
+  },
+  "uncertainty": {
+    "few_games_warning_below": 20,
+    "method": "game_cluster_percentile_v1",
+    "minimum_support_games": 5,
+    "minimum_valid_fraction": 0.95,
+    "nominal_level": 0.95,
+    "overall": {
+      "baseline": {
+        "dropback_rate": {
+          "few_games": false,
+          "interval": {
+            "lower": 0.5948918981534025,
+            "upper": 0.6096959099010536
+          },
+          "status": "ok",
+          "support_games": {
+            "baseline": 272
+          },
+          "undefined_replicates": 0,
+          "unit": "proportion",
+          "valid_replicates": 1000
+        },
+        "epa_per_play": {
+          "few_games": false,
+          "interval": {
+            "lower": -0.006262424906633071,
+            "upper": 0.028366118614662338
+          },
+          "status": "ok",
+          "support_games": {
+            "baseline": 272
+          },
+          "undefined_replicates": 0,
+          "unit": "expected_points_per_observed_play",
+          "valid_replicates": 1000
+        },
+        "success_rate": {
+          "few_games": false,
+          "interval": {
+            "lower": 0.4332607035990191,
+            "upper": 0.44653405305071314
+          },
+          "status": "ok",
+          "support_games": {
+            "baseline": 272
+          },
+          "undefined_replicates": 0,
+          "unit": "proportion",
+          "valid_replicates": 1000
+        }
+      },
+      "difference": {
+        "dropback_rate_pp": {
+          "few_games": true,
+          "interval": {
+            "lower": -0.6183081135555643,
+            "upper": 7.407447371549727
+          },
+          "status": "ok",
+          "support_games": {
+            "baseline": 272,
+            "selected": 17
+          },
+          "undefined_replicates": 0,
+          "unit": "percentage_points",
+          "valid_replicates": 1000
+        },
+        "epa_per_play": {
+          "few_games": true,
+          "interval": {
+            "lower": -0.19033589776651685,
+            "upper": 0.04882942000649212
+          },
+          "status": "ok",
+          "support_games": {
+            "baseline": 272,
+            "selected": 17
+          },
+          "undefined_replicates": 0,
+          "unit": "expected_points_per_observed_play",
+          "valid_replicates": 1000
+        },
+        "success_rate_pp": {
+          "few_games": true,
+          "interval": {
+            "lower": -6.749505389103374,
+            "upper": 0.8767467853828654
+          },
+          "status": "ok",
+          "support_games": {
+            "baseline": 272,
+            "selected": 17
+          },
+          "undefined_replicates": 0,
+          "unit": "percentage_points",
+          "valid_replicates": 1000
+        }
+      },
+      "selected": {
+        "dropback_rate": {
+          "few_games": true,
+          "interval": {
+            "lower": 0.5969632562488749,
+            "upper": 0.6767931496903061
+          },
+          "status": "ok",
+          "support_games": {
+            "selected": 17
+          },
+          "undefined_replicates": 0,
+          "unit": "proportion",
+          "valid_replicates": 1000
+        },
+        "epa_per_play": {
+          "few_games": true,
+          "interval": {
+            "lower": -0.17522531179370066,
+            "upper": 0.06168232054376231
+          },
+          "status": "ok",
+          "support_games": {
+            "selected": 17
+          },
+          "undefined_replicates": 0,
+          "unit": "expected_points_per_observed_play",
+          "valid_replicates": 1000
+        },
+        "success_rate": {
+          "few_games": true,
+          "interval": {
+            "lower": 0.37297518328889095,
+            "upper": 0.44692495126705656
+          },
+          "status": "ok",
+          "support_games": {
+            "selected": 17
+          },
+          "undefined_replicates": 0,
+          "unit": "proportion",
+          "valid_replicates": 1000
+        }
+      }
+    },
+    "performed_repetitions": 1000,
+    "quantile_method": "linear_n_minus_1",
+    "random_generator": "python_random.Random.randrange",
+    "repetitions": 1000,
+    "resampling_games": 272,
+    "resampling_population": "selected_and_baseline_union",
+    "resampling_unit": "game_id",
+    "seed": 20261006,
+    "shared_game_weights": true,
+    "situations": [
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.21176374784441462,
+              "upper": 0.3081967213114754
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 189
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.009908509691997516,
+              "upper": 0.1779580399735949
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 189
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.4653356783046726,
+              "upper": 0.5681117290192113
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 189
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -17.12084072740542,
+              "upper": 53.48847308847306
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 189,
+              "selected": 6
+            },
+            "undefined_replicates": 1,
+            "unit": "percentage_points",
+            "valid_replicates": 999
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.42531973877361096,
+              "upper": 0.37284629813858816
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 189,
+              "selected": 6
+            },
+            "undefined_replicates": 1,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 999
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -52.719216466767925,
+              "upper": 21.243891669119737
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 189,
+              "selected": 6
+            },
+            "undefined_replicates": 1,
+            "unit": "percentage_points",
+            "valid_replicates": 999
+          }
+        },
+        "distance": "short",
+        "down": 1,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.09954545454545458,
+              "upper": 0.8
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 6
+            },
+            "undefined_replicates": 1,
+            "unit": "proportion",
+            "valid_replicates": 999
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.3168764924921563,
+              "upper": 0.4422589750301589
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 6
+            },
+            "undefined_replicates": 1,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 999
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.0,
+              "upper": 0.7149350649350643
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 6
+            },
+            "undefined_replicates": 1,
+            "unit": "proportion",
+            "valid_replicates": 999
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.315621698943662,
+              "upper": 0.4147216218755873
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 194
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.2263358429902144,
+              "upper": 0.10115542304065347
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 194
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.46864087990281156,
+              "upper": 0.5688087128495304
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 194
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -16.47673397717296,
+              "upper": 43.920935227684005
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 194,
+              "selected": 9
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.272371695916423,
+              "upper": 0.5393874493612882
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 194,
+              "selected": 9
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -34.5268982291281,
+              "upper": 13.826555583929172
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 194,
+              "selected": 9
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "medium",
+        "down": 1,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.2,
+              "upper": 0.8
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 9
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.2839937430053291,
+              "upper": 0.4428144087306992
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 9
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.16666666666666666,
+              "upper": 0.6666666666666666
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 9
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.49239079644783335,
+              "upper": 0.5132323443093461
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.022684462530028503,
+              "upper": 0.0160093061659853
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.4108229258487595,
+              "upper": 0.4275909169156803
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -2.9446284231198083,
+              "upper": 5.983640578951469
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.06714942788253568,
+              "upper": 0.1179072791681087
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -3.097465778102778,
+              "upper": 4.655133077697007
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "long",
+        "down": 1,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.4748176178158597,
+              "upper": 0.5609863072314935
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.06994940374115881,
+              "upper": 0.11176531513329889
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.3887115934038394,
+              "upper": 0.4658960715028061
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.3490825014819281,
+              "upper": 0.39932885906040266
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.031943775057930716,
+              "upper": 0.06440043138497907
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.5232493760152134,
+              "upper": 0.5701148765172406
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -14.557973118209208,
+              "upper": 15.859565999791863
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.23556599914392606,
+              "upper": 0.17743047594337955
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -13.416028394066371,
+              "upper": 16.768001589905396
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "short",
+        "down": 2,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.23076923076923078,
+              "upper": 0.5333620689655172
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.20224698117157697,
+              "upper": 0.19553783280784282
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.4221666666666667,
+              "upper": 0.705977229601518
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.5110840329542498,
+              "upper": 0.5531423119278395
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.027122364670715812,
+              "upper": 0.12248490207492907
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.4628369692065104,
+              "upper": 0.5016020320334571
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -5.010924664694443,
+              "upper": 12.776716591797392
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.3550287026561356,
+              "upper": 0.14330333138488255
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -10.882203752889838,
+              "upper": 5.346766518161689
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "medium",
+        "down": 2,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.48385284523378036,
+              "upper": 0.6552216748768472
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.27195468811476253,
+              "upper": 0.2051091442103295
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.3763440860215054,
+              "upper": 0.5345135467980295
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.7131170701542476,
+              "upper": 0.737628459725439
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -6.149801543726103e-05,
+              "upper": 0.06241514885655737
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.41171100546934064,
+              "upper": 0.434779820139666
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -4.839819462983472,
+              "upper": 7.714749202739929
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.2888152939108127,
+              "upper": 0.029357045760412134
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -15.50148217245476,
+              "upper": 0.3948087653672653
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "long",
+        "down": 2,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.6795635079836316,
+              "upper": 0.8032947605271616
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.25332019337642986,
+              "upper": 0.05258764596716711
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.26919191919191915,
+              "upper": 0.4285894660894661
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.48480105254872585,
+              "upper": 0.5342602439933846
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.11387423154270127,
+              "upper": 0.04255940328251923
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.5683196149426852,
+              "upper": 0.6121444629238274
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -3.9162335515613766,
+              "upper": 20.21703967909384
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.5147161233566772,
+              "upper": 0.4607570771592734
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -21.183277044465438,
+              "upper": 5.573576735601719
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "short",
+        "down": 3,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.4761607142857142,
+              "upper": 0.7069660734149054
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.5422124326920708,
+              "upper": 0.42501002425806267
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.37829391891891895,
+              "upper": 0.6461764705882354
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.8967192470212726,
+              "upper": 0.926633743899605
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 271
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.031196239762411402,
+              "upper": 0.14435954509449125
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 271
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.42761066635271955,
+              "upper": 0.47722115095354767
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 271
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -4.574265262217777,
+              "upper": 8.099508853300621
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 271,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.4982418603393801,
+              "upper": 0.3540885689614101
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 271,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -15.271062610451523,
+              "upper": 8.435177743248548
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 271,
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "medium",
+        "down": 3,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.8703502415458937,
+              "upper": 0.9857242063492063
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.4560641828898736,
+              "upper": 0.39903596501976374
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.30354793233082705,
+              "upper": 0.5334057971014492
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 16
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.9067083400605096,
+              "upper": 0.927400777688606
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.15214211387314883,
+              "upper": -0.020308535048513408
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.30226899789399786,
+              "upper": 0.336442520069565
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -1.6027875902319095,
+              "upper": 7.857191891490233
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.6417048529685497,
+              "upper": 0.1693479061532058
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -11.936085984940972,
+              "upper": 5.4333947866499095
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 272,
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "long",
+        "down": 3,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.9024323966065748,
+              "upper": 0.9907449494949494
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.7308801451011253,
+              "upper": 0.06661330826442549
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.20558777164733702,
+              "upper": 0.37038530465949815
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.4381212226798907,
+              "upper": 0.5277900471142521
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 231
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.23425271516655877,
+              "upper": 0.7889293640871361
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 231
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.6089345494477376,
+              "upper": 0.6965107162084789
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 231
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -4.4734848484848415,
+              "upper": 41.61645834012689
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 231,
+              "selected": 10
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -1.3809458236160002,
+              "upper": 1.178865640109995
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 231,
+              "selected": 10
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": {
+              "lower": -28.85260233918129,
+              "upper": 15.667996874533072
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 231,
+              "selected": 10
+            },
+            "undefined_replicates": 0,
+            "unit": "percentage_points",
+            "valid_replicates": 1000
+          }
+        },
+        "distance": "short",
+        "down": 4,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.42857142857142855,
+              "upper": 0.9
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 10
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.8822199440922123,
+              "upper": 1.677011264494145
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 10
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": {
+              "lower": 0.36363636363636365,
+              "upper": 0.8150326797385619
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 10
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.9047092288242731,
+              "upper": 0.9826124437781109
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 95
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -0.34676239494284256,
+              "upper": 0.8437839611940706
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 95
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.3966825198814907,
+              "upper": 0.5727272727272728
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 95
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "baseline": 95,
+              "selected": 3
+            },
+            "undefined_replicates": 44,
+            "unit": "percentage_points",
+            "valid_replicates": 956
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "baseline": 95,
+              "selected": 3
+            },
+            "undefined_replicates": 44,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 956
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "baseline": 95,
+              "selected": 3
+            },
+            "undefined_replicates": 44,
+            "unit": "percentage_points",
+            "valid_replicates": 956
+          }
+        },
+        "distance": "medium",
+        "down": 4,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 3
+            },
+            "undefined_replicates": 44,
+            "unit": "proportion",
+            "valid_replicates": 956
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 3
+            },
+            "undefined_replicates": 44,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 956
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 3
+            },
+            "undefined_replicates": 44,
+            "unit": "proportion",
+            "valid_replicates": 956
+          }
+        }
+      },
+      {
+        "baseline": {
+          "dropback_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.923712516297262,
+              "upper": 0.9915966386554622
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 98
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          },
+          "epa_per_play": {
+            "few_games": false,
+            "interval": {
+              "lower": -1.0379507101510095,
+              "upper": -0.052466033258311645
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 98
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 1000
+          },
+          "success_rate": {
+            "few_games": false,
+            "interval": {
+              "lower": 0.22723607038123164,
+              "upper": 0.3984375
+            },
+            "status": "ok",
+            "support_games": {
+              "baseline": 98
+            },
+            "undefined_replicates": 0,
+            "unit": "proportion",
+            "valid_replicates": 1000
+          }
+        },
+        "difference": {
+          "dropback_rate_pp": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "baseline": 98,
+              "selected": 4
+            },
+            "undefined_replicates": 25,
+            "unit": "percentage_points",
+            "valid_replicates": 975
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "baseline": 98,
+              "selected": 4
+            },
+            "undefined_replicates": 25,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 975
+          },
+          "success_rate_pp": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "baseline": 98,
+              "selected": 4
+            },
+            "undefined_replicates": 25,
+            "unit": "percentage_points",
+            "valid_replicates": 975
+          }
+        },
+        "distance": "long",
+        "down": 4,
+        "selected": {
+          "dropback_rate": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 4
+            },
+            "undefined_replicates": 25,
+            "unit": "proportion",
+            "valid_replicates": 975
+          },
+          "epa_per_play": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 4
+            },
+            "undefined_replicates": 25,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 975
+          },
+          "success_rate": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 4
+            },
+            "undefined_replicates": 25,
+            "unit": "proportion",
+            "valid_replicates": 975
+          }
+        }
+      }
+    ],
+    "warnings": [
+      "Exploratory pointwise percentile intervals, not calibrated coverage, significance tests, or predictions.",
+      "Whole-game resampling retains within-game dependence; repeated teams/opponents across games remain dependent.",
+      "Five-game and 95%-valid gates are application safeguards, not statistical reliability guarantees; few games remain fragile.",
+      "Undefined resamples are counted and excluded; any reported bounds condition on defined replicates.",
+      "Constant or near-zero-width percentile intervals are withheld, not interpreted as certainty.",
+      "Selection is fixed before resampling; source availability, missing-data bias, and upstream EPA model uncertainty are not estimated."
+    ]
+  },
+  "warnings": [
+    "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+    "Week filtering does not reconstruct historical source availability or EPA model training."
+  ]
+}
