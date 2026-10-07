@@ -20,9 +20,11 @@ descriptive, not a two-team projection or validated scouting recommendation.
   unmerged. No open PRs or review feedback remained. The preceding checkout was
   clean with no unpublished commits; its remote feature branch had been deleted
   after merging. Full history is preserved.
-- Current review: local implementation, tests, and complete-diff self-review passed;
-  commit/push, PR publication, attribution/SHA verification, and CI pending.
-  Do not merge or enable auto-merge.
+- Current review: [PR #11](https://github.com/AryanParte/nfl-opponent-intelligence/pull/11),
+  open, unmerged, and attached to the task. Implementation `36aaff3` is pushed with
+  matching local/remote SHAs and confirmed AryanParte author/committer attribution.
+  Complete-diff self-review passed; no review submissions or threads were present
+  at publication. Do not merge or enable auto-merge.
 - Previous uncertainty review: [PR #10](https://github.com/AryanParte/nfl-opponent-intelligence/pull/10),
   merged at `07ee523`; final feature-head CI passed at `624aa81`. Its merge tree
   exactly matched that verified feature head. No new merged-main run was present
@@ -212,8 +214,12 @@ workflow when no automatic run appeared. No workflow code, repository settings,
 or daily automation changed.
 
 The [PR #10 final-head run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37473756050)
-was rechecked as successful on `624aa81`. Current brief-unit remote verification
-will be recorded after publication; local tests are not a substitute for CI.
+was rechecked as successful on `624aa81`. The
+[PR #11 implementation run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37694342796)
+passed at `36aaff3`: all three Python jobs ran 181 tests and the synthetic demo
+successfully, confirmed in job logs. The existing workflow was manually dispatched
+after no automatic run appeared. See the PR description for exact-head verification
+of the later documentation-only publication commit; no workflow settings changed.
 
 ## Raw acquisition evidence
 

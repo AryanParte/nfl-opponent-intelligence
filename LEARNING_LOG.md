@@ -826,8 +826,15 @@ CLI pipeline reproduced the historical Markdown byte-for-byte. Final staged
 `git diff --check` passed. No remaining verified defect was found; limitations remain
 explicit rather than being presented as completed validation.
 
-**Publication:** pending commit/push, PR creation, attribution/remote-SHA checks,
-and remote CI. No raw data, workflow settings, or 8 AM automation changed.
+**Publication:** implementation `36aaff3` is pushed on
+`codex/static-historical-brief` with matching local/remote SHAs and GitHub-confirmed
+AryanParte author/committer attribution. [PR #11](https://github.com/AryanParte/nfl-opponent-intelligence/pull/11)
+is open, unmerged, and attached; no review threads/submissions were present.
+The existing [verification workflow](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37694342796)
+passed on that exact SHA, with 181 tests and the synthetic demo successful in each
+of the three job logs. It was manually dispatched after no automatic run appeared.
+The PR description records verification for the later documentation-only head.
+No raw data, workflow settings, or 8 AM automation changed.
 
 **Remaining / next:** audit personnel/motion field availability and licensing,
 then document feasible-versus-deferred scope before closing P1.3 or building P1.4.
