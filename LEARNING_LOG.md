@@ -754,3 +754,85 @@ brief with source/cohort/role traceability, denominators, baseline coverage, and
 all uncertainty states preserved. Coverage calibration, cross-game dependence,
 historical availability, automatic CI triggering, and larger-than-memory scale
 remain explicit limitations. Do not skip to a UI or call this calibrated inference.
+
+## 2026-10-07 — Traceable historical opponent briefs
+
+**Built / why:** a separate offline JSON-to-Markdown command and pure rendering API.
+The brief turns the existing measurements into readable cohort evidence while
+keeping role, cutoff, contexts, denominator/missingness counts, baseline coverage,
+every uncertainty state, method/source metadata, and warnings visible. Frozen
+synthetic and retrospective CAR examples can be reviewed and replayed without
+raw data. No analytical formulas, filters, bootstrap, or existing JSON defaults changed.
+
+Started `codex/static-historical-brief` at updated `origin/main` `07ee523` after
+confirming PR #10 merged. The previous checkout was clean with no unpublished
+commits. No open PRs/reviews remained. PR #10's exact final-head CI was successful;
+the merge tree matched it, and all 161 baseline tests passed locally. No new
+merged-main CI run was present, so this does not claim one occurred.
+
+**Review:** `src/opponent_intelligence/brief.py`, `brief_validation.py`,
+`tests/test_brief.py`, `docs/BRIEFS.md`, and the two JSON/Markdown pairs under
+`docs/examples/`. Start with the synthetic example before reading the real one.
+
+**Sports concepts:** a defensive brief still reports opposing offensive EPA and
+success, not sign-reversed efficiency or defensive stops. Plays and observed EPA
+have distinct denominators. A baseline can share games and have missing matching
+buckets; an overall league average is not a valid substitute. The CAR example's
+984 plays are only 17 games, and its source was acquired in 2026, not before a
+2024 matchup. Percentile intervals remain exploratory and uncalibrated.
+
+**Software/statistical concepts:** separate measurement from presentation; validate
+saved inputs and cross-field relationships before emitting any text; match buckets
+by keys rather than array position; preserve null/zero and optional/empty states.
+Percentages and percentage-point differences use different scaling. A content
+fingerprint ties a brief to a report, while input bytes have a separate fingerprint.
+Rendering escapes untrusted text without activating links, images, or HTML.
+
+**What to learn:** the synthetic report has six eligible plays but only five
+observed EPA values: dropbacks are 3/6, success is 3/5, and EPA is 0.2/5. Display
+rounding must not change the underlying values. A digest proves content identity
+under a stated serialization rule, not authenticity, complete coverage, historical
+availability, or good statistical inference. `1.0` versus `1` can change this
+application's report fingerprint even when the numeric measurement is equal.
+
+**Three review questions:**
+
+1. Why do the synthetic dropback and success rates use different denominators,
+   and why must missing EPA or an unavailable interval never display as zero?
+2. Why are comparison rows joined by down/distance keys, and what would go wrong
+   if a missing bucket borrowed the overall baseline or a pp difference were scaled again?
+3. What exactly does each fingerprint identify, and what cannot be concluded
+   about authenticity, historical availability, or statistical reliability from it?
+
+**Verification / self-review:** all 181 tests pass on Python 3.11/3.12/3.13,
+including 20 new renderer tests. Both examples replay byte-for-byte offline; the
+synthetic JSON/brief also regenerate from the original fixture. Thirty-two pinned
+CAR report combinations rendered without changing their JSON and retained source
+fingerprints. This checks integration, not a new raw-data/statistical audit.
+A separate bundled Markdown parser rejected activation of hostile sample markup;
+a network-blocked headless preview showed readable tables and no horizontal
+overflow at 1280 pixels. No parser/browser dependency was added to the project.
+
+Review fixed an example-generation fingerprint mismatch caused by intermediate
+numeric normalization: saved examples now retain the pipeline's Python JSON, and
+the synthetic source-to-brief replay is asserted exactly. Added checks for changed
+context coordinates/timing, inconsistent ledgers, missing provenance notices,
+integer success counts, and impossible empty selected buckets. The complete diff
+(source, tests, docs, and generated evidence) was reviewed for units, denominator
+and role errors, unsupported inference, unsafe markup, determinism, and scope.
+Kept team lists compact without dropping coverage, and removed Markdown trailing
+whitespace. All 181 tests passed again on all three runtimes; the full pinned-source
+CLI pipeline reproduced the historical Markdown byte-for-byte. Final staged
+`git diff --check` passed. No remaining verified defect was found; limitations remain
+explicit rather than being presented as completed validation.
+
+**Publication:** pending commit/push, PR creation, attribution/remote-SHA checks,
+and remote CI. No raw data, workflow settings, or 8 AM automation changed.
+
+**Remaining / next:** audit personnel/motion field availability and licensing,
+then document feasible-versus-deferred scope before closing P1.3 or building P1.4.
+The brief is a one-team historical cohort summary, not a two-team matchup model.
+Ingestion checks raw-byte integrity; rendering does not reverify raw bytes or the
+authenticity of arbitrary saved JSON.
+Calibration, repeated-team dependence, historical availability, automatic CI
+triggering, and larger-than-memory ingestion remain explicit limitations.

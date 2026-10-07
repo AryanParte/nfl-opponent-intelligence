@@ -1,29 +1,32 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-06, P1.3 supports opt-in exploratory game-cluster
-uncertainty alongside offense/defense reports, context filters, and matched league
-baselines. All 161 offline tests pass on Python 3.11/3.12/3.13. Whole-game draws are
-shared across selected/baseline populations and situations; reports expose game
-support, undefined resamples, and unavailable/degenerate interval states. Existing
-reports are unchanged without the option. P1.2 stays complete for the pinned
-snapshot. Statistical coverage calibration, cross-game dependence, opponent
-adjustment, the finished brief, UI, and deployment remain open. These intervals
-are exploratory, not validated significance or prediction.
+As of the scheduled run on 2026-10-07, P1.3 includes a deterministic historical
+opponent brief from saved report JSON. It carries role/cohort/source fingerprints,
+denominators, matched baseline coverage, per-metric game support, all interval
+states, and warnings into Markdown. All 181 offline tests pass on Python
+3.11/3.12/3.13. Frozen synthetic and retrospective CAR examples replay without raw
+data or network access. Existing report/metric/bootstrap generation is unchanged.
+P1.2 stays complete for the pinned snapshot. Personnel/motion availability and
+licensing still need a scope decision before P1.3 closes; calibration, cross-game
+dependence, opponent adjustment, a UI, and deployment remain open. The brief is
+descriptive, not a two-team projection or validated scouting recommendation.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/game-cluster-uncertainty`, started from updated
-  `origin/main` at `af19425` after observing PR #9 was merged. Continue its PR while
+- Working branch: `codex/static-historical-brief`, started from updated
+  `origin/main` at `07ee523` after observing PR #10 was merged. Continue its PR while
   unmerged. No open PRs or review feedback remained. The preceding checkout was
   clean with no unpublished commits; its remote feature branch had been deleted
   after merging. Full history is preserved.
-- Current review: [PR #10](https://github.com/AryanParte/nfl-opponent-intelligence/pull/10),
-  open, unmerged, and attached to the task. Complete-diff self-review passed.
-  Implementation `f07b378` is pushed with matching local/remote SHAs and confirmed
-  AryanParte author/committer attribution. No review submissions or threads were
-  present at publication. Do not merge or enable auto-merge.
+- Current review: local implementation, tests, and complete-diff self-review passed;
+  commit/push, PR publication, attribution/SHA verification, and CI pending.
+  Do not merge or enable auto-merge.
+- Previous uncertainty review: [PR #10](https://github.com/AryanParte/nfl-opponent-intelligence/pull/10),
+  merged at `07ee523`; final feature-head CI passed at `624aa81`. Its merge tree
+  exactly matched that verified feature head. No new merged-main run was present
+  at this run's start; the baseline 161 tests passed locally before development.
 - Previous comparison review: [PR #9](https://github.com/AryanParte/nfl-opponent-intelligence/pull/9),
   merged at `af19425`; merged-main CI passed on that exact SHA.
 - Previous clock review: [PR #8](https://github.com/AryanParte/nfl-opponent-intelligence/pull/8),
@@ -174,6 +177,25 @@ correctly withheld. Full-season intervals retain the few-game warning. See the
 [uncertainty evidence and replay](REAL_DATA_AUDIT.md#uncertainty-extension-2026-10-06)
 and [method contract](UNCERTAINTY.md). These checks do not validate coverage.
 
+Twenty new brief tests bring the suite to 181. They check hand-calculated rates,
+counts and differences; offense/defense labels; zero/missing/empty/unrequested
+states; every uncertainty status and its support/draw counts; context and bucket
+alignment; inconsistent saved reports; metadata escaping; bounded file/stdin input;
+and offline subprocess replay. Both committed JSON/Markdown examples match
+byte-for-byte on all three runtimes, and the synthetic example also regenerates
+from the original fixture. Snapshot notices and fingerprints remain unchanged.
+
+The renderer accepted 32 pinned CAR combinations across role, early/full-season
+cutoff, unrestricted/Q4 clock range, comparison, and uncertainty settings. Original
+JSON was unchanged and source fingerprints retained. This is report-to-brief
+integration evidence, not an independent re-audit of raw metrics or calibration.
+The real example contains 984 plays / 17 games / 626 dropbacks before REG week 19
+and is explicitly retrospective. The source was acquired in 2026. See
+[brief contract and replay](BRIEFS.md) and [the example](examples/car-2024-reg-before-week-19.md).
+A separate bundled Markdown parser and network-blocked headless preview confirmed
+literal hostile labels, readable tables, and no horizontal overflow at 1280 pixels;
+neither parser nor browser is a project runtime/test dependency.
+
 The two PR #9 CI attempts on October 5 failed before test execution because GitHub
 could not allocate hosted runners, with an internal server error. After the merge,
 [main verification](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37382909725)
@@ -188,6 +210,10 @@ documentation-only publication head. The prior
 passed Python 3.11/3.12/3.13. Prior runs needed manual dispatch of the existing
 workflow when no automatic run appeared. No workflow code, repository settings,
 or daily automation changed.
+
+The [PR #10 final-head run](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37473756050)
+was rechecked as successful on `624aa81`. Current brief-unit remote verification
+will be recorded after publication; local tests are not a substitute for CI.
 
 ## Raw acquisition evidence
 
@@ -219,14 +245,14 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, continue P1.3 with a deterministic
-static historical opponent brief from existing JSON: traceable source/cohort/role,
-counts, matching baseline coverage, and support-aware uncertainty. Test synthetic
-rendering without network and retain unavailable intervals, few-game warnings,
-and descriptive limits in the prose. See [METRICS.md](METRICS.md) and
-[UNCERTAINTY.md](UNCERTAINTY.md) for the interpretation contracts. Coverage
-simulation and improved cross-game/small-sample methods are still unverified.
-Do not move to UI/predictive work yet. External schedule/gamebook
+Inspect current PR CI and reviews first. Next, audit personnel/motion availability
+and licensing against primary sources and the pinned schema. Record direct fields,
+missing/unsupported concepts, possible proxies, and separately licensed data;
+decide feasible versus deferred scope before claiming new measurements or moving
+to P1.4. Do not infer motion from free-text descriptions or obtain paid data without
+authorization. The brief now exists; do not rebuild it. See [BRIEFS.md](BRIEFS.md),
+[METRICS.md](METRICS.md), and [UNCERTAINTY.md](UNCERTAINTY.md). Coverage simulation
+and improved cross-game/small-sample methods are still unverified. External schedule/gamebook
 reconciliation, historical availability, backup, automatic CI triggering, and
 larger-than-memory ingestion remain documented limitations, not completed claims.
 
