@@ -1,28 +1,38 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-08, P1.3 is complete within its PBP-only scope.
-The last unit audits personnel/motion availability and records a primary-source
-licensing/timing decision. The pinned snapshot lacks those columns; separately
-documented enrichment is deferred, not implemented or declared impossible.
-Shotgun/no-huddle and text are not substitutes. See [the decision and replay](PERSONNEL_MOTION.md).
-All 195 offline tests pass locally on Python 3.11/3.12/3.13. Existing analytical
-reports, historical briefs, formulas and raw data are unchanged. P1.2 stays complete
-for the pinned snapshot. Calibration, cross-game dependence, opponent adjustment,
-historical information availability, a UI, and deployment remain open. The brief
-is descriptive, not a two-team projection or validated scouting recommendation.
+As of the additional manual run on 2026-10-08, P1.4's first narrow API slice is
+implemented: optional FastAPI `GET /v1/report` over one verified, explicitly
+configured immutable local snapshot. It reuses the existing builder/schema v2,
+retains nulls and provenance, rejects invalid/extra queries, and bounds expensive
+options and overlapping builders. See [API setup, contract and limits](API.md).
+All 196 core and 20 API tests pass locally on Python 3.11/3.12/3.13. The core CLI
+still works without site packages. No formulas, report defaults, raw bytes,
+database, frontend, deployment or daily automation changed.
+
+P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
+deferred under the [source decision](PERSONNEL_MOTION.md), not inferred from
+shotgun/no-huddle or text. P1.2 stays complete for the pinned snapshot. Calibration,
+cross-game dependence, opponent adjustment, historical information availability,
+a UI and deployment remain open. Reports are descriptive, not two-team
+projections or validated scouting recommendations.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/personnel-motion-audit`, started from updated
-  `origin/main` at `5fd1adc` after observing PR #11 merged. Continue this branch's
+- Working branch: `codex/snapshot-report-api`, started from updated
+  `origin/main` at `9f9a647` after observing PR #12 merged. Continue this branch's
   existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/personnel-motion-audit` for its exact published SHA, attribution and CI
+  `codex/snapshot-report-api` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous availability review: [PR #12](https://github.com/AryanParte/nfl-opponent-intelligence/pull/12),
+  merged at `9f9a647`; its tree exactly matched final feature head `62bdcc1`.
+  [Final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37830532360)
+  was rechecked as successful. No new merged-main run was present at this manual
+  run's start; all 195 baseline tests passed locally before development.
 - Previous brief review: [PR #11](https://github.com/AryanParte/nfl-opponent-intelligence/pull/11),
   merged at `5fd1adc`; its tree exactly matched final feature head `955bc2d`.
   [Final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37694474942)
@@ -74,6 +84,44 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 local API slice — 2026-10-08 manual run
+
+All 196 core and 20 API tests pass on Python 3.11/3.12/3.13, including API tests
+with warnings treated as errors and `pip check` for the optional environments.
+Clean 3.11/3.12 environments installed the constrained extras; core isolation is
+also checked with `python -S`. CI retains three dependency-free core jobs and
+adds three separately installed optional-API jobs. No CI trigger/settings or daily
+automation changes were made; publication and exact-head CI receipts belong in
+the feature PR.
+
+The 20 API methods cover independent synthetic metrics, exact builder equivalence,
+both roles, season/cutoff selection, empty/null states, all optional context groups,
+comparison/resampling, required/scalar/cross-field validation, path/URL/label/extra
+rejection, duplicate keys, methods/bodies, raw query bounds, startup verification,
+stable resident data, resource boundaries, concurrent 503 responses and recovery,
+sanitized internal/response errors and OpenAPI. Every test blocks network calls.
+
+The pinned real snapshot reproduced the frozen historical report exactly under
+sorted JSON serialization with comparison and 1,000 resamples (seed 20261006).
+Ten additional CAR offense/defense and context combinations matched the core
+builder. These replay checks blocked network access and retained the original
+archive and decoded hashes. A separate loopback Uvicorn factory smoke returned
+200 with 984 plays; its process was stopped. This is transport compatibility,
+not a new independent data audit, throughput benchmark or calibrated inference.
+See [API replay instructions](API.md#verification-and-replay).
+
+Self-review replaced Starlette's deprecated `httpx` test fallback with its current
+`httpx2` client, tested malformed/invalid/nonfinite outputs, explicit/default seed
+boundaries, absent clock versus period-only support, and retained the dataset in
+a local request reference. The full diff was checked for accidental analytics
+changes, optional-dependency coupling, path/data exposure, stale source selection,
+concurrency cleanup, misleading completeness and temporal claims. The models
+validate the v2 envelope/metrics, while variable method/context blocks retain the
+core's JSON contract. Limits are per application instance, not hard latency,
+streaming-memory, authentication or multi-worker guarantees.
+
+### Existing offline pipeline
 
 From the project root:
 
@@ -278,11 +326,13 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, begin P1.4 with a narrow FastAPI
-report endpoint over an explicitly configured immutable local snapshot. Reuse the
-report builder/schema v2; add synthetic contract tests, stable validation errors,
-bounded expensive options and optional API dependencies. Do not accept arbitrary
-paths or fetch data per request. No database, frontend or deployment in that unit.
+Inspect current PR CI and reviews first. Next, continue P1.4 with a narrow local
+React/TypeScript report view consuming this API: team/season/cutoff/role controls,
+source provenance, counts/rates, loading/error/empty/null states and contract tests.
+Keep analytical computation in the builder, preserve optional blocks and warnings,
+and explicitly choose a local browser/API connection policy. Do not add storage
+for this single-snapshot use case or imply a public deployment. No frontend was
+built in this API unit. The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add
 personnel/motion enrichment. See [PERSONNEL_MOTION.md](PERSONNEL_MOTION.md),
 [BRIEFS.md](BRIEFS.md), [METRICS.md](METRICS.md), and [UNCERTAINTY.md](UNCERTAINTY.md).

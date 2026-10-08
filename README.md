@@ -13,7 +13,9 @@ period/clock filters, matched league baselines, and opt-in exploratory game-leve
 resampling intervals. A separate offline JSON-to-Markdown command produces a
 traceable historical brief. P1.3's availability audit is complete: personnel and
 motion measurements remain deferred because they require separate source
-integration; shotgun and no-huddle are not substitutes. A web interface,
+integration; shotgun and no-huddle are not substitutes. An optional read-only
+FastAPI endpoint now serves schema v2 from one verified, operator-configured local
+snapshot, with bounded options and offline contract tests. A web interface,
 adjustment, and deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
@@ -23,7 +25,7 @@ with tests, self-review, learning notes, and pushed commits for each completed u
 
 ## Try it
 
-Requires Python 3.11 or later. The current runtime and tests use only the standard
+Requires Python 3.11 or later. The core runtime and core tests use only the standard
 library; the following commands need no package installation or network access.
 Run them from the repository root:
 
@@ -279,6 +281,22 @@ has no time columns; clock tests generate explicitly synthetic inputs. See
 [clock semantics](docs/METRICS.md#pre-play-period-and-clock) and
 [pinned-snapshot evidence](docs/REAL_DATA_AUDIT.md#clock-extension-2026-10-04).
 
+## Serve the same report locally (optional)
+
+The first product endpoint is `GET /v1/report`. It loads one explicitly configured
+immutable snapshot at startup and reuses the analytical builder; requests cannot
+choose paths, refresh data or trigger downloads. API dependencies are optional.
+See [setup, query bounds, error contract and replay](docs/API.md) before starting
+the service on loopback. Example query once it is running:
+
+```sh
+curl 'http://127.0.0.1:8000/v1/report?team=CAR&season=2024&before_week=19'
+```
+
+Responses retain schema v2, provenance, warnings, nulls, and opt-in comparison and
+uncertainty. This is a local integration slice, not a public deployment. The core
+CLI and synthetic demo above still need no web packages.
+
 ## The football decision
 
 The eventual user is an analyst preparing an opponent brief: how often does an
@@ -324,9 +342,13 @@ inclusion policy and why the current output is descriptive rather than a forecas
 9. `availability.py` audits exact personnel/motion candidate columns offline,
    separating schema absence from missing observations and zero-valued indicators.
    `tests/test_availability.py` verifies counts, provenance and safe failure states.
+10. Optional `api.py` loads a configured snapshot once and adapts bounded HTTP
+    queries to `build_report`; `api_models.py` defines its transport contract.
+    `tests_api/test_api.py` exercises synthetic HTTP contracts without network;
+    `tests/test_optional_api.py` checks dependency-free core CLI isolation.
 
-The pure analytical functions can later serve a FastAPI application. Storage and
-the React interface remain deferred until useful opponent briefs exist.
+The pure analytical functions serve both the CLI and the optional FastAPI adapter.
+The React interface is the next product slice; storage needs remain unproven.
 The reporting core has no database, runtime API dependency, or trained
 model; only the explicit acquisition command contacts GitHub.
 
@@ -342,6 +364,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Exploratory uncertainty method](docs/UNCERTAINTY.md)
 - [Historical brief format and examples](docs/BRIEFS.md)
 - [Personnel/motion availability and scope decision](docs/PERSONNEL_MOTION.md)
+- [Optional local API contract and setup](docs/API.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)
 - [Daily sync, commit identity, and recovery](docs/DAILY_WORKFLOW.md)

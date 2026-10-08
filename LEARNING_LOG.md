@@ -917,3 +917,87 @@ dependencies optional; no arbitrary path inputs or per-request downloads. Enrich
 legal review for particular redistributed adaptations, calibration, historical
 availability, automatic CI triggering and larger-than-memory ingestion remain
 separate unfinished work. Do not restart the brief or change the daily schedule.
+
+## 2026-10-08 — Local snapshot report API (additional manual run)
+
+**Built / why:** the first P1.4 product boundary, optional FastAPI `GET /v1/report`
+over one explicitly configured, verified local snapshot. Requests reuse the pure
+builder/schema v2 with bounded options and stable errors; they cannot choose files,
+change labels or download data. Startup loads once, and overlapping report builders
+receive 503 rather than accumulating expensive queued work. API/test dependencies
+and CI are separate from the dependency-free core. This exposes existing evidence
+to a future interface without introducing a second measurement implementation.
+
+Started `codex/snapshot-report-api` from fetched `origin/main` `9f9a647` after PR #12
+merged. The previous checkout was clean, matched upstream and had no unpublished
+commits. No open PRs/reviews remained. Final-head CI for `62bdcc1` passed and the
+merge tree matched; no new merged-main run was present. All 195 baseline tests
+passed locally. This manual run does not replace or alter the 8 AM automation.
+
+**Review:** `src/opponent_intelligence/api.py`, `api_models.py`,
+`tests_api/test_api.py`, `tests/test_optional_api.py`, `pyproject.toml`,
+`requirements/api-constraints.txt`, `.github/workflows/ci.yml` and `docs/API.md`.
+Trace one request from query model through the unchanged builder to the response.
+
+**Sports concepts:** offense-relative EPA and success keep their meaning in
+defense mode. Six synthetic plays but only five EPA observations still mean
+different rate denominators. An empty cohort returns null rates, not invented
+zero performance. A 1,000-resample cap is a compute policy, not a sample-size or
+calibration guarantee. Source acquisition in 2026 remains explicit even when
+the request cutoff selects 2024: this is retrospective analysis, not proof of
+pregame information availability.
+
+**Software/statistical concepts:** separate trusted operator configuration from
+untrusted query input; load and verify in application lifespan, not per request;
+preserve null versus absent fields; validate response shape without duplicating
+statistical formulas. A per-instance nonblocking lock is not distributed rate
+limiting. Row/game limits after parsing are not a streaming memory cap. Optional
+dependencies and constrained versions preserve the lightweight core; constraints
+are not artifact-hash/build-tool locks.
+
+**What to learn:** immutable input identity and stable transport contracts make
+integration testable. A successful HTTP response does not certify statistical
+reliability. Inspect source fingerprints, denominators, warnings and missingness
+before discussing a result, and distinguish independent fixture expectations
+from equivalence checks against the existing builder.
+
+**Three review questions:**
+
+1. Why does changing a cache pointer or passing a snapshot path in a query not
+   change the served dataset, and what operator action is required to change it?
+2. Why do empty reports keep null rates and absent opt-in blocks, and why must
+   defense EPA and the observed-EPA denominator survive serialization unchanged?
+3. What work do the query/resample bounds and per-instance lock limit, and what
+   memory, concurrency, latency, security and inference guarantees do they not provide?
+
+**Verification / self-review:** 196 core plus 20 API tests pass on all three Python
+versions (3.11/3.12/3.13); API tests also pass with warnings treated as errors,
+and optional environments pass `pip check`. Clean 3.11/3.12 installs resolved the
+constrained extras. Tests block network access and cover response/core equivalence
+plus independent counts, invalid inputs, startup integrity, resident-data stability,
+missing context, resource bounds, real request overlap/recovery and sanitized
+builder/response failures. The core CLI passes with site packages disabled.
+
+The pinned real historical report replays exactly under sorted JSON serialization,
+including numeric types, with 1,000 resamples and seed 20261006. Ten further role/
+context combinations match the builder with network blocked. A real loopback
+Uvicorn factory returned 200 and the expected 984 plays, then was stopped. These
+are integration checks, not additional independent source or statistical audits.
+
+Review replaced the deprecated `httpx` TestClient fallback with current `httpx2`,
+added invalid/nonfinite response, default/maximum seed and period-without-clock
+coverage, and retained a request-local dataset reference. Reviewed the complete
+diff for dependency coupling, paths/exception exposure, source replacement,
+concurrency cleanup, missing-data/role/cutoff mistakes and overclaimed limits.
+Documented that nested variable method/context dictionaries remain governed by
+the core contract, rather than claiming full semantic OpenAPI validation.
+Remote SHA, AryanParte attribution and exact-head CI receipts are recorded in
+the feature PR; local checks alone do not claim remote success.
+
+**Remaining / next:** a narrow React/TypeScript local view consuming this endpoint,
+with query controls, provenance, counts/rates, loading/error/empty/null states and
+contract tests. Choose the local browser/API connection deliberately; no CORS
+policy, authentication, database, deployment or UI was added here. Snapshot loading
+is still memory-resident; bounds are not performance benchmarks. Calibration,
+historical availability, enrichment and automatic CI triggering remain separate
+limitations. Review this PR before starting another unit; do not merge automatically.
