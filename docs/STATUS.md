@@ -1,30 +1,33 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-07, P1.3 includes a deterministic historical
-opponent brief from saved report JSON. It carries role/cohort/source fingerprints,
-denominators, matched baseline coverage, per-metric game support, all interval
-states, and warnings into Markdown. All 181 offline tests pass on Python
-3.11/3.12/3.13. Frozen synthetic and retrospective CAR examples replay without raw
-data or network access. Existing report/metric/bootstrap generation is unchanged.
-P1.2 stays complete for the pinned snapshot. Personnel/motion availability and
-licensing still need a scope decision before P1.3 closes; calibration, cross-game
-dependence, opponent adjustment, a UI, and deployment remain open. The brief is
-descriptive, not a two-team projection or validated scouting recommendation.
+As of the scheduled run on 2026-10-08, P1.3 is complete within its PBP-only scope.
+The last unit audits personnel/motion availability and records a primary-source
+licensing/timing decision. The pinned snapshot lacks those columns; separately
+documented enrichment is deferred, not implemented or declared impossible.
+Shotgun/no-huddle and text are not substitutes. See [the decision and replay](PERSONNEL_MOTION.md).
+All 195 offline tests pass locally on Python 3.11/3.12/3.13. Existing analytical
+reports, historical briefs, formulas and raw data are unchanged. P1.2 stays complete
+for the pinned snapshot. Calibration, cross-game dependence, opponent adjustment,
+historical information availability, a UI, and deployment remain open. The brief
+is descriptive, not a two-team projection or validated scouting recommendation.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/static-historical-brief`, started from updated
-  `origin/main` at `07ee523` after observing PR #10 was merged. Continue its PR while
-  unmerged. No open PRs or review feedback remained. The preceding checkout was
-  clean with no unpublished commits; its remote feature branch had been deleted
-  after merging. Full history is preserved.
-- Current review: [PR #11](https://github.com/AryanParte/nfl-opponent-intelligence/pull/11),
-  open, unmerged, and attached to the task. Implementation `36aaff3` is pushed with
-  matching local/remote SHAs and confirmed AryanParte author/committer attribution.
-  Complete-diff self-review passed; no review submissions or threads were present
-  at publication. Do not merge or enable auto-merge.
+- Working branch: `codex/personnel-motion-audit`, started from updated
+  `origin/main` at `5fd1adc` after observing PR #11 merged. Continue this branch's
+  existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
+  was clean and matched its upstream, with no unpublished commits. Only `main`
+  remained on the remote; no open PRs or review feedback remained. History is preserved.
+- Publication/remote verification for this unit: consult the PR for
+  `codex/personnel-motion-audit` for its exact published SHA, attribution and CI
+  receipt. Local checks below are not a claim that remote CI has run.
+- Previous brief review: [PR #11](https://github.com/AryanParte/nfl-opponent-intelligence/pull/11),
+  merged at `5fd1adc`; its tree exactly matched final feature head `955bc2d`.
+  [Final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37694474942)
+  was rechecked as successful. No new merged-main CI run was present at this run's
+  start; the baseline 181 tests passed locally before development.
 - Previous uncertainty review: [PR #10](https://github.com/AryanParte/nfl-opponent-intelligence/pull/10),
   merged at `07ee523`; final feature-head CI passed at `624aa81`. Its merge tree
   exactly matched that verified feature head. No new merged-main run was present
@@ -221,6 +224,30 @@ successfully, confirmed in job logs. The existing workflow was manually dispatch
 after no automatic run appeared. See the PR description for exact-head verification
 of the later documentation-only publication commit; no workflow settings changed.
 
+## Personnel/motion availability evidence (2026-10-08)
+
+Fourteen new tests bring the suite to 195, passing locally on all three supported
+Python versions. The offline inventory verifies source bytes and inventories 20
+exact candidate names on raw versus adapter-eligible rows. Absent columns have null
+counts, not invented missing/false observations. Tests cover all-missing and empty
+populations, excluded-only coverage, unrecognized numeric flags, no text/alias
+inference, malformed inputs, corrupt bytes, BOM identity, replay and blocked-network
+CLI execution. Non-missing strings are deliberately not called semantic validation.
+
+The [frozen JSON](evidence/pbp-2024-23370d5d10f8.availability.json) replays exactly
+from the unchanged pinned snapshot. A separate raw CSV/Decimal check matched all
+20 candidates' raw/eligible counts and binary partitions, with 49,492 / 34,902
+rows. Six candidate columns are present; fourteen (including personnel and
+`is_motion`) are absent. No new data was downloaded. Supplementary 2024 assets
+were checked only through release metadata, not data coverage or local byte hashes.
+
+The [source review](PERSONNEL_MOTION.md) pins nflreadr definitions and distinguishes
+PBP CC BY 4.0 from participation/charting CC BY-SA 4.0. Recent personnel delivery
+is post-season; documentation of a charting cadence is not proof of historical
+availability. The scope decision defers enrichment pending separate terms,
+provenance, joins, coverage and time-aware validation. Existing reporting remains
+unchanged; P1.3 acceptance is complete without claiming those additional metrics.
+
 ## Raw acquisition evidence
 
 `PYTHONPATH=src python3 -m opponent_intelligence.fetch --season 2024` downloaded
@@ -251,15 +278,16 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, audit personnel/motion availability
-and licensing against primary sources and the pinned schema. Record direct fields,
-missing/unsupported concepts, possible proxies, and separately licensed data;
-decide feasible versus deferred scope before claiming new measurements or moving
-to P1.4. Do not infer motion from free-text descriptions or obtain paid data without
-authorization. The brief now exists; do not rebuild it. See [BRIEFS.md](BRIEFS.md),
-[METRICS.md](METRICS.md), and [UNCERTAINTY.md](UNCERTAINTY.md). Coverage simulation
-and improved cross-game/small-sample methods are still unverified. External schedule/gamebook
-reconciliation, historical availability, backup, automatic CI triggering, and
+Inspect current PR CI and reviews first. Next, begin P1.4 with a narrow FastAPI
+report endpoint over an explicitly configured immutable local snapshot. Reuse the
+report builder/schema v2; add synthetic contract tests, stable validation errors,
+bounded expensive options and optional API dependencies. Do not accept arbitrary
+paths or fetch data per request. No database, frontend or deployment in that unit.
+The brief and availability decision exist; do not rebuild them or silently add
+personnel/motion enrichment. See [PERSONNEL_MOTION.md](PERSONNEL_MOTION.md),
+[BRIEFS.md](BRIEFS.md), [METRICS.md](METRICS.md), and [UNCERTAINTY.md](UNCERTAINTY.md).
+Coverage simulation and improved cross-game/small-sample methods remain unverified.
+External schedule/gamebook reconciliation, historical availability, backup, automatic CI triggering, and
 larger-than-memory ingestion remain documented limitations, not completed claims.
 
 The host's `/usr/bin/git` Xcode shim fails. The installed

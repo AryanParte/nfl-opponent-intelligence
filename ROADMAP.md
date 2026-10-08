@@ -46,7 +46,7 @@ cross-checked directly from source CSV using decimal EPA sums. No eligibility
 rules were relaxed. This is one retrospective snapshot's adapter validation, not
 external schedule/box-score reconciliation, a scale benchmark, or model validation.
 
-### P1.3 — Useful opponent brief (in progress)
+### P1.3 — Useful opponent brief (complete within PBP-only scope, 2026-10-08)
 
 - [x] Add explicit opponent-defense summaries (2026-10-01): offense-relative EPA,
       role-labeled report schema v2, denominator accounting, exclusive week cutoffs,
@@ -70,22 +70,29 @@ external schedule/box-score reconciliation, a scale benchmark, or model validati
       JSON-to-Markdown rendering, traceable role/cohort/source and denominators,
       matching baselines, every uncertainty state, and replayable synthetic and
       retrospective examples. This describes a cohort, not a two-team projection.
-- [ ] Validate personnel/motion data availability and licensing separately. The
-      initial play-by-play contract does not guarantee these fields exist.
+- [x] Audit personnel/motion availability and licensing (2026-10-08): replayable
+      raw/eligible field inventory, primary-source definitions and terms, explicit
+      absence/missing/zero distinctions, and a feasible-versus-deferred decision.
+      No enrichment, motion/personnel metrics, or paid data acquisition is claimed.
 
-Next coherent unit: audit personnel/motion field availability and licensing with
-primary source documentation and the pinned schema. Distinguish directly observed
-fields from inferred proxies, missing/unavailable fields, and separately licensed
-tracking/charting sources. Record a feasible-versus-deferred scope decision before
-promising those measurements; do not infer motion from descriptions or acquire
-unapproved paid data. Then assess P1.3 acceptance before the P1.4 product surface.
-The current unit passes 181 offline tests on Python 3.11/3.12/3.13; see
-[status](docs/STATUS.md) and the [brief examples](docs/BRIEFS.md). Method calibration,
-cross-game dependence, and historical information availability remain unverified.
-Inspect current PR/CI and reviews before selecting new work. PR #10 was merged;
-its final feature-head CI passed, and this unit starts from updated `origin/main`.
+The [scope decision](docs/PERSONNEL_MOTION.md) closes P1.3's final acceptance item.
+The pinned PBP lacks these fields; supplementary participation/charting is feasible
+in principle but requires separate manifests, terms, join/coverage validation and
+release-time evidence. The useful historical brief stays PBP-only. Shotgun,
+no-huddle, descriptions and play locations must not stand in for personnel/motion.
+All 195 tests pass locally on Python 3.11/3.12/3.13; see [status](docs/STATUS.md).
+Method calibration, cross-game dependence and historical information availability
+remain unverified. PR #11 was observed merged at `5fd1adc`; its final feature-head
+CI passed. Inspect current PR/CI and reviews before selecting new work.
 
 ### P1.4 — Product surface
+
+Next coherent unit: one FastAPI report endpoint over an explicitly configured
+immutable local snapshot, retaining schema v2 and the existing pure report builder.
+Use synthetic data in tests; define request validation, stable errors and bounded
+expensive options. No request-selected filesystem paths, network acquisition,
+database, frontend or deployment in this first slice; keep API dependencies
+optional so the offline CLI stays usable. See the [scope decision](docs/PERSONNEL_MOTION.md).
 
 - [ ] FastAPI endpoints with a stable report schema and invalid-input behavior.
 - [ ] React/TypeScript interface with situational comparison, source freshness,
