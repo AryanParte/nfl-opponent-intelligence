@@ -11,8 +11,10 @@ cohort reconciliations. Reports can select a team's offense or defense while
 keeping EPA offense-relative, with optional pre-play field-position, score, and
 period/clock filters, matched league baselines, and opt-in exploratory game-level
 resampling intervals. A separate offline JSON-to-Markdown command produces a
-traceable historical brief. A web interface, adjustment, and deployment
-remain on the [roadmap](ROADMAP.md). This is an independent portfolio
+traceable historical brief. P1.3's availability audit is complete: personnel and
+motion measurements remain deferred because they require separate source
+integration; shotgun and no-huddle are not substitutes. A web interface,
+adjustment, and deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
@@ -157,6 +159,15 @@ PYTHONPATH=src python3 -m opponent_intelligence \
 Markdown goes to stdout; existing JSON commands are unchanged. Invalid saved
 reports fail before any brief is printed. See the [brief contract and replay
 instructions](docs/BRIEFS.md), including what a fingerprint does **not** prove.
+
+### Personnel and motion: known limits
+
+The pinned PBP snapshot has neither personnel nor motion columns. The
+[availability and licensing audit](docs/PERSONNEL_MOTION.md) records the direct
+fields, unsuitable proxies, separately documented sources, and a replayable
+offline inventory. It also explains why data published after a season cannot be
+assumed available during that season. No personnel or motion rate is exposed by
+the current reports, and no supplementary dataset has been acquired or joined.
 
 ## Acquire a reproducible raw snapshot
 
@@ -310,6 +321,9 @@ inclusion policy and why the current output is descriptive rather than a forecas
 8. `brief.py` renders saved JSON as deterministic Markdown; `brief_validation.py`
    checks the consumed schema and cross-field relationships. `tests/test_brief.py`
    covers units, support, unsafe text, invalid saved inputs, and byte-exact examples.
+9. `availability.py` audits exact personnel/motion candidate columns offline,
+   separating schema absence from missing observations and zero-valued indicators.
+   `tests/test_availability.py` verifies counts, provenance and safe failure states.
 
 The pure analytical functions can later serve a FastAPI application. Storage and
 the React interface remain deferred until useful opponent briefs exist.
@@ -327,6 +341,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Metric definitions](docs/METRICS.md)
 - [Exploratory uncertainty method](docs/UNCERTAINTY.md)
 - [Historical brief format and examples](docs/BRIEFS.md)
+- [Personnel/motion availability and scope decision](docs/PERSONNEL_MOTION.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)
 - [Daily sync, commit identity, and recovery](docs/DAILY_WORKFLOW.md)

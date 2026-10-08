@@ -843,3 +843,77 @@ Ingestion checks raw-byte integrity; rendering does not reverify raw bytes or th
 authenticity of arbitrary saved JSON.
 Calibration, repeated-team dependence, historical availability, automatic CI
 triggering, and larger-than-memory ingestion remain explicit limitations.
+
+## 2026-10-08 — Personnel/motion availability and scope decision
+
+**Built / why:** an offline, byte-verified field inventory and primary-source
+availability/licensing review. The pinned 2024 PBP has 372 columns but lacks the
+personnel and motion candidates. The audit separates absent columns, all-missing
+values, empty populations, observed zeroes and unknown numeric flags. The decision
+closes P1.3 within its useful PBP-only brief scope; supplementary enrichment is
+deferred, not implemented or declared impossible. No existing metric, report,
+source byte, license, workflow or daily automation was changed.
+
+Started `codex/personnel-motion-audit` from fetched `origin/main` `5fd1adc` after
+confirming PR #11 merged. The old checkout was clean and matched upstream; no
+open PRs or review feedback remained. Its final-head CI at `955bc2d` was successful
+and the merge tree identical. No new merged-main run was present. All 181 baseline
+tests passed before implementation.
+
+**Review:** `src/opponent_intelligence/availability.py`, `tests/test_availability.py`,
+`docs/PERSONNEL_MOTION.md`, and `docs/evidence/pbp-2024-23370d5d10f8.availability.json`.
+Read the scope/source table before interpreting the field counts.
+
+**Sports concepts:** personnel composition, formation, tempo and motion are
+different concepts. Shotgun/no-huddle flags cannot identify RB/TE packages or motion.
+FTN's documented motion flag covers before or at the snap, not motion type/speed.
+Recent participation delivery is post-season; today's retrospective file cannot
+automatically become a feature available during that season.
+
+**Software/statistical concepts:** distinguish schema presence from observed data
+and semantic validity. Keep raw versus eligible denominators and source-specific
+terms/provenance. Extra non-missing columns are not silently promoted into the
+adapter contract. Inventory output is deterministic, and hashes identify the
+audited bytes; they do not prove charting quality or historical availability.
+
+**What to learn:** among 34,902 eligible plays, 24,703 have shotgun=1 and 4,398 have
+no_huddle=1, with no missing/other numeric codes. These describe their own indicators,
+not personnel or motion. An absent motion column has no measurable false count.
+A documented public dataset and published digest still require acquisition,
+byte verification, duplicate-safe joins, missingness review and release-time
+evidence before it can support a defensible new metric.
+
+**Three review questions:**
+
+1. How do absent columns, all-missing values, empty cohorts and observed zeroes
+   differ, and why must a motion-rate denominator exclude unknown/unmatched flags?
+2. Why can shotgun/no-huddle or a backfield count not substitute for personnel
+   composition or motion, even when their values are non-missing?
+3. What must be verified before joining and publishing FTN enrichment, and why
+   do post-season delivery and current-file timestamps matter for historical evaluation?
+
+**Verification / self-review:** 195 tests pass locally on Python 3.11/3.12/3.13,
+including 14 new synthetic tests. They cover raw/eligible partitions, zero/missing/
+absent/empty distinctions, invalid flags, no alias/text inference, provenance,
+malformed inputs, corruption, deterministic counts and blocked-network CLI replay.
+The frozen evidence replays byte-for-byte with connections blocked. A separate raw
+CSV/Decimal check reconciled all 20 candidates and the 49,492 raw / 34,902 eligible
+denominators without using adapter eligibility. Primary definitions/loaders were
+pinned to a source commit; supplementary assets were inspected as metadata only,
+not downloaded or misrepresented as coverage-validated data.
+
+Review checked the complete diff for denominator mistakes, accidental proxy
+claims, mixed licensing, temporal leakage, inflated validation claims and unnecessary
+scope. Clarified that the season-type policy applies to eligible rows, not a new
+validation of every raw administrative row. Corrected test setup for CRLF malformed
+headers and network blocking without breaking SSL imports. Removed a duplicate
+documentation heading. Remote publication, exact SHA attribution and CI results
+are recorded in the feature PR rather than inferred from these local checks.
+
+**Remaining / next:** implement the first P1.4 FastAPI report endpoint using an
+explicitly configured immutable local snapshot and the existing report builder.
+Add synthetic request/response/error tests, bound expensive options, and keep API
+dependencies optional; no arbitrary path inputs or per-request downloads. Enrichment,
+legal review for particular redistributed adaptations, calibration, historical
+availability, automatic CI triggering and larger-than-memory ingestion remain
+separate unfinished work. Do not restart the brief or change the daily schedule.
