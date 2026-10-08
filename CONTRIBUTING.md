@@ -4,6 +4,9 @@ Start with the README and current roadmap. Python 3.11+ is required. Use
 `PYTHONPATH=src python3 -m unittest discover -s tests -v` for the offline suite.
 The README includes the command-line demo. Tests use only temporary directories
 and synthetic fixtures; they must never depend on current upstream data.
+For HTTP changes, also install the optional constrained API/test extras and run
+`tests_api` as described in [the API verification guide](docs/API.md#verification-and-replay).
+Keep the core suite dependency-free; never make CI download NFL data.
 
 Keep a change tied to one observable behavior. Define the football cohort and
 denominator before adding a metric. Add regression tests that fail for the actual

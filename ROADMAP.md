@@ -80,26 +80,35 @@ The pinned PBP lacks these fields; supplementary participation/charting is feasi
 in principle but requires separate manifests, terms, join/coverage validation and
 release-time evidence. The useful historical brief stays PBP-only. Shotgun,
 no-huddle, descriptions and play locations must not stand in for personnel/motion.
-All 195 tests pass locally on Python 3.11/3.12/3.13; see [status](docs/STATUS.md).
+At P1.3 completion, 195 tests passed locally on Python 3.11/3.12/3.13;
+see [current status](docs/STATUS.md) for subsequent verification.
 Method calibration, cross-game dependence and historical information availability
-remain unverified. PR #11 was observed merged at `5fd1adc`; its final feature-head
+remain unverified. PR #12 was observed merged at `9f9a647`; its final feature-head
 CI passed. Inspect current PR/CI and reviews before selecting new work.
 
-### P1.4 — Product surface
+### P1.4 — Product surface (in progress)
 
-Next coherent unit: one FastAPI report endpoint over an explicitly configured
-immutable local snapshot, retaining schema v2 and the existing pure report builder.
-Use synthetic data in tests; define request validation, stable errors and bounded
-expensive options. No request-selected filesystem paths, network acquisition,
-database, frontend or deployment in this first slice; keep API dependencies
-optional so the offline CLI stays usable. See the [scope decision](docs/PERSONNEL_MOTION.md).
-
-- [ ] FastAPI endpoints with a stable report schema and invalid-input behavior.
+- [x] First narrow FastAPI report endpoint (2026-10-08, additional manual run):
+      `GET /v1/report` over one operator-configured immutable local snapshot,
+      schema v2 and the existing builder, optional dependencies, stable errors,
+      bounded queries/resampling and one active builder per application instance.
+      196 core and 20 API tests pass on Python 3.11/3.12/3.13; real frozen-report
+      replay, ten additional role/context reports and a loopback Uvicorn smoke
+      test passed. See [API contract and limits](docs/API.md). No per-request
+      paths/downloads, database, frontend or deployment were added.
 - [ ] React/TypeScript interface with situational comparison, source freshness,
       downloadable reports, and visible uncertainty/missing-data states.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
       record the decision. Keep a small modular service before adding components.
 - [ ] Accessible empty/error/loading states and an end-to-end demo.
+
+Next coherent unit: the first narrow React/TypeScript local report view consuming
+this existing API: team/season/cutoff/role controls, source provenance, counts/rates
+and explicit loading/error/empty/null states, with contract tests. Keep optional
+comparison/uncertainty states honest; do not rebuild analytics or add storage to
+support a single configured snapshot. Plan any local browser-to-API connection
+explicitly; there is no CORS or deployment policy yet. Inspect this branch's PR/CI
+before starting it. No frontend work was performed in the API unit.
 
 ### P1.5 — Operational evidence and case study
 
