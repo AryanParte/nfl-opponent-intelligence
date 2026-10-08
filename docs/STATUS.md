@@ -28,6 +28,16 @@ projections or validated scouting recommendations.
 - Publication/remote verification for this unit: consult the PR for
   `codex/snapshot-report-api` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- API implementation `0054dcd` is published in open
+  [PR #13](https://github.com/AryanParte/nfl-opponent-intelligence/pull/13), with
+  matching local/remote SHAs and verified AryanParte author/committer attribution.
+  [Automatic push CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37853903611)
+  passed all six jobs on that exact head; logs confirm 196 core / 20 API tests
+  per Python version, dependency checks and synthetic demos. A separate PR run
+  was queued at this checkpoint. The PR records final-head verification after
+  this documentation update. No workflow dispatch or trigger-setting change was
+  needed this time; earlier missing automatic runs are historical observations,
+  not evidence that this run required manual dispatch.
 - Previous availability review: [PR #12](https://github.com/AryanParte/nfl-opponent-intelligence/pull/12),
   merged at `9f9a647`; its tree exactly matched final feature head `62bdcc1`.
   [Final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37830532360)
@@ -337,7 +347,7 @@ The brief and availability decision exist; do not rebuild them or silently add
 personnel/motion enrichment. See [PERSONNEL_MOTION.md](PERSONNEL_MOTION.md),
 [BRIEFS.md](BRIEFS.md), [METRICS.md](METRICS.md), and [UNCERTAINTY.md](UNCERTAINTY.md).
 Coverage simulation and improved cross-game/small-sample methods remain unverified.
-External schedule/gamebook reconciliation, historical availability, backup, automatic CI triggering, and
+External schedule/gamebook reconciliation, historical availability, backup, and
 larger-than-memory ingestion remain documented limitations, not completed claims.
 
 The host's `/usr/bin/git` Xcode shim fails. The installed

@@ -999,5 +999,17 @@ with query controls, provenance, counts/rates, loading/error/empty/null states a
 contract tests. Choose the local browser/API connection deliberately; no CORS
 policy, authentication, database, deployment or UI was added here. Snapshot loading
 is still memory-resident; bounds are not performance benchmarks. Calibration,
-historical availability, enrichment and automatic CI triggering remain separate
-limitations. Review this PR before starting another unit; do not merge automatically.
+historical availability and enrichment remain separate limitations. Review this
+PR before starting another unit; do not merge automatically.
+
+**Publication:** implementation `0054dcd` is pushed with matching local/remote
+SHAs and GitHub-confirmed AryanParte author/committer attribution.
+[PR #13](https://github.com/AryanParte/nfl-opponent-intelligence/pull/13) is open,
+unmerged and attached. Its automatic
+[push workflow](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37853903611)
+passed all six jobs on this exact implementation SHA. Logs confirm 196 core and
+20 API tests per runtime, successful optional-dependency checks and synthetic
+demos. Unlike earlier runs, no manual dispatch was needed. A separate PR-triggered
+run was queued at this checkpoint; the PR description records final-head CI after
+this documentation receipt. No repository trigger settings or daily automation
+were changed. This observation does not establish a cause for earlier CI issues.
