@@ -7,6 +7,9 @@ and synthetic fixtures; they must never depend on current upstream data.
 For HTTP changes, also install the optional constrained API/test extras and run
 `tests_api` as described in [the API verification guide](docs/API.md#verification-and-replay).
 Keep the core suite dependency-free; never make CI download NFL data.
+For browser changes, use Node 24.19.0 and run `npm ci`, `npm test` and `npm run build`
+inside `web/`. Run the API suite too: it checks the browser's synthetic fixtures
+against actual endpoint output. See [local viewer checks](docs/WEB.md#verification).
 
 Keep a change tied to one observable behavior. Define the football cohort and
 denominator before adding a metric. Add regression tests that fail for the actual

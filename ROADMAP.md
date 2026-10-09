@@ -96,19 +96,27 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       replay, ten additional role/context reports and a loopback Uvicorn smoke
       test passed. See [API contract and limits](docs/API.md). No per-request
       paths/downloads, database, frontend or deployment were added.
-- [ ] React/TypeScript interface with situational comparison, source freshness,
-      downloadable reports, and visible uncertainty/missing-data states.
+- [x] First narrow local React/TypeScript report view (2026-10-09): explicit
+      team/season/cutoff/role/type controls, returned cohort, denominator-aware
+      metrics and splits, warnings, attribution, timestamps and hashes. Loading,
+      error, empty/null, retry, timeout and stale-response handling are tested.
+      A loopback-only route proxy keeps API/CORS/data selection unchanged.
+      51 frontend tests plus Python API-to-fixture replay, type-check/build and
+      a real-snapshot browser smoke check passed; see [viewer evidence](docs/WEB.md).
+- [ ] Extend the interface with context filters, matched situational comparison,
+      downloadable reports, and visible exploratory uncertainty/support states.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
       record the decision. Keep a small modular service before adding components.
-- [ ] Accessible empty/error/loading states and an end-to-end demo.
+- [ ] Broader accessibility review and a repeatable CI browser/end-to-end demo;
+      the first slice has labeled controls, status/alerts and local browser checks,
+      not a screen-reader/WCAG audit or browser tests in CI.
 
-Next coherent unit: the first narrow React/TypeScript local report view consuming
-this existing API: team/season/cutoff/role controls, source provenance, counts/rates
-and explicit loading/error/empty/null states, with contract tests. Keep optional
-comparison/uncertainty states honest; do not rebuild analytics or add storage to
-support a single configured snapshot. Plan any local browser-to-API connection
-explicitly; there is no CORS or deployment policy yet. Inspect this branch's PR/CI
-before starting it. No frontend work was performed in the API unit.
+Next coherent unit: add an opt-in matched league comparison view over the existing
+API, with observed baseline coverage, matching down/distance buckets, explicit
+denominators, null differences and percentage-point units. Keep computation in
+the builder; do not add storage for a single configured snapshot. Context ranges,
+uncertainty display, downloads and broader browser verification remain separate
+unfinished slices. Inspect this branch's PR/CI and reviews before continuing.
 
 ### P1.5 — Operational evidence and case study
 

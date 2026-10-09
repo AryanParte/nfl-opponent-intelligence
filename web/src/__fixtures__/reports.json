@@ -1,0 +1,395 @@
+{
+  "defense": {
+    "query": {
+      "before_week": 3,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "defense",
+      "team": "ATL"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "defense",
+        "team": "ATL"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 4,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "metric_context": {
+        "interpretation": "allowed",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 2,
+        "dropback_rate": 0.6,
+        "dropbacks": 3,
+        "epa_observations": 4,
+        "epa_per_play": 0.05000000000000003,
+        "games": 1,
+        "missing_epa": 1,
+        "plays": 5,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": 0.75
+      },
+      "schema_version": 2,
+      "situations": [
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 1,
+          "dropback_rate": 1.0,
+          "dropbacks": 2,
+          "epa_observations": 2,
+          "epa_per_play": 0.6000000000000001,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 2,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1.0
+        },
+        {
+          "designed_runs": 1,
+          "distance": "short",
+          "down": 2,
+          "dropback_rate": 0.0,
+          "dropbacks": 0,
+          "epa_observations": 1,
+          "epa_per_play": 0.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1.0
+        },
+        {
+          "designed_runs": 1,
+          "distance": "medium",
+          "down": 2,
+          "dropback_rate": 0.0,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 1,
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 3,
+          "dropback_rate": 1.0,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": -1.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.0
+        }
+      ],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Defense view describes opposing offenses: EPA is not sign-flipped; success still means offensive EPA > 0, not a defensive stop rate.",
+        "Missing EPA is excluded only from EPA and success-rate denominators."
+      ]
+    }
+  },
+  "empty": {
+    "query": {
+      "before_week": 1,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense",
+      "team": "CAR"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 1,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 9,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 0,
+        "dropback_rate": null,
+        "dropbacks": 0,
+        "epa_observations": 0,
+        "epa_per_play": null,
+        "games": 0,
+        "missing_epa": 0,
+        "plays": 0,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": null
+      },
+      "schema_version": 2,
+      "situations": [],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "No eligible plays match this cohort; rates are null, not zero."
+      ]
+    }
+  },
+  "offense": {
+    "query": {
+      "before_week": 3,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense",
+      "team": "CAR"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 3,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 3,
+        "dropback_rate": 0.5,
+        "dropbacks": 3,
+        "epa_observations": 5,
+        "epa_per_play": 0.04000000000000002,
+        "games": 2,
+        "missing_epa": 1,
+        "plays": 6,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": 0.6
+      },
+      "schema_version": 2,
+      "situations": [
+        {
+          "designed_runs": 1,
+          "distance": "long",
+          "down": 1,
+          "dropback_rate": 0.6666666666666666,
+          "dropbacks": 2,
+          "epa_observations": 3,
+          "epa_per_play": 0.4000000000000001,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 3,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.6666666666666666
+        },
+        {
+          "designed_runs": 1,
+          "distance": "short",
+          "down": 2,
+          "dropback_rate": 0.0,
+          "dropbacks": 0,
+          "epa_observations": 1,
+          "epa_per_play": 0.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1.0
+        },
+        {
+          "designed_runs": 1,
+          "distance": "medium",
+          "down": 2,
+          "dropback_rate": 0.0,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 1,
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 3,
+          "dropback_rate": 1.0,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": -1.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.0
+        }
+      ],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators."
+      ]
+    }
+  }
+}

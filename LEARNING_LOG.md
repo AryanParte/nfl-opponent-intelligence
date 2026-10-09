@@ -1013,3 +1013,87 @@ demos. Unlike earlier runs, no manual dispatch was needed. A separate PR-trigger
 run was queued at this checkpoint; the PR description records final-head CI after
 this documentation receipt. No repository trigger settings or daily automation
 were changed. This observation does not establish a cause for earlier CI issues.
+
+## 2026-10-09 — First local report viewer (scheduled run)
+
+**Built / why:** a narrow React/TypeScript view of the existing snapshot API.
+Five explicit query controls lead to overall metrics, down/distance rows, missing
+EPA counts, sample warnings and source timestamps/fingerprints. Loading, empty,
+failure, manual retry and timeout states are distinct. Editing controls removes
+the old result and cancels the request; late responses cannot relabel an older
+cohort. A loopback-only Vite proxy connects the browser to the existing API without
+changing CORS, adding a database, deploying anything or downloading source data.
+
+Started `codex/local-report-view` from fetched `origin/main` `39af171` after PR #13
+merged. The checkout was clean and matched its upstream; the merge tree matched
+the prior feature head. The merged-main workflow passed all six Python jobs, no
+open PRs/reviews remained, and the 196 core / 20 API baseline tests passed. The
+canonical clone and history are preserved; the daily automation is unchanged.
+
+**Review:** `web/src/App.tsx`, `web/src/report.ts`, their tests, `web/vite.config.ts`,
+`web/config.test.ts`, `tests_api/test_frontend_contract.py`,
+`tests_api/synthetic_snapshot.py`, `.github/workflows/ci.yml` and `docs/WEB.md`.
+Trace an edited query through abort/response identity checks into the rendered
+cohort, then compare the synthetic browser fixture with its actual API replay.
+
+**Sports concepts:** dropback rate uses all eligible plays, while EPA and success
+use observed EPA only. Defense displays opposing offensive production without
+reversing EPA or calling offensive success a defensive stop. Short distance includes
+zero yards. Missing/empty rates are unavailable, not zero. Source acquisition and
+asset-update dates remain visible: a week cutoff on a retrospective snapshot does
+not prove pregame availability, and a count flag is not a reliability test.
+
+**Software/statistical concepts:** consumed-contract validation, same-origin
+loopback proxying, immutable source identity, optional dependency boundaries,
+request cancellation and stale-response suppression. Counts partition across
+situations; game counts and rates do not sum. Synthetic end-to-end contract fixtures
+catch drift, but agreement between layers is not independent validation of source
+data or statistical calibration. Display rounding never changes API measurements.
+
+**What to learn:** trustworthy interfaces preserve analytical meaning, including
+denominators and unavailable values. A successful HTTP status alone is insufficient:
+verify the returned cohort, schema and provenance before showing measurements.
+The first view deliberately does not request comparison or bootstrap calculations;
+it rejects unexpected advanced blocks instead of hiding or mislabeling them.
+
+**Three review questions:**
+
+1. Why can six plays produce a 50% dropback rate and 60% success rate, and what
+   changes in the interpretation—not the signs—when the selected role is defense?
+2. How do the request sequence, abort signal and returned-cohort checks prevent
+   a slow response from displaying a report under newly edited controls?
+3. What do the source timestamps, hashes, synthetic contract replay and live
+   browser checks establish, and what availability or reliability claims do they
+   not justify?
+
+**Verification / self-review:** 51 frontend tests, TypeScript checking and the
+production bundle build pass on Node 24.19.0 after clean locked installs. All 196
+core and 21 API tests pass on Python 3.11/3.12/3.13, with API warnings treated as
+errors. The new API test regenerates the labeled browser fixtures exactly with
+network blocked; fixed stored gzip blocks and an OS byte prevent platform-specific
+fixture hashes. CI adds one frontend job while keeping the six Python jobs separate.
+
+An isolated Chrome 154 loopback check exercised the real pinned 2024 snapshot:
+no initial fetch, CAR offense (984 plays, 626 dropbacks, EPA/play -0.052 and 41.4%
+success), defense and an empty cutoff. There were no page errors or external page
+requests, repository-file access outside `web/` returned 403, and desktop/mobile
+layouts were inspected with no page overflow at 390px. The committed screenshot
+is actual desktop output; these are local integration checks, not browser CI,
+load benchmarks or accessibility certification. No source bytes were changed.
+
+The live check exposed an initially overstrict UTC timestamp decoder (`Z` only);
+it now accepts the acquisition tool's fractional `+00:00` timestamps, with a
+regression test. Review also fixed short-distance wording, missing versus zero EPA
+test assumptions, Node/DOM test isolation and the mobile selector. It added date
+validity, bucket partition, JSON media-type and safe error-lookup guards. Reviewed
+the complete diff for stale/mismatched cohorts, misleading denominators, hidden
+warnings, source/path exposure, dependency coupling and scope. Exact published SHA,
+GitHub attribution and remote CI evidence are recorded in the PR; local checks
+alone do not claim remote success.
+
+**Remaining / next:** add an opt-in matched league comparison view using the
+existing API, including actual baseline coverage, matched situation buckets,
+percentage-point differences and unavailable comparisons. Broader context filters,
+uncertainty, downloads, a CI browser demo and a broader accessibility review remain
+unfinished P1.4 slices. Keep the calculations in the existing builder and inspect
+this branch's PR/CI before continuing; do not merge automatically.

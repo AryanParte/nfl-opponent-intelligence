@@ -15,7 +15,9 @@ traceable historical brief. P1.3's availability audit is complete: personnel and
 motion measurements remain deferred because they require separate source
 integration; shotgun and no-huddle are not substitutes. An optional read-only
 FastAPI endpoint now serves schema v2 from one verified, operator-configured local
-snapshot, with bounded options and offline contract tests. A web interface,
+snapshot, with bounded options and offline contract tests. A local React/TypeScript
+viewer now exposes basic cohort controls, metrics, warnings and provenance with
+explicit loading/error/empty states. Richer comparisons, context controls, downloads,
 adjustment, and deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
@@ -297,6 +299,24 @@ Responses retain schema v2, provenance, warnings, nulls, and opt-in comparison a
 uncertainty. This is a local integration slice, not a public deployment. The core
 CLI and synthetic demo above still need no web packages.
 
+### Open the local report viewer
+
+With the API running on loopback and Node 24.19.0 selected:
+
+```sh
+cd web
+npm ci
+npm run dev
+```
+
+Open `http://127.0.0.1:5173/`, choose a cohort and select **Build report**.
+[Setup, connection policy, screenshot and verification](docs/WEB.md) explains the
+narrow view. It does not request optional context filters, comparison or uncertainty
+yet, and never downloads data or substitutes synthetic observations for an API
+failure. Snapshot timestamps are visible, not mislabeled as a live-feed guarantee.
+
+![Local retrospective report viewer](docs/examples/local-report-view.png)
+
 ## The football decision
 
 The eventual user is an analyst preparing an opponent brief: how often does an
@@ -346,9 +366,14 @@ inclusion policy and why the current output is descriptive rather than a forecas
     queries to `build_report`; `api_models.py` defines its transport contract.
     `tests_api/test_api.py` exercises synthetic HTTP contracts without network;
     `tests/test_optional_api.py` checks dependency-free core CLI isolation.
+11. `web/src/App.tsx` presents the local cohort view; `web/src/report.ts` validates
+    the consumed API contract and formats values without changing measurements.
+    Frontend tests cover states/races/errors; `tests_api/test_frontend_contract.py`
+    checks that committed synthetic browser fixtures match the actual endpoint.
 
 The pure analytical functions serve both the CLI and the optional FastAPI adapter.
-The React interface is the next product slice; storage needs remain unproven.
+The first React view consumes that API; richer product controls remain unfinished
+and storage needs remain unproven.
 The reporting core has no database, runtime API dependency, or trained
 model; only the explicit acquisition command contacts GitHub.
 
@@ -365,6 +390,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Historical brief format and examples](docs/BRIEFS.md)
 - [Personnel/motion availability and scope decision](docs/PERSONNEL_MOTION.md)
 - [Optional local API contract and setup](docs/API.md)
+- [Local browser viewer and verification](docs/WEB.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)
 - [Daily sync, commit identity, and recovery](docs/DAILY_WORKFLOW.md)

@@ -3,9 +3,6 @@
 from concurrent.futures import ThreadPoolExecutor
 import csv
 from dataclasses import replace
-import gzip
-from hashlib import sha256
-import io
 import json
 from pathlib import Path
 import tempfile
@@ -18,6 +15,7 @@ from fastapi.testclient import TestClient
 from opponent_intelligence import api, snapshots
 from opponent_intelligence.ingestion import load_snapshot
 from opponent_intelligence.report import build_report
+from tests_api.synthetic_snapshot import write_snapshot
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,31 +40,7 @@ class ReportAPITests(unittest.TestCase):
         self.app = api.create_app(snapshot=self.directory, source_label=LABEL)
 
     def snapshot(self, rows):
-        stream = io.StringIO(newline="")
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]) if rows else list(self.rows[0]))
-        writer.writeheader()
-        writer.writerows(rows)
-        raw = stream.getvalue().encode()
-        archive = gzip.compress(raw, mtime=0)
-        digest = sha256(archive).hexdigest()
-        directory = self.root / digest
-        directory.mkdir(exist_ok=True)
-        # Fictional IDs/timestamps solely for testing the existing manifest contract.
-        manifest = {
-            "schema_version": 1, "season": 2024, "retrieved_at_utc": "2026-10-08T00:00:00Z",
-            "source": {
-                "release_api_url": snapshots.RELEASE_API, "release_tag": "pbp", "release_id": 100,
-                "asset_id": 200, "asset_name": snapshots.ASSET_NAME, "download_url": snapshots.ASSET_URL,
-                "size_bytes": len(archive), "sha256": digest,
-                "asset_updated_at_utc": "2025-02-10T00:00:00Z",
-            },
-            "archive": {"sha256": digest, "size_bytes": len(archive)},
-            "decoded_csv": {"sha256": sha256(raw).hexdigest(), "size_bytes": len(raw)},
-            "license": snapshots._license_notice(),
-        }
-        (directory / snapshots.ASSET_NAME).write_bytes(archive)
-        (directory / "manifest.json").write_text(json.dumps(manifest))
-        return directory
+        return write_snapshot(self.root, rows, list(rows[0]) if rows else list(self.rows[0]))
 
     def expected(self, **options):
         return build_report(self.dataset, source_label=LABEL, **(QUERY | options))

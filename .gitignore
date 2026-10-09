@@ -12,3 +12,6 @@ dist/
 data/raw/
 data/processed/
 reports/
+node_modules/
+.cache/
+.vitest/

@@ -2,10 +2,12 @@
 
 P1.4's first HTTP slice exposes **GET `/v1/report`**, using the existing report
 builder and JSON report schema v2. It is an optional, read-only local service,
-not a deployment or a new statistical model. There is no database, frontend,
+not a deployment or a new statistical model. There is no database,
 authentication, CORS policy, remote data selector, or HTTP ingestion command.
 Only the operator chooses a snapshot, before startup. The offline CLI still
 requires only Python's standard library.
+The optional [local browser viewer](WEB.md) uses a loopback Vite proxy; this API
+does not serve frontend assets and its CORS policy was not changed for that view.
 
 ## Install and start
 
