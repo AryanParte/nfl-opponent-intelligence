@@ -48,3 +48,22 @@ jobs:
         run: python -m pip check
       - name: Offline API contracts with synthetic snapshots
         run: python -m unittest discover -s tests_api -v
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked frontend dependencies
+        run: npm ci
+      - name: Offline frontend contracts and interaction tests
+        run: npm test
+      - name: Type-check and build local report view
+        run: npm run build

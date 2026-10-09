@@ -1,43 +1,41 @@
 # Engineering status
 
-As of the additional manual run on 2026-10-08, P1.4's first narrow API slice is
-implemented: optional FastAPI `GET /v1/report` over one verified, explicitly
-configured immutable local snapshot. It reuses the existing builder/schema v2,
-retains nulls and provenance, rejects invalid/extra queries, and bounds expensive
-options and overlapping builders. See [API setup, contract and limits](API.md).
-All 196 core and 20 API tests pass locally on Python 3.11/3.12/3.13. The core CLI
-still works without site packages. No formulas, report defaults, raw bytes,
-database, frontend, deployment or daily automation changed.
+As of the scheduled run on 2026-10-09, P1.4 has a first narrow local React/TypeScript
+viewer over the existing snapshot API. It offers basic cohort controls, metrics,
+down/distance rows, warnings, provenance and explicit loading/error/empty/null
+states. A loopback-only route proxy connects it without changing API CORS, data
+selection or analytics. See [viewer setup and evidence](WEB.md).
+All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 51 frontend
+tests, type-check/build and a real-snapshot browser smoke check pass on Node 24.19.0.
+No formulas, API routes, report defaults, raw bytes, database, deployment or daily
+automation changed. The core CLI still needs no third-party dependencies.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
 deferred under the [source decision](PERSONNEL_MOTION.md), not inferred from
 shotgun/no-huddle or text. P1.2 stays complete for the pinned snapshot. Calibration,
 cross-game dependence, opponent adjustment, historical information availability,
-a UI and deployment remain open. Reports are descriptive, not two-team
+richer UI controls and deployment remain open. Reports are descriptive, not two-team
 projections or validated scouting recommendations.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/snapshot-report-api`, started from updated
-  `origin/main` at `9f9a647` after observing PR #12 merged. Continue this branch's
+- Working branch: `codex/local-report-view`, started from updated
+  `origin/main` at `39af171` after observing PR #13 merged. Continue this branch's
   existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/snapshot-report-api` for its exact published SHA, attribution and CI
+  `codex/local-report-view` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
-- API implementation `0054dcd` is published in open
-  [PR #13](https://github.com/AryanParte/nfl-opponent-intelligence/pull/13), with
-  matching local/remote SHAs and verified AryanParte author/committer attribution.
-  [Automatic push CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37853903611)
-  passed all six jobs on that exact head; logs confirm 196 core / 20 API tests
-  per Python version, dependency checks and synthetic demos. A separate PR run
-  was queued at this checkpoint. The PR records final-head verification after
-  this documentation update. No workflow dispatch or trigger-setting change was
-  needed this time; earlier missing automatic runs are historical observations,
-  not evidence that this run required manual dispatch.
+- Previous API review: [PR #13](https://github.com/AryanParte/nfl-opponent-intelligence/pull/13),
+  merged at `39af171`; its tree matches final feature head `495b0e2`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37861277858)
+  passed all six jobs. The previous checkout was clean and matched its upstream;
+  no open PRs or relevant review feedback remained. All 196 core / 20 API baseline
+  tests passed locally before this unit. Earlier missing automatic runs are
+  historical observations, not a blocker observed in this run.
 - Previous availability review: [PR #12](https://github.com/AryanParte/nfl-opponent-intelligence/pull/12),
   merged at `9f9a647`; its tree exactly matched final feature head `62bdcc1`.
   [Final-head CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37830532360)
@@ -94,6 +92,44 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 local report viewer — 2026-10-09
+
+Fifty-one frontend tests cover consumed schema/identity/provenance validation,
+counts/nulls/zeroes, roles, query bounds and fixed-route requests, malicious text,
+loading/empty/error/retry/timeout states, edit/unmount cancellation and late-response
+suppression. Tests use explicitly synthetic endpoint responses, never remote NFL
+data. The twenty-first Python API test regenerates the committed browser fixtures
+exactly through FastAPI with network blocked. The API fixture writer was extracted
+for reuse; fixed stored gzip blocks/OS byte remove platform/compressor variance.
+All 196 core and 21 API tests pass on Python 3.11/3.12/3.13, and frontend tests,
+type-check/build and clean `npm ci` pass with Node 24.19.0. npm reported zero known
+vulnerabilities at install time, not a comprehensive security audit.
+
+Chrome 154 on loopback verified no initial report fetch, the pinned CAR offense
+(984 plays / 17 games), defense and empty cutoff through the real Vite proxy/API.
+It observed no page errors or external page requests. Vite returned 403 for an
+attempt to read repository content outside `web/`. Desktop/mobile layouts were
+inspected, with no document overflow at 390px; wide table scrolling stays local
+to its region. See the [captured desktop](examples/local-report-view.png). This is
+local integration evidence, not browser CI, an accessibility certification or a
+throughput benchmark. No new source data was acquired.
+
+Self-review corrected acceptance of real acquisition timestamps (`+00:00`, not
+only `Z`) and added regression coverage. It corrected short-distance wording to
+include zero, retained unavailable EPA cells in individual situations even when
+overall values are zero, separated Node config tests from the DOM environment,
+kept source attribution visible and widened the mobile season selector. It also
+added impossible-date and bucket-count partition checks, exact JSON media-type
+handling, and an own-property guard for the safe error-message lookup. The
+decoder deliberately rejects unrequested advanced blocks/filters rather than
+mislabeling their absence or hiding returned calculations. Display rounding does
+not alter API measurements. The complete diff was reviewed for stale/mismatched
+cohorts, denominator/role errors, data exposure, source claims and scope.
+
+The CI workflow adds one Node frontend job to the existing six Python jobs.
+Exact published SHA, attribution and final CI receipts are recorded in the PR;
+the local evidence above does not by itself claim a remote pass.
 
 ### P1.4 local API slice — 2026-10-08 manual run
 
@@ -336,13 +372,13 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, continue P1.4 with a narrow local
-React/TypeScript report view consuming this API: team/season/cutoff/role controls,
-source provenance, counts/rates, loading/error/empty/null states and contract tests.
-Keep analytical computation in the builder, preserve optional blocks and warnings,
-and explicitly choose a local browser/API connection policy. Do not add storage
-for this single-snapshot use case or imply a public deployment. No frontend was
-built in this API unit. The API must not accept arbitrary paths or fetch per request.
+Inspect current PR CI and reviews first. Next, continue P1.4 with opt-in matched
+league comparison in the viewer: actual baseline coverage, matching down/distance
+buckets, denominators, null differences and percentage-point units. Keep analytical
+computation in the existing builder. Context filters, uncertainty display, report
+downloads, a CI browser demo and broader accessibility review remain unfinished.
+Do not add storage for this single-snapshot view or imply a public deployment.
+The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add
 personnel/motion enrichment. See [PERSONNEL_MOTION.md](PERSONNEL_MOTION.md),
 [BRIEFS.md](BRIEFS.md), [METRICS.md](METRICS.md), and [UNCERTAINTY.md](UNCERTAINTY.md).
