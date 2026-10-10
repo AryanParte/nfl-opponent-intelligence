@@ -1,7 +1,304 @@
 {
+  "baseline_only_bucket_comparison": {
+    "query": {
+      "before_week": 3,
+      "compare_league": true,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense",
+      "team": "CAR"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 3,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "league_comparison": {
+        "cohort": {
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "season": 2024,
+          "season_type": "REG",
+          "side": "offense"
+        },
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 7,
+          "excluded_selected_team_rows": 6,
+          "filter_order": [],
+          "plays_after_context_filters": 1,
+          "plays_before_context_filters": 1
+        },
+        "difference_convention": "selected_minus_baseline",
+        "overall": {
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": 3,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -50,
+          "epa_per_play": -2.96,
+          "success_rate_pp": -40
+        },
+        "population": {
+          "excluded_team": "CAR",
+          "scope": "available_source_only",
+          "shared_games_with_selected": 1,
+          "side": "offense",
+          "team_count": 1,
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "weighting": "pooled_plays"
+        },
+        "situation_scope": "selected_team_observed_buckets",
+        "situations": [
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "long",
+            "down": 1
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "short",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "medium",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "long",
+            "down": 3
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents."
+        ]
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 3,
+        "dropback_rate": 0.5,
+        "dropbacks": 3,
+        "epa_observations": 5,
+        "epa_per_play": 0.04000000000000002,
+        "games": 2,
+        "missing_epa": 1,
+        "plays": 6,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": 0.6
+      },
+      "schema_version": 2,
+      "situations": [
+        {
+          "designed_runs": 1,
+          "distance": "long",
+          "down": 1,
+          "dropback_rate": 0.6666666666666666,
+          "dropbacks": 2,
+          "epa_observations": 3,
+          "epa_per_play": 0.4000000000000001,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 3,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.6666666666666666
+        },
+        {
+          "designed_runs": 1,
+          "distance": "short",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 1,
+          "epa_per_play": 0.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        },
+        {
+          "designed_runs": 1,
+          "distance": "medium",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 1,
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 3,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": -1.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0
+        }
+      ],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "80f6562b97d8a0d1b431b3029cea4c7c5da25d46c299a8cea4f5cf71e65ae35f",
+        "snapshot": {
+          "archive": {
+            "sha256": "04a00eedee88061d346d41fab80c974216f52dbab5a4860623a096057883b33c",
+            "size_bytes": 972
+          },
+          "decoded_csv": {
+            "sha256": "80f6562b97d8a0d1b431b3029cea4c7c5da25d46c299a8cea4f5cf71e65ae35f",
+            "size_bytes": 949
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "04a00eedee88061d346d41fab80c974216f52dbab5a4860623a096057883b33c",
+            "size_bytes": 972
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators."
+      ]
+    }
+  },
   "defense": {
     "query": {
       "before_week": 3,
+      "compare_league": false,
       "season": 2024,
       "season_type": "REG",
       "side": "defense",
@@ -51,7 +348,7 @@
           "designed_runs": 0,
           "distance": "long",
           "down": 1,
-          "dropback_rate": 1.0,
+          "dropback_rate": 1,
           "dropbacks": 2,
           "epa_observations": 2,
           "epa_per_play": 0.6000000000000001,
@@ -60,13 +357,13 @@
           "plays": 2,
           "small_epa_sample": true,
           "small_sample": true,
-          "success_rate": 1.0
+          "success_rate": 1
         },
         {
           "designed_runs": 1,
           "distance": "short",
           "down": 2,
-          "dropback_rate": 0.0,
+          "dropback_rate": 0,
           "dropbacks": 0,
           "epa_observations": 1,
           "epa_per_play": 0.2,
@@ -75,13 +372,13 @@
           "plays": 1,
           "small_epa_sample": true,
           "small_sample": true,
-          "success_rate": 1.0
+          "success_rate": 1
         },
         {
           "designed_runs": 1,
           "distance": "medium",
           "down": 2,
-          "dropback_rate": 0.0,
+          "dropback_rate": 0,
           "dropbacks": 0,
           "epa_observations": 0,
           "epa_per_play": null,
@@ -96,7 +393,7 @@
           "designed_runs": 0,
           "distance": "long",
           "down": 3,
-          "dropback_rate": 1.0,
+          "dropback_rate": 1,
           "dropbacks": 1,
           "epa_observations": 1,
           "epa_per_play": -1.2,
@@ -105,7 +402,305 @@
           "plays": 1,
           "small_epa_sample": true,
           "small_sample": true,
-          "success_rate": 0.0
+          "success_rate": 0
+        }
+      ],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Defense view describes opposing offenses: EPA is not sign-flipped; success still means offensive EPA > 0, not a defensive stop rate.",
+        "Missing EPA is excluded only from EPA and success-rate denominators."
+      ]
+    }
+  },
+  "defense_comparison": {
+    "query": {
+      "before_week": 3,
+      "compare_league": true,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "defense",
+      "team": "ATL"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "defense",
+        "team": "ATL"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 4,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "league_comparison": {
+        "cohort": {
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "season": 2024,
+          "season_type": "REG",
+          "side": "defense"
+        },
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 7,
+          "excluded_selected_team_rows": 5,
+          "filter_order": [],
+          "plays_after_context_filters": 2,
+          "plays_before_context_filters": 2
+        },
+        "difference_convention": "selected_minus_baseline",
+        "overall": {
+          "designed_runs": 1,
+          "dropback_rate": 0.5,
+          "dropbacks": 1,
+          "epa_observations": 2,
+          "epa_per_play": 1.5,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 2,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.5
+        },
+        "overall_difference": {
+          "dropback_rate_pp": 9.999999999999998,
+          "epa_per_play": -1.45,
+          "success_rate_pp": 25
+        },
+        "population": {
+          "excluded_team": "ATL",
+          "scope": "available_source_only",
+          "shared_games_with_selected": 1,
+          "side": "defense",
+          "team_count": 2,
+          "team_field": "defteam",
+          "teams": [
+            "CAR",
+            "NO"
+          ],
+          "weighting": "pooled_plays"
+        },
+        "situation_scope": "selected_team_observed_buckets",
+        "situations": [
+          {
+            "baseline": {
+              "designed_runs": 1,
+              "dropback_rate": 0.5,
+              "dropbacks": 1,
+              "epa_observations": 2,
+              "epa_per_play": 1.5,
+              "games": 2,
+              "missing_epa": 0,
+              "plays": 2,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": 0.5
+            },
+            "difference": {
+              "dropback_rate_pp": 50,
+              "epa_per_play": -0.8999999999999999,
+              "success_rate_pp": 50
+            },
+            "distance": "long",
+            "down": 1
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "short",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "medium",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "long",
+            "down": 3
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents."
+        ]
+      },
+      "metric_context": {
+        "interpretation": "allowed",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 2,
+        "dropback_rate": 0.6,
+        "dropbacks": 3,
+        "epa_observations": 4,
+        "epa_per_play": 0.05000000000000003,
+        "games": 1,
+        "missing_epa": 1,
+        "plays": 5,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": 0.75
+      },
+      "schema_version": 2,
+      "situations": [
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 1,
+          "dropback_rate": 1,
+          "dropbacks": 2,
+          "epa_observations": 2,
+          "epa_per_play": 0.6000000000000001,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 2,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        },
+        {
+          "designed_runs": 1,
+          "distance": "short",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 1,
+          "epa_per_play": 0.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        },
+        {
+          "designed_runs": 1,
+          "distance": "medium",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 1,
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 3,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": -1.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0
         }
       ],
       "source": {
@@ -154,6 +749,7 @@
   "empty": {
     "query": {
       "before_week": 1,
+      "compare_league": false,
       "season": 2024,
       "season_type": "REG",
       "side": "offense",
@@ -241,9 +837,783 @@
       ]
     }
   },
+  "empty_baseline_comparison": {
+    "query": {
+      "before_week": 20,
+      "compare_league": true,
+      "season": 2024,
+      "season_type": "POST",
+      "side": "offense",
+      "team": "CAR"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 20,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "POST",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 8,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "league_comparison": {
+        "cohort": {
+          "before_week_exclusive": 20,
+          "minimum_plays_warning": 30,
+          "season": 2024,
+          "season_type": "POST",
+          "side": "offense"
+        },
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 1,
+          "excluded_selected_team_rows": 1,
+          "filter_order": [],
+          "plays_after_context_filters": 0,
+          "plays_before_context_filters": 0
+        },
+        "difference_convention": "selected_minus_baseline",
+        "overall": {
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "epa_per_play": null,
+          "success_rate_pp": null
+        },
+        "population": {
+          "excluded_team": "CAR",
+          "scope": "available_source_only",
+          "shared_games_with_selected": 0,
+          "side": "offense",
+          "team_count": 0,
+          "team_field": "posteam",
+          "teams": [],
+          "weighting": "pooled_plays"
+        },
+        "situation_scope": "selected_team_observed_buckets",
+        "situations": [
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "long",
+            "down": 1
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null."
+        ]
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 0,
+        "dropback_rate": 1,
+        "dropbacks": 1,
+        "epa_observations": 1,
+        "epa_per_play": 6,
+        "games": 1,
+        "missing_epa": 0,
+        "plays": 1,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": 1
+      },
+      "schema_version": 2,
+      "situations": [
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 1,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": 6,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        }
+      ],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training."
+      ]
+    }
+  },
+  "empty_comparison": {
+    "query": {
+      "before_week": 1,
+      "compare_league": true,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense",
+      "team": "CAR"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 1,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 9,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "league_comparison": {
+        "cohort": {
+          "before_week_exclusive": 1,
+          "minimum_plays_warning": 30,
+          "season": 2024,
+          "season_type": "REG",
+          "side": "offense"
+        },
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 0,
+          "excluded_selected_team_rows": 0,
+          "filter_order": [],
+          "plays_after_context_filters": 0,
+          "plays_before_context_filters": 0
+        },
+        "difference_convention": "selected_minus_baseline",
+        "overall": {
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "epa_per_play": null,
+          "success_rate_pp": null
+        },
+        "population": {
+          "excluded_team": "CAR",
+          "scope": "available_source_only",
+          "shared_games_with_selected": 0,
+          "side": "offense",
+          "team_count": 0,
+          "team_field": "posteam",
+          "teams": [],
+          "weighting": "pooled_plays"
+        },
+        "situation_scope": "selected_team_observed_buckets",
+        "situations": [],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null."
+        ]
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 0,
+        "dropback_rate": null,
+        "dropbacks": 0,
+        "epa_observations": 0,
+        "epa_per_play": null,
+        "games": 0,
+        "missing_epa": 0,
+        "plays": 0,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": null
+      },
+      "schema_version": 2,
+      "situations": [],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "No eligible plays match this cohort; rates are null, not zero."
+      ]
+    }
+  },
+  "empty_selected_comparison": {
+    "query": {
+      "before_week": 3,
+      "compare_league": true,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense",
+      "team": "ZZZ"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "ZZZ"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 9,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "league_comparison": {
+        "cohort": {
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "season": 2024,
+          "season_type": "REG",
+          "side": "offense"
+        },
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 7,
+          "excluded_selected_team_rows": 0,
+          "filter_order": [],
+          "plays_after_context_filters": 7,
+          "plays_before_context_filters": 7
+        },
+        "difference_convention": "selected_minus_baseline",
+        "overall": {
+          "designed_runs": 3,
+          "dropback_rate": 0.5714285714285714,
+          "dropbacks": 4,
+          "epa_observations": 6,
+          "epa_per_play": 0.5333333333333333,
+          "games": 2,
+          "missing_epa": 1,
+          "plays": 7,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.6666666666666666
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "epa_per_play": null,
+          "success_rate_pp": null
+        },
+        "population": {
+          "excluded_team": "ZZZ",
+          "scope": "available_source_only",
+          "shared_games_with_selected": 0,
+          "side": "offense",
+          "team_count": 2,
+          "team_field": "posteam",
+          "teams": [
+            "ATL",
+            "CAR"
+          ],
+          "weighting": "pooled_plays"
+        },
+        "situation_scope": "selected_team_observed_buckets",
+        "situations": [],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Missing baseline EPA affects only EPA and success-rate denominators."
+        ]
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 0,
+        "dropback_rate": null,
+        "dropbacks": 0,
+        "epa_observations": 0,
+        "epa_per_play": null,
+        "games": 0,
+        "missing_epa": 0,
+        "plays": 0,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": null
+      },
+      "schema_version": 2,
+      "situations": [],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "No eligible plays match this cohort; rates are null, not zero."
+      ]
+    }
+  },
+  "missing_epa_comparison": {
+    "query": {
+      "before_week": 3,
+      "compare_league": true,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense",
+      "team": "CAR"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 3,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "league_comparison": {
+        "cohort": {
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "season": 2024,
+          "season_type": "REG",
+          "side": "offense"
+        },
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 7,
+          "excluded_selected_team_rows": 6,
+          "filter_order": [],
+          "plays_after_context_filters": 1,
+          "plays_before_context_filters": 1
+        },
+        "difference_convention": "selected_minus_baseline",
+        "overall": {
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 1,
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -50,
+          "epa_per_play": null,
+          "success_rate_pp": null
+        },
+        "population": {
+          "excluded_team": "CAR",
+          "scope": "available_source_only",
+          "shared_games_with_selected": 1,
+          "side": "offense",
+          "team_count": 1,
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "weighting": "pooled_plays"
+        },
+        "situation_scope": "selected_team_observed_buckets",
+        "situations": [
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": 1,
+              "dropbacks": 1,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 1,
+              "missing_epa": 1,
+              "plays": 1,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": -33.333333333333336,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "long",
+            "down": 1
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "short",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "medium",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "long",
+            "down": 3
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Missing baseline EPA affects only EPA and success-rate denominators."
+        ]
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 3,
+        "dropback_rate": 0.5,
+        "dropbacks": 3,
+        "epa_observations": 5,
+        "epa_per_play": 0.04000000000000002,
+        "games": 2,
+        "missing_epa": 1,
+        "plays": 6,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": 0.6
+      },
+      "schema_version": 2,
+      "situations": [
+        {
+          "designed_runs": 1,
+          "distance": "long",
+          "down": 1,
+          "dropback_rate": 0.6666666666666666,
+          "dropbacks": 2,
+          "epa_observations": 3,
+          "epa_per_play": 0.4000000000000001,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 3,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.6666666666666666
+        },
+        {
+          "designed_runs": 1,
+          "distance": "short",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 1,
+          "epa_per_play": 0.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        },
+        {
+          "designed_runs": 1,
+          "distance": "medium",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 1,
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 3,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": -1.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0
+        }
+      ],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "aa1eb53c5d0d5f4c6d24cd60e636ef721707533a6c787e4dfe1e8487c0c36fc4",
+        "snapshot": {
+          "archive": {
+            "sha256": "4a15e68c0875311ee5574de9fcf33680a36d761f3d69c19ee568bdd1d543c615",
+            "size_bytes": 970
+          },
+          "decoded_csv": {
+            "sha256": "aa1eb53c5d0d5f4c6d24cd60e636ef721707533a6c787e4dfe1e8487c0c36fc4",
+            "size_bytes": 947
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "4a15e68c0875311ee5574de9fcf33680a36d761f3d69c19ee568bdd1d543c615",
+            "size_bytes": 970
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators."
+      ]
+    }
+  },
   "offense": {
     "query": {
       "before_week": 3,
+      "compare_league": false,
       "season": 2024,
       "season_type": "REG",
       "side": "offense",
@@ -308,7 +1678,7 @@
           "designed_runs": 1,
           "distance": "short",
           "down": 2,
-          "dropback_rate": 0.0,
+          "dropback_rate": 0,
           "dropbacks": 0,
           "epa_observations": 1,
           "epa_per_play": 0.2,
@@ -317,13 +1687,13 @@
           "plays": 1,
           "small_epa_sample": true,
           "small_sample": true,
-          "success_rate": 1.0
+          "success_rate": 1
         },
         {
           "designed_runs": 1,
           "distance": "medium",
           "down": 2,
-          "dropback_rate": 0.0,
+          "dropback_rate": 0,
           "dropbacks": 0,
           "epa_observations": 0,
           "epa_per_play": null,
@@ -338,7 +1708,7 @@
           "designed_runs": 0,
           "distance": "long",
           "down": 3,
-          "dropback_rate": 1.0,
+          "dropback_rate": 1,
           "dropbacks": 1,
           "epa_observations": 1,
           "epa_per_play": -1.2,
@@ -347,7 +1717,303 @@
           "plays": 1,
           "small_epa_sample": true,
           "small_sample": true,
-          "success_rate": 0.0
+          "success_rate": 0
+        }
+      ],
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators."
+      ]
+    }
+  },
+  "offense_comparison": {
+    "query": {
+      "before_week": 3,
+      "compare_league": true,
+      "season": 2024,
+      "season_type": "REG",
+      "side": "offense",
+      "team": "CAR"
+    },
+    "report": {
+      "cohort": {
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "data_quality": {
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 3,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "input_rows": 13
+      },
+      "league_comparison": {
+        "cohort": {
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "season": 2024,
+          "season_type": "REG",
+          "side": "offense"
+        },
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 7,
+          "excluded_selected_team_rows": 6,
+          "filter_order": [],
+          "plays_after_context_filters": 1,
+          "plays_before_context_filters": 1
+        },
+        "difference_convention": "selected_minus_baseline",
+        "overall": {
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": 3,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -50,
+          "epa_per_play": -2.96,
+          "success_rate_pp": -40
+        },
+        "population": {
+          "excluded_team": "CAR",
+          "scope": "available_source_only",
+          "shared_games_with_selected": 1,
+          "side": "offense",
+          "team_count": 1,
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "weighting": "pooled_plays"
+        },
+        "situation_scope": "selected_team_observed_buckets",
+        "situations": [
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": 1,
+              "dropbacks": 1,
+              "epa_observations": 1,
+              "epa_per_play": 3,
+              "games": 1,
+              "missing_epa": 0,
+              "plays": 1,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": 1
+            },
+            "difference": {
+              "dropback_rate_pp": -33.333333333333336,
+              "epa_per_play": -2.6,
+              "success_rate_pp": -33.333333333333336
+            },
+            "distance": "long",
+            "down": 1
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "short",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "medium",
+            "down": 2
+          },
+          {
+            "baseline": {
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "dropbacks": 0,
+              "epa_observations": 0,
+              "epa_per_play": null,
+              "games": 0,
+              "missing_epa": 0,
+              "plays": 0,
+              "small_epa_sample": true,
+              "small_sample": true,
+              "success_rate": null
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "epa_per_play": null,
+              "success_rate_pp": null
+            },
+            "distance": "long",
+            "down": 3
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents."
+        ]
+      },
+      "metric_context": {
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "overall": {
+        "designed_runs": 3,
+        "dropback_rate": 0.5,
+        "dropbacks": 3,
+        "epa_observations": 5,
+        "epa_per_play": 0.04000000000000002,
+        "games": 2,
+        "missing_epa": 1,
+        "plays": 6,
+        "small_epa_sample": true,
+        "small_sample": true,
+        "success_rate": 0.6
+      },
+      "schema_version": 2,
+      "situations": [
+        {
+          "designed_runs": 1,
+          "distance": "long",
+          "down": 1,
+          "dropback_rate": 0.6666666666666666,
+          "dropbacks": 2,
+          "epa_observations": 3,
+          "epa_per_play": 0.4000000000000001,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 3,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0.6666666666666666
+        },
+        {
+          "designed_runs": 1,
+          "distance": "short",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 1,
+          "epa_per_play": 0.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 1
+        },
+        {
+          "designed_runs": 1,
+          "distance": "medium",
+          "down": 2,
+          "dropback_rate": 0,
+          "dropbacks": 0,
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "games": 1,
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "designed_runs": 0,
+          "distance": "long",
+          "down": 3,
+          "dropback_rate": 1,
+          "dropbacks": 1,
+          "epa_observations": 1,
+          "epa_per_play": -1.2,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": 0
         }
       ],
       "source": {

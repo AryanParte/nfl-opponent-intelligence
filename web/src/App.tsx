@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { epa, fetchReport, number, parseQuery, percentage, type Draft, type Report } from './report';
+import { ComparisonView } from './ComparisonView';
 
 export const REQUEST_TIMEOUT_MS = 15_000;
 type State = { kind: 'idle' | 'loading' } | { kind: 'error'; message: string }
   | { kind: 'ready'; report: Report };
-const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG' };
+const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG', compare_league: false };
 
 function ReportView({ report }: { report: Report }) {
   const { overall: m, cohort, source } = report;
@@ -52,6 +53,7 @@ function ReportView({ report }: { report: Report }) {
         </div>}
       <p className="muted">Count warning threshold: {cohort.minimum_plays_warning}. Absence of a flag does not establish statistical reliability.</p>
     </section>
+    <ComparisonView report={report} />
     <section className="panel source" aria-labelledby="source-title">
       <div className="section-heading"><h3 id="source-title">Source &amp; availability</h3><span>Report schema v{report.schema_version}</span></div>
       <p className="source-label">{source.label}</p>
@@ -69,7 +71,8 @@ function ReportView({ report }: { report: Report }) {
     </section>
     <section className="notice" aria-labelledby="warnings-title">
       <h3 id="warnings-title">Read before interpreting</h3>
-      <p>League comparison: <strong>not requested</strong>. Uncertainty: <strong>not requested</strong>. This first view does not request those optional calculations.</p>
+      <p>League comparison: <strong>{report.league_comparison ? 'requested; shown above' : 'not requested'}</strong>.
+        {' '}Uncertainty: <strong>not requested</strong>. This view does not request bootstrap calculations.</p>
       <p>Overall sample flags: {m.small_sample ? 'few plays' : 'no play-count flag'}; {m.small_epa_sample ? 'few EPA observations' : 'no EPA-count flag'}.</p>
       {report.warnings.length > 0 && <ul>{report.warnings.map((warning, i) => <li key={i}>{warning}</li>)}</ul>}
       <p>Descriptive history only—not opponent adjustment, a forecast, calibrated inference or a scouting recommendation.</p>
@@ -84,7 +87,7 @@ export function App() {
   const active = useRef<AbortController | null>(null);
   useEffect(() => () => { sequence.current += 1; active.current?.abort(); }, []);
 
-  function edit(field: keyof Draft, value: string) {
+  function edit<Key extends keyof Draft>(field: Key, value: Draft[Key]) {
     sequence.current += 1;
     active.current?.abort();
     setDraft((previous) => ({ ...previous, [field]: value }));
@@ -138,6 +141,10 @@ export function App() {
           <label>Season type<select name="season_type" value={draft.season_type} onChange={(e) => edit('season_type', e.target.value)}>
             <option value="REG">Regular season</option><option value="POST">Postseason</option></select></label>
         </div>
+        <label className="comparison-toggle"><input type="checkbox" name="compare_league" checked={draft.compare_league}
+          onChange={(e) => edit('compare_league', e.target.checked)} aria-describedby="comparison-help" />
+          Compare with other teams in the same role</label>
+        <p id="comparison-help" className="muted">Optional pooled baseline from available source plays. Does not request uncertainty calculations.</p>
         <div className="form-footer"><div><p id="cutoff-help">Exclusive cutoff: only weeks strictly before this week are included.</p>
           <p id="query-help" className="muted">Use source team codes. The API's operator selects the local season snapshot, not this form.</p></div>
           <button type="submit" disabled={state.kind === 'loading'}>{state.kind === 'loading' ? 'Building…' : 'Build report'} <span aria-hidden="true">→</span></button></div>

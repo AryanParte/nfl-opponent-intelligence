@@ -2,8 +2,9 @@
 export type Query = {
   team: string; season: number; before_week: number;
   side: 'offense' | 'defense'; season_type: 'REG' | 'POST';
+  compare_league: boolean;
 };
-export type Draft = { [Key in keyof Query]: string };
+export type Draft = { [Key in Exclude<keyof Query, 'compare_league'>]: string } & { compare_league: boolean };
 export type Metrics = {
   plays: number; games: number; dropbacks: number; designed_runs: number;
   epa_observations: number; missing_epa: number;
@@ -22,6 +23,17 @@ export type Report = {
   overall: Metrics;
   situations: (Metrics & { down: number; distance: 'short' | 'medium' | 'long' })[];
   warnings: string[];
+  league_comparison?: Comparison;
+};
+export type Difference = { dropback_rate_pp: number | null; success_rate_pp: number | null; epa_per_play: number | null };
+export type Comparison = {
+  population: { scope: 'available_source_only'; side: Query['side']; excluded_team: string;
+    team_field: 'posteam' | 'defteam'; teams: string[]; team_count: number;
+    weighting: 'pooled_plays'; shared_games_with_selected: number };
+  overall: Metrics;
+  overall_difference: Difference;
+  situations: { down: number; distance: Report['situations'][number]['distance']; baseline: Metrics; difference: Difference }[];
+  warnings: string[];
 };
 
 export function parseQuery(draft: Draft): Query {
@@ -29,11 +41,11 @@ export function parseQuery(draft: Draft): Query {
     /^\d+$/.test(value) && Number(value) >= min && Number(value) <= max;
   if (!/^[A-Z]{2,3}$/.test(draft.team) || !whole(draft.season, 1999, 9999)
       || !whole(draft.before_week, 1, 23) || !['offense', 'defense'].includes(draft.side)
-      || !['REG', 'POST'].includes(draft.season_type)) {
+      || !['REG', 'POST'].includes(draft.season_type) || typeof draft.compare_league !== 'boolean') {
     throw new Error('Use a 2–3 letter uppercase team code, season 1999–9999 and cutoff week 1–23. Check the role and season type.');
   }
   return { team: draft.team, season: Number(draft.season), before_week: Number(draft.before_week),
-    side: draft.side as Query['side'], season_type: draft.season_type as Query['season_type'] };
+    side: draft.side as Query['side'], season_type: draft.season_type as Query['season_type'], compare_league: draft.compare_league };
 }
 
 const object = (v: unknown): v is Record<string, unknown> =>
@@ -69,6 +81,58 @@ function situation(v: unknown): boolean {
     && typeof distance === 'string' && ['short', 'medium', 'long'].includes(distance);
 }
 
+const countKeys = ['plays', 'dropbacks', 'designed_runs', 'epa_observations', 'missing_epa'] as const;
+const bucketKey = (row: { down: number; distance: string }) => `${row.down}:${row.distance}`;
+
+function difference(value: unknown, selected: Metrics, baseline: Metrics): value is Difference {
+  if (!object(value)) return false;
+  return ([['dropback_rate_pp', 'dropback_rate', 100], ['success_rate_pp', 'success_rate', 100],
+    ['epa_per_play', 'epa_per_play', 1]] as const).every(([key, metric, scale]) => {
+    const left = selected[metric], right = baseline[metric];
+    if (left === null || right === null) return value[key] === null;
+    // Check the declared convention/units; render the API value, not a new estimate.
+    return finite(value[key]) && Math.abs(value[key] - (left - right) * scale) <= 1e-9;
+  });
+}
+
+function comparison(value: unknown, report: Report): value is Comparison {
+  if (!object(value) || !object(value.population) || !object(value.cohort)
+      || !object(value.data_quality) || !metrics(value.overall)
+      || !difference(value.overall_difference, report.overall, value.overall)
+      || value.difference_convention !== 'selected_minus_baseline'
+      || value.situation_scope !== 'selected_team_observed_buckets'
+      || !Array.isArray(value.warnings) || !value.warnings.every(w => typeof w === 'string')) return false;
+  const { population: p, cohort: c, data_quality: q, overall } = value;
+  if (Object.keys(c).length !== 5 || Object.entries(report.cohort).some(([key, v]) => key !== 'team' && c[key] !== v)
+      || p.scope !== 'available_source_only' || p.weighting !== 'pooled_plays'
+      || p.side !== report.cohort.side || p.excluded_team !== report.cohort.team
+      || p.team_field !== (report.cohort.side === 'defense' ? 'defteam' : 'posteam')
+      || !Array.isArray(p.teams) || !p.teams.every(t => typeof t === 'string' && /^[A-Z]{2,3}$/.test(t) && t !== report.cohort.team)
+      || new Set(p.teams).size !== p.teams.length || p.team_count !== p.teams.length
+      || p.teams.length > overall.plays || (p.teams.length === 0) !== (overall.plays === 0)
+      || !count(p.shared_games_with_selected) || p.shared_games_with_selected > Math.min(overall.games, report.overall.games)
+      // No context filters are requested by this view; do not accept a filtered baseline.
+      || !Array.isArray(q.filter_order) || q.filter_order.length !== 0 || Object.keys(q).length !== 5
+      || q.excluded_selected_team_rows !== report.overall.plays
+      || q.plays_before_context_filters !== overall.plays || q.plays_after_context_filters !== overall.plays
+      || q.eligible_rows_same_season_type_before_week !== overall.plays + report.overall.plays
+      || !Array.isArray(value.situations) || value.situations.length !== report.situations.length) return false;
+  const selected = new Map(report.situations.map(row => [bucketKey(row), row]));
+  const seen = new Set<string>();
+  const rows: Comparison['situations'] = [];
+  for (const row of value.situations) {
+    if (!object(row) || !count(row.down) || typeof row.distance !== 'string' || !metrics(row.baseline)) return false;
+    const key = bucketKey({ down: row.down, distance: row.distance });
+    const match = selected.get(key);
+    if (!match || seen.has(key) || !difference(row.difference, match, row.baseline)
+        || row.baseline.games > overall.games) return false;
+    seen.add(key);
+    rows.push(row as unknown as Comparison['situations'][number]);
+  }
+  // Only selected buckets appear: baseline-only buckets may contribute to overall.
+  return countKeys.every(key => rows.reduce((n, row) => n + row.baseline[key], 0) <= overall[key]);
+}
+
 export function parseReport(value: unknown, query: Query): Report {
   const fail = () => { throw new Error('The API returned an incompatible report. No measurements were displayed.'); };
   if (!object(value) || value.schema_version !== 2 || !object(value.cohort)
@@ -80,7 +144,7 @@ export function parseReport(value: unknown, query: Query): Report {
       || cohort.minimum_plays_warning !== 30 || Object.keys(cohort).length !== 6
       || context.interpretation !== (query.side === 'defense' ? 'allowed' : 'produced')
       || context.perspective !== 'offense' || context.success_condition !== 'epa > 0'
-      || 'league_comparison' in value || 'uncertainty' in value) return fail();
+      || 'uncertainty' in value) return fail();
   const snapshot = source.snapshot;
   if (typeof source.label !== 'string' || !source.label.trim() || !hash(source.sha256)
       || !object(snapshot) || !timestamp(snapshot.retrieved_at_utc) || !object(snapshot.archive)
@@ -98,8 +162,10 @@ export function parseReport(value: unknown, query: Query): Report {
   const keys = situations.map((r) => `${r.down}:${r.distance}`);
   if (new Set(keys).size !== keys.length
       // Counts partition across buckets; games do not, and rates must not be summed.
-      || (['plays', 'dropbacks', 'designed_runs', 'epa_observations', 'missing_epa'] as const)
+      || countKeys
         .some((key) => situations.reduce((n, row) => n + row[key], 0) !== overall[key])) return fail();
+  if (query.compare_league ? !comparison(value.league_comparison, value as unknown as Report)
+    : 'league_comparison' in value) return fail();
   return value as unknown as Report;
 }
 
@@ -113,6 +179,7 @@ const errors: Record<string, string> = {
 export async function fetchReport(query: Query, signal: AbortSignal): Promise<Report> {
   const params = new URLSearchParams({ team: query.team, season: String(query.season),
     before_week: String(query.before_week), side: query.side, season_type: query.season_type });
+  if (query.compare_league) params.set('compare_league', 'true');
   const response = await fetch(`/api/v1/report?${params}`, {
     signal, credentials: 'omit', cache: 'no-store', redirect: 'error',
   });
@@ -131,3 +198,9 @@ export async function fetchReport(query: Query, signal: AbortSignal): Promise<Re
 export const percentage = (value: number | null) => value === null ? 'Unavailable' : `${(value * 100).toFixed(1)}%`;
 export const epa = (value: number | null) => value === null ? 'Unavailable' : value.toFixed(3);
 export const number = (value: number) => value.toLocaleString('en-US');
+export function signedDifference(value: number | null, unit: 'pp' | 'EPA/play'): string {
+  if (value === null) return 'Unavailable';
+  // Normalize displayed negative zero; signs describe direction, never "better".
+  const rounded = Number(value.toFixed(unit === 'pp' ? 1 : 3));
+  return `${rounded > 0 ? '+' : ''}${rounded.toFixed(unit === 'pp' ? 1 : 3)} ${unit}`;
+}

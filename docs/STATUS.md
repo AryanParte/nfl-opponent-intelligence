@@ -1,12 +1,12 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-09, P1.4 has a first narrow local React/TypeScript
-viewer over the existing snapshot API. It offers basic cohort controls, metrics,
-down/distance rows, warnings, provenance and explicit loading/error/empty/null
-states. A loopback-only route proxy connects it without changing API CORS, data
-selection or analytics. See [viewer setup and evidence](WEB.md).
-All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 51 frontend
-tests, type-check/build and a real-snapshot browser smoke check pass on Node 24.19.0.
+As of the scheduled run on 2026-10-10, P1.4's local viewer adds an opt-in matched
+league comparison over the existing snapshot API. It shows observed coverage,
+selected/baseline denominators, same-bucket metrics, signed differences, missing/
+empty states and every baseline warning. The checkbox uses the existing explicit
+submit/cancel/stale-response flow. See [viewer setup and evidence](WEB.md).
+All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 99 frontend
+tests, type-check/build and real-snapshot browser checks pass on Node 24.19.0.
 No formulas, API routes, report defaults, raw bytes, database, deployment or daily
 automation changed. The core CLI still needs no third-party dependencies.
 
@@ -21,14 +21,19 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/local-report-view`, started from updated
-  `origin/main` at `39af171` after observing PR #13 merged. Continue this branch's
+- Working branch: `codex/league-comparison-view`, started from updated
+  `origin/main` at `fcba137` after observing PR #14 merged. Continue this branch's
   existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/local-report-view` for its exact published SHA, attribution and CI
+  `codex/league-comparison-view` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous viewer review: [PR #14](https://github.com/AryanParte/nfl-opponent-intelligence/pull/14),
+  merged at `fcba137`; the merge tree matches feature head `01cb6cd`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37989125545)
+  passed all seven jobs. No open PRs/reviews remained and the prior checkout was
+  clean, matching upstream. Baseline 196 core / 21 API / 51 frontend tests passed.
 - Previous API review: [PR #13](https://github.com/AryanParte/nfl-opponent-intelligence/pull/13),
   merged at `39af171`; its tree matches final feature head `495b0e2`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/37861277858)
@@ -92,6 +97,43 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 comparison viewer — 2026-10-10
+
+The frontend suite now has 99 tests. Seven new endpoint-generated synthetic
+fixtures expand the existing three to cover comparison on/off, both roles, no
+selected observations, no baseline, neither population, missing baseline EPA and
+baseline-only situation buckets. Independent expectations check percentage-point
+units and offense-relative defense signs. Tests reject bad coverage/exclusion,
+role/cohort mismatch, wrong difference units/signs/nulls, malformed ledgers, duplicate
+or absent bucket keys and missing requested comparison. Warning markup renders
+literally rather than executing.
+Checkbox edits abort in-flight work and cannot display late comparison responses.
+The existing 196 core and 21 API tests pass on all three supported Python versions;
+API fixture replay stays network-blocked and byte-exact. Clean locked frontend
+install, tests, type-check and build pass on Node 24.19.0. Dependencies and CI
+configuration are unchanged.
+
+An isolated Chrome 154 loopback check reproduced the frozen CAR 2024 REG-before-19
+comparison exactly through the unchanged API. The baseline has 32,351 plays,
+272 games, 31 observed teams and 17 shared games; selected counts stay 984 / 17.
+Displayed differences are +3.4 pp dropback rate, -2.6 pp success and -0.064 EPA/play.
+All 12 selected situation keys are present; an expanded 1/long bucket matches its
+own baseline. Defense and toggle-off flows pass, with no external page requests
+or page errors. Desktop/mobile rendering was inspected, with no page overflow at
+390px. [Screenshot](examples/league-comparison-view.png) is real retrospective
+output, not a new source audit, browser CI, latency benchmark or inference claim.
+
+Self-review retained baseline-only buckets in overall counts without demanding
+displayed baseline rows sum to the overall baseline. It validates difference
+arithmetic/units against the returned metrics (1e-9 absolute tolerance) while
+rendering API values, never computing a replacement estimate. Rounded negative
+zero is normalized, reordered rows join by down/distance identity, and test queries
+were scoped to distinguish collapsed duplicate text from the visible matching row.
+The complete diff was checked for default changes, hidden warnings, temporal/
+coverage claims, nullable measurements, API coupling and unrelated scope. No raw
+source data, core/API code, dependencies or automation settings changed.
+Exact remote SHA, attribution and CI receipts belong in this feature PR.
 
 ### P1.4 local report viewer — 2026-10-09
 
@@ -372,11 +414,13 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, continue P1.4 with opt-in matched
-league comparison in the viewer: actual baseline coverage, matching down/distance
-buckets, denominators, null differences and percentage-point units. Keep analytical
-computation in the existing builder. Context filters, uncertainty display, report
-downloads, a CI browser demo and broader accessibility review remain unfinished.
+Inspect current PR CI and reviews first. Next, continue P1.4 with optional pre-play
+field-position controls, reusing the API's inclusive `yardline_min` / `yardline_max`
+bounds and defaults. Show offense-relative coordinates for both roles and ordered
+selected/baseline missing-context accounting; expand response identity checks and
+fixtures for filtered cohorts. Keep computation in the existing builder. Score/
+clock filters, uncertainty display, downloads, browser CI and broader accessibility
+review remain unfinished.
 Do not add storage for this single-snapshot view or imply a public deployment.
 The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add

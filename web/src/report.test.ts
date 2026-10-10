@@ -3,7 +3,7 @@ import fixtures from './__fixtures__/reports.json';
 import { epa, fetchReport, parseQuery, parseReport, percentage, type Draft, type Query } from './report';
 
 const query = fixtures.offense.query as Query;
-const draft: Draft = { team: 'CAR', season: '2024', before_week: '3', side: 'offense', season_type: 'REG' };
+const draft: Draft = { team: 'CAR', season: '2024', before_week: '3', side: 'offense', season_type: 'REG', compare_league: false };
 const response = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status, headers: { 'content-type': 'application/json' } });
 
 describe('consumed report contract', () => {

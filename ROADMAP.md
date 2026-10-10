@@ -103,7 +103,12 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       A loopback-only route proxy keeps API/CORS/data selection unchanged.
       51 frontend tests plus Python API-to-fixture replay, type-check/build and
       a real-snapshot browser smoke check passed; see [viewer evidence](docs/WEB.md).
-- [ ] Extend the interface with context filters, matched situational comparison,
+- [x] Opt-in matched league comparison view (2026-10-10): observed same-role
+      coverage, pooled baseline counts, signed percentage-point/EPA differences,
+      matched buckets, missing/empty states and all baseline warnings. Ten
+      synthetic API fixtures, 99 frontend tests and real-snapshot browser replay
+      cover the consumed contract; no analytics, source or API changes.
+- [ ] Extend the interface with context filters,
       downloadable reports, and visible exploratory uncertainty/support states.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
       record the decision. Keep a small modular service before adding components.
@@ -111,12 +116,13 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       the first slice has labeled controls, status/alerts and local browser checks,
       not a screen-reader/WCAG audit or browser tests in CI.
 
-Next coherent unit: add an opt-in matched league comparison view over the existing
-API, with observed baseline coverage, matching down/distance buckets, explicit
-denominators, null differences and percentage-point units. Keep computation in
-the builder; do not add storage for a single configured snapshot. Context ranges,
-uncertainty display, downloads and broader browser verification remain separate
-unfinished slices. Inspect this branch's PR/CI and reviews before continuing.
+Next coherent unit: add optional pre-play field-position controls for the existing
+`yardline_min` / `yardline_max` API options, with inclusive/default bounds, explicit
+offense-relative coordinates in either role, and selected/baseline missing-context
+accounting. Extend response identity validation and fixtures before exposing those
+filters. Keep computation in the builder. Score/clock controls, uncertainty display,
+downloads and broader browser verification remain separate unfinished slices.
+Inspect this branch's PR/CI and reviews before continuing; do not add storage.
 
 ### P1.5 — Operational evidence and case study
 
