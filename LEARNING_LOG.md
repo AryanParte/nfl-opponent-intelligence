@@ -1097,3 +1097,72 @@ percentage-point differences and unavailable comparisons. Broader context filter
 uncertainty, downloads, a CI browser demo and a broader accessibility review remain
 unfinished P1.4 slices. Keep the calculations in the existing builder and inspect
 this branch's PR/CI before continuing; do not merge automatically.
+
+## 2026-10-10 — Opt-in matched league comparison view
+
+**Built / why:** a comparison checkbox and local browser panel using the existing
+API. Selected/baseline measurements retain observed team coverage, play/game/EPA
+counts, missingness, sample flags, matching situations and all baseline warnings.
+Differences show percentage-point or EPA/play units. Empty/unknown comparisons
+stay distinct from unrequested calculations; edits abort work and discard stale
+responses. This makes the existing comparison inspectable without a second
+analytics implementation, new dependencies or a deployment.
+
+Synced the canonical clone and started `codex/league-comparison-view` at `fcba137`
+after PR #14 merged. Its tree matched `01cb6cd`, merged-main CI passed all seven
+jobs, no open PRs/review findings remained, and the checkout was clean/in sync.
+Baseline 196 core / 21 API / 51 frontend tests passed before implementation.
+
+**Review files:** `web/src/ComparisonView.tsx`, `web/src/report.ts`,
+`web/src/comparison.test.tsx`, `web/src/App.tsx`,
+`tests_api/test_frontend_contract.py`, `docs/WEB.md` and the comparison screenshot.
+
+**Sports/statistical concepts:** exclude the selected team in the same role, not
+every game involving it. Pool plays rather than team averages; show observed
+coverage rather than assume a complete league. Defense remains offensive
+production allowed. Rate differences are percentage points, not percent change.
+Missing EPA leaves dropback denominators intact. Baseline-only buckets contribute
+to overall totals but not selected-team rows, and populations may share games.
+
+**Software concepts / what to learn:** align buckets by identity, validate the
+returned cohort and requested optional block, and keep UI cancellation separate
+from server computation. Difference validation checks returned arithmetic/units
+within 1e-9; rendering uses the API's estimate. Rounded cells may not subtract to
+the rounded difference. Synthetic contract replay tests integration, not the
+truth of real observations or predictive calibration.
+
+**Three review questions:**
+
+1. Why can the displayed baseline situation counts sum to less than its overall
+   count, and why must an unmatched bucket never use the overall baseline rate?
+2. What does a +3.4 pp dropback difference mean, and why is a positive defense
+   EPA difference not automatically an improvement or an opponent-adjusted result?
+3. How do comparison presence checks, bucket keys and abort/sequence handling
+   prevent a valid-looking response from being attached to the wrong query?
+
+**Verification / self-review:** 99 frontend tests, type-check/build and clean
+locked installation pass on Node 24.19.0. All 196 core and 21 API tests pass on
+Python 3.11/3.12/3.13, with API warnings treated as errors. Ten explicitly synthetic
+endpoint fixtures replay with network blocked. New checks cover units/signs,
+missing/empty populations, baseline-only and reordered buckets, malformed
+coverage/ledgers/optional blocks, literal warnings and stale-toggle responses.
+
+Isolated Chrome 154 reproduced the frozen CAR 2024 REG-before-19 comparison
+exactly: 984 selected versus 32,351 baseline plays, 31 observed baseline teams,
+17 shared games and 12 matched rows. Overall and expanded-row rendering, defense,
+toggle-off and 390px layout passed, with no external page requests or page errors.
+The screenshot is actual retrospective output. No new source data was acquired.
+
+Full-diff review checked default-off compatibility, bucket joins, null/zero and
+denominator handling, hidden warnings, temporal/coverage claims and scope. It
+retained unequal baseline bucket totals, normalized displayed negative zero and
+clarified unrounded differences. Test selectors were fixed to distinguish intended
+rows from repeated text in collapsed details. Core/API code, dependencies, workflow
+configuration and daily automation are unchanged. Exact publication, attribution
+and CI receipts are recorded in the feature PR, not inferred from local checks.
+
+**Remaining / next:** optional pre-play field-position controls with inclusive/
+default bounds and explicit missing-context accounting for both populations.
+Score/clock controls, uncertainty, downloads, browser CI and broader accessibility
+work remain unfinished. No inference calibration, historical pregame availability
+or public deployment is claimed. Review the PR before continuing; never auto-merge.

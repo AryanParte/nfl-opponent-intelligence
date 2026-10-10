@@ -4,8 +4,10 @@ The first P1.4 browser slice is a React/TypeScript view of the existing
 `GET /v1/report` endpoint, not a new analytics engine. It accepts team, season,
 exclusive cutoff, offense/defense and regular/postseason selection. It displays
 overall metrics, observed down/distance rows, sample flags, all report warnings,
-source timestamps, attribution and fingerprints. It never selects a filesystem
-path, fetches NFL data, or silently falls back to a synthetic response.
+source timestamps, attribution and fingerprints. An opt-in league comparison adds
+observed baseline coverage, side-by-side measurements and matching situation differences.
+It never selects a filesystem path, fetches NFL data, or silently falls back to a
+synthetic response.
 
 ![Local report view of the retrospective CAR 2024 cohort](examples/local-report-view.png)
 
@@ -35,7 +37,8 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/` and select **Build report**. Installation needs package
+Open `http://127.0.0.1:5173/`, optionally check **Compare with other teams in the
+same role**, and select **Build report**. Installation needs package
 network access. Once dependencies and the snapshot exist, normal operation is
 local: no hosted assets, remote fonts, acquisition or background report requests.
 Stop the two terminal processes with Ctrl-C when finished.
@@ -64,25 +67,30 @@ API does not justify adding a database for this view.
 
 ## Display and request contract
 
-- Only the five query controls above are sent. The API's default warning threshold
-  remains 30. This view does not request context ranges, league comparison or
-  bootstrap uncertainty. Those calculations are labeled **not requested**, not
-  zero, unavailable confidence, or evidence of no difference.
+- Only the five basic query controls and optional `compare_league=true` are sent.
+  Comparison starts off and is omitted when unchecked. The API's default warning
+  threshold remains 30. This view does not request context ranges or bootstrap
+  uncertainty. Unrequested calculations are labeled **not requested**, not zero,
+  unavailable confidence, or evidence of no difference.
 - The decoder checks the consumed schema v2 fields, returned cohort against the
   submitted query, offense-relative interpretation, metric shapes/count partitions,
   observed situation partitions, source hash consistency and UTC timestamps. Both
   `Z` and `+00:00`, including fractional seconds, are accepted. Unexpected filters
-  or comparison/uncertainty blocks fail closed rather than being mislabeled or
-  silently hidden. This is not a full independent validator of every report field
-  or a statistical reimplementation.
+  or uncertainty blocks fail closed rather than being mislabeled or silently
+  hidden. Comparison must be present if requested and absent otherwise. Its
+  population/cohort/ledger and bucket identities are validated before display;
+  difference arithmetic is checked against the returned estimates with 1e-9
+  absolute tolerance, then the API's values are rendered. This is not a full
+  independent source validator or a statistical reimplementation.
 - EPA keeps its sign in defense mode, where production is **allowed to opposing
   offenses**. Success remains offensive EPA > 0, not defensive stops. Dropback
   rates use all eligible plays; EPA and success use observed EPA only. Small-count
   flags are warnings, not significance or independence guarantees.
 - Nulls display as **Unavailable**; observed zeroes remain zero. Percentages are
   rounded to one decimal and EPA to three for display only. The API values are not
-  rounded or recomputed. A whole report may have observed EPA while an individual
-  situation has none. Empty responses preserve provenance and warnings.
+  rounded or recomputed. Differences use unrounded API values; subtracting rounded
+  cells can differ in the last digit. A whole report may have observed EPA while an
+  individual situation has none. Empty responses preserve provenance and warnings.
 - Editing any control immediately removes old results and aborts the prior
   client request. A sequence guard also ignores late responses. Loading is
   announced, duplicate submit buttons are disabled, failures offer a manual retry,
@@ -97,7 +105,43 @@ API does not justify adding a database for this view.
 
 All detailed source/method/data-quality fields remain available in the API JSON;
 this view intentionally summarizes a subset. No report downloads, situation
-filters, comparison controls, interval visualizations or saved queries exist yet.
+filters, interval visualizations or saved queries exist yet.
+
+## Matched league comparison
+
+![Retrospective CAR comparison panel with a matching bucket expanded](examples/league-comparison-view.png)
+
+Captured on 2026-10-10 from the same pinned snapshot: CAR offense, 2024 REG,
+before week 19. The selected 984 plays / 17 games are compared with 32,351 baseline
+plays / 272 games from 31 observed other offenses; 17 games are shared. Displayed
+overall differences are +3.4 pp dropbacks, -2.6 pp success and -0.064 EPA/play.
+This is the existing historical comparison rendered in a browser, not newly
+validated analytics or a completeness guarantee. The source was acquired in 2026.
+
+Both populations use the same season, type and exclusive cutoff. Exclusion is by
+the selected role (`posteam` for offense, `defteam` for defense), not every game
+involving that franchise. Values are pooled over plays, not averaged team rates.
+In defense mode these remain opposing offensive EPA and success allowed, without
+reversing signs. Positive differences mean numerically higher, not universally better.
+See the [existing comparison contract](METRICS.md#matched-league-baselines).
+
+The overall table shows selected, baseline and selected-minus-baseline columns.
+Rate differences use percentage points (pp), not relative percent change. Both
+populations retain play/game counts, observed/missing EPA and separate play/EPA
+sample flags. All baseline warnings are displayed. A missing EPA denominator
+does not erase a valid dropback comparison.
+
+Expandable situation rows join by down/distance identity, not array position.
+Only selected-team observed buckets appear. A missing matching baseline keeps
+null rates/differences; it never falls back to the overall baseline. Conversely,
+baseline-only buckets may contribute to overall totals without appearing here.
+Displayed baseline rows therefore need not sum to baseline overall counts.
+Empty selected, empty baseline and both-empty comparisons remain requested
+reports with unavailable differences, distinct from an unchecked comparison.
+
+The checkbox participates in the existing edit/abort/late-response flow and never
+auto-fetches. No new endpoint, data download, model, context filter, bootstrap
+control, dependency or deployment was added by this slice.
 
 ## Verification
 
@@ -109,8 +153,9 @@ npm run build
 ```
 
 The lockfile pins resolved packages and integrity hashes. Tests use jsdom/Testing
-Library/Vitest with fetch mocked to reject unconfigured network calls. The three
-committed synthetic API fixtures cover offense, defense and empty cohorts. They
+Library/Vitest with fetch mocked to reject unconfigured network calls. The ten
+committed synthetic API fixtures cover offense, defense, empty populations,
+missing baseline EPA and baseline-only buckets, with comparison on/off. They
 are never a runtime fallback or bundled sample API. Python API CI regenerates them
 through the actual endpoint with socket/acquisition access blocked and compares
 them exactly, so changes on either side cannot silently leave stale test data.
@@ -154,10 +199,27 @@ Primary references reviewed for this slice:
 [Vitest](https://vitest.dev/guide/), and
 [setup-node](https://github.com/actions/setup-node).
 
+On 2026-10-10, 99 frontend tests, type-check/build and clean locked installation
+passed on Node 24.19.0; all 196 core and 21 API tests passed on Python 3.11/3.12/3.13.
+API tests replay all ten fixtures with network blocked. Browser checks in isolated
+Chrome 154 reproduced the frozen real comparison exactly, checked overall and
+matched-row display, defense and toggle-off behavior, no external page requests/
+page errors, and 390px layout without document overflow. Comparison tables retain
+their own horizontal scroll region. These remain local checks, not browser CI or
+an accessibility certification. Controlled checkbox behavior was checked against
+[React's input reference](https://react.dev/reference/react-dom/components/input).
+
+Review checked comparison presence, exclusion/role/coverage/ledger consistency,
+denominators, wrong-unit/sign/null rejection, duplicate/mismatched/reordered bucket
+keys and baseline-only buckets. It retained null versus zero, normalized displayed
+negative zero, exposed all warnings and kept differences based on unrounded API
+values. Test selectors were narrowed to inspect the intended expanded row when
+multiple collapsed buckets contain the same unavailable message.
+
 ## Next slice
 
-Add an opt-in matched league comparison view, preserving actual baseline coverage,
-matching down/distance buckets, null differences and percentage-point units. Keep
-computation in the existing API. Broader context filters, uncertainty display,
+Add optional pre-play field-position controls using the existing API bounds and
+defaults. Preserve offense-relative coordinates, selected/baseline missing-context
+accounting and filtered-cohort identity. Score/clock controls, uncertainty display,
 downloads and a CI browser demo remain separate P1.4 work; do not mark the whole
-product surface complete on the strength of this first viewer.
+product surface complete on the strength of these first viewer slices.

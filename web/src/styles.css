@@ -47,6 +47,17 @@ button span { margin-left: 18px; }
 .metric p { margin-bottom: 0; color: #4e6772; font-size: 11px; }
 .table-scroll { overflow-x: auto; margin-top: 18px; }
 .table-hint { display: none; }
+.comparison-toggle { display: flex; align-items: center; gap: 10px; margin-top: 18px; min-height: 44px; cursor: pointer; }
+.comparison-toggle input { width: 20px; height: 20px; min-height: 20px; flex-shrink: 0; accent-color: #006e91; }
+.comparison { border-top: 3px solid #476c7c; }
+.comparison > p, .comparison-counts, .comparison-empty, .comparison-warnings { font-size: 13px; }
+.comparison h4 { margin: 22px 0 12px; font-size: 14px; }
+.comparison-counts { color: #385762; }
+.comparison-table small { display: block; font-size: 11px; color: #506a75; font-weight: 400; }
+.comparison-bucket { padding-bottom: 10px; }
+.comparison-bucket summary { line-height: 1.8; }
+.comparison-empty { color: #775037; }
+.comparison-warnings { margin-top: 24px; padding: 4px 18px 12px; background: #f5eedf; border-radius: 5px; }
 table { width: 100%; border-collapse: collapse; white-space: nowrap; font-size: 12px; font-variant-numeric: tabular-nums; }
 th, td { text-align: right; padding: 12px 14px; border-bottom: 1px solid #e0e7e8; }
 th:first-child { text-align: left; padding-left: 0; }
