@@ -108,6 +108,12 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       matched buckets, missing/empty states and all baseline warnings. Ten
       synthetic API fixtures, 99 frontend tests and real-snapshot browser replay
       cover the consumed contract; no analytics, source or API changes.
+- [x] Optional pre-play field-position controls (2026-10-11): inclusive decimal
+      bounds, omitted-end defaults, offense-relative coordinates in either role,
+      returned filter identity and separate selected/baseline exclusion accounting.
+      Missing column errors, all-missing/empty cohorts, zero versus omission and
+      stale edits are covered; 184 frontend tests, 22 API-generated fixtures and
+      real-snapshot desktop/mobile browser checks pass. Core/API remain unchanged.
 - [ ] Extend the interface with context filters,
       downloadable reports, and visible exploratory uncertainty/support states.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
@@ -116,12 +122,13 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       the first slice has labeled controls, status/alerts and local browser checks,
       not a screen-reader/WCAG audit or browser tests in CI.
 
-Next coherent unit: add optional pre-play field-position controls for the existing
-`yardline_min` / `yardline_max` API options, with inclusive/default bounds, explicit
-offense-relative coordinates in either role, and selected/baseline missing-context
-accounting. Extend response identity validation and fixtures before exposing those
-filters. Keep computation in the builder. Score/clock controls, uncertainty display,
-downloads and broader browser verification remain separate unfinished slices.
+Next coherent unit: expose the existing pre-play `score_min` / `score_max` API
+options with signed whole-point bounds, unbounded omitted ends and explicit
+offense-minus-defense interpretation in either role. Compose with field position
+in the existing order, showing separate before/missing/outside/retained counts
+for each stage and population. Extend filtered-cohort identity checks and fixtures;
+keep computation in the builder. Clock controls, uncertainty display, downloads
+and broader browser verification remain separate unfinished slices.
 Inspect this branch's PR/CI and reviews before continuing; do not add storage.
 
 ### P1.5 — Operational evidence and case study

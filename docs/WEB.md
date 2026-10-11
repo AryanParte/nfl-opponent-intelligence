@@ -6,6 +6,8 @@ exclusive cutoff, offense/defense and regular/postseason selection. It displays
 overall metrics, observed down/distance rows, sample flags, all report warnings,
 source timestamps, attribution and fingerprints. An opt-in league comparison adds
 observed baseline coverage, side-by-side measurements and matching situation differences.
+Optional pre-play field-position bounds retain offense-relative coordinates and
+display separate selected/baseline exclusion accounting.
 It never selects a filesystem path, fetches NFL data, or silently falls back to a
 synthetic response.
 
@@ -67,15 +69,16 @@ API does not justify adding a database for this view.
 
 ## Display and request contract
 
-- Only the five basic query controls and optional `compare_league=true` are sent.
+- Only the five basic query controls, optional `compare_league=true`, and entered
+  `yardline_min` / `yardline_max` bounds are sent.
   Comparison starts off and is omitted when unchecked. The API's default warning
-  threshold remains 30. This view does not request context ranges or bootstrap
+  threshold remains 30. This view does not request score/clock ranges or bootstrap
   uncertainty. Unrequested calculations are labeled **not requested**, not zero,
   unavailable confidence, or evidence of no difference.
 - The decoder checks the consumed schema v2 fields, returned cohort against the
   submitted query, offense-relative interpretation, metric shapes/count partitions,
   observed situation partitions, source hash consistency and UTC timestamps. Both
-  `Z` and `+00:00`, including fractional seconds, are accepted. Unexpected filters
+  `Z` and `+00:00`, including fractional seconds, are accepted. Unrequested filters
   or uncertainty blocks fail closed rather than being mislabeled or silently
   hidden. Comparison must be present if requested and absent otherwise. Its
   population/cohort/ledger and bucket identities are validated before display;
@@ -104,8 +107,53 @@ API does not justify adding a database for this view.
   basic accessibility. This is not a screen-reader or WCAG conformance audit.
 
 All detailed source/method/data-quality fields remain available in the API JSON;
-this view intentionally summarizes a subset. No report downloads, situation
-filters, interval visualizations or saved queries exist yet.
+this view intentionally summarizes a subset. No report downloads, down/distance
+selectors, interval visualizations or saved queries exist yet.
+
+## Pre-play field position
+
+![Field-position accounting for retrospective CAR offense before 2024 REG week 19](examples/field-position-view.png)
+
+Captured on 2026-10-11 from the pinned 2024 snapshot (acquired in 2026), with
+comparison checked and only **Maximum yards to goal = 20** entered. The effective
+range is 0–20 inclusive: 156 of 984 selected plays remain; 4,991 of 32,351 baseline
+plays remain. Neither population has missing positions; 828 and 27,360 plays,
+respectively, lie outside the range. These are retained **plays**, not possessions
+or drive-level red-zone efficiency. The counts describe this retrospective source,
+not historical pregame availability, calibrated inference or a scouting recommendation.
+
+**Minimum / Maximum yards to goal** accept decimals from 0 to 100 using a dot,
+including equal/fractional bounds. Both blank means no field filter. If just one
+end is entered, the omitted end defaults to 0 or 100. An explicit full 0–100 range
+still excludes missing positions; it is not generally equivalent to blank bounds.
+Zero is an observed coordinate, not missing. Clear both fields and explicitly
+build again to remove the filter; editing never silently refreshes a report.
+
+Coordinates use pre-play `yardline_100`: distance to the offense's opponent's
+goal line. 20 means the opponent's 20-yard line; 80 means the offense's own 20.
+For the selected defense cohort, the target goal line belongs to that defense;
+baseline plays use each other defense's goal line. Coordinates
+and EPA are not reversed. See [the analytical contract](METRICS.md#pre-play-field-position-ranges).
+
+The returned effective filter appears before metrics, with independent accounting
+for the selected cohort and, if requested, the other-teams baseline:
+`before = missing + outside_range + retained`. Team/role/season/week selection
+precedes the field filter; comparison excludes the selected team's **pre-filter**
+plays. Counts are not added again to global exclusions. Missing position and
+missing EPA are separate concepts; all rates, games and observed baseline team
+coverage use the retained population. Existing report/baseline warnings stay visible.
+An absent source column returns a safe, distinct API error, while a present but
+all-missing field may produce a valid empty cohort. Neither triggers an automatic
+fallback to unfiltered data.
+
+The decoder matches both cohort identities to the submitted effective range,
+offense perspective and missing policy, then verifies nonnegative integer stage
+counts, their reconciliation to displayed plays and baseline temporal/exclusion
+totals. Other unrequested context blocks are still rejected. Inputs deliberately
+preserve malformed text (e.g. `1e`) for validation: a numeric input's
+[HTML value sanitization](https://html.spec.whatwg.org/multipage/input.html#number-state-(type=number))
+can turn invalid numeric text into an empty value, which has a different query
+meaning here. Decimal input-mode hints retain a useful mobile keyboard.
 
 ## Matched league comparison
 
@@ -118,7 +166,8 @@ overall differences are +3.4 pp dropbacks, -2.6 pp success and -0.064 EPA/play.
 This is the existing historical comparison rendered in a browser, not newly
 validated analytics or a completeness guarantee. The source was acquired in 2026.
 
-Both populations use the same season, type and exclusive cutoff. Exclusion is by
+Both populations use the same season, type, exclusive cutoff and any requested
+field-position bounds/missing policy. Exclusion is by
 the selected role (`posteam` for offense, `defteam` for defense), not every game
 involving that franchise. Values are pooled over plays, not averaged team rates.
 In defense mode these remain opposing offensive EPA and success allowed, without
@@ -140,8 +189,8 @@ Empty selected, empty baseline and both-empty comparisons remain requested
 reports with unavailable differences, distinct from an unchecked comparison.
 
 The checkbox participates in the existing edit/abort/late-response flow and never
-auto-fetches. No new endpoint, data download, model, context filter, bootstrap
-control, dependency or deployment was added by this slice.
+auto-fetches. The 2026-10-10 comparison slice added no endpoint, data download,
+model, context filter, bootstrap control, dependency or deployment.
 
 ## Verification
 
@@ -153,9 +202,10 @@ npm run build
 ```
 
 The lockfile pins resolved packages and integrity hashes. Tests use jsdom/Testing
-Library/Vitest with fetch mocked to reject unconfigured network calls. The ten
+Library/Vitest with fetch mocked to reject unconfigured network calls. The 22
 committed synthetic API fixtures cover offense, defense, empty populations,
-missing baseline EPA and baseline-only buckets, with comparison on/off. They
+missing baseline EPA, baseline-only buckets and field-position controls/accounting,
+with comparison on/off. They
 are never a runtime fallback or bundled sample API. Python API CI regenerates them
 through the actual endpoint with socket/acquisition access blocked and compares
 them exactly, so changes on either side cannot silently leave stale test data.
@@ -216,10 +266,30 @@ negative zero, exposed all warnings and kept differences based on unrounded API
 values. Test selectors were narrowed to inspect the intended expanded row when
 multiple collapsed buckets contain the same unavailable message.
 
+On 2026-10-11, 184 frontend tests, clean locked install and type-check/build passed
+on Node 24.19.0. All 196 core and 21 API tests passed on Python 3.11/3.12/3.13;
+API fixture replay stays network-blocked. Twelve new field-position fixtures cover
+same-source unfiltered/full-range differences, both roles, default and fractional
+endpoints, zero, empty before-week counts, outside-range emptiness, and missing
+context in either population. Original fixtures are unchanged. Mutation tests
+reject mismatched nested cohorts and ledgers; UI tests cover invalid text,
+missing-column errors, clearing bounds, displayed denominators and stale edits.
+
+Six isolated Chrome 154 real-snapshot queries checked 0–20 for both roles,
+defense 80–100 with an omitted upper end, fractional/zero empty ranges, and the
+cleared offense. Defense 0–20 retains 218 of 1,131 plays versus 4,929 of 32,204
+other-defense plays. Table cells match the API; unfiltered overall/comparison
+blocks match the frozen historical report exactly. Invalid input sends no request.
+Desktop and 390px mobile views were inspected, including keyboard scrolling of
+the accounting table, with no document overflow, external page requests or page
+errors. An initially clipped screenshot was recaptured as the full accounting
+panel above. Both local test servers were stopped. This is local integration
+evidence, not a new source audit, browser CI, load test or accessibility certification.
+
 ## Next slice
 
-Add optional pre-play field-position controls using the existing API bounds and
-defaults. Preserve offense-relative coordinates, selected/baseline missing-context
-accounting and filtered-cohort identity. Score/clock controls, uncertainty display,
+Add pre-play score controls using the existing signed whole-point API bounds and
+unbounded omitted ends. Preserve offense-minus-defense signs in either role and
+extend both cohorts' identity and ordered field-then-score accounting. Clock controls, uncertainty display,
 downloads and a CI browser demo remain separate P1.4 work; do not mark the whole
 product surface complete on the strength of these first viewer slices.

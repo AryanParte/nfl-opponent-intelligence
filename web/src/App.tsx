@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { epa, fetchReport, number, parseQuery, percentage, type Draft, type Report } from './report';
 import { ComparisonView } from './ComparisonView';
+import { FieldPositionView } from './FieldPositionView';
 
 export const REQUEST_TIMEOUT_MS = 15_000;
 type State = { kind: 'idle' | 'loading' } | { kind: 'error'; message: string }
   | { kind: 'ready'; report: Report };
-const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG', compare_league: false };
+const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG',
+  compare_league: false, yardline_min: '', yardline_max: '' };
 
 function ReportView({ report }: { report: Report }) {
   const { overall: m, cohort, source } = report;
@@ -19,9 +21,10 @@ function ReportView({ report }: { report: Report }) {
     <p className="interpretation">{defense
       ? 'Production allowed to opposing offenses. EPA and success stay offense-relative; these are not defensive stops.'
       : 'Production by the selected offense. EPA and success are offense-relative.'}</p>
+    <FieldPositionView report={report} />
     {m.plays === 0 && <section className="notice empty" aria-label="Empty cohort">
       <h3>No eligible plays match this query.</h3>
-      <p>Try a later cutoff with available games, another team code, or season type. An absent team code is not proof that a team exists. Missing rates are unavailable, not zero performance.</p>
+      <p>Try a later cutoff with available games, another team code, season type, or field-position range. An absent team code is not proof that a team exists. Missing rates are unavailable, not zero performance.</p>
     </section>}
     <div className="metric-grid">
       <section className="metric"><h3>Eligible plays</h3><strong>{number(m.plays)}</strong>
@@ -141,6 +144,20 @@ export function App() {
           <label>Season type<select name="season_type" value={draft.season_type} onChange={(e) => edit('season_type', e.target.value)}>
             <option value="REG">Regular season</option><option value="POST">Postseason</option></select></label>
         </div>
+        <fieldset className="field-controls" aria-describedby="field-help field-coordinate-help">
+          <legend>Pre-play field position (optional)</legend>
+          <p id="field-coordinate-help" className="muted">Yards to the offense’s opponent’s goal line, in either role.
+            20 = opponent’s 20; 80 = own 20. Defense mode does not reverse the coordinates.</p>
+          <div className="field-inputs">
+            {/* Keep invalid text distinguishable from blank (which means omit the filter). */}
+            <label>Minimum yards to goal<input name="yardline_min" type="text" inputMode="decimal" autoComplete="off"
+              value={draft.yardline_min} onChange={(e) => edit('yardline_min', e.target.value)} aria-describedby="field-help field-coordinate-help" /></label>
+            <label>Maximum yards to goal<input name="yardline_max" type="text" inputMode="decimal" autoComplete="off"
+              value={draft.yardline_max} onChange={(e) => edit('yardline_max', e.target.value)} aria-describedby="field-help field-coordinate-help" /></label>
+          </div>
+          <p id="field-help" className="muted">Inclusive decimals 0–100; use a dot. Both blank = no field filter.
+            With one bound entered, the blank end defaults to 0 or 100. Any requested range, even 0–100, excludes missing positions.</p>
+        </fieldset>
         <label className="comparison-toggle"><input type="checkbox" name="compare_league" checked={draft.compare_league}
           onChange={(e) => edit('compare_league', e.target.checked)} aria-describedby="comparison-help" />
           Compare with other teams in the same role</label>

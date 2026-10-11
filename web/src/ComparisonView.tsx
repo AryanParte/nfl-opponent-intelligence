@@ -42,7 +42,8 @@ export function ComparisonView({ report }: { report: Report }) {
   return <section className="panel comparison" aria-labelledby="comparison-title">
     <div className="section-heading"><h3 id="comparison-title">Matched league comparison</h3><span>Available source only</span></div>
     <p>Baseline: other {population.side === 'defense' ? 'defenses’ allowed offensive production' : 'offenses’ production'},
-      excluding {population.excluded_team} in the same role. Same season, type and exclusive cutoff; no context filters requested.</p>
+      excluding {population.excluded_team} in the same role. Same season, type and exclusive cutoff;
+      {' '}{report.cohort.field_position ? 'identical inclusive field-position bounds and missing-position exclusion, as shown above.' : 'no context filters requested.'}</p>
     <p><strong>{number(population.team_count)} observed baseline teams</strong>: {population.teams.join(', ') || 'none'}.
       {' '}{number(population.shared_games_with_selected)} games shared with the selected cohort.</p>
     <p>Pooled plays, not an average of team rates. Observed coverage does not certify a complete league.

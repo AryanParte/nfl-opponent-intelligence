@@ -3,8 +3,15 @@ export type Query = {
   team: string; season: number; before_week: number;
   side: 'offense' | 'defense'; season_type: 'REG' | 'POST';
   compare_league: boolean;
+  yardline_min?: number; yardline_max?: number;
 };
 export type Draft = { [Key in Exclude<keyof Query, 'compare_league'>]: string } & { compare_league: boolean };
+export type FieldPosition = { field: 'yardline_100'; minimum_inclusive: number; maximum_inclusive: number;
+  perspective: 'offense'; missing_policy: 'exclude' };
+export type FieldPositionCounts = { plays_before_filter: number; missing_yardline_100: number;
+  outside_range: number; plays_after_filter: number };
+type SelectedQuality = { input_rows: number; eligible_rows_all_teams: number; eligible_rows_outside_cohort: number;
+  excluded_rows_by_reason: Record<string, number>; field_position_filter?: FieldPositionCounts };
 export type Metrics = {
   plays: number; games: number; dropbacks: number; designed_runs: number;
   epa_observations: number; missing_epa: number;
@@ -14,7 +21,9 @@ export type Metrics = {
 export type Report = {
   schema_version: 2;
   cohort: { team: string; season: number; before_week_exclusive: number;
-    side: Query['side']; season_type: Query['season_type']; minimum_plays_warning: number };
+    side: Query['side']; season_type: Query['season_type']; minimum_plays_warning: number;
+    field_position?: FieldPosition };
+  data_quality: SelectedQuality;
   source: { label: string; sha256: string; snapshot: {
     retrieved_at_utc: string; archive: { sha256: string };
     source: { asset_updated_at_utc: string };
@@ -30,6 +39,9 @@ export type Comparison = {
   population: { scope: 'available_source_only'; side: Query['side']; excluded_team: string;
     team_field: 'posteam' | 'defteam'; teams: string[]; team_count: number;
     weighting: 'pooled_plays'; shared_games_with_selected: number };
+  data_quality: { eligible_rows_same_season_type_before_week: number; excluded_selected_team_rows: number;
+    plays_before_context_filters: number; plays_after_context_filters: number; filter_order: string[];
+    field_position_filter?: FieldPositionCounts };
   overall: Metrics;
   overall_difference: Difference;
   situations: { down: number; distance: Report['situations'][number]['distance']; baseline: Metrics; difference: Difference }[];
@@ -44,7 +56,18 @@ export function parseQuery(draft: Draft): Query {
       || !['REG', 'POST'].includes(draft.season_type) || typeof draft.compare_league !== 'boolean') {
     throw new Error('Use a 2–3 letter uppercase team code, season 1999–9999 and cutoff week 1–23. Check the role and season type.');
   }
+  const bound = (text: string): number | undefined => {
+    const value = text.trim();
+    if (value === '') return undefined;
+    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(value) || !Number.isFinite(Number(value)) || Number(value) > 100) {
+      throw new Error('Field-position bounds must be decimals from 0 to 100, or blank. Use a dot for decimals.');
+    }
+    return Number(value);
+  };
+  const lower = bound(draft.yardline_min), upper = bound(draft.yardline_max);
+  if ((lower ?? 0) > (upper ?? 100)) throw new Error('Minimum yards to goal must not exceed maximum yards to goal.');
   return { team: draft.team, season: Number(draft.season), before_week: Number(draft.before_week),
+    ...(lower === undefined ? {} : { yardline_min: lower }), ...(upper === undefined ? {} : { yardline_max: upper }),
     side: draft.side as Query['side'], season_type: draft.season_type as Query['season_type'], compare_league: draft.compare_league };
 }
 
@@ -84,6 +107,36 @@ function situation(v: unknown): boolean {
 const countKeys = ['plays', 'dropbacks', 'designed_runs', 'epa_observations', 'missing_epa'] as const;
 const bucketKey = (row: { down: number; distance: string }) => `${row.down}:${row.distance}`;
 
+function requestedField(query: Query): FieldPosition | undefined {
+  if (query.yardline_min === undefined && query.yardline_max === undefined) return undefined;
+  return { field: 'yardline_100', minimum_inclusive: query.yardline_min ?? 0,
+    maximum_inclusive: query.yardline_max ?? 100, perspective: 'offense', missing_policy: 'exclude' };
+}
+
+function sameField(value: unknown, expected: FieldPosition | undefined): boolean {
+  return expected === undefined ? value === undefined : object(value) && Object.keys(value).length === 5
+    && Object.entries(expected).every(([key, v]) => value[key] === v);
+}
+
+function fieldCounts(value: unknown, plays: number): value is FieldPositionCounts {
+  if (!object(value) || Object.keys(value).length !== 4
+      || !['plays_before_filter', 'missing_yardline_100', 'outside_range', 'plays_after_filter'].every(key => count(value[key]))) return false;
+  const q = value as FieldPositionCounts;
+  return q.plays_after_filter === plays
+    && q.plays_before_filter === q.missing_yardline_100 + q.outside_range + q.plays_after_filter;
+}
+
+function selectedQuality(value: unknown, plays: number, filtered: boolean): value is SelectedQuality {
+  if (!object(value) || Object.keys(value).length !== (filtered ? 5 : 4)
+      || !count(value.input_rows) || !count(value.eligible_rows_all_teams) || !count(value.eligible_rows_outside_cohort)
+      || !object(value.excluded_rows_by_reason) || !Object.values(value.excluded_rows_by_reason).every(count)) return false;
+  const q = value as SelectedQuality;
+  return q.input_rows === q.eligible_rows_all_teams + Object.values(q.excluded_rows_by_reason).reduce((n, v) => n + v, 0)
+    && q.eligible_rows_all_teams === q.eligible_rows_outside_cohort + plays
+    && (filtered ? fieldCounts(q.field_position_filter, plays) && q.field_position_filter.plays_before_filter <= q.eligible_rows_all_teams
+      : !('field_position_filter' in q));
+}
+
 function difference(value: unknown, selected: Metrics, baseline: Metrics): value is Difference {
   if (!object(value)) return false;
   return ([['dropback_rate_pp', 'dropback_rate', 100], ['success_rate_pp', 'success_rate', 100],
@@ -103,7 +156,12 @@ function comparison(value: unknown, report: Report): value is Comparison {
       || value.situation_scope !== 'selected_team_observed_buckets'
       || !Array.isArray(value.warnings) || !value.warnings.every(w => typeof w === 'string')) return false;
   const { population: p, cohort: c, data_quality: q, overall } = value;
-  if (Object.keys(c).length !== 5 || Object.entries(report.cohort).some(([key, v]) => key !== 'team' && c[key] !== v)
+  const field = report.cohort.field_position;
+  // Leave-team-out happens before context filtering, not on the displayed plays.
+  const selectedBefore = report.data_quality.field_position_filter?.plays_before_filter ?? report.overall.plays;
+  if (Object.keys(c).length !== (field ? 6 : 5)
+      || Object.entries(report.cohort).some(([key, v]) => key !== 'team' && key !== 'field_position' && c[key] !== v)
+      || !sameField(c.field_position, field)
       || p.scope !== 'available_source_only' || p.weighting !== 'pooled_plays'
       || p.side !== report.cohort.side || p.excluded_team !== report.cohort.team
       || p.team_field !== (report.cohort.side === 'defense' ? 'defteam' : 'posteam')
@@ -111,11 +169,15 @@ function comparison(value: unknown, report: Report): value is Comparison {
       || new Set(p.teams).size !== p.teams.length || p.team_count !== p.teams.length
       || p.teams.length > overall.plays || (p.teams.length === 0) !== (overall.plays === 0)
       || !count(p.shared_games_with_selected) || p.shared_games_with_selected > Math.min(overall.games, report.overall.games)
-      // No context filters are requested by this view; do not accept a filtered baseline.
-      || !Array.isArray(q.filter_order) || q.filter_order.length !== 0 || Object.keys(q).length !== 5
-      || q.excluded_selected_team_rows !== report.overall.plays
-      || q.plays_before_context_filters !== overall.plays || q.plays_after_context_filters !== overall.plays
-      || q.eligible_rows_same_season_type_before_week !== overall.plays + report.overall.plays
+      || !Array.isArray(q.filter_order) || q.filter_order.length !== (field ? 1 : 0)
+      || (field && q.filter_order[0] !== 'field_position') || Object.keys(q).length !== (field ? 6 : 5)
+      || !count(q.plays_before_context_filters) || !count(q.eligible_rows_same_season_type_before_week)
+      || q.excluded_selected_team_rows !== selectedBefore || q.plays_after_context_filters !== overall.plays
+      || q.eligible_rows_same_season_type_before_week !== q.plays_before_context_filters + selectedBefore
+      || q.eligible_rows_same_season_type_before_week > report.data_quality.eligible_rows_all_teams
+      || (field ? !fieldCounts(q.field_position_filter, overall.plays)
+          || q.field_position_filter.plays_before_filter !== q.plays_before_context_filters
+        : 'field_position_filter' in q || q.plays_before_context_filters !== overall.plays)
       || !Array.isArray(value.situations) || value.situations.length !== report.situations.length) return false;
   const selected = new Map(report.situations.map(row => [bucketKey(row), row]));
   const seen = new Set<string>();
@@ -138,10 +200,12 @@ export function parseReport(value: unknown, query: Query): Report {
   if (!object(value) || value.schema_version !== 2 || !object(value.cohort)
       || !object(value.metric_context) || !object(value.source)) return fail();
   const { cohort, source, metric_context: context } = value;
+  const field = requestedField(query);
   // Reject a different/filtered cohort rather than silently displaying it under this query.
   if (cohort.team !== query.team || cohort.season !== query.season || cohort.side !== query.side
       || cohort.season_type !== query.season_type || cohort.before_week_exclusive !== query.before_week
-      || cohort.minimum_plays_warning !== 30 || Object.keys(cohort).length !== 6
+      || cohort.minimum_plays_warning !== 30 || Object.keys(cohort).length !== (field ? 7 : 6)
+      || !sameField(cohort.field_position, field)
       || context.interpretation !== (query.side === 'defense' ? 'allowed' : 'produced')
       || context.perspective !== 'offense' || context.success_condition !== 'epa > 0'
       || 'uncertainty' in value) return fail();
@@ -159,6 +223,7 @@ export function parseReport(value: unknown, query: Query): Report {
       || !Array.isArray(value.warnings) || !value.warnings.every((w) => typeof w === 'string')) return fail();
   const situations = value.situations as Report['situations'];
   const overall = value.overall;
+  if (!selectedQuality(value.data_quality, overall.plays, field !== undefined)) return fail();
   const keys = situations.map((r) => `${r.down}:${r.distance}`);
   if (new Set(keys).size !== keys.length
       // Counts partition across buckets; games do not, and rates must not be summed.
@@ -172,6 +237,7 @@ export function parseReport(value: unknown, query: Query): Report {
 const errors: Record<string, string> = {
   invalid_query: 'The API rejected the query. Check the fields and try again.',
   season_unavailable: 'That season is not in the configured snapshot. Check the operator’s snapshot configuration.',
+  context_unavailable: 'The configured snapshot lacks the requested context column. Clear the field-position bounds or ask the operator to choose a suitable snapshot.',
   report_busy: 'The API is building another report. Wait a moment, then select Build report again.',
   snapshot_not_ready: 'The API snapshot is not ready. Ask the operator to check startup.',
 };
@@ -180,6 +246,8 @@ export async function fetchReport(query: Query, signal: AbortSignal): Promise<Re
   const params = new URLSearchParams({ team: query.team, season: String(query.season),
     before_week: String(query.before_week), side: query.side, season_type: query.season_type });
   if (query.compare_league) params.set('compare_league', 'true');
+  if (query.yardline_min !== undefined) params.set('yardline_min', String(query.yardline_min));
+  if (query.yardline_max !== undefined) params.set('yardline_max', String(query.yardline_max));
   const response = await fetch(`/api/v1/report?${params}`, {
     signal, credentials: 'omit', cache: 'no-store', redirect: 'error',
   });
