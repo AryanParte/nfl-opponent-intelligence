@@ -19,7 +19,8 @@ snapshot, with bounded options and offline contract tests. A local React/TypeScr
 viewer now exposes basic cohort controls, metrics, warnings and provenance with
 explicit loading/error/empty states. Opt-in matched league comparisons now show
 baseline coverage, denominators, matching situations and percentage-point differences.
-Context controls, exploratory uncertainty display, downloads,
+Optional field-position bounds show effective ranges and separate selected/baseline
+missing-position exclusions. Score/clock controls, exploratory uncertainty display, downloads,
 adjustment, and deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
@@ -314,15 +315,19 @@ npm run dev
 Open `http://127.0.0.1:5173/`, choose a cohort and select **Build report**.
 [Setup, connection policy, screenshot and verification](docs/WEB.md) explains the
 narrow view. Optionally select **Compare with other teams in the same role** for
-pooled baseline metrics and matched down/distance comparisons. It does not request
-context filters or bootstrap uncertainty yet, and never downloads data or
+pooled baseline metrics and matched down/distance comparisons. Optional **Minimum /
+Maximum yards to goal** fields apply an inclusive offense-relative range to both
+populations. Both blank means no filter; an explicit 0–100 range excludes unknown
+positions. The returned accounting separates missing, outside-range and retained
+plays. Score/clock controls and bootstrap uncertainty are not exposed yet. The view never downloads data or
 substitutes synthetic observations for an API failure. Snapshot timestamps are
 visible, not mislabeled as a live-feed guarantee.
 
 ![Local retrospective report viewer](docs/examples/local-report-view.png)
 
 See the [comparison view and its interpretation limits](docs/WEB.md#matched-league-comparison)
-for observed coverage, signed differences and unavailable values.
+for observed coverage, signed differences and unavailable values, and the
+[field-position view](docs/WEB.md#pre-play-field-position) for defaults and exclusion counts.
 
 ## The football decision
 

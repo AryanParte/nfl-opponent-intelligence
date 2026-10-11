@@ -50,6 +50,11 @@ button span { margin-left: 18px; }
 .comparison-toggle { display: flex; align-items: center; gap: 10px; margin-top: 18px; min-height: 44px; cursor: pointer; }
 .comparison-toggle input { width: 20px; height: 20px; min-height: 20px; flex-shrink: 0; accent-color: #006e91; }
 .comparison { border-top: 3px solid #476c7c; }
+.field-controls { min-width: 0; margin: 24px 0 0; padding: 12px 16px; border: 1px solid #d2dcdf; border-radius: 5px; }
+.field-controls legend { font-size: 13px; font-weight: 650; padding: 0 6px; }
+.field-inputs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 560px; }
+.field-position > p { font-size: 13px; }
+.field-position th:last-child, .field-position td:last-child { text-align: right; white-space: nowrap; }
 .comparison > p, .comparison-counts, .comparison-empty, .comparison-warnings { font-size: 13px; }
 .comparison h4 { margin: 22px 0 12px; font-size: 14px; }
 .comparison-counts { color: #385762; }
@@ -87,6 +92,7 @@ footer { max-width: 1240px; margin: auto; border-top: 1px solid #d4dddd; padding
   main { padding: 24px 20px 40px; }
   .local-tag { display: none; }
   .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .field-inputs { grid-template-columns: 1fr; }
   .controls label:last-child { grid-column: 1 / -1; }
   .table-hint { display: block; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

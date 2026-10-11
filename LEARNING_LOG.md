@@ -1166,3 +1166,86 @@ default bounds and explicit missing-context accounting for both populations.
 Score/clock controls, uncertainty, downloads, browser CI and broader accessibility
 work remain unfinished. No inference calibration, historical pregame availability
 or public deployment is claimed. Review the PR before continuing; never auto-merge.
+
+## 2026-10-11 — Optional pre-play field-position controls
+
+**Built / why:** minimum/maximum yards-to-goal controls and a returned-filter
+accounting panel over the existing snapshot API. Both populations keep inclusive
+bounds, offense-relative coordinates, missing-position exclusions and the existing
+metric denominator rules. Blank versus zero/full-range, source-column errors and
+empty results stay distinct. Every edit invalidates previous results. This makes
+the existing field-position analysis usable and auditable without another
+measurement implementation, dependency, database or deployment.
+
+Fetched the canonical clone and started `codex/field-position-view` from updated
+`origin/main` at `c9b9087` after PR #15 merged. Its tree equals feature head
+`a3f1e71`; merged-main CI passed all seven jobs. No open PRs/reviews remained,
+the checkout matched its upstream with no local changes, and baseline 196 core /
+21 API / 99 frontend tests passed before implementation. History is preserved.
+
+**Review files:** `web/src/report.ts`, `web/src/App.tsx`,
+`web/src/FieldPositionView.tsx`, `web/src/field-position.test.tsx`,
+`tests_api/test_frontend_contract.py`, and `docs/WEB.md` with the new screenshot.
+
+**Sports/statistical concepts:** field position is measured before the play,
+toward the offense's opponent's goal, even in defense mode. A 0–20-yard play
+cohort is not drive-level red-zone efficiency. Context missingness and EPA
+missingness change different denominators. Full-range filtering can remove
+unknown positions, unlike no filter. Baseline exclusion occurs before context
+selection, and each population needs its own count reconciliation. These are
+descriptive available-source cohorts, not adjusted or causal effects.
+
+**Software concepts / what to learn:** model omission separately from zero;
+serialize only explicit options but validate the returned effective defaults.
+Compare nested cohort values rather than object references. Validate both local
+stage partitions and cross-population totals before rendering. Preserve malformed
+text for validation rather than allowing numeric-input sanitization to convert
+it to blank. API-generated fixtures verify transport compatibility, while small
+hand-checkable expectations expose unit/denominator mistakes. Source/time cutoffs
+and hashes still do not prove historical information availability.
+
+**Three review questions:**
+
+1. Why can blank bounds and an explicit 0–100 range return different counts,
+   and how is a missing position different from missing EPA or an absent column?
+2. When selecting CAR defense at 0–20, whose goal line is the target, and why
+   must neither the coordinates nor EPA be reversed or called drive efficiency?
+3. Why must baseline `excluded_selected_team_rows` equal the selected count
+   before field filtering, and which checks prevent a stale or mismatched report?
+
+**Verification / self-review:** 184 frontend tests, clean locked install and
+type-check/build pass on Node 24.19.0. All 196 core / 21 API tests pass on Python
+3.11/3.12/3.13 with API warnings treated as errors; `pip check` finds no broken
+requirements. Twenty-two labeled synthetic endpoint fixtures replay with network
+blocked. All ten original fixtures remain unchanged. Twelve additions cover
+both roles, comparison on/off, zero/default/fractional/full ranges, same-source
+unfiltered output, empty pre-week counts and missing context in either population.
+Tests reject bad filter identity/policy/counts, hidden filters, incorrect temporal
+totals, stale edits and missing-column fallback.
+
+Six Chrome 154 loopback queries exercised real 2024 REG-before-19 data. At 0–20,
+CAR offense retains 156 / 984 plays versus 4,991 / 32,351 baseline plays; neither
+has missing positions, with 828 / 27,360 outside-range exclusions. CAR defense
+retains 218 / 1,131 versus 4,929 / 32,204. Lower-only, fractional/zero empty and
+cleared-filter states passed; cleared overall/comparison blocks match the frozen
+historical report exactly. Malformed text makes no request. Desktop/mobile
+inspection found no document overflow at 390px; accounting tables scroll by
+keyboard. No external page requests or page errors occurred. The screenshot is
+actual retrospective output; both owned servers were stopped. This is integration
+evidence, not a fresh raw-data audit, calibrated inference, load test or browser CI.
+
+Full-diff review checked defaults, field/cohort identity, missing/zero handling,
+pre-filter leave-team-out counts, double-counted exclusions, warnings, source/time
+claims and unrelated scope. It added same-source unfiltered and zero-base fixtures,
+kept invalid text distinct from omission, and corrected a clipped evidence image.
+It clarified baseline goal-line wording and scoped the global-exclusion note to
+the selected cohort so population-specific counts are not confused.
+No core/API code, source bytes, dependencies, workflow settings or daily automation
+changed. Exact published SHA, GitHub attribution and CI receipts belong in the
+feature PR; local success alone is not proof of remote CI success.
+
+**Remaining / next:** optional signed whole-point pre-play score controls, composed
+with field position using the existing order. Show selected/baseline per-stage
+missing/outside/retained counts and validate both effective cohorts. Clock controls,
+uncertainty display, downloads, browser CI and broader accessibility remain open.
+Keep the builder canonical, inspect PR/CI before continuing, and never auto-merge.

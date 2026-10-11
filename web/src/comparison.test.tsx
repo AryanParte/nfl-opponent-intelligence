@@ -48,7 +48,7 @@ describe('comparison contract', () => {
     expect(() => parseReport(fixtures.offense.report, query)).toThrow('incompatible report');
     expect(() => parseReport(fixture.report, { ...query, compare_league: false })).toThrow('incompatible report');
     expect(() => parseQuery({ team: 'CAR', season: '2024', before_week: '3', side: 'offense', season_type: 'REG',
-      compare_league: 'true' as unknown as boolean })).toThrow();
+      compare_league: 'true' as unknown as boolean, yardline_min: '', yardline_max: '' })).toThrow();
   });
   it('sends only the explicit opt-in, never bootstrap or filesystem options', async () => {
     vi.mocked(fetch).mockResolvedValue(reply(fixture.report));
