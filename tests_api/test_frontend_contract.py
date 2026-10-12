@@ -40,6 +40,23 @@ QUERIES.update({
     "field_missing_baseline": QUERIES["offense_comparison"] | {"yardline_max": 20},
     "field_all_missing": QUERIES["offense_comparison"] | {"yardline_min": 0},
 })
+QUERIES.update({
+    "score_unfiltered": QUERIES["offense_comparison"],
+    "score_offense": QUERIES["offense"] | {"score_min": -7, "score_max": 0},
+    "score_comparison": QUERIES["offense_comparison"] | {"score_min": -7, "score_max": 0},
+    "score_defense": QUERIES["defense_comparison"] | {"score_min": -7, "score_max": 0},
+    "score_lower_only": QUERIES["offense_comparison"] | {"score_min": 1},
+    "score_upper_only": QUERIES["offense_comparison"] | {"score_max": -7},
+    "score_tied": QUERIES["offense_comparison"] | {"score_min": 0, "score_max": 0},
+    "score_input_limits": QUERIES["offense_comparison"] | {"score_min": -1000, "score_max": 1000},
+    "score_empty": QUERIES["offense_comparison"] | {"score_min": -6, "score_max": -1},
+    "score_all_missing": QUERIES["offense_comparison"] | {"score_max": 0},
+    "score_missing_baseline": QUERIES["offense_comparison"] | {"score_max": 0},
+    "score_missing_epa": QUERIES["offense_comparison"] | {"score_max": 0},
+    "score_field": QUERIES["offense_comparison"] | {"yardline_max": 20.5, "score_min": -7, "score_max": 0},
+    "score_field_defense": QUERIES["defense_comparison"] | {"yardline_max": 20.5, "score_min": -7, "score_max": 0},
+    "score_before_first_week": QUERIES["empty_comparison"] | {"yardline_max": 20.5, "score_max": 0},
+})
 
 
 def field_position_rows(rows, *, missing_baseline=False, all_missing=False):
@@ -60,6 +77,30 @@ def field_position_rows(rows, *, missing_baseline=False, all_missing=False):
     return variant
 
 
+def score_rows(rows, name):
+    """Invented pre-play scores, not substituted outcomes or real observations.
+
+    CAR: scores -7, 0, 7, missing, missing, 14 on the six eligible plays.
+    Add four invented ATL baseline plays: 0 at 20 yards to goal, 7 at 80,
+    missing at missing, missing at 20. Its original play has -7 at 20.
+    With field <=20.5, each population retains 3 then score [-7, 0]
+    retains 2. Missing-at-both is counted at field position, not twice.
+    """
+    scores = {"1": "-7", "2": "0", "3": "7", "10": "-7"}
+    variant = [row | {"score_differential": scores.get(row["play_id"], "")
+        if row["game_id"] == "SYNTHETIC_2024_01_A" else "14"} for row in field_position_rows(rows)]
+    baseline = next(row for row in variant if row["posteam"] == "ATL")
+    for play_id, score, position in (("11", "0", "20"), ("12", "7", "80"),
+                                      ("13", "", ""), ("14", "", "20")):
+        variant.append(baseline | {"play_id": play_id, "score_differential": score, "yardline_100": position})
+    if name == "score_missing_epa":
+        variant = [row | {"epa": ""} for row in variant]
+    if name in ("score_all_missing", "score_missing_baseline"):
+        variant = [row | {"score_differential": ""}
+            if name == "score_all_missing" or row["posteam"] == "ATL" else row for row in variant]
+    return variant
+
+
 def browser_fixtures():
     with tempfile.TemporaryDirectory() as temporary, ExitStack() as stack:
         for target in ("opponent_intelligence.snapshots.urlopen", "socket.create_connection", "socket.socket.connect"):
@@ -77,6 +118,8 @@ def browser_fixtures():
             elif name.startswith("field_"):
                 variant = field_position_rows(rows, missing_baseline=name == "field_missing_baseline",
                                               all_missing=name == "field_all_missing")
+            elif name.startswith("score_"):
+                variant = score_rows(rows, name)
             directory = write_snapshot(Path(temporary), variant, list(variant[0]))
             with TestClient(create_app(snapshot=directory,
                 source_label="Synthetic API/browser fixture; invented observations and provenance, not real NFL data")) as client:
