@@ -19,8 +19,8 @@ snapshot, with bounded options and offline contract tests. A local React/TypeScr
 viewer now exposes basic cohort controls, metrics, warnings and provenance with
 explicit loading/error/empty states. Opt-in matched league comparisons now show
 baseline coverage, denominators, matching situations and percentage-point differences.
-Optional field-position bounds show effective ranges and separate selected/baseline
-missing-position exclusions. Score/clock controls, exploratory uncertainty display, downloads,
+Optional field-position and pre-play score bounds show effective ranges and ordered
+selected/baseline missing-context exclusions. Clock controls, exploratory uncertainty display, downloads,
 adjustment, and deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
 project, with no NFL or team affiliation or predictive-validation claim.
 
@@ -319,7 +319,10 @@ pooled baseline metrics and matched down/distance comparisons. Optional **Minimu
 Maximum yards to goal** fields apply an inclusive offense-relative range to both
 populations. Both blank means no filter; an explicit 0–100 range excludes unknown
 positions. The returned accounting separates missing, outside-range and retained
-plays. Score/clock controls and bootstrap uncertainty are not exposed yet. The view never downloads data or
+plays. Optional **Minimum / Maximum score difference** uses signed whole points
+(offense minus defense before the play), with blank ends unbounded. Field position
+is filtered before score, with separate accounting for each stage and population.
+Clock controls and bootstrap uncertainty are not exposed yet. The view never downloads data or
 substitutes synthetic observations for an API failure. Snapshot timestamps are
 visible, not mislabeled as a live-feed guarantee.
 
@@ -327,7 +330,8 @@ visible, not mislabeled as a live-feed guarantee.
 
 See the [comparison view and its interpretation limits](docs/WEB.md#matched-league-comparison)
 for observed coverage, signed differences and unavailable values, and the
-[field-position view](docs/WEB.md#pre-play-field-position) for defaults and exclusion counts.
+[field-position view](docs/WEB.md#pre-play-field-position) and
+[pre-play score view](docs/WEB.md#pre-play-score-difference) for bounds and exclusion counts.
 
 ## The football decision
 

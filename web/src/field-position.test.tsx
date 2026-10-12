@@ -8,7 +8,7 @@ import { fetchReport, parseQuery, parseReport, type Draft, type Query } from './
 const fixture = fixtures.field_offense_comparison;
 const query = fixture.query as Query;
 const draft: Draft = { team: 'CAR', season: '2024', before_week: '3', side: 'offense', season_type: 'REG',
-  compare_league: true, yardline_min: '', yardline_max: '' };
+  compare_league: true, yardline_min: '', yardline_max: '', score_min: '', score_max: '' };
 const reply = (value: unknown, status = 200) => new Response(JSON.stringify(value), {
   status, headers: { 'content-type': 'application/json' },
 });
@@ -132,7 +132,7 @@ describe('field-position controls and display', () => {
     render(<App />);
     for (const input of bounds()) { expect(input).toHaveValue(''); expect(input).toHaveAttribute('inputmode', 'decimal'); }
     expect(screen.getByText(/Both blank = no field filter/)).toBeVisible();
-    expect(screen.getByText(/Defense mode does not reverse/)).toBeVisible();
+    expect(screen.getByText(/Defense mode does not reverse the coordinates/)).toBeVisible();
     expect(fetch).not.toHaveBeenCalled();
   });
   it.each(['field_offense', 'field_offense_comparison', 'field_defense_comparison', 'field_missing_baseline', 'field_all_missing', 'field_empty', 'field_fractional', 'field_before_first_week'] as const)(
@@ -170,7 +170,7 @@ describe('field-position controls and display', () => {
     setup(); await submit(); await screen.findByRole('article');
     change(bounds()[1], ''); expect(screen.queryByRole('article')).not.toBeInTheDocument();
     expect(fetch).toHaveBeenCalledTimes(1); await submit();
-    expect(await screen.findByText('Field position: unrestricted; missing positions are retained.')).toBeVisible();
+    expect(await screen.findByText('Field position: unrestricted; missing positions are not excluded by field position.')).toBeVisible();
     expect(String(vi.mocked(fetch).mock.lastCall![0])).not.toContain('yardline_');
     expect(screen.queryByRole('region', { name: 'Pre-play field position' })).not.toBeInTheDocument();
   });

@@ -114,6 +114,12 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       Missing column errors, all-missing/empty cohorts, zero versus omission and
       stale edits are covered; 184 frontend tests, 22 API-generated fixtures and
       real-snapshot desktop/mobile browser checks pass. Core/API remain unchanged.
+- [x] Optional pre-play score controls (2026-10-12): inclusive signed whole-point
+      bounds, unbounded omitted ends, ties versus missing scores and unchanged
+      offense-minus-defense signs in either role. Selected/baseline field-then-score
+      ledgers reconcile to final metrics; conditional missingness is not counted
+      twice. 290 frontend tests, 37 endpoint-generated fixtures and real-snapshot
+      desktop/mobile checks pass. No new analytics, API or dependency changes.
 - [ ] Extend the interface with context filters,
       downloadable reports, and visible exploratory uncertainty/support states.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
@@ -122,13 +128,13 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       the first slice has labeled controls, status/alerts and local browser checks,
       not a screen-reader/WCAG audit or browser tests in CI.
 
-Next coherent unit: expose the existing pre-play `score_min` / `score_max` API
-options with signed whole-point bounds, unbounded omitted ends and explicit
-offense-minus-defense interpretation in either role. Compose with field position
-in the existing order, showing separate before/missing/outside/retained counts
-for each stage and population. Extend filtered-cohort identity checks and fixtures;
-keep computation in the builder. Clock controls, uncertainty display, downloads
-and broader browser verification remain separate unfinished slices.
+Next coherent unit: expose the existing pre-play `period`, `clock_min` and
+`clock_max` API options, with explicit Q1–Q4/OT selection and a required period
+for inclusive seconds-remaining bounds. Distinguish zero, missing and omitted
+values; preserve the existing field → score → period → clock order and separate
+selected/baseline stage counts. Extend cohort identity/chain validation and
+endpoint-generated fixtures; keep computation in the builder. Uncertainty
+display, downloads and broader browser verification remain unfinished slices.
 Inspect this branch's PR/CI and reviews before continuing; do not add storage.
 
 ### P1.5 — Operational evidence and case study

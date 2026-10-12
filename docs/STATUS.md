@@ -1,15 +1,16 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-11, P1.4's local viewer adds optional pre-play
-field-position bounds over the existing snapshot API. It displays the returned
-inclusive range and separate selected/baseline before, missing, outside-range and
-retained counts. Blank versus zero/full-range, decimal/default bounds, defense
-coordinates, missing-column errors and stale edits are explicit and tested.
-The existing metrics, comparisons and warnings remain intact.
-See [viewer setup and evidence](WEB.md#pre-play-field-position).
-All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 184 frontend
+As of the scheduled run on 2026-10-12, P1.4's local viewer adds optional signed
+pre-play score bounds over the existing snapshot API. Omitted ends stay unbounded,
+zero means a known tie, and defense mode keeps offense-minus-defense signs.
+Selected/baseline field-then-score accounting distinguishes intermediate and final
+survivors, conditional missingness and pre-context leave-team-out counts. Wrong
+cohorts, order, broken stage links and mismatched final counts fail before display.
+The existing metrics, comparisons, warnings and edit/abort behavior remain intact.
+See [viewer setup and evidence](WEB.md#pre-play-score-difference).
+All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 290 frontend
 tests, clean locked install, type-check/build and real-snapshot browser checks pass
-on Node 24.19.0. All 22 synthetic API/browser fixtures replay offline.
+on Node 24.19.0. All 37 synthetic API/browser fixtures replay offline.
 No formulas, API routes, report defaults, raw bytes, database, deployment or daily
 automation changed. The core CLI still needs no third-party dependencies.
 
@@ -24,14 +25,20 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/field-position-view`, started from updated
-  `origin/main` at `c9b9087` after observing PR #15 merged. Continue this branch's
+- Working branch: `codex/pre-play-score-view`, started from updated
+  `origin/main` at `a83a3c2` after observing PR #16 merged. Continue this branch's
   existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/field-position-view` for its exact published SHA, attribution and CI
+  `codex/pre-play-score-view` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous field-position viewer review: [PR #16](https://github.com/AryanParte/nfl-opponent-intelligence/pull/16),
+  merged at `a83a3c2`; its tree matches feature head `0a957cc`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38160303213)
+  passed all seven jobs. No open PRs or review feedback remained; the prior
+  checkout was clean and matched upstream. Baseline 196 core / 21 API / 184
+  frontend tests passed before implementation.
 - Previous comparison viewer review: [PR #15](https://github.com/AryanParte/nfl-opponent-intelligence/pull/15),
   merged at `c9b9087`; the merge tree matches feature head `a3f1e71`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38094251935)
@@ -106,6 +113,44 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 pre-play score viewer — 2026-10-12
+
+All 290 frontend tests, a clean locked install and type-check/build pass on Node
+24.19.0. All 196 core and 21 API tests pass on Python 3.11/3.12/3.13, with API
+warnings treated as errors and no broken requirements from `pip check`.
+Thirty-seven endpoint-generated synthetic fixtures replay with network blocked;
+the 22 previous fixtures are unchanged. Fifteen additions cover score-only and
+field/score queries in both roles, ties and negative/positive bounds, unbounded
+ends, API input limits, all-missing scores, missing baseline scores/EPA and emptiness.
+Independent count/EPA expectations complement response replay. Both populations'
+metadata, order, count partitions and stage linkage have rejection tests; input,
+stale-edit, clear/rebuild and safe missing-column error behavior is tested.
+
+Six Chrome 154 loopback queries on the unchanged pinned 2024 snapshot passed:
+CAR 2024 REG before week 19, comparison on, with combined field 0–20 / score -7–0
+in both roles; defense lower-only +7; offense upper-only -7; offense ties; and
+cleared filters. Offense counts are selected 984 → 156 → 90 versus baseline
+32,351 → 4,991 → 2,244; defense counts are 1,131 → 218 → 96 versus
+32,204 → 4,929 → 2,238. These sequences mean before field → after field → after
+score; neither stage has missing context for these real cohorts. Cleared overall
+and comparison blocks exactly match the frozen historical report. A partial minus
+sign sends no request. No external browser requests or page errors occurred.
+
+Desktop and 390px mobile layouts were inspected, with no document overflow and
+keyboard scrolling within the score table. The [screenshot](examples/pre-play-score-view.png)
+is actual retrospective output. Both owned servers were stopped. These are local
+integration checks, not a new raw-data audit, browser CI, physical-keyboard/WCAG
+certification, a load test, calibrated inference or a neutral-game definition.
+
+Full-diff self-review replaced the field-only final-count assumption with a
+checked ordered chain and labeled field survivors as intermediate when needed.
+It corrected unrestricted-field text that could imply retention despite a score
+filter, kept missing-column feedback relevant to either context, and used a tight
+tolerance for independently calculated floating-point EPA. Plain text score inputs
+preserve invalid partial signs and avoid numeric keyboard hints that may omit minus.
+The builder, API, source bytes, dependencies, workflows and automation are unchanged.
+Exact-head remote CI, publication and attribution receipts belong in the feature PR.
 
 ### P1.4 field-position viewer — 2026-10-11
 
@@ -469,12 +514,12 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, continue P1.4 with optional pre-play
-`score_min` / `score_max` controls: signed whole points, unbounded omitted ends,
-offense-minus-defense even in defense mode, and field-then-score accounting for
-each population. Extend response identity checks and synthetic fixtures for
-combined filters; keep computation in the existing builder. Clock controls,
-uncertainty display, downloads, browser CI and broader accessibility
+Inspect current PR CI and reviews first. Next, continue P1.4 with existing
+`period` / `clock_min` / `clock_max` options: explicit Q1–Q4/OT, a required period
+for inclusive seconds-remaining bounds, and zero/missing/omitted distinctions.
+Compose field → score → period → clock, with separate population ledgers and
+response identity/chain validation plus endpoint-generated fixtures. Keep the
+builder canonical. Uncertainty display, downloads, browser CI and broader accessibility
 review remain unfinished.
 Do not add storage for this single-snapshot view or imply a public deployment.
 The API must not accept arbitrary paths or fetch per request.

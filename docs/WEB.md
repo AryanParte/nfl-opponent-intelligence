@@ -6,8 +6,8 @@ exclusive cutoff, offense/defense and regular/postseason selection. It displays
 overall metrics, observed down/distance rows, sample flags, all report warnings,
 source timestamps, attribution and fingerprints. An opt-in league comparison adds
 observed baseline coverage, side-by-side measurements and matching situation differences.
-Optional pre-play field-position bounds retain offense-relative coordinates and
-display separate selected/baseline exclusion accounting.
+Optional pre-play field-position and score bounds retain offense-relative
+coordinates/signs and display ordered selected/baseline exclusion accounting.
 It never selects a filesystem path, fetches NFL data, or silently falls back to a
 synthetic response.
 
@@ -70,9 +70,9 @@ API does not justify adding a database for this view.
 ## Display and request contract
 
 - Only the five basic query controls, optional `compare_league=true`, and entered
-  `yardline_min` / `yardline_max` bounds are sent.
+  `yardline_min` / `yardline_max` and `score_min` / `score_max` bounds are sent.
   Comparison starts off and is omitted when unchecked. The API's default warning
-  threshold remains 30. This view does not request score/clock ranges or bootstrap
+  threshold remains 30. This view does not request period/clock ranges or bootstrap
   uncertainty. Unrequested calculations are labeled **not requested**, not zero,
   unavailable confidence, or evidence of no difference.
 - The decoder checks the consumed schema v2 fields, returned cohort against the
@@ -141,19 +141,70 @@ for the selected cohort and, if requested, the other-teams baseline:
 precedes the field filter; comparison excludes the selected team's **pre-filter**
 plays. Counts are not added again to global exclusions. Missing position and
 missing EPA are separate concepts; all rates, games and observed baseline team
-coverage use the retained population. Existing report/baseline warnings stay visible.
+coverage use the final population after every requested filter. When score is
+also filtered, the field table labels its output as an intermediate count.
+Existing report/baseline warnings stay visible.
 An absent source column returns a safe, distinct API error, while a present but
 all-missing field may produce a valid empty cohort. Neither triggers an automatic
 fallback to unfiltered data.
 
 The decoder matches both cohort identities to the submitted effective range,
 offense perspective and missing policy, then verifies nonnegative integer stage
-counts, their reconciliation to displayed plays and baseline temporal/exclusion
+counts, their ordered reconciliation to final plays and baseline temporal/exclusion
 totals. Other unrequested context blocks are still rejected. Inputs deliberately
 preserve malformed text (e.g. `1e`) for validation: a numeric input's
 [HTML value sanitization](https://html.spec.whatwg.org/multipage/input.html#number-state-(type=number))
 can turn invalid numeric text into an empty value, which has a different query
 meaning here. Decimal input-mode hints retain a useful mobile keyboard.
+
+## Pre-play score difference
+
+![Pre-play score accounting after field selection for retrospective CAR offense](examples/pre-play-score-view.png)
+
+Captured on 2026-10-12 from the pinned 2024 snapshot acquired in 2026: CAR offense,
+REG, before week 19, comparison checked, maximum yards to goal 20, and score
+minimum -7 / maximum 0. Selected plays go **984 → 156 → 90**; other-offense baseline
+plays go **32,351 → 4,991 → 2,244** (team/time selection → field → score). Neither
+stage has missing context here. This is an integration example, not a fresh data
+audit, neutral-situation definition, causal effect or historically available forecast.
+
+**Minimum / Maximum score difference** accept signed whole-point notation from
+-1000 to +1000, inclusive. These are the existing API's input limits, not typical
+game scores. Both blank means no score filter; either blank end is **unbounded**,
+returned as JSON `null`, not zero or an invented maximum. Bounds of 0 / 0 select
+known ties, while maximum -1 selects trailing offenses and minimum 1 leading ones.
+Any requested score range excludes unknown pre-play scores. Unknown EPA on a
+retained play still affects only EPA/success denominators. An absent score column
+is a distinct API error, not an empty report or an automatic unfiltered fallback.
+
+The score is **offense points minus defense points before the play**, including
+when viewing defense: -7 means the opposing offense trails the selected defense
+by seven. Each baseline play uses its own offense's perspective. Neither scores
+nor EPA are sign-reversed. There is no post-play substitution or inferred
+possession/win-probability meaning. See [the existing analytical contract](METRICS.md#pre-play-score-ranges).
+
+Team/role/season/exclusive-week selection happens first; when both optional
+filters are requested, **field position precedes score** in each population.
+Each stage satisfies `before = missing + outside_range + after`; the first stage's
+output equals the second stage's input. Score missingness is conditional on field
+survival, not source-wide missingness. A play missing both fields is removed at
+field position only. Final metrics, situations, games and team coverage use the
+last stage's survivors. Leave-team-out exclusion still uses pre-context counts;
+selected losses are already included in global outside-cohort counts.
+
+The decoder rejects wrong score identities/bounds/perspectives, unexpected stages,
+missing/reordered ledgers, disconnected stage counts, and final-count mismatches
+before rendering. Schema v2's older field-only selected shape (without a
+`filter_order`) remains compatible; baselines always declare their active order.
+The browser only validates/renders the returned contract; the builder remains
+the measurement implementation.
+
+Text inputs preserve invalid partial signs rather than sanitizing them into
+blank/unfiltered requests. Score fields use the standard keyboard rather than a
+numeric/decimal hint, because those hints may omit a minus key ([MDN input-mode
+reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inputmode)).
+This is an input-design choice, not a physical-device keyboard audit. As with the
+other controls, editing immediately clears results; only explicit submit fetches.
 
 ## Matched league comparison
 
@@ -167,7 +218,7 @@ This is the existing historical comparison rendered in a browser, not newly
 validated analytics or a completeness guarantee. The source was acquired in 2026.
 
 Both populations use the same season, type, exclusive cutoff and any requested
-field-position bounds/missing policy. Exclusion is by
+field-position and pre-play score bounds/missing policies in the same order. Exclusion is by
 the selected role (`posteam` for offense, `defteam` for defense), not every game
 involving that franchise. Values are pooled over plays, not averaged team rates.
 In defense mode these remain opposing offensive EPA and success allowed, without
@@ -202,9 +253,9 @@ npm run build
 ```
 
 The lockfile pins resolved packages and integrity hashes. Tests use jsdom/Testing
-Library/Vitest with fetch mocked to reject unconfigured network calls. The 22
+Library/Vitest with fetch mocked to reject unconfigured network calls. The 37
 committed synthetic API fixtures cover offense, defense, empty populations,
-missing baseline EPA, baseline-only buckets and field-position controls/accounting,
+missing baseline EPA, baseline-only buckets and field/score controls/accounting,
 with comparison on/off. They
 are never a runtime fallback or bundled sample API. Python API CI regenerates them
 through the actual endpoint with socket/acquisition access blocked and compares
@@ -286,10 +337,36 @@ errors. An initially clipped screenshot was recaptured as the full accounting
 panel above. Both local test servers were stopped. This is local integration
 evidence, not a new source audit, browser CI, load test or accessibility certification.
 
+On 2026-10-12, 290 frontend tests, clean locked install and type-check/build pass
+on Node 24.19.0; 196 core / 21 API tests and dependency checks pass on Python
+3.11/3.12/3.13. Fifteen new synthetic API fixtures cover score-only and combined
+queries in both roles, negative/zero/positive and open bounds, input limits,
+missing score/EPA and empty populations. All 22 previous fixtures are unchanged.
+Independent tiny-fixture expectations verify inclusive ties and overlapping
+missingness; mutation tests reject invalid identity, order, linkage and totals.
+
+Six isolated Chrome 154 loopback queries exercised the real snapshot: combined
+0–20 / -7–0 in both roles, defense lower-only +7, offense upper-only -7, tied
+offense and cleared controls. The defense combined query retains 96 / 218 / 1,131
+selected plays (final / after field / before field), versus 2,238 / 4,929 / 32,204
+baseline plays. Accounting cells match API values. Cleared overall/comparison
+blocks exactly match the frozen historical report. A partial minus sign issues
+no request; no external browser requests or page errors occurred. Desktop and
+390px mobile were inspected, including keyboard table scrolling with no document
+overflow. Both owned servers were stopped afterward. These are local integration
+checks, not browser CI, a load test, statistical calibration or a WCAG audit.
+
+Self-review replaced the field-only final-count assumption with ordered-chain
+validation and marked field survivors as intermediate when score is requested.
+It corrected the unrestricted-field wording (other filters may still remove
+those plays), kept missing-column feedback applicable to either context, and
+used tolerance for an independently calculated floating-point EPA expectation.
+No API/core calculations, dependencies, source bytes or automation changed.
+
 ## Next slice
 
-Add pre-play score controls using the existing signed whole-point API bounds and
-unbounded omitted ends. Preserve offense-minus-defense signs in either role and
-extend both cohorts' identity and ordered field-then-score accounting. Clock controls, uncertainty display,
-downloads and a CI browser demo remain separate P1.4 work; do not mark the whole
+Add existing period/clock options, with explicit Q1–Q4/OT, period required for
+seconds bounds, zero versus missing, and field → score → period → clock accounting
+for both populations. Uncertainty display, downloads and a CI browser demo remain
+separate P1.4 work; do not mark the whole
 product surface complete on the strength of these first viewer slices.

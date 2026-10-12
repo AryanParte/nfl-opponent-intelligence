@@ -1249,3 +1249,73 @@ with field position using the existing order. Show selected/baseline per-stage
 missing/outside/retained counts and validate both effective cohorts. Clock controls,
 uncertainty display, downloads, browser CI and broader accessibility remain open.
 Keep the builder canonical, inspect PR/CI before continuing, and never auto-merge.
+
+## 2026-10-12 — Pre-play score controls and ordered context accounting
+
+**Built / why:** signed whole-point score controls with unbounded blank ends,
+inclusive ties, offense-relative signs in either role, and a returned-score
+accounting panel. Both populations now show field survivors feeding score before
+final metrics. Validation rejects wrong context identities, order, disconnected
+stages and final counts. Existing stale-response, safe-error and explicit-submit
+behavior applies. This makes score-context analysis auditable without new formulas,
+dependencies, downloads, storage or deployment.
+
+Fetched the stable clone, verified PR #16 merged at `a83a3c2` (same tree as
+`0a957cc`) and all seven merged-main CI jobs passed. The previous branch was clean
+and matched upstream; no open PRs/reviews remained. Started `codex/pre-play-score-view`
+from updated `origin/main`; baseline 196 core / 21 API / 184 frontend tests passed.
+
+**Review files:** `web/src/report.ts`, `web/src/ScoreView.tsx`, `web/src/App.tsx`,
+`web/src/FieldPositionView.tsx`, `web/src/score.test.tsx`,
+`tests_api/test_frontend_contract.py`, and `docs/WEB.md` with the real screenshot.
+
+**Sports/statistical concepts:** pre-play offense points minus defense points;
+negative still means the opposing offense trails when viewing defense. Zero is a
+known tie, not missing. Missing score and missing EPA affect different denominators.
+After field selection, score missingness is conditional; a play missing both is
+excluded only once. Final play/game/team coverage describes the intersection, not
+an adjusted, causal, neutral-game or predictive conclusion.
+
+**Software concepts / what to learn:** distinguish invalid text, omitted options,
+nullable unbounded ends and numeric zero. Validate both nested identities and
+ordered count chains; preserve schema v2's older field-only shape. API-generated
+fixtures check interoperability while hand-checkable expectations detect shared
+mistakes. Keep the existing builder as the measurement source, not duplicated UI
+analytics. Client validation complements, never replaces, the API boundary.
+
+**Three review questions:**
+
+1. What does score -7 mean for CAR defense, and why would selecting post-play
+   scores or replacing a missing score with zero change the cohort incorrectly?
+2. Why does a play missing both position and score appear only in the field
+   exclusions, and how do stage counts reconcile with final metrics and baseline exclusion?
+3. How do blank, `0`, and `-` differ at the input/request/response boundaries,
+   and which checks prevent stale or misidentified measurements from appearing?
+
+**Verification / self-review:** 290 frontend tests, clean locked install and
+type-check/build pass on Node 24.19.0. All 196 core / 21 API tests pass on Python
+3.11/3.12/3.13; API warnings are errors and `pip check` passes. Thirty-seven labeled
+synthetic API fixtures replay offline; all 22 previous fixtures are unchanged.
+Fifteen additions cover both roles, standalone/combined context, open ends, ties,
+input limits, missing score/EPA and empty cohorts. Mutation and interaction tests
+cover wrong identity, ordering/linkage, invalid inputs, stale edits and safe errors.
+
+Six isolated Chrome 154 real-snapshot queries passed. For CAR offense before 2024
+REG week 19 with field 0–20 and score -7–0, counts are 984 → 156 → 90; the baseline
+is 32,351 → 4,991 → 2,244. Defense, one-ended positive/negative ranges and ties also
+passed. Clearing filters restores the frozen overall/comparison blocks exactly.
+Desktop/mobile inspection, 390px document width, keyboard table scrolling, invalid
+partial-sign no-fetch behavior and no external requests/page errors passed. Both
+owned servers were stopped; the screenshot is actual retrospective output.
+
+Review corrected field-only final-count/retention assumptions for chained filters,
+made missing-column guidance context-neutral, scoped a duplicate-text test selector
+and used tolerance for a hand-computed floating-point EPA expectation. No analytics,
+API, raw data, dependency, workflow or automation changes. Local checks are not
+remote CI receipts; the published PR records exact SHA, attribution and CI results.
+
+**Remaining / next:** period/clock controls with explicit Q1–Q4/OT, period required
+for seconds bounds, zero/missing distinctions and four-stage population accounting.
+Uncertainty display, downloads, browser CI and broader accessibility remain open.
+No source-availability, calibration, load-test or deployment claim. Inspect this
+branch's PR/reviews before continuing and never auto-merge.
