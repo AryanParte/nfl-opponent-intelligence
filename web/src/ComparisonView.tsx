@@ -46,7 +46,8 @@ export function ComparisonView({ report }: { report: Report }) {
       {' '}{report.cohort.field_position && 'identical inclusive field-position bounds and missing-position exclusion. '}
       {report.cohort.score_differential && 'Identical inclusive pre-play score bounds and missing-score exclusion, in the same offense-relative perspective. '}
       {report.cohort.field_position && report.cohort.score_differential && 'Field position then score, in that order for both populations. '}
-      {!report.cohort.field_position && !report.cohort.score_differential && 'no context filters requested.'}</p>
+      {report.cohort.period && 'Identical period selection and any requested clock bounds, after earlier field/score stages, with the same missing-data policies. '}
+      {!report.cohort.field_position && !report.cohort.score_differential && !report.cohort.period && 'no context filters requested.'}</p>
     <p><strong>{number(population.team_count)} observed baseline teams</strong>: {population.teams.join(', ') || 'none'}.
       {' '}{number(population.shared_games_with_selected)} games shared with the selected cohort.</p>
     <p>Pooled plays, not an average of team rates. Observed coverage does not certify a complete league.

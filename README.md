@@ -19,10 +19,11 @@ snapshot, with bounded options and offline contract tests. A local React/TypeScr
 viewer now exposes basic cohort controls, metrics, warnings and provenance with
 explicit loading/error/empty states. Opt-in matched league comparisons now show
 baseline coverage, denominators, matching situations and percentage-point differences.
-Optional field-position and pre-play score bounds show effective ranges and ordered
-selected/baseline missing-context exclusions. Clock controls, exploratory uncertainty display, downloads,
-adjustment, and deployment remain on the [roadmap](ROADMAP.md). This is an independent portfolio
-project, with no NFL or team affiliation or predictive-validation claim.
+Optional field-position, pre-play score and period/clock controls show effective
+filters and ordered selected/baseline missing-context exclusions. Exploratory
+uncertainty display, downloads, adjustment, and deployment remain on the
+[roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
+team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
 source of truth. The daily workflow continues existing branches and the roadmap,
@@ -322,7 +323,11 @@ positions. The returned accounting separates missing, outside-range and retained
 plays. Optional **Minimum / Maximum score difference** uses signed whole points
 (offense minus defense before the play), with blank ends unbounded. Field position
 is filtered before score, with separate accounting for each stage and population.
-Clock controls and bootstrap uncertainty are not exposed yet. The view never downloads data or
+Optional **Period** selects Q1–Q4 or all overtime periods. **Minimum / Maximum
+seconds remaining** require a period and accept inclusive whole seconds 0–900 at
+play start; a blank end defaults to 0 or 900 when the other is entered. Both blank
+means no clock filter, which can retain missing clocks. Filtering follows field
+→ score → period → clock. Bootstrap uncertainty is not exposed yet. The view never downloads data or
 substitutes synthetic observations for an API failure. Snapshot timestamps are
 visible, not mislabeled as a live-feed guarantee.
 
@@ -330,8 +335,9 @@ visible, not mislabeled as a live-feed guarantee.
 
 See the [comparison view and its interpretation limits](docs/WEB.md#matched-league-comparison)
 for observed coverage, signed differences and unavailable values, and the
-[field-position view](docs/WEB.md#pre-play-field-position) and
-[pre-play score view](docs/WEB.md#pre-play-score-difference) for bounds and exclusion counts.
+[field-position view](docs/WEB.md#pre-play-field-position),
+[pre-play score view](docs/WEB.md#pre-play-score-difference), and
+[period/clock view](docs/WEB.md#pre-play-period-and-clock) for bounds and exclusion counts.
 
 ## The football decision
 

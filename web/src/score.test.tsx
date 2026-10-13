@@ -8,7 +8,7 @@ import { fetchReport, parseQuery, parseReport, type Draft, type Query } from './
 const fixture = fixtures.score_field;
 const query = fixture.query as Query;
 const draft: Draft = { team: 'CAR', season: '2024', before_week: '3', side: 'offense', season_type: 'REG',
-  compare_league: true, yardline_min: '', yardline_max: '', score_min: '', score_max: '' };
+  compare_league: true, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '' };
 const reply = (value: unknown, status = 200) => new Response(JSON.stringify(value), {
   status, headers: { 'content-type': 'application/json' },
 });

@@ -8359,5 +8359,4924 @@
         ]
       }
     }
+  },
+  "time_all_missing_clock": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "61bceca42ae424b452d95f45356095618c2dddfa5314586491174f316dfd8686",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1838,
+            "sha256": "fccf4f1b824ff560f2de86b64330a079ab5763697e630d9e64d89392ed0e7b03",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "fccf4f1b824ff560f2de86b64330a079ab5763697e630d9e64d89392ed0e7b03",
+            "size_bytes": 1838
+          },
+          "decoded_csv": {
+            "sha256": "61bceca42ae424b452d95f45356095618c2dddfa5314586491174f316dfd8686",
+            "size_bytes": 1815
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 22,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "clock_filter": {
+          "plays_before_filter": 8,
+          "missing_quarter_seconds_remaining": 8,
+          "outside_range": 0,
+          "plays_after_filter": 0
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 0,
+        "games": 0,
+        "dropbacks": 0,
+        "designed_runs": 0,
+        "epa_observations": 0,
+        "missing_epa": 0,
+        "dropback_rate": null,
+        "success_rate": null,
+        "epa_per_play": null,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "No eligible plays match this cohort; rates are null, not zero.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 8 of 8 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 2,
+            "outside_range": 0,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 2 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
+  },
+  "time_all_missing_period": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a85e83cd09ce4174a7e1f231e163c2fab273507cda82729a9fc558eac81f44d6",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1860,
+            "sha256": "58acb50281a239f64aac5e96ba64f0ccc26e1630810acf7b1623bbdc8392e603",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "58acb50281a239f64aac5e96ba64f0ccc26e1630810acf7b1623bbdc8392e603",
+            "size_bytes": 1860
+          },
+          "decoded_csv": {
+            "sha256": "a85e83cd09ce4174a7e1f231e163c2fab273507cda82729a9fc558eac81f44d6",
+            "size_bytes": 1837
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 22,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 15,
+          "outside_period": 0,
+          "plays_after_filter": 0
+        },
+        "clock_filter": {
+          "plays_before_filter": 0,
+          "missing_quarter_seconds_remaining": 0,
+          "outside_range": 0,
+          "plays_after_filter": 0
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 0,
+        "games": 0,
+        "dropbacks": 0,
+        "designed_runs": 0,
+        "epa_observations": 0,
+        "missing_epa": 0,
+        "dropback_rate": null,
+        "success_rate": null,
+        "epa_per_play": null,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "No eligible plays match this cohort; rates are null, not zero.",
+        "Missing qtr excluded by period filter: 15 of 15 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 5,
+            "outside_period": 0,
+            "plays_after_filter": 0
+          },
+          "clock_filter": {
+            "plays_before_filter": 0,
+            "missing_quarter_seconds_remaining": 0,
+            "outside_range": 0,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 5 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_before_first_week": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 1,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 1,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 22,
+        "period_filter": {
+          "plays_before_filter": 0,
+          "missing_qtr": 0,
+          "outside_period": 0,
+          "plays_after_filter": 0
+        },
+        "clock_filter": {
+          "plays_before_filter": 0,
+          "missing_quarter_seconds_remaining": 0,
+          "outside_range": 0,
+          "plays_after_filter": 0
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 0,
+        "games": 0,
+        "dropbacks": 0,
+        "designed_runs": 0,
+        "epa_observations": 0,
+        "missing_epa": 0,
+        "dropback_rate": null,
+        "success_rate": null,
+        "epa_per_play": null,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "No eligible plays match this cohort; rates are null, not zero."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 1,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 0,
+          "excluded_selected_team_rows": 0,
+          "plays_before_context_filters": 0,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 0,
+            "missing_qtr": 0,
+            "outside_period": 0,
+            "plays_after_filter": 0
+          },
+          "clock_filter": {
+            "plays_before_filter": 0,
+            "missing_quarter_seconds_remaining": 0,
+            "outside_range": 0,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null."
+        ]
+      }
+    }
+  },
+  "time_defense": {
+    "query": {
+      "team": "ATL",
+      "season": 2024,
+      "before_week": 3,
+      "side": "defense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "ATL",
+        "side": "defense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "allowed",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 17,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "clock_filter": {
+          "plays_before_filter": 8,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 2,
+          "plays_after_filter": 5
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 5,
+        "games": 1,
+        "dropbacks": 3,
+        "designed_runs": 2,
+        "epa_observations": 4,
+        "missing_epa": 1,
+        "dropback_rate": 0.6,
+        "success_rate": 0.75,
+        "epa_per_play": 0.35,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 5,
+          "games": 1,
+          "dropbacks": 3,
+          "designed_runs": 2,
+          "epa_observations": 4,
+          "missing_epa": 1,
+          "dropback_rate": 0.6,
+          "success_rate": 0.75,
+          "epa_per_play": 0.35,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Defense view describes opposing offenses: EPA is not sign-flipped; success still means offensive EPA > 0, not a defensive stop rate.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 8 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "defense",
+          "excluded_team": "ATL",
+          "team_field": "defteam",
+          "teams": [
+            "CAR"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "defense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 1,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 1,
+            "outside_range": 0,
+            "plays_after_filter": 1
+          }
+        },
+        "overall": {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "epa_per_play": 3,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -40,
+          "success_rate_pp": -25,
+          "epa_per_play": -2.65
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 1,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 0,
+              "dropback_rate": 1,
+              "epa_observations": 1,
+              "missing_epa": 0,
+              "epa_per_play": 3,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": -40,
+              "success_rate_pp": -25,
+              "epa_per_play": -2.65
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 1 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
+  },
+  "time_empty_field": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "score_min": -7,
+      "score_max": 0,
+      "yardline_min": 91,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "field_position": {
+          "field": "yardline_100",
+          "minimum_inclusive": 91,
+          "maximum_inclusive": 100,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "score_differential": {
+          "field": "score_differential",
+          "minimum_inclusive": -7,
+          "maximum_inclusive": 0,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 22,
+        "field_position_filter": {
+          "plays_before_filter": 15,
+          "missing_yardline_100": 2,
+          "outside_range": 13,
+          "plays_after_filter": 0
+        },
+        "score_differential_filter": {
+          "plays_before_filter": 0,
+          "missing_score_differential": 0,
+          "outside_range": 0,
+          "plays_after_filter": 0
+        },
+        "period_filter": {
+          "plays_before_filter": 0,
+          "missing_qtr": 0,
+          "outside_period": 0,
+          "plays_after_filter": 0
+        },
+        "clock_filter": {
+          "plays_before_filter": 0,
+          "missing_quarter_seconds_remaining": 0,
+          "outside_range": 0,
+          "plays_after_filter": 0
+        },
+        "filter_order": [
+          "field_position",
+          "score_differential",
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 0,
+        "games": 0,
+        "dropbacks": 0,
+        "designed_runs": 0,
+        "epa_observations": 0,
+        "missing_epa": 0,
+        "dropback_rate": null,
+        "success_rate": null,
+        "epa_per_play": null,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "No eligible plays match this cohort; rates are null, not zero.",
+        "Missing yardline_100 excluded by field-position filter: 2 of 15 base-cohort plays; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "field_position": {
+            "field": "yardline_100",
+            "minimum_inclusive": 91,
+            "maximum_inclusive": 100,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "score_differential": {
+            "field": "score_differential",
+            "minimum_inclusive": -7,
+            "maximum_inclusive": 0,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "field_position",
+            "score_differential",
+            "period",
+            "clock"
+          ],
+          "field_position_filter": {
+            "plays_before_filter": 5,
+            "missing_yardline_100": 1,
+            "outside_range": 4,
+            "plays_after_filter": 0
+          },
+          "score_differential_filter": {
+            "plays_before_filter": 0,
+            "missing_score_differential": 0,
+            "outside_range": 0,
+            "plays_after_filter": 0
+          },
+          "period_filter": {
+            "plays_before_filter": 0,
+            "missing_qtr": 0,
+            "outside_period": 0,
+            "plays_after_filter": 0
+          },
+          "clock_filter": {
+            "plays_before_filter": 0,
+            "missing_quarter_seconds_remaining": 0,
+            "outside_range": 0,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline field_position filter excluded 1 of 5 surviving plays with missing yardline_100; no imputation."
+        ]
+      }
+    }
+  },
+  "time_field_period": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "yardline_max": 20,
+      "period": "Q4"
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "field_position": {
+          "field": "yardline_100",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 20,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 16,
+        "field_position_filter": {
+          "plays_before_filter": 15,
+          "missing_yardline_100": 2,
+          "outside_range": 1,
+          "plays_after_filter": 12
+        },
+        "period_filter": {
+          "plays_before_filter": 12,
+          "missing_qtr": 1,
+          "outside_period": 5,
+          "plays_after_filter": 6
+        },
+        "filter_order": [
+          "field_position",
+          "period"
+        ]
+      },
+      "overall": {
+        "plays": 6,
+        "games": 1,
+        "dropbacks": 4,
+        "designed_runs": 2,
+        "epa_observations": 5,
+        "missing_epa": 1,
+        "dropback_rate": 0.6666666666666666,
+        "success_rate": 0.6,
+        "epa_per_play": 0.32,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 6,
+          "games": 1,
+          "dropbacks": 4,
+          "designed_runs": 2,
+          "epa_observations": 5,
+          "missing_epa": 1,
+          "dropback_rate": 0.6666666666666666,
+          "success_rate": 0.6,
+          "epa_per_play": 0.32,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing yardline_100 excluded by field-position filter: 2 of 15 base-cohort plays; no imputation.",
+        "Missing qtr excluded by period filter: 1 of 12 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "field_position": {
+            "field": "yardline_100",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 20,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 2,
+          "filter_order": [
+            "field_position",
+            "period"
+          ],
+          "field_position_filter": {
+            "plays_before_filter": 5,
+            "missing_yardline_100": 1,
+            "outside_range": 0,
+            "plays_after_filter": 4
+          },
+          "period_filter": {
+            "plays_before_filter": 4,
+            "missing_qtr": 1,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          }
+        },
+        "overall": {
+          "plays": 2,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 1,
+          "dropback_rate": 0.5,
+          "epa_observations": 2,
+          "missing_epa": 0,
+          "epa_per_play": 2.5,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": 16.666666666666664,
+          "success_rate_pp": -40,
+          "epa_per_play": -2.18
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 2,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 1,
+              "dropback_rate": 0.5,
+              "epa_observations": 2,
+              "missing_epa": 0,
+              "epa_per_play": 2.5,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": 16.666666666666664,
+              "success_rate_pp": -40,
+              "epa_per_play": -2.18
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline field_position filter excluded 1 of 5 surviving plays with missing yardline_100; no imputation.",
+          "Baseline period filter excluded 1 of 4 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_four_stage": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "score_min": -7,
+      "score_max": 0,
+      "yardline_max": 20,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "field_position": {
+          "field": "yardline_100",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 20,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "score_differential": {
+          "field": "score_differential",
+          "minimum_inclusive": -7,
+          "maximum_inclusive": 0,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 19,
+        "field_position_filter": {
+          "plays_before_filter": 15,
+          "missing_yardline_100": 2,
+          "outside_range": 1,
+          "plays_after_filter": 12
+        },
+        "score_differential_filter": {
+          "plays_before_filter": 12,
+          "missing_score_differential": 1,
+          "outside_range": 0,
+          "plays_after_filter": 11
+        },
+        "period_filter": {
+          "plays_before_filter": 11,
+          "missing_qtr": 1,
+          "outside_period": 5,
+          "plays_after_filter": 5
+        },
+        "clock_filter": {
+          "plays_before_filter": 5,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 1,
+          "plays_after_filter": 3
+        },
+        "filter_order": [
+          "field_position",
+          "score_differential",
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 3,
+        "games": 1,
+        "dropbacks": 1,
+        "designed_runs": 2,
+        "epa_observations": 2,
+        "missing_epa": 1,
+        "dropback_rate": 0.3333333333333333,
+        "success_rate": 0.5,
+        "epa_per_play": 0.2,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 3,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 2,
+          "epa_observations": 2,
+          "missing_epa": 1,
+          "dropback_rate": 0.3333333333333333,
+          "success_rate": 0.5,
+          "epa_per_play": 0.2,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing yardline_100 excluded by field-position filter: 2 of 15 base-cohort plays; no imputation.",
+        "Missing score_differential excluded by score filter: 1 of 12 plays after team/time and any field-position filter; no imputation.",
+        "Missing qtr excluded by period filter: 1 of 11 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 5 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "field_position": {
+            "field": "yardline_100",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 20,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "score_differential": {
+            "field": "score_differential",
+            "minimum_inclusive": -7,
+            "maximum_inclusive": 0,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 1,
+          "filter_order": [
+            "field_position",
+            "score_differential",
+            "period",
+            "clock"
+          ],
+          "field_position_filter": {
+            "plays_before_filter": 5,
+            "missing_yardline_100": 1,
+            "outside_range": 0,
+            "plays_after_filter": 4
+          },
+          "score_differential_filter": {
+            "plays_before_filter": 4,
+            "missing_score_differential": 0,
+            "outside_range": 0,
+            "plays_after_filter": 4
+          },
+          "period_filter": {
+            "plays_before_filter": 4,
+            "missing_qtr": 1,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 1,
+            "outside_range": 0,
+            "plays_after_filter": 1
+          }
+        },
+        "overall": {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "epa_per_play": 3,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -66.66666666666667,
+          "success_rate_pp": -50,
+          "epa_per_play": -2.8
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 1,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 0,
+              "dropback_rate": 1,
+              "epa_observations": 1,
+              "missing_epa": 0,
+              "epa_per_play": 3,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": -66.66666666666667,
+              "success_rate_pp": -50,
+              "epa_per_play": -2.8
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline field_position filter excluded 1 of 5 surviving plays with missing yardline_100; no imputation.",
+          "Baseline period filter excluded 1 of 4 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 1 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
+  },
+  "time_four_stage_defense": {
+    "query": {
+      "team": "ATL",
+      "season": 2024,
+      "before_week": 3,
+      "side": "defense",
+      "season_type": "REG",
+      "compare_league": true,
+      "score_min": -7,
+      "score_max": 0,
+      "yardline_max": 20,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "ATL",
+        "side": "defense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "field_position": {
+          "field": "yardline_100",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 20,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "score_differential": {
+          "field": "score_differential",
+          "minimum_inclusive": -7,
+          "maximum_inclusive": 0,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "allowed",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 19,
+        "field_position_filter": {
+          "plays_before_filter": 15,
+          "missing_yardline_100": 2,
+          "outside_range": 1,
+          "plays_after_filter": 12
+        },
+        "score_differential_filter": {
+          "plays_before_filter": 12,
+          "missing_score_differential": 1,
+          "outside_range": 0,
+          "plays_after_filter": 11
+        },
+        "period_filter": {
+          "plays_before_filter": 11,
+          "missing_qtr": 1,
+          "outside_period": 5,
+          "plays_after_filter": 5
+        },
+        "clock_filter": {
+          "plays_before_filter": 5,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 1,
+          "plays_after_filter": 3
+        },
+        "filter_order": [
+          "field_position",
+          "score_differential",
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 3,
+        "games": 1,
+        "dropbacks": 1,
+        "designed_runs": 2,
+        "epa_observations": 2,
+        "missing_epa": 1,
+        "dropback_rate": 0.3333333333333333,
+        "success_rate": 0.5,
+        "epa_per_play": 0.2,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 3,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 2,
+          "epa_observations": 2,
+          "missing_epa": 1,
+          "dropback_rate": 0.3333333333333333,
+          "success_rate": 0.5,
+          "epa_per_play": 0.2,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Defense view describes opposing offenses: EPA is not sign-flipped; success still means offensive EPA > 0, not a defensive stop rate.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing yardline_100 excluded by field-position filter: 2 of 15 base-cohort plays; no imputation.",
+        "Missing score_differential excluded by score filter: 1 of 12 plays after team/time and any field-position filter; no imputation.",
+        "Missing qtr excluded by period filter: 1 of 11 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 5 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "defense",
+          "excluded_team": "ATL",
+          "team_field": "defteam",
+          "teams": [
+            "CAR"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "defense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "field_position": {
+            "field": "yardline_100",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 20,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "score_differential": {
+            "field": "score_differential",
+            "minimum_inclusive": -7,
+            "maximum_inclusive": 0,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 1,
+          "filter_order": [
+            "field_position",
+            "score_differential",
+            "period",
+            "clock"
+          ],
+          "field_position_filter": {
+            "plays_before_filter": 5,
+            "missing_yardline_100": 1,
+            "outside_range": 0,
+            "plays_after_filter": 4
+          },
+          "score_differential_filter": {
+            "plays_before_filter": 4,
+            "missing_score_differential": 0,
+            "outside_range": 0,
+            "plays_after_filter": 4
+          },
+          "period_filter": {
+            "plays_before_filter": 4,
+            "missing_qtr": 1,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 1,
+            "outside_range": 0,
+            "plays_after_filter": 1
+          }
+        },
+        "overall": {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "epa_per_play": 3,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -66.66666666666667,
+          "success_rate_pp": -50,
+          "epa_per_play": -2.8
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 1,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 0,
+              "dropback_rate": 1,
+              "epa_observations": 1,
+              "missing_epa": 0,
+              "epa_per_play": 3,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": -66.66666666666667,
+              "success_rate_pp": -50,
+              "epa_per_play": -2.8
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline field_position filter excluded 1 of 5 surviving plays with missing yardline_100; no imputation.",
+          "Baseline period filter excluded 1 of 4 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 1 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
+  },
+  "time_full_clock": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_min": 0,
+      "clock_max": 900
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 900,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 15,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "clock_filter": {
+          "plays_before_filter": 8,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 0,
+          "plays_after_filter": 7
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 7,
+        "games": 1,
+        "dropbacks": 4,
+        "designed_runs": 3,
+        "epa_observations": 5,
+        "missing_epa": 2,
+        "dropback_rate": 0.5714285714285714,
+        "success_rate": 0.6,
+        "epa_per_play": 0.27999999999999997,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 7,
+          "games": 1,
+          "dropbacks": 4,
+          "designed_runs": 3,
+          "epa_observations": 5,
+          "missing_epa": 2,
+          "dropback_rate": 0.5714285714285714,
+          "success_rate": 0.6,
+          "epa_per_play": 0.27999999999999997,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 8 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 900,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 1,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 1,
+            "outside_range": 0,
+            "plays_after_filter": 1
+          }
+        },
+        "overall": {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "epa_per_play": 3,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -42.85714285714286,
+          "success_rate_pp": -40,
+          "epa_per_play": -2.72
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 1,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 0,
+              "dropback_rate": 1,
+              "epa_observations": 1,
+              "missing_epa": 0,
+              "epa_per_play": 3,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": -42.85714285714286,
+              "success_rate_pp": -40,
+              "epa_per_play": -2.72
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 1 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
+  },
+  "time_lower_only": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_min": 900
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 900,
+          "maximum_inclusive": 900,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 21,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "clock_filter": {
+          "plays_before_filter": 8,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 6,
+          "plays_after_filter": 1
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 1,
+        "games": 1,
+        "dropbacks": 0,
+        "designed_runs": 1,
+        "epa_observations": 0,
+        "missing_epa": 1,
+        "dropback_rate": 0,
+        "success_rate": null,
+        "epa_per_play": null,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 0,
+          "designed_runs": 1,
+          "epa_observations": 0,
+          "missing_epa": 1,
+          "dropback_rate": 0,
+          "success_rate": null,
+          "epa_per_play": null,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 8 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 900,
+            "maximum_inclusive": 900,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 1,
+            "outside_range": 1,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 0,
+              "games": 0,
+              "dropbacks": 0,
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "epa_observations": 0,
+              "missing_epa": 0,
+              "epa_per_play": null,
+              "success_rate": null,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "success_rate_pp": null,
+              "epa_per_play": null
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 1 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
+  },
+  "time_missing_baseline_clock": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "53b83a55a6858440461c421449952169b63fe6acb653f5d71aeb8fb96ffc831f",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1874,
+            "sha256": "27b510387946653249b8be5e2f60a48381861551cf34bc842ca728116b3714c5",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "27b510387946653249b8be5e2f60a48381861551cf34bc842ca728116b3714c5",
+            "size_bytes": 1874
+          },
+          "decoded_csv": {
+            "sha256": "53b83a55a6858440461c421449952169b63fe6acb653f5d71aeb8fb96ffc831f",
+            "size_bytes": 1851
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 17,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "clock_filter": {
+          "plays_before_filter": 8,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 2,
+          "plays_after_filter": 5
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 5,
+        "games": 1,
+        "dropbacks": 3,
+        "designed_runs": 2,
+        "epa_observations": 4,
+        "missing_epa": 1,
+        "dropback_rate": 0.6,
+        "success_rate": 0.75,
+        "epa_per_play": 0.35,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 5,
+          "games": 1,
+          "dropbacks": 3,
+          "designed_runs": 2,
+          "epa_observations": 4,
+          "missing_epa": 1,
+          "dropback_rate": 0.6,
+          "success_rate": 0.75,
+          "epa_per_play": 0.35,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 8 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 2,
+            "outside_range": 0,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 0,
+              "games": 0,
+              "dropbacks": 0,
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "epa_observations": 0,
+              "missing_epa": 0,
+              "epa_per_play": null,
+              "success_rate": null,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "success_rate_pp": null,
+              "epa_per_play": null
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 2 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
+  },
+  "time_offense": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": false,
+      "period": "Q4",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 17,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "clock_filter": {
+          "plays_before_filter": 8,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 2,
+          "plays_after_filter": 5
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 5,
+        "games": 1,
+        "dropbacks": 3,
+        "designed_runs": 2,
+        "epa_observations": 4,
+        "missing_epa": 1,
+        "dropback_rate": 0.6,
+        "success_rate": 0.75,
+        "epa_per_play": 0.35,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 5,
+          "games": 1,
+          "dropbacks": 3,
+          "designed_runs": 2,
+          "epa_observations": 4,
+          "missing_epa": 1,
+          "dropback_rate": 0.6,
+          "success_rate": 0.75,
+          "epa_per_play": 0.35,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 8 plays after period selection and any field/score filters; no imputation."
+      ]
+    }
+  },
+  "time_ot": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "OT",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "OT",
+          "minimum_inclusive": 5,
+          "maximum_inclusive": null,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 20,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 11,
+          "plays_after_filter": 2
+        },
+        "clock_filter": {
+          "plays_before_filter": 2,
+          "missing_quarter_seconds_remaining": 0,
+          "outside_range": 0,
+          "plays_after_filter": 2
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 2,
+        "games": 1,
+        "dropbacks": 1,
+        "designed_runs": 1,
+        "epa_observations": 2,
+        "missing_epa": 0,
+        "dropback_rate": 0.5,
+        "success_rate": 0.5,
+        "epa_per_play": -0.09999999999999998,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 2,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 1,
+          "epa_observations": 2,
+          "missing_epa": 0,
+          "dropback_rate": 0.5,
+          "success_rate": 0.5,
+          "epa_per_play": -0.09999999999999998,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "OT",
+            "minimum_inclusive": 5,
+            "maximum_inclusive": null,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 1,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 2,
+            "plays_after_filter": 1
+          },
+          "clock_filter": {
+            "plays_before_filter": 1,
+            "missing_quarter_seconds_remaining": 0,
+            "outside_range": 0,
+            "plays_after_filter": 1
+          }
+        },
+        "overall": {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "dropback_rate": 1,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "epa_per_play": -1,
+          "success_rate": 0,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": -50,
+          "success_rate_pp": 50,
+          "epa_per_play": 0.9
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 1,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 0,
+              "dropback_rate": 1,
+              "epa_observations": 1,
+              "missing_epa": 0,
+              "epa_per_play": -1,
+              "success_rate": 0,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": -50,
+              "success_rate_pp": 50,
+              "epa_per_play": 0.9
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_period": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4"
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 14,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "filter_order": [
+          "period"
+        ]
+      },
+      "overall": {
+        "plays": 8,
+        "games": 1,
+        "dropbacks": 5,
+        "designed_runs": 3,
+        "epa_observations": 6,
+        "missing_epa": 2,
+        "dropback_rate": 0.625,
+        "success_rate": 0.6666666666666666,
+        "epa_per_play": 0.3833333333333333,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 8,
+          "games": 1,
+          "dropbacks": 5,
+          "designed_runs": 3,
+          "epa_observations": 6,
+          "missing_epa": 2,
+          "dropback_rate": 0.625,
+          "success_rate": 0.6666666666666666,
+          "epa_per_play": 0.3833333333333333,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 2,
+          "filter_order": [
+            "period"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          }
+        },
+        "overall": {
+          "plays": 2,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 1,
+          "dropback_rate": 0.5,
+          "epa_observations": 2,
+          "missing_epa": 0,
+          "epa_per_play": 2.5,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": 12.5,
+          "success_rate_pp": -33.333333333333336,
+          "epa_per_play": -2.1166666666666667
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 2,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 1,
+              "dropback_rate": 0.5,
+              "epa_observations": 2,
+              "missing_epa": 0,
+              "epa_per_play": 2.5,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": 12.5,
+              "success_rate_pp": -33.333333333333336,
+              "epa_per_play": -2.1166666666666667
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_period_no_clock": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4"
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a76b2a6ab727ae74411d0b578a792bf6b8f6b62127409ee2c3f3932f7b3f1cb4",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1789,
+            "sha256": "a922c39951a0a693f4cce1f85ddb61e758aca4fa72e278b45096bd71127ea161",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "a922c39951a0a693f4cce1f85ddb61e758aca4fa72e278b45096bd71127ea161",
+            "size_bytes": 1789
+          },
+          "decoded_csv": {
+            "sha256": "a76b2a6ab727ae74411d0b578a792bf6b8f6b62127409ee2c3f3932f7b3f1cb4",
+            "size_bytes": 1766
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 14,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "filter_order": [
+          "period"
+        ]
+      },
+      "overall": {
+        "plays": 8,
+        "games": 1,
+        "dropbacks": 5,
+        "designed_runs": 3,
+        "epa_observations": 6,
+        "missing_epa": 2,
+        "dropback_rate": 0.625,
+        "success_rate": 0.6666666666666666,
+        "epa_per_play": 0.3833333333333333,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 8,
+          "games": 1,
+          "dropbacks": 5,
+          "designed_runs": 3,
+          "epa_observations": 6,
+          "missing_epa": 2,
+          "dropback_rate": 0.625,
+          "success_rate": 0.6666666666666666,
+          "epa_per_play": 0.3833333333333333,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 2,
+          "filter_order": [
+            "period"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          }
+        },
+        "overall": {
+          "plays": 2,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 1,
+          "dropback_rate": 0.5,
+          "epa_observations": 2,
+          "missing_epa": 0,
+          "epa_per_play": 2.5,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": 12.5,
+          "success_rate_pp": -33.333333333333336,
+          "epa_per_play": -2.1166666666666667
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 2,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 1,
+              "dropback_rate": 0.5,
+              "epa_observations": 2,
+              "missing_epa": 0,
+              "epa_per_play": 2.5,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": 12.5,
+              "success_rate_pp": -33.333333333333336,
+              "epa_per_play": -2.1166666666666667
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_q1": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q1"
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q1",
+          "minimum_inclusive": 1,
+          "maximum_inclusive": 1,
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 21,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 12,
+          "plays_after_filter": 1
+        },
+        "filter_order": [
+          "period"
+        ]
+      },
+      "overall": {
+        "plays": 1,
+        "games": 1,
+        "dropbacks": 1,
+        "designed_runs": 0,
+        "epa_observations": 1,
+        "missing_epa": 0,
+        "dropback_rate": 1,
+        "success_rate": 1,
+        "epa_per_play": 0.2,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "dropback_rate": 1,
+          "success_rate": 1,
+          "epa_per_play": 0.2,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q1",
+            "minimum_inclusive": 1,
+            "maximum_inclusive": 1,
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 3,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 0,
+              "games": 0,
+              "dropbacks": 0,
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "epa_observations": 0,
+              "missing_epa": 0,
+              "epa_per_play": null,
+              "success_rate": null,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "success_rate_pp": null,
+              "epa_per_play": null
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_q2": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q2",
+      "clock_max": 120
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q2",
+          "minimum_inclusive": 2,
+          "maximum_inclusive": 2,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 120,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 21,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 12,
+          "plays_after_filter": 1
+        },
+        "clock_filter": {
+          "plays_before_filter": 1,
+          "missing_quarter_seconds_remaining": 0,
+          "outside_range": 0,
+          "plays_after_filter": 1
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 1,
+        "games": 1,
+        "dropbacks": 1,
+        "designed_runs": 0,
+        "epa_observations": 1,
+        "missing_epa": 0,
+        "dropback_rate": 1,
+        "success_rate": 0,
+        "epa_per_play": -0.2,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "dropback_rate": 1,
+          "success_rate": 0,
+          "epa_per_play": -0.2,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q2",
+            "minimum_inclusive": 2,
+            "maximum_inclusive": 2,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 120,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 3,
+            "plays_after_filter": 0
+          },
+          "clock_filter": {
+            "plays_before_filter": 0,
+            "missing_quarter_seconds_remaining": 0,
+            "outside_range": 0,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 0,
+              "games": 0,
+              "dropbacks": 0,
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "epa_observations": 0,
+              "missing_epa": 0,
+              "epa_per_play": null,
+              "success_rate": null,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "success_rate_pp": null,
+              "epa_per_play": null
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_q3": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q3"
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q3",
+          "minimum_inclusive": 3,
+          "maximum_inclusive": 3,
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 21,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 12,
+          "plays_after_filter": 1
+        },
+        "filter_order": [
+          "period"
+        ]
+      },
+      "overall": {
+        "plays": 1,
+        "games": 1,
+        "dropbacks": 1,
+        "designed_runs": 0,
+        "epa_observations": 1,
+        "missing_epa": 0,
+        "dropback_rate": 1,
+        "success_rate": 1,
+        "epa_per_play": 0.1,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 0,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "dropback_rate": 1,
+          "success_rate": 1,
+          "epa_per_play": 0.1,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q3",
+            "minimum_inclusive": 3,
+            "maximum_inclusive": 3,
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 3,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 0,
+              "games": 0,
+              "dropbacks": 0,
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "epa_observations": 0,
+              "missing_epa": 0,
+              "epa_per_play": null,
+              "success_rate": null,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "success_rate_pp": null,
+              "epa_per_play": null
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_score_period": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "score_max": 0,
+      "period": "Q4"
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "score_differential": {
+          "field": "score_differential",
+          "minimum_inclusive": null,
+          "maximum_inclusive": 0,
+          "perspective": "offense",
+          "missing_policy": "exclude"
+        },
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 16,
+        "score_differential_filter": {
+          "plays_before_filter": 15,
+          "missing_score_differential": 2,
+          "outside_range": 1,
+          "plays_after_filter": 12
+        },
+        "period_filter": {
+          "plays_before_filter": 12,
+          "missing_qtr": 1,
+          "outside_period": 5,
+          "plays_after_filter": 6
+        },
+        "filter_order": [
+          "score_differential",
+          "period"
+        ]
+      },
+      "overall": {
+        "plays": 6,
+        "games": 1,
+        "dropbacks": 4,
+        "designed_runs": 2,
+        "epa_observations": 5,
+        "missing_epa": 1,
+        "dropback_rate": 0.6666666666666666,
+        "success_rate": 0.6,
+        "epa_per_play": 0.4,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 6,
+          "games": 1,
+          "dropbacks": 4,
+          "designed_runs": 2,
+          "epa_observations": 5,
+          "missing_epa": 1,
+          "dropback_rate": 0.6666666666666666,
+          "success_rate": 0.6,
+          "epa_per_play": 0.4,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators.",
+        "Missing score_differential excluded by score filter: 2 of 15 plays after team/time and any field-position filter; no imputation.",
+        "Missing qtr excluded by period filter: 1 of 12 plays after team/week and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "score_differential": {
+            "field": "score_differential",
+            "minimum_inclusive": null,
+            "maximum_inclusive": 0,
+            "perspective": "offense",
+            "missing_policy": "exclude"
+          },
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 2,
+          "filter_order": [
+            "score_differential",
+            "period"
+          ],
+          "score_differential_filter": {
+            "plays_before_filter": 5,
+            "missing_score_differential": 0,
+            "outside_range": 0,
+            "plays_after_filter": 5
+          },
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          }
+        },
+        "overall": {
+          "plays": 2,
+          "games": 1,
+          "dropbacks": 1,
+          "designed_runs": 1,
+          "dropback_rate": 0.5,
+          "epa_observations": 2,
+          "missing_epa": 0,
+          "epa_per_play": 2.5,
+          "success_rate": 1,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": 16.666666666666664,
+          "success_rate_pp": -40,
+          "epa_per_play": -2.1
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 2,
+              "games": 1,
+              "dropbacks": 1,
+              "designed_runs": 1,
+              "dropback_rate": 0.5,
+              "epa_observations": 2,
+              "missing_epa": 0,
+              "epa_per_play": 2.5,
+              "success_rate": 1,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": 16.666666666666664,
+              "success_rate_pp": -40,
+              "epa_per_play": -2.1
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation."
+        ]
+      }
+    }
+  },
+  "time_unfiltered": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 7
+      },
+      "overall": {
+        "plays": 15,
+        "games": 1,
+        "dropbacks": 11,
+        "designed_runs": 4,
+        "epa_observations": 13,
+        "missing_epa": 2,
+        "dropback_rate": 0.7333333333333333,
+        "success_rate": 0.6923076923076923,
+        "epa_per_play": 0.19230769230769232,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 15,
+          "games": 1,
+          "dropbacks": 11,
+          "designed_runs": 4,
+          "epa_observations": 13,
+          "missing_epa": 2,
+          "dropback_rate": 0.7333333333333333,
+          "success_rate": 0.6923076923076923,
+          "epa_per_play": 0.19230769230769232,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing EPA is excluded only from EPA and success-rate denominators."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [
+            "ATL"
+          ],
+          "team_count": 1,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 1
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 5,
+          "filter_order": []
+        },
+        "overall": {
+          "plays": 5,
+          "games": 1,
+          "dropbacks": 3,
+          "designed_runs": 2,
+          "dropback_rate": 0.6,
+          "epa_observations": 5,
+          "missing_epa": 0,
+          "epa_per_play": 1,
+          "success_rate": 0.6,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": 13.33333333333333,
+          "success_rate_pp": 9.230769230769232,
+          "epa_per_play": -0.8076923076923077
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 5,
+              "games": 1,
+              "dropbacks": 3,
+              "designed_runs": 2,
+              "dropback_rate": 0.6,
+              "epa_observations": 5,
+              "missing_epa": 0,
+              "epa_per_play": 1,
+              "success_rate": 0.6,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": 13.33333333333333,
+              "success_rate_pp": 9.230769230769232,
+              "epa_per_play": -0.8076923076923077
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents."
+        ]
+      }
+    }
+  },
+  "time_zero": {
+    "query": {
+      "team": "CAR",
+      "season": 2024,
+      "before_week": 3,
+      "side": "offense",
+      "season_type": "REG",
+      "compare_league": true,
+      "period": "Q4",
+      "clock_min": 0,
+      "clock_max": 0
+    },
+    "report": {
+      "schema_version": 2,
+      "source": {
+        "label": "Synthetic API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+        "snapshot": {
+          "schema_version": 1,
+          "season": 2024,
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "source": {
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_tag": "pbp",
+            "release_id": 100,
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "size_bytes": 1879,
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z"
+          },
+          "archive": {
+            "sha256": "924f96a78c01b2890153d761106c40d924d25b67fced0a8e925075c51ed1b6a1",
+            "size_bytes": 1879
+          },
+          "decoded_csv": {
+            "sha256": "170a8e4d468a6e7f8c9c7c94752f558202e6b8061c3f8b8cb197f511e2c44df8",
+            "size_bytes": 1856
+          },
+          "license": {
+            "identifier": "CC-BY-4.0",
+            "url": "https://creativecommons.org/licenses/by/4.0/",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "attribution": "nflverse play-by-play data",
+            "modifications": "Archive retained byte-for-byte; no data transformations."
+          }
+        }
+      },
+      "cohort": {
+        "team": "CAR",
+        "side": "offense",
+        "season": 2024,
+        "season_type": "REG",
+        "before_week_exclusive": 3,
+        "minimum_plays_warning": 30,
+        "period": {
+          "field": "qtr",
+          "label": "Q4",
+          "minimum_inclusive": 4,
+          "maximum_inclusive": 4,
+          "missing_policy": "exclude"
+        },
+        "clock": {
+          "field": "quarter_seconds_remaining",
+          "minimum_inclusive": 0,
+          "maximum_inclusive": 0,
+          "unit": "seconds",
+          "timing": "pre_play",
+          "missing_policy": "exclude"
+        }
+      },
+      "metric_context": {
+        "perspective": "offense",
+        "interpretation": "produced",
+        "success_condition": "epa > 0"
+      },
+      "data_quality": {
+        "input_rows": 23,
+        "eligible_rows_all_teams": 22,
+        "excluded_rows_by_reason": {
+          "non_run_pass": 1
+        },
+        "eligible_rows_outside_cohort": 21,
+        "period_filter": {
+          "plays_before_filter": 15,
+          "missing_qtr": 2,
+          "outside_period": 5,
+          "plays_after_filter": 8
+        },
+        "clock_filter": {
+          "plays_before_filter": 8,
+          "missing_quarter_seconds_remaining": 1,
+          "outside_range": 6,
+          "plays_after_filter": 1
+        },
+        "filter_order": [
+          "period",
+          "clock"
+        ]
+      },
+      "overall": {
+        "plays": 1,
+        "games": 1,
+        "dropbacks": 0,
+        "designed_runs": 1,
+        "epa_observations": 1,
+        "missing_epa": 0,
+        "dropback_rate": 0,
+        "success_rate": 0,
+        "epa_per_play": -0.4,
+        "small_sample": true,
+        "small_epa_sample": true
+      },
+      "situations": [
+        {
+          "plays": 1,
+          "games": 1,
+          "dropbacks": 0,
+          "designed_runs": 1,
+          "epa_observations": 1,
+          "missing_epa": 0,
+          "dropback_rate": 0,
+          "success_rate": 0,
+          "epa_per_play": -0.4,
+          "small_sample": true,
+          "small_epa_sample": true,
+          "down": 1,
+          "distance": "long"
+        }
+      ],
+      "warnings": [
+        "Descriptive completed-play tendencies; no opponent adjustment or causal claims.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Missing qtr excluded by period filter: 2 of 15 plays after team/week and any field/score filters; no imputation.",
+        "Missing quarter_seconds_remaining excluded by clock filter: 1 of 8 plays after period selection and any field/score filters; no imputation."
+      ],
+      "league_comparison": {
+        "population": {
+          "scope": "available_source_only",
+          "side": "offense",
+          "excluded_team": "CAR",
+          "team_field": "posteam",
+          "teams": [],
+          "team_count": 0,
+          "weighting": "pooled_plays",
+          "shared_games_with_selected": 0
+        },
+        "cohort": {
+          "side": "offense",
+          "season": 2024,
+          "season_type": "REG",
+          "before_week_exclusive": 3,
+          "minimum_plays_warning": 30,
+          "period": {
+            "field": "qtr",
+            "label": "Q4",
+            "minimum_inclusive": 4,
+            "maximum_inclusive": 4,
+            "missing_policy": "exclude"
+          },
+          "clock": {
+            "field": "quarter_seconds_remaining",
+            "minimum_inclusive": 0,
+            "maximum_inclusive": 0,
+            "unit": "seconds",
+            "timing": "pre_play",
+            "missing_policy": "exclude"
+          }
+        },
+        "difference_convention": "selected_minus_baseline",
+        "situation_scope": "selected_team_observed_buckets",
+        "data_quality": {
+          "eligible_rows_same_season_type_before_week": 20,
+          "excluded_selected_team_rows": 15,
+          "plays_before_context_filters": 5,
+          "plays_after_context_filters": 0,
+          "filter_order": [
+            "period",
+            "clock"
+          ],
+          "period_filter": {
+            "plays_before_filter": 5,
+            "missing_qtr": 2,
+            "outside_period": 1,
+            "plays_after_filter": 2
+          },
+          "clock_filter": {
+            "plays_before_filter": 2,
+            "missing_quarter_seconds_remaining": 1,
+            "outside_range": 1,
+            "plays_after_filter": 0
+          }
+        },
+        "overall": {
+          "plays": 0,
+          "games": 0,
+          "dropbacks": 0,
+          "designed_runs": 0,
+          "dropback_rate": null,
+          "epa_observations": 0,
+          "missing_epa": 0,
+          "epa_per_play": null,
+          "success_rate": null,
+          "small_sample": true,
+          "small_epa_sample": true
+        },
+        "overall_difference": {
+          "dropback_rate_pp": null,
+          "success_rate_pp": null,
+          "epa_per_play": null
+        },
+        "situations": [
+          {
+            "down": 1,
+            "distance": "long",
+            "baseline": {
+              "plays": 0,
+              "games": 0,
+              "dropbacks": 0,
+              "designed_runs": 0,
+              "dropback_rate": null,
+              "epa_observations": 0,
+              "missing_epa": 0,
+              "epa_per_play": null,
+              "success_rate": null,
+              "small_sample": true,
+              "small_epa_sample": true
+            },
+            "difference": {
+              "dropback_rate_pp": null,
+              "success_rate_pp": null,
+              "epa_per_play": null
+            }
+          }
+        ],
+        "warnings": [
+          "Baseline uses only available source plays; full league coverage is not certified.",
+          "Pooled descriptive differences are not opponent adjustment or predictive validation.",
+          "Overall context mixes may differ; compare matching down/distance rows, not a reweighted overall score.",
+          "Plays within games are dependent; selected and baseline populations may share games and opponents.",
+          "No eligible baseline plays match; baseline rates and differences are null.",
+          "Baseline period filter excluded 2 of 5 surviving plays with missing qtr; no imputation.",
+          "Baseline clock filter excluded 1 of 2 surviving plays with missing quarter_seconds_remaining; no imputation."
+        ]
+      }
+    }
   }
 }
