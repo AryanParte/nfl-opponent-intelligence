@@ -1393,3 +1393,89 @@ selected-only/opt-in comparison support, method/dependence caveats and no browse
 recomputation.
 Downloads, browser CI and broader accessibility remain open. Inspect this branch's
 PR/reviews before continuing; never merge automatically.
+
+## 2026-10-14 — Exploratory uncertainty controls and game-support tables
+
+**Built / why:** opt-in, bounded game-bootstrap controls and returned overall/
+matching-situation intervals over the existing snapshot API. Selected-only and
+comparison reports show contributing games, defined/undefined draws and every
+withheld/unavailable status alongside point estimates. This makes the amount of
+evidence visible without replacing the builder, inferring certainty from missing
+intervals or presenting exploratory bounds as calibrated confidence.
+
+Fetched the canonical clone and verified PR #18 merged at `1b1a37e`, with the same
+tree as `c47ffea` and all seven merged-main CI jobs successful. The prior checkout
+was clean and matched upstream, with no open PRs or review findings. Started
+`codex/uncertainty-view` from updated `origin/main`; baseline 196 core / 21 API /
+418 frontend tests passed. Initial connector transport trouble was bypassed with
+bounded public GitHub reads; the connector later recovered. No repository, access,
+global identity or 8 AM automation settings were changed.
+
+**Review files:** `web/src/uncertainty.ts`, `web/src/UncertaintyView.tsx`,
+`web/src/report.ts`, `web/src/App.tsx`, `web/src/uncertainty.test.tsx`,
+`tests_api/test_frontend_contract.py`, and `docs/WEB.md` with the real screenshot.
+
+**Sports concepts:** game support is not a count of independent plays. Dropbacks
+use games with eligible plays; EPA/success require observed EPA. Both populations
+use the same cohort filters and offensive sign, including defense mode. Shared
+games appear once in the comparison resampling union, and missing matching
+baseline buckets never borrow overall support. Repeated teams/opponents still
+create cross-game dependence that whole-game resampling does not remove.
+
+**Software/statistical concepts / what to learn:** omitted repetitions, seed zero,
+invalid text and requested-but-undefined output are different states. Gate
+precedence, paired valid counts, per-metric support and subset consistency belong
+in a defensive transport boundary. Differences are computed within shared draws,
+not by subtracting endpoints. Percentile bounds need not contain the original
+estimate; pointwise nominal 95% does not mean simultaneous or calibrated coverage.
+More draws add computation, not games. A seed needs the same source/cohort/runtime
+for replay, and client cancellation does not cancel server computation.
+
+**Three review questions:**
+
+1. Why does CAR's 17-game selected sample with 272 baseline games use a 272-game
+   union, and why can enabling comparison change the selected interval?
+2. How can a valid point estimate have a withheld interval, and how do zero EPA
+   support, fewer than five games, too few defined draws and degeneracy differ?
+3. Why must paired differences use the same draws, and which checks prevent
+   wrong-query results, impossible support counts or stale responses from display?
+
+**Verification / self-review:** 545 frontend tests, clean locked installation and
+type-check/build pass on Node 24.19.0. All 196 core / 22 API tests pass on Python
+3.11/3.12/3.13, with API warnings as errors and clean dependency checks. Thirteen
+new synthetic fixtures replay through the actual endpoint with networking blocked;
+all 58 previous fixtures are unchanged. Two explicitly labeled controlled-RNG
+cases check 189/200 versus 190/200 defined draws, not real seed behavior or
+calibration. Independent pooled/support counts and contract mutations cover all
+statuses, both roles, empty frames, missing EPA/buckets, limits and context queries.
+UI tests cover explicit retry, invalid text, unsafe warning text, clearing controls
+and ignored stale responses. A bootstrap-on/off comparison proves filtered
+estimates and accounting are unchanged.
+
+Eight isolated Chrome 155 loopback queries passed on the pinned retrospective
+2024 snapshot. The CAR offense comparison at 1000 draws / seed 20261006 exactly
+matches frozen uncertainty, overall and comparison blocks. Selected-only, defense,
+maximum seed, four-stage filtered and empty-frame cases also pass. The filtered
+defense has three plays in one game: bounds are withheld with 130 defined and 70
+undefined draws. The filtered offense is empty while its baseline is observed;
+before-week-1 performs zero draws. Clearing controls restores frozen measurements.
+Invalid text/seed-only requests never fetch. Desktop and 390px mobile layout,
+keyboard table scrolling and zero external page requests/errors passed; owned
+servers were stopped. These are local integration checks, not browser CI, load,
+screen-reader or statistical calibration evidence.
+
+Complete-diff review tightened full-frame, subset and paired support checks,
+matched the combined-filter fixture cutoff to its no-bootstrap counterpart, and
+kept displayed seeds ungrouped for copyable replay. One test's minus-sign expectation
+was corrected to the existing ASCII format; relevant checks reran. No analytics,
+API/core, dependencies, source bytes, CI workflow or automation changed. Consult
+the published PR for exact SHA, GitHub attribution and remote CI receipts; local
+tests alone do not establish remote verification.
+
+**Remaining / next:** download the current validated schema-v2 JSON from the
+viewer, preserving all provenance and optional contexts/comparison/uncertainty.
+Use a safe cohort filename, no extra request, no stale/loading/error export, and
+object-URL cleanup. Test a saved file through the existing offline brief renderer;
+do not reimplement it in JavaScript. Broader accessibility/browser CI, calibration,
+historical availability and deployment remain open. Inspect this branch's PR and
+reviews before continuing; never auto-merge.

@@ -4,12 +4,13 @@ import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
 import { ScoreView } from './ScoreView';
 import { TimeView } from './TimeView';
+import { UncertaintyView } from './UncertaintyView';
 
 export const REQUEST_TIMEOUT_MS = 15_000;
 type State = { kind: 'idle' | 'loading' } | { kind: 'error'; message: string }
   | { kind: 'ready'; report: Report };
 const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG',
-  compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '' };
+  compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '', bootstrap_repetitions: '', bootstrap_seed: '' };
 
 function ReportView({ report }: { report: Report }) {
   const { overall: m, cohort, source } = report;
@@ -61,6 +62,7 @@ function ReportView({ report }: { report: Report }) {
       <p className="muted">Count warning threshold: {cohort.minimum_plays_warning}. Absence of a flag does not establish statistical reliability.</p>
     </section>
     <ComparisonView report={report} />
+    <UncertaintyView report={report} />
     <section className="panel source" aria-labelledby="source-title">
       <div className="section-heading"><h3 id="source-title">Source &amp; availability</h3><span>Report schema v{report.schema_version}</span></div>
       <p className="source-label">{source.label}</p>
@@ -79,7 +81,7 @@ function ReportView({ report }: { report: Report }) {
     <section className="notice" aria-labelledby="warnings-title">
       <h3 id="warnings-title">Read before interpreting</h3>
       <p>League comparison: <strong>{report.league_comparison ? 'requested; shown above' : 'not requested'}</strong>.
-        {' '}Uncertainty: <strong>not requested</strong>. This view does not request bootstrap calculations.</p>
+        {' '}Uncertainty: <strong>{report.uncertainty ? 'requested; support and limitations shown above' : 'not requested'}</strong>.</p>
       <p>Overall sample flags: {m.small_sample ? 'few plays' : 'no play-count flag'}; {m.small_epa_sample ? 'few EPA observations' : 'no EPA-count flag'}.</p>
       {report.warnings.length > 0 && <ul>{report.warnings.map((warning, i) => <li key={i}>{warning}</li>)}</ul>}
       <p>Descriptive history only—not opponent adjustment, a forecast, calibrated inference or a scouting recommendation.</p>
@@ -202,6 +204,18 @@ export function App() {
           onChange={(e) => edit('compare_league', e.target.checked)} aria-describedby="comparison-help" />
           Compare with other teams in the same role</label>
         <p id="comparison-help" className="muted">Optional pooled baseline from available source plays. Does not request uncertainty calculations.</p>
+        <fieldset className="field-controls" aria-describedby="bootstrap-help">
+          <legend>Exploratory game bootstrap (optional)</legend>
+          <div className="field-inputs">
+            <label>Bootstrap repetitions<input name="bootstrap_repetitions" type="text" inputMode="numeric" autoComplete="off"
+              value={draft.bootstrap_repetitions} onChange={e => edit('bootstrap_repetitions', e.target.value)} aria-describedby="bootstrap-help" /></label>
+            <label>Bootstrap seed<input name="bootstrap_seed" type="text" inputMode="numeric" autoComplete="off"
+              value={draft.bootstrap_seed} onChange={e => edit('bootstrap_seed', e.target.value)} aria-describedby="bootstrap-help" /></label>
+          </div>
+          <p id="bootstrap-help" className="muted">Whole repetitions 200–1000 opt in; both blank means not requested. Seed 0–4294967295 requires repetitions;
+            blank seed defaults to 0. Works with or without comparison. More draws add computation, not observed games or statistical reliability.
+            Bounds are exploratory, not calibrated confidence. Editing clears results; aborting or timing out does not stop server computation.</p>
+        </fieldset>
         <div className="form-footer"><div><p id="cutoff-help">Exclusive cutoff: only weeks strictly before this week are included.</p>
           <p id="query-help" className="muted">Use source team codes. The API's operator selects the local season snapshot, not this form.</p></div>
           <button type="submit" disabled={state.kind === 'loading'}>{state.kind === 'loading' ? 'Building…' : 'Build report'} <span aria-hidden="true">→</span></button></div>

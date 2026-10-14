@@ -20,8 +20,9 @@ viewer now exposes basic cohort controls, metrics, warnings and provenance with
 explicit loading/error/empty states. Opt-in matched league comparisons now show
 baseline coverage, denominators, matching situations and percentage-point differences.
 Optional field-position, pre-play score and period/clock controls show effective
-filters and ordered selected/baseline missing-context exclusions. Exploratory
-uncertainty display, downloads, adjustment, and deployment remain on the
+filters and ordered selected/baseline missing-context exclusions. Bounded, opt-in
+game-bootstrap controls show exploratory intervals, per-metric game support and
+explicit unavailable/withheld states. Downloads, adjustment, and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 
@@ -327,7 +328,11 @@ Optional **Period** selects Q1–Q4 or all overtime periods. **Minimum / Maximum
 seconds remaining** require a period and accept inclusive whole seconds 0–900 at
 play start; a blank end defaults to 0 or 900 when the other is entered. Both blank
 means no clock filter, which can retain missing clocks. Filtering follows field
-→ score → period → clock. Bootstrap uncertainty is not exposed yet. The view never downloads data or
+→ score → period → clock. Optional **Bootstrap repetitions** (200–1000) and **Bootstrap
+seed** (0–4294967295, default 0) expose the existing exploratory game-level intervals.
+Both blank means not requested; seed alone is invalid. Overall and matching
+situation tables show support, defined/undefined draws and withheld intervals,
+not calibrated confidence or predictions. The view never downloads data or
 substitutes synthetic observations for an API failure. Snapshot timestamps are
 visible, not mislabeled as a live-feed guarantee.
 
@@ -338,6 +343,8 @@ for observed coverage, signed differences and unavailable values, and the
 [field-position view](docs/WEB.md#pre-play-field-position),
 [pre-play score view](docs/WEB.md#pre-play-score-difference), and
 [period/clock view](docs/WEB.md#pre-play-period-and-clock) for bounds and exclusion counts.
+The [uncertainty view](docs/WEB.md#exploratory-game-level-uncertainty) explains
+paired differences, distinct game support and why withheld bounds are not certainty.
 
 ## The football decision
 

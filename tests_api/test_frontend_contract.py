@@ -1,8 +1,10 @@
 """Freeze actual API responses for browser tests without shipping a fake live API."""
 
 from contextlib import ExitStack
+from argparse import ArgumentParser
 import csv
 import json
+from itertools import chain
 from pathlib import Path
 import tempfile
 import unittest
@@ -174,17 +176,64 @@ def time_rows(rows, name):
     return variant
 
 
-def browser_fixtures():
+UNCERTAINTY_QUERIES = {
+    name: QUERIES["offense_comparison"] | {"before_week": 19, "bootstrap_repetitions": 200, "bootstrap_seed": 7}
+    for name in ("selected", "comparison", "defense", "empty", "missing_epa", "partial_epa", "many_games",
+                 "sparse_draws", "valid_boundary", "small", "baseline_only_bucket", "context", "empty_selected")
+}
+UNCERTAINTY_QUERIES["selected"].update(compare_league=False)
+del UNCERTAINTY_QUERIES["selected"]["bootstrap_seed"]  # Exercise the API's default zero seed.
+UNCERTAINTY_QUERIES["defense"].update(team="ATL", side="defense", bootstrap_repetitions=1000, bootstrap_seed=4294967295)
+UNCERTAINTY_QUERIES["empty"].update(before_week=1)
+UNCERTAINTY_QUERIES["empty_selected"].update(team="ZZZ")
+UNCERTAINTY_QUERIES["small"].update(before_week=3)
+UNCERTAINTY_QUERIES["context"].update(before_week=3, yardline_max=20, score_min=-7, score_max=0, period="Q4", clock_max=120)
+
+
+def uncertainty_rows(rows, name):
+    """Invented game clusters; all values and provenance remain synthetic.
+
+    In five shared games CAR has 1..5 plays/game, EPA -2..2, alternating
+    pass/run. ATL has opposite play types and EPA +3 above CAR. Thus CAR
+    has 15 plays, 9 dropbacks, 9 EPA-positive plays and EPA sum 10; the
+    paired EPA difference is exactly -3, a degenerate interval (not certainty).
+    Sparse-draw cases add 15 baseline-only games for a controlled RNG test.
+    """
+    if name == "small":
+        return rows
+    if name == "context":
+        return time_rows(rows, "time_four_stage")
+    variant = []
+    for game in range(20 if name == "many_games" else 5):
+        for play in range(game % 5 + 1):
+            for team, defense, offset in (("CAR", "ATL", 0), ("ATL", "CAR", 100)):
+                passing = (game % 2 == 0) == (team == "CAR")
+                epa = str(game % 5 - 2 + (3 if team == "ATL" else 0))
+                if team == "CAR" and (name == "missing_epa" or (name == "partial_epa" and game != 0)):
+                    epa = ""
+                variant.append(rows[0] | {"game_id": f"SYNTHETIC_BOOT_{game:02}", "play_id": str(play + offset),
+                    "week": str(game % 18 + 1), "posteam": team, "defteam": defense,
+                    "play_type": "pass" if passing else "run", "qb_dropback": "1" if passing else "0", "epa": epa,
+                    "down": "4" if name == "baseline_only_bucket" and team == "ATL" else "1",
+                    "ydstogo": "1" if name == "baseline_only_bucket" and team == "ATL" else "10"})
+    if name in ("sparse_draws", "valid_boundary"):
+        variant.extend(variant[-1] | {"game_id": f"SYNTHETIC_BOOT_{game:02}", "epa": "1"} for game in range(5, 20))
+    return variant
+
+
+def browser_fixtures(queries=QUERIES, *, uncertainty=False):
     with tempfile.TemporaryDirectory() as temporary, ExitStack() as stack:
         for target in ("opponent_intelligence.snapshots.urlopen", "socket.create_connection", "socket.socket.connect"):
             stack.enter_context(patch(target, side_effect=AssertionError("network forbidden")))
         with (ROOT / "tests/fixtures/synthetic_pbp.csv").open(newline="") as source:
             rows = [row for row in csv.DictReader(source) if row["season"] == "2024"]
         result = {}
-        for name, query in QUERIES.items():
+        for name, query in queries.items():
             # All variants remain invented observations, never altered real data.
             variant = rows
-            if name == "missing_epa_comparison":
+            if uncertainty:
+                variant = uncertainty_rows(rows, name)
+            elif name == "missing_epa_comparison":
                 variant = [row | {"epa": ""} if row["posteam"] == "ATL" else row for row in rows]
             elif name == "baseline_only_bucket_comparison":
                 variant = [row | {"down": "4", "ydstogo": "1"} if row["posteam"] == "ATL" else row for row in rows]
@@ -196,8 +245,18 @@ def browser_fixtures():
             elif name.startswith("time_"):
                 variant = time_rows(rows, name)
             directory = write_snapshot(Path(temporary), variant, list(variant[0]))
-            with TestClient(create_app(snapshot=directory,
-                source_label="Synthetic API/browser fixture; invented observations and provenance, not real NFL data")) as client:
+            label = "Synthetic API/browser fixture; invented observations and provenance, not real NFL data"
+            controlled = uncertainty and name in ("sparse_draws", "valid_boundary")
+            if controlled:
+                label += "; deliberately controlled draws replace RNG to test the valid-replicate gate (not a seed replay)"
+            with ExitStack() as request_stack, TestClient(create_app(snapshot=directory, source_label=label)) as client:
+                if controlled:
+                    # Force 11/200 or 10/200 undefined CAR draws, then alternate
+                    # whole draws of shared games 00/04. No response JSON mutation.
+                    missing = 11 if name == "sparse_draws" else 10
+                    indices = [19] * missing + [0 if i % 2 else 4 for i in range(200 - missing)]
+                    generator = request_stack.enter_context(patch("opponent_intelligence.uncertainty.Random"))
+                    generator.return_value.randrange.side_effect = chain.from_iterable([i] * 20 for i in indices)
                 params = {key: str(value).lower() if isinstance(value, bool) else value for key, value in query.items()}
                 response = client.get("/v1/report", params=params)
             if response.status_code != 200:
@@ -211,7 +270,15 @@ class FrontendContractTests(unittest.TestCase):
         expected = json.loads((ROOT / "web/src/__fixtures__/reports.json").read_text())
         self.assertEqual(browser_fixtures(), expected)
 
+    def test_committed_uncertainty_fixtures_match_actual_api(self):
+        expected = json.loads((ROOT / "web/src/__fixtures__/uncertainty-reports.json").read_text())
+        self.assertEqual(browser_fixtures(UNCERTAINTY_QUERIES, uncertainty=True), expected)
+
 
 if __name__ == "__main__":
     # Emit to stdout for an explicit, reviewed fixture update; never fetch data.
-    print(json.dumps(browser_fixtures(), indent=2, sort_keys=True, allow_nan=False))
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("--uncertainty", action="store_true", help="emit the separate uncertainty fixture set")
+    options = parser.parse_args()
+    queries = UNCERTAINTY_QUERIES if options.uncertainty else QUERIES
+    print(json.dumps(browser_fixtures(queries, uncertainty=options.uncertainty), indent=2, sort_keys=True, allow_nan=False))

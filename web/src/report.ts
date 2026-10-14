@@ -1,4 +1,5 @@
 /** Validate only this view's consumed contract; do not recompute analytics. */
+import { validUncertainty, type Uncertainty } from './uncertainty';
 export const PERIODS = ['Q1', 'Q2', 'Q3', 'Q4', 'OT'] as const;
 export type Query = {
   team: string; season: number; before_week: number;
@@ -7,6 +8,7 @@ export type Query = {
   yardline_min?: number; yardline_max?: number;
   score_min?: number; score_max?: number;
   period?: typeof PERIODS[number]; clock_min?: number; clock_max?: number;
+  bootstrap_repetitions?: number; bootstrap_seed?: number;
 };
 export type Draft = { [Key in Exclude<keyof Query, 'compare_league'>]: string } & { compare_league: boolean };
 export type FieldPosition = { field: 'yardline_100'; minimum_inclusive: number; maximum_inclusive: number;
@@ -49,6 +51,7 @@ export type Report = {
   situations: (Metrics & { down: number; distance: 'short' | 'medium' | 'long' })[];
   warnings: string[];
   league_comparison?: Comparison;
+  uncertainty?: Uncertainty;
 };
 export type Difference = { dropback_rate_pp: number | null; success_rate_pp: number | null; epa_per_play: number | null };
 export type Comparison = {
@@ -109,11 +112,17 @@ export function parseQuery(draft: Draft): Query {
     throw new Error('Choose an explicit period before using clock bounds. Clear both clock bounds for unrestricted periods.');
   }
   if ((clockLower ?? 0) > (clockUpper ?? 900)) throw new Error('Minimum seconds remaining must not exceed maximum seconds remaining.');
+  const repetitions = draft.bootstrap_repetitions.trim(), seed = draft.bootstrap_seed.trim();
+  if ((repetitions !== '' && !whole(repetitions, 200, 1000)) || (seed !== '' && !whole(seed, 0, 4294967295))) {
+    throw new Error('Bootstrap repetitions must be whole numbers from 200 to 1000; seed must be a whole number from 0 to 4294967295. Leave both blank for no uncertainty.');
+  }
+  if (seed !== '' && repetitions === '') throw new Error('Bootstrap seed requires repetitions. Clear both fields to omit uncertainty.');
   return { team: draft.team, season: Number(draft.season), before_week: Number(draft.before_week),
     ...(lower === undefined ? {} : { yardline_min: lower }), ...(upper === undefined ? {} : { yardline_max: upper }),
     ...(scoreLower === undefined ? {} : { score_min: scoreLower }), ...(scoreUpper === undefined ? {} : { score_max: scoreUpper }),
     ...(draft.period === '' ? {} : { period: draft.period as Query['period'] }),
     ...(clockLower === undefined ? {} : { clock_min: clockLower }), ...(clockUpper === undefined ? {} : { clock_max: clockUpper }),
+    ...(repetitions === '' ? {} : { bootstrap_repetitions: Number(repetitions) }), ...(seed === '' ? {} : { bootstrap_seed: Number(seed) }),
     side: draft.side as Query['side'], season_type: draft.season_type as Query['season_type'], compare_league: draft.compare_league };
 }
 
@@ -291,8 +300,7 @@ export function parseReport(value: unknown, query: Query): Report {
       || cohort.minimum_plays_warning !== 30 || Object.keys(cohort).length !== 6 + contextCount(contexts)
       || contextKeys.some(key => !sameContext(cohort[key], contexts[key]))
       || context.interpretation !== (query.side === 'defense' ? 'allowed' : 'produced')
-      || context.perspective !== 'offense' || context.success_condition !== 'epa > 0'
-      || 'uncertainty' in value) return fail();
+      || context.perspective !== 'offense' || context.success_condition !== 'epa > 0') return fail();
   const snapshot = source.snapshot;
   if (typeof source.label !== 'string' || !source.label.trim() || !hash(source.sha256)
       || !object(snapshot) || !timestamp(snapshot.retrieved_at_utc) || !object(snapshot.archive)
@@ -315,6 +323,8 @@ export function parseReport(value: unknown, query: Query): Report {
         .some((key) => situations.reduce((n, row) => n + row[key], 0) !== overall[key])) return fail();
   if (query.compare_league ? !comparison(value.league_comparison, value as unknown as Report)
     : 'league_comparison' in value) return fail();
+  if (query.bootstrap_repetitions === undefined ? 'uncertainty' in value
+    : !validUncertainty(value.uncertainty, value as unknown as Report, query)) return fail();
   return value as unknown as Report;
 }
 
@@ -337,6 +347,8 @@ export async function fetchReport(query: Query, signal: AbortSignal): Promise<Re
   if (query.period !== undefined) params.set('period', query.period);
   if (query.clock_min !== undefined) params.set('clock_min', String(query.clock_min));
   if (query.clock_max !== undefined) params.set('clock_max', String(query.clock_max));
+  if (query.bootstrap_repetitions !== undefined) params.set('bootstrap_repetitions', String(query.bootstrap_repetitions));
+  if (query.bootstrap_seed !== undefined) params.set('bootstrap_seed', String(query.bootstrap_seed));
   const response = await fetch(`/api/v1/report?${params}`, {
     signal, credentials: 'omit', cache: 'no-store', redirect: 'error',
   });
