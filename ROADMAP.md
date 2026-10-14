@@ -120,21 +120,26 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       ledgers reconcile to final metrics; conditional missingness is not counted
       twice. 290 frontend tests, 37 endpoint-generated fixtures and real-snapshot
       desktop/mobile checks pass. No new analytics, API or dependency changes.
-- [ ] Extend the interface with context filters,
-      downloadable reports, and visible exploratory uncertainty/support states.
+- [x] Optional pre-play period/clock controls (2026-10-13): explicit Q1–Q4/OT,
+      whole seconds with a required period, omitted-end defaults and zero/missing
+      distinctions. Period-only selection can retain missing clocks. Both
+      populations' field → score → period → clock ledgers reconcile to final
+      metrics; 418 frontend tests, 58 endpoint-generated fixtures and real-snapshot
+      desktop/mobile checks pass. Existing analytics/API/dependencies are unchanged.
+- [ ] Add downloadable reports and visible exploratory uncertainty/support states.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
       record the decision. Keep a small modular service before adding components.
 - [ ] Broader accessibility review and a repeatable CI browser/end-to-end demo;
       the first slice has labeled controls, status/alerts and local browser checks,
       not a screen-reader/WCAG audit or browser tests in CI.
 
-Next coherent unit: expose the existing pre-play `period`, `clock_min` and
-`clock_max` API options, with explicit Q1–Q4/OT selection and a required period
-for inclusive seconds-remaining bounds. Distinguish zero, missing and omitted
-values; preserve the existing field → score → period → clock order and separate
-selected/baseline stage counts. Extend cohort identity/chain validation and
-endpoint-generated fixtures; keep computation in the builder. Uncertainty
-display, downloads and broader browser verification remain unfinished slices.
+Next coherent unit: expose the existing opt-in exploratory game-bootstrap API
+options and returned uncertainty/support states. Bound repetitions/seed using the
+existing API limits, support selected-only and opt-in comparison reports, retain
+not-requested/withheld/undefined distinctions, and show per-metric support plus
+method/dependence warnings. Extend response validation and endpoint-generated fixtures without computing intervals
+in the browser or implying calibrated confidence. Downloads and broader browser
+verification remain unfinished slices.
 Inspect this branch's PR/CI and reviews before continuing; do not add storage.
 
 ### P1.5 — Operational evidence and case study

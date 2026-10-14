@@ -1,16 +1,17 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-12, P1.4's local viewer adds optional signed
-pre-play score bounds over the existing snapshot API. Omitted ends stay unbounded,
-zero means a known tie, and defense mode keeps offense-minus-defense signs.
-Selected/baseline field-then-score accounting distinguishes intermediate and final
-survivors, conditional missingness and pre-context leave-team-out counts. Wrong
-cohorts, order, broken stage links and mismatched final counts fail before display.
-The existing metrics, comparisons, warnings and edit/abort behavior remain intact.
-See [viewer setup and evidence](WEB.md#pre-play-score-difference).
-All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 290 frontend
+As of the scheduled run on 2026-10-13, P1.4's local viewer adds explicit Q1–Q4/OT
+and optional inclusive whole-second clock bounds over the existing snapshot API.
+Clock bounds require a period; blank ends resolve to 0/900 only when a bound is
+entered. Zero is observed, not missing; period-only selection can retain missing
+clocks. Selected/baseline field → score → period → clock accounting distinguishes
+intermediate and final survivors, conditional missingness and pre-context
+leave-team-out counts. Wrong identities, order, broken links and mismatched final
+counts fail before display. Existing metrics, warnings and edit/abort behavior remain.
+See [viewer setup and evidence](WEB.md#pre-play-period-and-clock).
+All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 418 frontend
 tests, clean locked install, type-check/build and real-snapshot browser checks pass
-on Node 24.19.0. All 37 synthetic API/browser fixtures replay offline.
+on Node 24.19.0. All 58 synthetic API/browser fixtures replay offline.
 No formulas, API routes, report defaults, raw bytes, database, deployment or daily
 automation changed. The core CLI still needs no third-party dependencies.
 
@@ -25,14 +26,20 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/pre-play-score-view`, started from updated
-  `origin/main` at `a83a3c2` after observing PR #16 merged. Continue this branch's
+- Working branch: `codex/period-clock-view`, started from updated
+  `origin/main` at `4872669` after observing PR #17 merged. Continue this branch's
   existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/pre-play-score-view` for its exact published SHA, attribution and CI
+  `codex/period-clock-view` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous score viewer review: [PR #17](https://github.com/AryanParte/nfl-opponent-intelligence/pull/17),
+  merged at `4872669`; its tree matches feature head `4e402a1`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38312899520)
+  passed all seven jobs. No open PRs or review feedback remained. The previous
+  checkout was clean and matched upstream; baseline 196 core / 21 API / 290
+  frontend tests passed before implementation.
 - Previous field-position viewer review: [PR #16](https://github.com/AryanParte/nfl-opponent-intelligence/pull/16),
   merged at `a83a3c2`; its tree matches feature head `0a957cc`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38160303213)
@@ -113,6 +120,42 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 period/clock viewer — 2026-10-13
+
+All 418 frontend tests, a clean locked install and type-check/build pass on Node
+24.19.0. All 196 core / 21 API tests pass on Python 3.11/3.12/3.13, with API
+warnings treated as errors and clean `pip check` results. Fifty-eight synthetic
+endpoint/browser fixtures replay with network blocked; the prior 37 are unchanged.
+Twenty-one additions cover period-only versus explicit full-clock, an absent
+clock column, all regulation quarters and OT periods 5/6, omitted clock ends,
+zero, empty/missing populations, missing EPA, both roles and four-stage chains.
+Independent count/EPA expectations complement exact endpoint replay. Mutation
+tests reject wrong identity/units/timing, hidden or missing contexts, incorrect
+order, disconnected ledgers, final-count mismatches and post-filter leave-team-out
+counts. Interaction tests preserve invalid text, enforce a period even for zero,
+clear/rebuild explicitly, ignore late responses and keep API error feedback safe.
+
+Seven isolated Chrome 155 queries on the unchanged pinned 2024 snapshot passed.
+For CAR 2024 REG before week 19, comparison on, field 0–20, score -7–0, Q4 0–120,
+offense plays are **984 → 156 → 90 → 4 → 0** versus **32,351 → 4,991 → 2,244 →
+426 → 139** baseline; defense is **1,131 → 218 → 96 → 18 → 3** versus **32,204 →
+4,929 → 2,238 → 412 → 136**. Stage cells match the API and empty results remain
+empty. Q4-only/full-clock, OT 0–120 and Q4 zero-clock also passed. Clearing all
+context controls restores frozen overall/comparison blocks exactly. Invalid
+`2:00` and a clock bound without period issue no request. No external page requests
+or page errors occurred. Desktop and 390px mobile views were inspected, including
+keyboard table scrolling with no document overflow. Both owned servers were stopped.
+
+Self-review clarified earlier stage labels as intermediate, preserved schema v2
+field-only compatibility and checked conditional missingness/global exclusion
+accounting. The field caption now names season/week instead of ambiguous “time”
+selection; period filtering happens later. Initial test selectors were corrected
+to match accessible row names and actual help text, then verification reran.
+No formulas, API/core code, dependencies, source bytes, CI or automation changed.
+This is local integration evidence, not browser CI, a WCAG audit, load testing,
+historical availability or statistical calibration. The screenshot and replay
+details are in [the viewer guide](WEB.md#pre-play-period-and-clock).
 
 ### P1.4 pre-play score viewer — 2026-10-12
 
@@ -514,13 +557,13 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, continue P1.4 with existing
-`period` / `clock_min` / `clock_max` options: explicit Q1–Q4/OT, a required period
-for inclusive seconds-remaining bounds, and zero/missing/omitted distinctions.
-Compose field → score → period → clock, with separate population ledgers and
-response identity/chain validation plus endpoint-generated fixtures. Keep the
-builder canonical. Uncertainty display, downloads, browser CI and broader accessibility
-review remain unfinished.
+Inspect current PR CI and reviews first. Next, continue P1.4 with existing opt-in
+exploratory game-bootstrap controls and returned uncertainty/support states.
+Support selected-only and opt-in comparison reports; bound repetitions/seed to
+existing API limits and show per-metric support, not-requested/withheld/undefined
+distinctions and method/dependence warnings. Extend response checks and endpoint fixtures; keep interval
+computation in the builder and make no calibrated-confidence claim. Downloads,
+browser CI and broader accessibility review remain unfinished.
 Do not add storage for this single-snapshot view or imply a public deployment.
 The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add

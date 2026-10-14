@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { epa, fetchReport, number, parseQuery, percentage, type Draft, type Report } from './report';
+import { epa, fetchReport, number, parseQuery, percentage, PERIODS, type Draft, type Report } from './report';
 import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
 import { ScoreView } from './ScoreView';
+import { TimeView } from './TimeView';
 
 export const REQUEST_TIMEOUT_MS = 15_000;
 type State = { kind: 'idle' | 'loading' } | { kind: 'error'; message: string }
   | { kind: 'ready'; report: Report };
 const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG',
-  compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '' };
+  compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '' };
 
 function ReportView({ report }: { report: Report }) {
   const { overall: m, cohort, source } = report;
@@ -24,6 +25,7 @@ function ReportView({ report }: { report: Report }) {
       : 'Production by the selected offense. EPA and success are offense-relative.'}</p>
     <FieldPositionView report={report} />
     <ScoreView report={report} />
+    <TimeView report={report} />
     {m.plays === 0 && <section className="notice empty" aria-label="Empty cohort">
       <h3>No eligible plays match this query.</h3>
       <p>Try a later cutoff with available games, another team code, season type, or context range. An absent team code is not proof that a team exists. Missing rates are unavailable, not zero performance.</p>
@@ -175,6 +177,26 @@ export function App() {
           <p id="score-help" className="muted">Inclusive signed whole points, -1000 to +1000 (API input limits, not typical game scores).
             A blank end is unbounded; both blank = no score filter. Any requested score range excludes missing pre-play scores.
             Field position is filtered first when both are requested.</p>
+        </fieldset>
+        <fieldset className="field-controls" aria-describedby="time-help clock-help">
+          <legend>Pre-play period &amp; clock (optional)</legend>
+          <div className="field-inputs">
+            <label>Period<select name="period" value={draft.period} onChange={(e) => edit('period', e.target.value)} aria-describedby="time-help">
+              <option value="">Unrestricted</option>
+              {PERIODS.map(period => <option key={period} value={period}>{period === 'OT' ? 'OT — all overtime periods' : period}</option>)}
+            </select></label>
+          </div>
+          <p id="time-help" className="muted">Q1–Q4 select one regulation quarter; OT selects all periods numbered 5 or higher.
+            Period-only selection excludes unknown periods but does not exclude missing clocks.</p>
+          <div className="field-inputs">
+            <label>Minimum seconds remaining<input name="clock_min" type="text" inputMode="numeric" autoComplete="off"
+              value={draft.clock_min} onChange={(e) => edit('clock_min', e.target.value)} aria-describedby="clock-help" /></label>
+            <label>Maximum seconds remaining<input name="clock_max" type="text" inputMode="numeric" autoComplete="off"
+              value={draft.clock_max} onChange={(e) => edit('clock_max', e.target.value)} aria-describedby="clock-help" /></label>
+          </div>
+          <p id="clock-help" className="muted">Inclusive whole seconds 0–900 remaining in the selected period at play start, not elapsed time or MM:SS.
+            Clock bounds require an explicit period. Both blank = no clock filter; with one bound entered, the blank end defaults to 0 or 900.
+            Zero is observed, not missing. Any requested clock range excludes missing clocks. Clearing the period does not clear entered bounds.</p>
         </fieldset>
         <label className="comparison-toggle"><input type="checkbox" name="compare_league" checked={draft.compare_league}
           onChange={(e) => edit('compare_league', e.target.checked)} aria-describedby="comparison-help" />

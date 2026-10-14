@@ -7,7 +7,8 @@ overall metrics, observed down/distance rows, sample flags, all report warnings,
 source timestamps, attribution and fingerprints. An opt-in league comparison adds
 observed baseline coverage, side-by-side measurements and matching situation differences.
 Optional pre-play field-position and score bounds retain offense-relative
-coordinates/signs and display ordered selected/baseline exclusion accounting.
+coordinates/signs; period/clock controls select Q1–Q4 or OT and inclusive seconds
+remaining. All requested stages show ordered selected/baseline exclusion accounting.
 It never selects a filesystem path, fetches NFL data, or silently falls back to a
 synthetic response.
 
@@ -69,11 +70,12 @@ API does not justify adding a database for this view.
 
 ## Display and request contract
 
-- Only the five basic query controls, optional `compare_league=true`, and entered
-  `yardline_min` / `yardline_max` and `score_min` / `score_max` bounds are sent.
+- Only the five basic query controls, optional `compare_league=true`, entered
+  `yardline_min` / `yardline_max`, `score_min` / `score_max`, and explicit `period`
+  with any entered `clock_min` / `clock_max` bounds are sent.
   Comparison starts off and is omitted when unchecked. The API's default warning
-  threshold remains 30. This view does not request period/clock ranges or bootstrap
-  uncertainty. Unrequested calculations are labeled **not requested**, not zero,
+  threshold remains 30. This view does not request bootstrap uncertainty.
+  Unrequested calculations are labeled **not requested**, not zero,
   unavailable confidence, or evidence of no difference.
 - The decoder checks the consumed schema v2 fields, returned cohort against the
   submitted query, offense-relative interpretation, metric shapes/count partitions,
@@ -141,8 +143,8 @@ for the selected cohort and, if requested, the other-teams baseline:
 precedes the field filter; comparison excludes the selected team's **pre-filter**
 plays. Counts are not added again to global exclusions. Missing position and
 missing EPA are separate concepts; all rates, games and observed baseline team
-coverage use the final population after every requested filter. When score is
-also filtered, the field table labels its output as an intermediate count.
+coverage use the final population after every requested filter. When score or
+period is also filtered, the field table labels its output as an intermediate count.
 Existing report/baseline warnings stay visible.
 An absent source column returns a safe, distinct API error, while a present but
 all-missing field may produce a valid empty cohort. Neither triggers an automatic
@@ -206,6 +208,57 @@ reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_at
 This is an input-design choice, not a physical-device keyboard audit. As with the
 other controls, editing immediately clears results; only explicit submit fetches.
 
+## Pre-play period and clock
+
+![Ordered period and clock accounting for the retrospective CAR offense cohort](examples/period-clock-view.png)
+
+Captured on 2026-10-13 from the unchanged pinned 2024 snapshot acquired in 2026:
+CAR offense, REG before week 19, comparison on, field 0–20, score -7–0, Q4 and
+clock 0–120. Selected plays follow **984 → 156 → 90 → 4 → 0**; other offenses
+follow **32,351 → 4,991 → 2,244 → 426 → 139**. These are team/time selection →
+field → score → period → clock counts. No context values are missing in these
+real cohorts. The selected empty result is retained, not silently broadened.
+This is integration evidence for a retrospective query, not a football finding,
+completeness claim, pregame-available dataset or statistically supported comparison.
+
+**Period** defaults to unrestricted. Q1–Q4 select exactly one regulation quarter;
+OT selects every `qtr >= 5`, including multiple overtime periods. Period-only
+selection excludes unknown periods but can retain missing clocks, including when
+the optional clock column is absent entirely. **Minimum / Maximum seconds
+remaining** accept whole seconds 0–900, inclusive, at play start. Either clock
+bound requires an explicit period. One blank end defaults to 0 or 900; both blank
+means no clock stage. Zero is observed, not missing. An explicit 0–900 range
+excludes missing clocks and is not generally equivalent to period-only selection.
+
+Clock values mean `quarter_seconds_remaining`, not elapsed time or `MM:SS` text.
+Q4 excludes overtime even when the clock agrees, so Q4 0–120 is not a definition
+of the last two minutes of a game. OT bounds apply within each period, not across
+accumulated overtime time. The input limit is not certification of season-specific
+overtime rules. Definitions reuse the [existing analytical contract](METRICS.md#pre-play-period-and-clock)
+and [nflreadr data dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv);
+no period/clock values are inferred from other clocks or later outcomes.
+
+After team/role/season/exclusive-week selection, active filters run **field →
+score → period → clock**, independently for selected and leave-team-out populations.
+Every stage shows before, missing, outside and after counts. Before equals missing
+plus outside plus after; each stage receives the preceding stage's survivors.
+Period uses `missing_qtr` / `outside_period`; clock uses
+`missing_quarter_seconds_remaining` / `outside_range`. A row missing both is
+excluded at period only. Counts are conditional, not source-wide missingness.
+Earlier field/score counts and period counts before a clock stage are labeled
+intermediate. Final metrics, situations, games and observed team coverage use the
+last stage; missing EPA remains separate. Selected losses are already in the
+global outside-cohort count and must not be added again.
+
+The decoder checks exact returned period/clock fields, labels, inclusive resolved
+bounds, units, pre-play timing and missing policies for both populations. It rejects
+hidden/omitted/reordered stages, disconnected ledgers and mismatched final totals,
+while preserving older unfiltered and field-only schema v2 shapes. Clearing period
+does **not** silently erase entered clock bounds: the form requires a period again
+or explicit clearing of both bounds. Editing invalidates old results and aborts the
+client request; no edit triggers a fetch. Missing columns return safe API feedback,
+not an empty-cohort claim or an unfiltered fallback.
+
 ## Matched league comparison
 
 ![Retrospective CAR comparison panel with a matching bucket expanded](examples/league-comparison-view.png)
@@ -218,7 +271,7 @@ This is the existing historical comparison rendered in a browser, not newly
 validated analytics or a completeness guarantee. The source was acquired in 2026.
 
 Both populations use the same season, type, exclusive cutoff and any requested
-field-position and pre-play score bounds/missing policies in the same order. Exclusion is by
+field-position, score, period and clock bounds/missing policies in the same order. Exclusion is by
 the selected role (`posteam` for offense, `defteam` for defense), not every game
 involving that franchise. Values are pooled over plays, not averaged team rates.
 In defense mode these remain opposing offensive EPA and success allowed, without
@@ -253,9 +306,9 @@ npm run build
 ```
 
 The lockfile pins resolved packages and integrity hashes. Tests use jsdom/Testing
-Library/Vitest with fetch mocked to reject unconfigured network calls. The 37
+Library/Vitest with fetch mocked to reject unconfigured network calls. The 58
 committed synthetic API fixtures cover offense, defense, empty populations,
-missing baseline EPA, baseline-only buckets and field/score controls/accounting,
+missing baseline EPA, baseline-only buckets and field/score/period/clock controls/accounting,
 with comparison on/off. They
 are never a runtime fallback or bundled sample API. Python API CI regenerates them
 through the actual endpoint with socket/acquisition access blocked and compares
@@ -363,10 +416,41 @@ those plays), kept missing-column feedback applicable to either context, and
 used tolerance for an independently calculated floating-point EPA expectation.
 No API/core calculations, dependencies, source bytes or automation changed.
 
+On 2026-10-13, 418 frontend tests, clean locked install and type-check/build pass
+on Node 24.19.0. All 196 core / 21 API tests and dependency checks pass on Python
+3.11/3.12/3.13, with API warnings treated as errors. Twenty-one new labeled
+synthetic endpoint fixtures cover every period, period-only with an absent clock
+column, one-ended/full/zero clock ranges, overtime periods 5 and 6, both roles,
+ordered four-stage combinations, missing values/EPA and empty populations. All 37
+earlier fixtures are unchanged. Hand-counted expectations complement exact replay;
+mutation tests reject wrong context identity, order, links and final/pre-filter totals.
+
+Seven isolated Chrome 155 loopback queries checked the pinned real snapshot:
+the four-stage query in both roles, OT 0–120, Q4 alone, Q4 0–900, Q4 0–0, then
+cleared filters. Defense four-stage counts are **1,131 → 218 → 96 → 18 → 3**,
+versus **32,204 → 4,929 → 2,238 → 412 → 136** for the baseline. Q4 alone and
+explicit full-clock retain 249 selected / 8,814 baseline plays in this snapshot;
+the synthetic missing-clock case distinguishes their different policies. OT 0–120
+retains 0 / 4, and Q4 0–0 retains 0 / 1. Cleared overall/comparison blocks match
+the frozen historical report exactly. Displayed stage cells match the API.
+Invalid `2:00` and a clock bound without period send no requests. No external page
+requests or page errors occurred. Desktop and 390px mobile layouts were inspected;
+the document has no horizontal overflow and the accounting table scrolls by
+keyboard within its own region. These are local integration checks, not browser
+CI, physical-device/screen-reader certification, load testing or new source auditing.
+
+Self-review extended ordered validation through period/clock without recomputing
+measurements, relabeled earlier stages as intermediate and clarified the field
+table's caption to distinguish season/week selection from later period filtering.
+Test row selectors use accessible-name prefixes including cells, and help-text
+assertions match the actual wording. Existing calculations, API, dependencies,
+source bytes, CI workflows and daily automation are unchanged.
+
 ## Next slice
 
-Add existing period/clock options, with explicit Q1–Q4/OT, period required for
-seconds bounds, zero versus missing, and field → score → period → clock accounting
-for both populations. Uncertainty display, downloads and a CI browser demo remain
-separate P1.4 work; do not mark the whole
-product surface complete on the strength of these first viewer slices.
+Expose the existing opt-in exploratory game-bootstrap options and returned
+uncertainty/support states for selected-only and opt-in comparison reports. Bound
+repetitions/seed to the API contract, preserve not-requested/withheld/undefined
+distinctions, and show method and dependence caveats without recalculating intervals in the browser. Downloads,
+a CI browser demo and broader accessibility remain separate P1.4 work; do not mark
+the whole product surface complete on the strength of these viewer slices.

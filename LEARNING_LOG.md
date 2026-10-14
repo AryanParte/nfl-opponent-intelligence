@@ -1319,3 +1319,77 @@ for seconds bounds, zero/missing distinctions and four-stage population accounti
 Uncertainty display, downloads, browser CI and broader accessibility remain open.
 No source-availability, calibration, load-test or deployment claim. Inspect this
 branch's PR/reviews before continuing and never auto-merge.
+
+## 2026-10-13 — Period/clock controls and four-stage cohort accounting
+
+**Built / why:** Q1–Q4/OT selection and optional inclusive whole-second clock
+bounds over the existing API, with separate selected/baseline period and clock
+ledgers. Earlier field/score counts are intermediate when time filters follow;
+all final metrics retain their proper denominators. This exposes game context
+without new analytics, silent cohort broadening, downloads or dependency changes.
+
+Fetched the stable clone and verified PR #17 merged at `4872669`, with the same
+tree as `4e402a1` and all seven merged-main CI jobs successful. The prior checkout
+was clean and matched upstream, with no open PRs or review feedback. Started
+`codex/period-clock-view` from updated `origin/main`; baseline 196 core / 21 API /
+290 frontend tests passed. The 8 AM automation was not modified.
+
+**Review files:** `web/src/report.ts`, `web/src/TimeView.tsx`, `web/src/App.tsx`,
+`web/src/FieldPositionView.tsx`, `web/src/ScoreView.tsx`, `web/src/time.test.tsx`,
+`tests_api/test_frontend_contract.py`, and `docs/WEB.md` with the real screenshot.
+
+**Sports concepts:** clock means seconds remaining in the period at play start,
+not elapsed or cumulative game time. Q4 excludes OT; OT includes every period
+numbered 5 or higher. Period-only can retain missing clocks; an explicit full-clock
+range excludes them. Zero is observed. Field → score → period → clock counts are
+conditional, and a play missing multiple contexts is excluded only at its first
+active missing stage. Final sample sizes and missing EPA remain distinct.
+
+**Software/statistical concepts / what to learn:** distinguish omitted, zero,
+invalid and missing values; enforce dependent query options before fetching.
+Validate nested cohort identity, units/timing, ordered partitions and pre-context
+leave-team-out totals. API-generated fixtures detect cross-layer drift while
+hand-calculated cases test assumptions. Keep computation server-side, preserve
+stale-response protection, and do not mistake tiny context samples for reliable
+scouting findings or historically available predictors.
+
+**Three review questions:**
+
+1. Why can Q4-only and Q4 0–900 produce different samples, and why is Q4 0–120
+   not interchangeable with the last two minutes of every game?
+2. For a play missing both period and clock after field/score filtering, which
+   ledger counts the exclusion and how do all four stages reconcile to final plays?
+3. Why must baseline team exclusion use pre-context counts, and how do query
+   validation, response identity checks and request cancellation protect the display?
+
+**Verification / self-review:** 418 frontend tests, clean lockfile installation
+and type-check/build pass on Node 24.19.0. All 196 core / 21 API tests pass on
+Python 3.11/3.12/3.13; API warnings are errors and `pip check` passes. All 58 labeled
+synthetic endpoint fixtures replay offline; the 37 previous cases are unchanged.
+New tests cover every period, multiple OTs, period-only without a clock column,
+zero/one-ended/full ranges, missing/empty populations, both roles, broken metadata/
+stage chains, invalid inputs, clearing controls, late responses and safe API errors.
+
+Seven isolated Chrome 155 loopback queries passed on the pinned retrospective
+2024 snapshot. CAR offense, REG before week 19, field 0–20, score -7–0, Q4 0–120
+gives 984 → 156 → 90 → 4 → 0 plays versus 32,351 → 4,991 → 2,244 → 426 → 139
+other-offense plays; the empty selected sample stays empty. Defense, OT, period-only,
+full/zero clock and clearing controls also passed. Cleared overall/comparison
+blocks match the frozen report exactly. Desktop/mobile inspection, 390px document
+width, keyboard table scrolling, invalid-input no-fetch behavior and zero external
+page requests/errors passed. Both owned test servers were stopped.
+
+Complete-diff review relabeled intermediate field/score survivors, generalized the
+ordered validator without changing analytics, and clarified the field caption's
+season/week selection so it cannot be mistaken for later period filtering. Initial
+test selectors were fixed to use accessible-name prefixes and actual help text;
+all verification reran. No API/core, source, dependency, CI or automation changes.
+The published PR records exact SHA, attribution and CI; local checks alone are
+not remote CI receipts or statistical/accessibility/load validation.
+
+**Remaining / next:** expose the existing opt-in exploratory game-bootstrap API
+controls and returned per-metric uncertainty/support states, with bounded options,
+selected-only/opt-in comparison support, method/dependence caveats and no browser
+recomputation.
+Downloads, browser CI and broader accessibility remain open. Inspect this branch's
+PR/reviews before continuing; never merge automatically.

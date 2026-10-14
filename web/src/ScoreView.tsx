@@ -24,13 +24,15 @@ export function ScoreView({ report }: { report: Report }) {
     <div className="table-scroll" role="region" tabIndex={0} aria-label="Pre-play score accounting, scroll horizontally on small screens">
       <table><caption className="sr-only">Pre-play score exclusions after earlier selection stages</caption>
         <thead><tr><th scope="col">Population</th><th scope="col">Before score</th><th scope="col">Missing score</th>
-          <th scope="col">Outside range</th><th scope="col">Final retained plays</th></tr></thead>
+          <th scope="col">Outside range</th><th scope="col">{report.cohort.period ? 'After score filter' : 'Final retained plays'}</th></tr></thead>
         <tbody>{rows.map(([label, q]) => <tr key={label}><th scope="row">{label}</th>
           <td>{number(q.plays_before_filter)}</td><td>{number(q.missing_score_differential)}</td>
           <td>{number(q.outside_range)}</td><td>{number(q.plays_after_filter)}</td></tr>)}</tbody>
       </table>
     </div>
-    <p className="muted">All metrics and game/team coverage below use final retained plays. Missing EPA is counted separately.
+    <p className="muted">{report.cohort.period
+      ? 'After score filter is intermediate, passed to period selection below. Metrics and game/team coverage use only final survivors.'
+      : 'All metrics and game/team coverage below use final retained plays.'} Missing EPA is counted separately.
       Selected-cohort stage exclusions are already in the global outside-cohort count; do not add them again.</p>
   </section>;
 }
