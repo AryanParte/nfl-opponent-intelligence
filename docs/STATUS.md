@@ -1,40 +1,47 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-14, P1.4's local viewer exposes existing opt-in
-exploratory game-bootstrap calculations: 200–1000 repetitions, optional seed
-0–4294967295 (default 0), selected-only or matched comparison. Both fields blank
-means not requested; seed alone is invalid. Returned overall and matching-situation
-tables keep point estimates, bounds, per-metric contributing games, defined/undefined
-draws, withheld/undefined statuses and method limitations distinct. The decoder
-checks request/method identity, union size, support, paired counts and interval
-states; the browser never resamples games or subtracts endpoints. Existing filters,
-metrics, warnings and edit/abort behavior remain unchanged.
-See [viewer setup and evidence](WEB.md#exploratory-game-level-uncertainty).
-All 196 core and 22 API tests pass locally on Python 3.11/3.12/3.13; 545 frontend
+As of the scheduled run on 2026-10-15, P1.4's local viewer can download its current
+validated schema-v2 report as JSON. The original decoded API text is retained,
+not reserialized by JavaScript, so full source/method fields, numeric spellings,
+filters, comparison, uncertainty and nulls survive offline brief replay. The safe
+filename identifies the basic cohort, not every option or snapshot. A native link
+exists only for the ready report; edits/resubmits remove it, stale/error responses
+cannot create one, and owned object URLs are cleaned up. No extra request, raw-data
+acquisition or analytics occur. See [download and replay](WEB.md#download-and-replay-the-current-report).
+Existing query bounds, denominators, support warnings and API behavior are unchanged.
+All 196 core and 22 API tests pass locally on Python 3.11/3.12/3.13; 635 frontend
 tests, clean locked install, type-check/build and real-snapshot browser checks pass
-on Node 24.19.0. All 71 synthetic API/browser fixtures replay offline.
-No formulas, API routes, report defaults, raw bytes, database, deployment or daily
-automation changed. The core CLI still needs no third-party dependencies.
+on Node 24.19.0. All 71 synthetic API/browser fixtures remain unchanged.
+Seven native downloads across six queries match response text byte-for-byte; all
+six saved reports render offline, and the frozen CAR Markdown reproduces exactly.
+No formulas, API routes, report defaults, dependencies, raw bytes, database,
+deployment, CI workflow or daily automation changed. The core CLI still needs
+no third-party dependencies.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
 deferred under the [source decision](PERSONNEL_MOTION.md), not inferred from
 shotgun/no-huddle or text. P1.2 stays complete for the pinned snapshot. Calibration,
 cross-game dependence, opponent adjustment, historical information availability,
-richer UI controls and deployment remain open. Reports are descriptive, not two-team
+broader accessibility/browser CI and deployment remain open. Reports are descriptive, not two-team
 projections or validated scouting recommendations.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/uncertainty-view`, started from updated
-  `origin/main` at `1b1a37e` after observing PR #18 merged. Continue this branch's
+- Working branch: `codex/report-json-download`, started from updated
+  `origin/main` at `bd7e39d` after observing PR #19 merged. Continue this branch's
   existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/uncertainty-view` for its exact published SHA, attribution and CI
+  `codex/report-json-download` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous uncertainty viewer review: [PR #19](https://github.com/AryanParte/nfl-opponent-intelligence/pull/19),
+  merged at `bd7e39d`; its tree matches feature head `ed47af0`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38657439450)
+  passed all seven jobs. No open PRs or review feedback remained; the clean prior
+  checkout matched upstream. Baseline 196 core / 22 API / 545 frontend tests passed.
 - Previous period/clock viewer review: [PR #18](https://github.com/AryanParte/nfl-opponent-intelligence/pull/18),
   merged at `1b1a37e`; its tree matches feature head `c47ffea`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38498188199)
@@ -128,6 +135,41 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 current-report JSON download — 2026-10-15
+
+All 635 frontend tests, clean locked install and type-check/build pass on Node
+24.19.0. All 196 core / 22 API tests pass on Python 3.11/3.12/3.13, with API warnings
+as errors and clean dependency checks. Ninety added frontend cases cover all 71
+unchanged API fixtures, byte-preserving Blob contents, safe filenames, additional
+fields/Unicode/numeric spellings, empty/null results, invalid HTTP/JSON/cohort,
+query edits, late/timeout responses, repeated clicks, replacement failure,
+StrictMode and unmount cleanup. The test URL-store stub preserves the URL parser;
+browser saving is checked separately, not inferred from jsdom link clicks.
+
+Six actual pinned-snapshot API queries yielded seven native Chrome 155 downloads,
+all identical to their decoded response text, with no additional report request.
+Cases cover the frozen 1000-draw comparison, selected-only uncertainty, four-stage
+defense/offense, an empty pre-week-1 frame and clearing comparison/bootstrap.
+Filtered defense retains 3 selected / 136 baseline plays; filtered offense 0 / 139.
+All six saved JSON files replay through the existing Python renderer; file/stdin
+outputs match. Frozen CAR offense REG before week 19 (1000 draws, seed 20261006)
+reproduces the committed historical Markdown byte-for-byte, including its report
+fingerprint. Saving does not make the source pregame-available or validate inference.
+Repeated download keeps one live URL; all 12 StrictMode-created URLs were revoked
+once after removal. Mobile 390px keyboard Enter download and desktop/mobile visual
+inspection passed, with no document overflow, external page requests or page errors.
+Both owned servers were stopped. This is local integration evidence, not browser
+CI, a cross-browser/screen-reader audit, benchmark or statistical calibration.
+
+Complete-diff self-review preserved decoded text instead of fingerprint-changing
+JavaScript serialization, added failed-replacement resource cleanup coverage, and
+documented that filenames are neither unique report identities nor proof of a saved
+file. No analytics, dependencies, source bytes, workflow or automation changed.
+One local attempt had simultaneous roughly 53-second stalls/timeouts across seven
+workers. The unchanged 635-test suite subsequently passed in 11.46 seconds and the
+build passed, without increasing timeouts. The stall cause was not established;
+independent remote CI is recorded on the PR.
 
 ### P1.4 exploratory uncertainty viewer — 2026-10-14
 
@@ -602,13 +644,12 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, add a viewer download of the current
-validated schema-v2 JSON response, retaining every source/method field and optional
-context/comparison/uncertainty block. Use a safe cohort-identifying filename, no
-extra fetch/recomputation, no stale/error/loading export, and clean up object URLs.
-Test downloaded contents and replay a saved file through the existing offline
-brief renderer rather than rewriting it in JavaScript. Browser CI and broader
-accessibility review remain separate unfinished work.
+Inspect current PR CI and reviews first. Next, make a repeatable CI browser smoke
+flow over a clearly labeled synthetic immutable snapshot and the actual API/viewer.
+Cover build/edit/error/download, saved-JSON-to-offline-brief replay and targeted
+keyboard/mobile checks, with unexpected external requests blocked and owned-server
+cleanup. Do not require the pinned real raw data or describe these checks as a
+full screen-reader/WCAG audit. Broader accessibility review remains open.
 Do not add storage for this single-snapshot view or imply a public deployment.
 The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add

@@ -131,21 +131,26 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       and matching-bucket intervals, per-metric game support and all withheld/undefined
       states. No browser resampling or endpoint subtraction. 545 frontend tests,
       71 endpoint-generated fixtures and real-snapshot desktop/mobile checks pass.
-- [ ] Add downloadable reports preserving the validated response and provenance.
+- [x] Download the current validated JSON report (2026-10-15): retain the decoded
+      API text unchanged, including all provenance, contexts, comparison and
+      uncertainty. Safe basic-cohort filenames, no new request/recomputation,
+      ready-only links and owned object-URL cleanup. 635 frontend tests and seven
+      native Chrome downloads pass; six real-snapshot reports replay offline,
+      including byte-exact reproduction of the frozen historical Markdown brief.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
       record the decision. Keep a small modular service before adding components.
 - [ ] Broader accessibility review and a repeatable CI browser/end-to-end demo;
       the first slice has labeled controls, status/alerts and local browser checks,
       not a screen-reader/WCAG audit or browser tests in CI.
 
-Next coherent unit: download the current validated schema-v2 report as JSON from
-the viewer. Preserve all returned source/method fields, filters, comparisons and
-uncertainty; use a safe cohort-identifying filename and no extra request, raw-data
-download or browser recomputation. No export is available for stale/loading/error
-state. Test serialization and object-URL cleanup, then verify a saved report replays
-through the existing offline JSON-to-Markdown brief renderer. Do not reimplement
-that renderer in JavaScript. Broader accessibility/browser CI remain separate slices.
-Inspect this branch's PR/CI and reviews before continuing; do not add storage.
+Next coherent unit: make the local browser smoke flow repeatable in CI with a
+clearly labeled synthetic immutable snapshot and the actual API/viewer. Exercise
+build/edit/error/download behavior and saved-JSON-to-offline-brief replay, plus
+targeted keyboard/mobile checks; block unexpected external requests and reliably
+stop owned servers. Do not require the real raw snapshot or call this a full
+screen-reader/WCAG audit. Broader accessibility review remains open. Storage is
+conditional on justified access patterns; the current single-snapshot flow still
+does not justify a database. Inspect this branch's PR/CI and reviews first.
 
 ### P1.5 — Operational evidence and case study
 

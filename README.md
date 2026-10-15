@@ -22,7 +22,10 @@ baseline coverage, denominators, matching situations and percentage-point differ
 Optional field-position, pre-play score and period/clock controls show effective
 filters and ordered selected/baseline missing-context exclusions. Bounded, opt-in
 game-bootstrap controls show exploratory intervals, per-metric game support and
-explicit unavailable/withheld states. Downloads, adjustment, and deployment remain on the
+explicit unavailable/withheld states. The displayed report can be downloaded as
+its original validated JSON for offline brief replay, with full provenance and no
+new request or calculation. Browser CI, broader accessibility review, adjustment,
+and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 
@@ -332,7 +335,11 @@ means no clock filter, which can retain missing clocks. Filtering follows field
 seed** (0–4294967295, default 0) expose the existing exploratory game-level intervals.
 Both blank means not requested; seed alone is invalid. Overall and matching
 situation tables show support, defined/undefined draws and withheld intervals,
-not calibrated confidence or predictions. The view never downloads data or
+not calibrated confidence or predictions. **Download report JSON** saves the
+current validated response, including every returned source/method field and
+optional filter/comparison/uncertainty block. It makes no extra request; editing
+clears the download link along with the report. See [download and offline replay](docs/WEB.md#download-and-replay-the-current-report).
+The view never acquires raw NFL data or
 substitutes synthetic observations for an API failure. Snapshot timestamps are
 visible, not mislabeled as a live-feed guarantee.
 

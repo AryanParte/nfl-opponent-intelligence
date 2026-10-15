@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { epa, fetchReport, number, parseQuery, percentage, PERIODS, type Draft, type Report } from './report';
+import { epa, fetchReportDocument, number, parseQuery, percentage, PERIODS, type Draft, type ReportDocument } from './report';
 import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
 import { ScoreView } from './ScoreView';
 import { TimeView } from './TimeView';
 import { UncertaintyView } from './UncertaintyView';
+import { ReportDownload } from './ReportDownload';
 
 export const REQUEST_TIMEOUT_MS = 15_000;
 type State = { kind: 'idle' | 'loading' } | { kind: 'error'; message: string }
-  | { kind: 'ready'; report: Report };
+  | { kind: 'ready'; document: ReportDocument };
 const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG',
   compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '', bootstrap_repetitions: '', bootstrap_seed: '' };
 
-function ReportView({ report }: { report: Report }) {
+function ReportView({ document }: { document: ReportDocument }) {
+  const { report } = document;
   const { overall: m, cohort, source } = report;
   const defense = cohort.side === 'defense';
   return <article aria-labelledby="report-title">
@@ -24,6 +26,7 @@ function ReportView({ report }: { report: Report }) {
     <p className="interpretation">{defense
       ? 'Production allowed to opposing offenses. EPA and success stay offense-relative; these are not defensive stops.'
       : 'Production by the selected offense. EPA and success are offense-relative.'}</p>
+    <ReportDownload document={document} />
     <FieldPositionView report={report} />
     <ScoreView report={report} />
     <TimeView report={report} />
@@ -116,8 +119,8 @@ export function App() {
     const timer = setTimeout(() => { timedOut = true; controller.abort(); }, REQUEST_TIMEOUT_MS);
     setState({ kind: 'loading' });
     try {
-      const report = await fetchReport(query, controller.signal);
-      if (sequence.current === request && !controller.signal.aborted) setState({ kind: 'ready', report });
+      const document = await fetchReportDocument(query, controller.signal);
+      if (sequence.current === request && !controller.signal.aborted) setState({ kind: 'ready', document });
     } catch (error) {
       if (sequence.current === request) setState({ kind: 'error', message: timedOut
         ? 'The request timed out after 15 seconds. Check the local API before retrying; server work may still be running.'
@@ -221,11 +224,11 @@ export function App() {
           <button type="submit" disabled={state.kind === 'loading'}>{state.kind === 'loading' ? 'Building…' : 'Build report'} <span aria-hidden="true">→</span></button></div>
       </form>
       <div className="request-status" role="status" aria-live="polite">{state.kind === 'loading' ? 'Building report from the configured local snapshot…'
-        : state.kind === 'ready' ? `Report loaded: ${state.report.cohort.team}, ${state.report.cohort.side}, ${state.report.overall.plays} eligible plays.` : ''}</div>
+        : state.kind === 'ready' ? `Report loaded: ${state.document.report.cohort.team}, ${state.document.report.cohort.side}, ${state.document.report.overall.plays} eligible plays.` : ''}</div>
       {state.kind === 'idle' && <section className="empty-state"><span className="eyebrow">Ready when you are</span>
         <h2>Select a cohort to inspect the evidence.</h2><p>No report has been requested for these controls. No automatic fetches or background refreshes.</p></section>}
       {state.kind === 'error' && <section className="notice error" role="alert"><h2>Report unavailable</h2><p>{state.message}</p><p>Correct the query or connection, then select Build report. No previous result is shown.</p></section>}
-      {state.kind === 'ready' && <ReportView report={state.report} />}
+      {state.kind === 'ready' && <ReportView document={state.document} />}
     </main>
     <footer>Independent portfolio project · No NFL or team affiliation · Local development view, not a deployed product</footer>
   </>;

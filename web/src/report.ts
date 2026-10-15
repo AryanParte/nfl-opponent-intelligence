@@ -54,6 +54,8 @@ export type Report = {
   uncertainty?: Uncertainty;
 };
 export type Difference = { dropback_rate_pp: number | null; success_rate_pp: number | null; epa_per_play: number | null };
+/** Keep the validated decoded response text: JS reserialization changes numeric lexemes. */
+export type ReportDocument = { readonly report: Report; readonly json: string };
 export type Comparison = {
   population: { scope: 'available_source_only'; side: Query['side']; excluded_team: string;
     team_field: 'posteam' | 'defteam'; teams: string[]; team_count: number;
@@ -336,7 +338,7 @@ const errors: Record<string, string> = {
   snapshot_not_ready: 'The API snapshot is not ready. Ask the operator to check startup.',
 };
 
-export async function fetchReport(query: Query, signal: AbortSignal): Promise<Report> {
+export async function fetchReportDocument(query: Query, signal: AbortSignal): Promise<ReportDocument> {
   const params = new URLSearchParams({ team: query.team, season: String(query.season),
     before_week: String(query.before_week), side: query.side, season_type: query.season_type });
   if (query.compare_league) params.set('compare_league', 'true');
@@ -361,7 +363,12 @@ export async function fetchReport(query: Query, signal: AbortSignal): Promise<Re
   if (response.headers.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/json') {
     throw new Error('The local API did not return JSON. Check that the API and viewer are both running.');
   }
-  return parseReport(await response.json(), query);
+  const json = await response.text();
+  return { report: parseReport(JSON.parse(json), query), json };
+}
+
+export async function fetchReport(query: Query, signal: AbortSignal): Promise<Report> {
+  return (await fetchReportDocument(query, signal)).report;
 }
 
 export const percentage = (value: number | null) => value === null ? 'Unavailable' : `${(value * 100).toFixed(1)}%`;

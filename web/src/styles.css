@@ -40,6 +40,9 @@ button span { margin-left: 18px; }
 .report-heading h2 { font-size: 30px; }
 .report-heading h2 span { font-weight: 500; }
 .interpretation { font-size: 13px; color: #385762; margin: 12px 0 20px; }
+.report-download { margin: 0 0 24px; }
+.report-download a { display: inline-block; color: #005570; font-size: 14px; font-weight: 650; padding: 10px 0; min-height: 44px; text-underline-offset: 3px; }
+.report-download p { max-width: 690px; margin: 4px 0; }
 .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .metric { padding: 21px 20px 16px; border-radius: 8px; background: #fff; border: 1px solid #d2dcdf; border-top: 3px solid #92b2c0; }
 .metric h3 { font-size: 12px; font-weight: 650; min-height: 38px; }
