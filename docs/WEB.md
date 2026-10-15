@@ -9,6 +9,8 @@ observed baseline coverage, side-by-side measurements and matching situation dif
 Optional pre-play field-position and score bounds retain offense-relative
 coordinates/signs; period/clock controls select Q1–Q4 or OT and inclusive seconds
 remaining. All requested stages show ordered selected/baseline exclusion accounting.
+Optional game-bootstrap controls expose returned exploratory intervals, per-metric
+game support and withheld/undefined states without browser resampling.
 It never selects a filesystem path, fetches NFL data, or silently falls back to a
 synthetic response.
 
@@ -72,9 +74,10 @@ API does not justify adding a database for this view.
 
 - Only the five basic query controls, optional `compare_league=true`, entered
   `yardline_min` / `yardline_max`, `score_min` / `score_max`, and explicit `period`
-  with any entered `clock_min` / `clock_max` bounds are sent.
+  with any entered `clock_min` / `clock_max` bounds, and entered
+  `bootstrap_repetitions` / `bootstrap_seed` are sent.
   Comparison starts off and is omitted when unchecked. The API's default warning
-  threshold remains 30. This view does not request bootstrap uncertainty.
+  threshold remains 30. Bootstrap starts off; repetitions explicitly opt in.
   Unrequested calculations are labeled **not requested**, not zero,
   unavailable confidence, or evidence of no difference.
 - The decoder checks the consumed schema v2 fields, returned cohort against the
@@ -110,7 +113,7 @@ API does not justify adding a database for this view.
 
 All detailed source/method/data-quality fields remain available in the API JSON;
 this view intentionally summarizes a subset. No report downloads, down/distance
-selectors, interval visualizations or saved queries exist yet.
+selectors, interval charts or saved queries exist yet.
 
 ## Pre-play field position
 
@@ -259,6 +262,80 @@ or explicit clearing of both bounds. Editing invalidates old results and aborts 
 client request; no edit triggers a fetch. Missing columns return safe API feedback,
 not an empty-cohort claim or an unfiltered fallback.
 
+## Exploratory game-level uncertainty
+
+![Returned exploratory intervals and game support for retrospective CAR offense](examples/uncertainty-view.png)
+
+Captured on 2026-10-14 from the unchanged pinned 2024 snapshot acquired in 2026:
+CAR offense, REG before week 19, comparison on, 1000 repetitions and seed 20261006.
+All uncertainty/overall/comparison fields exactly match the frozen historical
+JSON report. Selected EPA bounds display **-0.175 to 0.062 EPA/play**; paired
+selected-minus-baseline bounds display **-0.190 to 0.049**. Selected support is
+17 games versus 272 baseline games; 17 are shared, so the union is 272, not 289.
+These are exploratory nominal pointwise percentile bounds, not calibrated coverage,
+significance tests, predictive validation, opponent adjustment or scouting advice.
+
+**Bootstrap repetitions** accepts whole numbers 200–1000, matching the existing
+API limit. **Bootstrap seed** accepts 0–4294967295, requires repetitions and defaults
+to 0 when blank. Both blank means uncertainty is not requested, not zero uncertainty.
+Text inputs preserve invalid entries for validation. Clear both and explicitly
+rebuild to omit uncertainty; clearing repetitions does not silently erase a seed.
+Controls work with all existing filters and with comparison either on or off.
+Editing clears old results and aborts client waiting, but cannot stop server
+computation. More repetitions add computation, not observations or statistical
+reliability. Existing 15-second client timeout and API single-builder limits remain.
+
+The builder samples whole `game_id` clusters. Selected-only uses selected games;
+comparison uses the selected/baseline union with shared game weights, forming
+differences **inside each replicate**, never by subtracting interval endpoints.
+Turning comparison on can change selected bounds because it changes the frame.
+Within-game dependence is retained, but repeated teams/opponents across games
+remain dependent. Selection is fixed before resampling. Missing-data bias,
+historical source availability and upstream EPA-model uncertainty are not estimated.
+See [the implemented method and limits](UNCERTAINTY.md). The primary
+[SciPy bootstrap reference](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html)
+describes percentile bounds and shared-index paired sampling; it is conceptual
+background, not a dependency or validation of this project's cluster method.
+
+Each overall/situation table shows the returned point estimate, nominal 95% bounds,
+distinct contributing games on every required side, defined/undefined draws and
+status. Dropback support counts games with eligible plays; success/EPA support
+counts games with observed EPA. Rates display as percentages, rate differences
+as percentage points, and EPA keeps its offensive sign even for defense. Rounding
+can make distinct endpoints look equal; it never changes the underlying report.
+
+| Returned status | Display meaning |
+| --- | --- |
+| `ok` | Bounds available, still exploratory; fewer than 20 games on either required side is flagged separately. |
+| `undefined_estimate` | No contributing games on a required side; estimate and bounds unavailable. |
+| `insufficient_games` | Fewer than five contributing games on a required side; bounds withheld, not zero uncertainty. |
+| `too_few_valid_replicates` | Fewer than 95% of performed draws have the required denominator(s); bounds withheld. |
+| `degenerate_interval` | Constant/near-constant percentile bounds withheld, not interpreted as certainty. |
+
+The five-game and 95%-defined gates and the below-20 flag are application safeguards,
+not reliability guarantees. Status precedence is undefined → insufficient games →
+too few valid draws → degenerate/available. An empty frame performs zero draws;
+an empty selected population with an observed baseline can still have a nonempty
+union and performed draws. Undefined replicates are counted and excluded from
+bounds. Available point estimates remain visible when only bounds are withheld.
+Pointwise means not simultaneous coverage across the many displayed findings.
+
+Expandable situation tables join by down/distance keys, not array positions.
+Missing baseline buckets keep zero support and unavailable differences; overall
+baseline support is never substituted. Baseline-only buckets can contribute to
+overall estimates without adding selected-team situation rows. All returned
+uncertainty warnings render as text. Method, generator, quantile rule, frame,
+repetitions and the copyable seed accompany source provenance elsewhere in the
+report; replay also needs the same cohort, snapshot and supported Python runtime.
+
+The decoder checks requested/defaulted method metadata and exact population/metric
+keys, units, nonnegative integer support, valid+undefined totals, gate precedence,
+null versus finite ordered bounds, rate/pp domains, full-frame support and paired
+valid-count limits. Success/EPA denominators agree; each situation's support and
+defined draws cannot exceed its overall population's. It does not reconstruct
+game IDs/distributions, recompute intervals, assume a percentile interval contains
+the point estimate, or prove calibration. Unknown/mismatched responses fail closed.
+
 ## Matched league comparison
 
 ![Retrospective CAR comparison panel with a matching bucket expanded](examples/league-comparison-view.png)
@@ -306,10 +383,10 @@ npm run build
 ```
 
 The lockfile pins resolved packages and integrity hashes. Tests use jsdom/Testing
-Library/Vitest with fetch mocked to reject unconfigured network calls. The 58
+Library/Vitest with fetch mocked to reject unconfigured network calls. The 71
 committed synthetic API fixtures cover offense, defense, empty populations,
 missing baseline EPA, baseline-only buckets and field/score/period/clock controls/accounting,
-with comparison on/off. They
+with comparison on/off, plus uncertainty/support states. They
 are never a runtime fallback or bundled sample API. Python API CI regenerates them
 through the actual endpoint with socket/acquisition access blocked and compares
 them exactly, so changes on either side cannot silently leave stale test data.
@@ -320,11 +397,16 @@ From the repository root with optional API/test dependencies installed:
 PYTHONPATH=src .venv/api/bin/python -m unittest discover -s tests_api -v
 # Print freshly regenerated fixtures for an explicit, reviewed update:
 PYTHONPATH=src .venv/api/bin/python -m tests_api.test_frontend_contract
+# Print the separate uncertainty fixture set:
+PYTHONPATH=src .venv/api/bin/python -m tests_api.test_frontend_contract --uncertainty
 ```
 
 The tiny fixture gzip uses stored blocks and a fixed OS byte to remove compressor
 heuristic/platform variance. Its IDs, timestamps, observations and provenance are
 invented and labeled as such. No raw nflverse download is required by any CI job.
+The two sparse-draw uncertainty fixtures explicitly replace the RNG with controlled
+whole-game draws to test the 189/200 versus 190/200 gate. Their source labels say
+they are not seed replays; response JSON itself is not fabricated after the endpoint.
 The Python core stays dependency-free; frontend tools install only under `web/`.
 
 On 2026-10-09, 51 frontend tests, type-check and build passed on Node 24.19.0.
@@ -446,11 +528,38 @@ Test row selectors use accessible-name prefixes including cells, and help-text
 assertions match the actual wording. Existing calculations, API, dependencies,
 source bytes, CI workflows and daily automation are unchanged.
 
+On 2026-10-14, 545 frontend tests, clean locked install and type-check/build pass
+on Node 24.19.0; all 196 core / 22 API tests and dependency checks pass on Python
+3.11/3.12/3.13, with API warnings as errors. Thirteen separate uncertainty fixtures
+replay through the actual endpoint offline; the prior 58 fixtures are untouched.
+Cases cover all statuses, exact valid-draw gate boundaries, selected-only/default
+seed, comparison, defense, empty frames/selected cohorts, missing/partial EPA,
+20-game support, missing matching baselines and combined contexts. Independently
+counted expectations and paired/subset/identity mutation tests complement replay.
+
+Eight isolated Chrome 155 loopback queries passed on the pinned real snapshot:
+frozen 1000-draw comparison replay; selected-only default seed; defense; both roles
+with field 0–20, score -7–0, Q4 0–120; empty-before-week-1; maximum seed; then all
+controls cleared. The filtered defense has three plays / one game with 130 defined
+and 70 undefined draws, so intervals are withheld; filtered offense is empty with
+an observed baseline. The before-week-1 empty frame performs zero draws. Displayed
+overall and expanded-bucket cells match API values, and cleared overall/comparison
+blocks match the frozen report. No automatic fetch, invalid-input request,
+external page request or page error occurred. Desktop/390px mobile inspection and
+keyboard table scrolling passed without document overflow; owned servers stopped.
+These are local integration checks, not browser CI, a benchmark or a WCAG audit.
+
+Complete-diff review added full-frame, subset and paired-count safeguards,
+confirmed bootstrap does not change filtered estimates, kept seeds ungrouped for
+copying, and corrected an expected minus glyph to the existing ASCII format.
+No core/API formulas, dependencies, raw source, workflow or automation changed.
+
 ## Next slice
 
-Expose the existing opt-in exploratory game-bootstrap options and returned
-uncertainty/support states for selected-only and opt-in comparison reports. Bound
-repetitions/seed to the API contract, preserve not-requested/withheld/undefined
-distinctions, and show method and dependence caveats without recalculating intervals in the browser. Downloads,
-a CI browser demo and broader accessibility remain separate P1.4 work; do not mark
+Download the current validated schema-v2 response as JSON, preserving source/method
+metadata and every optional context/comparison/uncertainty block. Use a safe
+cohort-identifying filename, no extra fetch/recomputation and no stale/loading/error
+export; test serialization and object-URL cleanup. Verify the saved file replays
+through the existing offline brief renderer instead of rewriting it in JavaScript.
+A CI browser demo and broader accessibility remain separate P1.4 work; do not mark
 the whole product surface complete on the strength of these viewer slices.

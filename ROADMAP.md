@@ -126,20 +126,25 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       populations' field → score → period → clock ledgers reconcile to final
       metrics; 418 frontend tests, 58 endpoint-generated fixtures and real-snapshot
       desktop/mobile checks pass. Existing analytics/API/dependencies are unchanged.
-- [ ] Add downloadable reports and visible exploratory uncertainty/support states.
+- [x] Visible exploratory uncertainty/support states (2026-10-14): bounded opt-in
+      game-bootstrap controls for selected-only/comparison queries, returned overall
+      and matching-bucket intervals, per-metric game support and all withheld/undefined
+      states. No browser resampling or endpoint subtraction. 545 frontend tests,
+      71 endpoint-generated fixtures and real-snapshot desktop/mobile checks pass.
+- [ ] Add downloadable reports preserving the validated response and provenance.
 - [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
       record the decision. Keep a small modular service before adding components.
 - [ ] Broader accessibility review and a repeatable CI browser/end-to-end demo;
       the first slice has labeled controls, status/alerts and local browser checks,
       not a screen-reader/WCAG audit or browser tests in CI.
 
-Next coherent unit: expose the existing opt-in exploratory game-bootstrap API
-options and returned uncertainty/support states. Bound repetitions/seed using the
-existing API limits, support selected-only and opt-in comparison reports, retain
-not-requested/withheld/undefined distinctions, and show per-metric support plus
-method/dependence warnings. Extend response validation and endpoint-generated fixtures without computing intervals
-in the browser or implying calibrated confidence. Downloads and broader browser
-verification remain unfinished slices.
+Next coherent unit: download the current validated schema-v2 report as JSON from
+the viewer. Preserve all returned source/method fields, filters, comparisons and
+uncertainty; use a safe cohort-identifying filename and no extra request, raw-data
+download or browser recomputation. No export is available for stale/loading/error
+state. Test serialization and object-URL cleanup, then verify a saved report replays
+through the existing offline JSON-to-Markdown brief renderer. Do not reimplement
+that renderer in JavaScript. Broader accessibility/browser CI remain separate slices.
 Inspect this branch's PR/CI and reviews before continuing; do not add storage.
 
 ### P1.5 — Operational evidence and case study

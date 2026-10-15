@@ -4,7 +4,7 @@ import { epa, fetchReport, parseQuery, parseReport, percentage, type Draft, type
 
 const query = fixtures.offense.query as Query;
 const draft: Draft = { team: 'CAR', season: '2024', before_week: '3', side: 'offense', season_type: 'REG',
-  compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '' };
+  compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '', bootstrap_repetitions: '', bootstrap_seed: '' };
 const response = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status, headers: { 'content-type': 'application/json' } });
 
 describe('consumed report contract', () => {

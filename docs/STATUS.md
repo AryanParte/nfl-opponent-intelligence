@@ -1,17 +1,18 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-13, P1.4's local viewer adds explicit Q1–Q4/OT
-and optional inclusive whole-second clock bounds over the existing snapshot API.
-Clock bounds require a period; blank ends resolve to 0/900 only when a bound is
-entered. Zero is observed, not missing; period-only selection can retain missing
-clocks. Selected/baseline field → score → period → clock accounting distinguishes
-intermediate and final survivors, conditional missingness and pre-context
-leave-team-out counts. Wrong identities, order, broken links and mismatched final
-counts fail before display. Existing metrics, warnings and edit/abort behavior remain.
-See [viewer setup and evidence](WEB.md#pre-play-period-and-clock).
-All 196 core and 21 API tests pass locally on Python 3.11/3.12/3.13; 418 frontend
+As of the scheduled run on 2026-10-14, P1.4's local viewer exposes existing opt-in
+exploratory game-bootstrap calculations: 200–1000 repetitions, optional seed
+0–4294967295 (default 0), selected-only or matched comparison. Both fields blank
+means not requested; seed alone is invalid. Returned overall and matching-situation
+tables keep point estimates, bounds, per-metric contributing games, defined/undefined
+draws, withheld/undefined statuses and method limitations distinct. The decoder
+checks request/method identity, union size, support, paired counts and interval
+states; the browser never resamples games or subtracts endpoints. Existing filters,
+metrics, warnings and edit/abort behavior remain unchanged.
+See [viewer setup and evidence](WEB.md#exploratory-game-level-uncertainty).
+All 196 core and 22 API tests pass locally on Python 3.11/3.12/3.13; 545 frontend
 tests, clean locked install, type-check/build and real-snapshot browser checks pass
-on Node 24.19.0. All 58 synthetic API/browser fixtures replay offline.
+on Node 24.19.0. All 71 synthetic API/browser fixtures replay offline.
 No formulas, API routes, report defaults, raw bytes, database, deployment or daily
 automation changed. The core CLI still needs no third-party dependencies.
 
@@ -26,14 +27,21 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/period-clock-view`, started from updated
-  `origin/main` at `4872669` after observing PR #17 merged. Continue this branch's
+- Working branch: `codex/uncertainty-view`, started from updated
+  `origin/main` at `1b1a37e` after observing PR #18 merged. Continue this branch's
   existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/period-clock-view` for its exact published SHA, attribution and CI
+  `codex/uncertainty-view` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous period/clock viewer review: [PR #18](https://github.com/AryanParte/nfl-opponent-intelligence/pull/18),
+  merged at `1b1a37e`; its tree matches feature head `c47ffea`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38498188199)
+  passed all seven jobs. No open PRs or review feedback remained; the clean prior
+  checkout matched upstream. Baseline 196 core / 21 API / 418 frontend tests passed.
+  A temporary connector transport failure was bypassed with bounded public GitHub
+  reads; the connector recovered before publication. No access settings changed.
 - Previous score viewer review: [PR #17](https://github.com/AryanParte/nfl-opponent-intelligence/pull/17),
   merged at `4872669`; its tree matches feature head `4e402a1`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38312899520)
@@ -120,6 +128,43 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 exploratory uncertainty viewer — 2026-10-14
+
+All 545 frontend tests, clean locked install and type-check/build pass on Node
+24.19.0. All 196 core / 22 API tests pass on Python 3.11/3.12/3.13, with API warnings
+treated as errors and clean dependency checks. Thirteen new synthetic endpoint
+fixtures cover every interval status, selected-only/default seed, comparison,
+defense, empty frames/populations, partial/missing EPA, baseline-only buckets,
+20-game support and combined filters. The previous 58 fixtures are unchanged.
+Two explicitly labeled controlled-RNG endpoint cases test the exact 190/200
+valid-draw gate; they are not seed-replay or calibration evidence. Independent
+pooled/support expectations complement replay. Mutation tests reject invalid
+metadata, units, support, statuses, bounds, paired counts and situation identity;
+UI tests cover unsafe text, invalid input, explicit retry and late-response handling.
+
+Eight isolated Chrome 155 loopback queries passed on the unchanged pinned 2024
+snapshot. CAR offense, REG before week 19, comparison on, 1000 draws and seed
+20261006 exactly reproduces the frozen uncertainty, overall and comparison blocks.
+There are 17 selected and 272 baseline games, with a 272-game union; selected
+EPA bounds display -0.175 to 0.062, paired-difference bounds -0.190 to 0.049.
+These are exploratory nominal bounds, not a calibrated finding or significance test.
+Selected-only/default seed, defense, maximum seed, both-empty and four-stage
+filtered queries passed. The filtered defense has three plays in one game, so its
+intervals are withheld: 130 defined / 70 undefined of 200 draws. The same offense
+query is empty while its baseline remains observed; before-week-1 performs zero
+draws on an empty frame. Clearing bootstrap restores frozen overall/comparison
+blocks exactly. Invalid text/seed-without-repetitions sends no request. No external
+page requests/errors, mobile document overflow or keyboard-scroll issues occurred.
+The desktop screenshot and 390px mobile layout were inspected; both owned servers
+were stopped. These remain local checks, not browser CI, WCAG or load certification.
+
+Complete-diff review added full-frame and subset/paired support consistency checks,
+tested that bootstrap leaves filtered estimates unchanged, and kept seeds ungrouped
+for copying back into the form. A test expectation was corrected to match existing
+ASCII minus formatting. No analytical formulas, API/core code, source bytes,
+dependencies, CI workflow or automation changed. Coverage and cross-game dependence
+remain unvalidated; more draws do not supply more observed games.
 
 ### P1.4 period/clock viewer — 2026-10-13
 
@@ -557,13 +602,13 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, continue P1.4 with existing opt-in
-exploratory game-bootstrap controls and returned uncertainty/support states.
-Support selected-only and opt-in comparison reports; bound repetitions/seed to
-existing API limits and show per-metric support, not-requested/withheld/undefined
-distinctions and method/dependence warnings. Extend response checks and endpoint fixtures; keep interval
-computation in the builder and make no calibrated-confidence claim. Downloads,
-browser CI and broader accessibility review remain unfinished.
+Inspect current PR CI and reviews first. Next, add a viewer download of the current
+validated schema-v2 JSON response, retaining every source/method field and optional
+context/comparison/uncertainty block. Use a safe cohort-identifying filename, no
+extra fetch/recomputation, no stale/error/loading export, and clean up object URLs.
+Test downloaded contents and replay a saved file through the existing offline
+brief renderer rather than rewriting it in JavaScript. Browser CI and broader
+accessibility review remain separate unfinished work.
 Do not add storage for this single-snapshot view or imply a public deployment.
 The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add
