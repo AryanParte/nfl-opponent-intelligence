@@ -1479,3 +1479,86 @@ object-URL cleanup. Test a saved file through the existing offline brief rendere
 do not reimplement it in JavaScript. Broader accessibility/browser CI, calibration,
 historical availability and deployment remain open. Inspect this branch's PR and
 reviews before continuing; never auto-merge.
+
+## 2026-10-15 — Downloadable report JSON with exact offline replay
+
+**Built / why:** a native download link for the current validated schema-v2 report.
+It saves the original decoded API JSON text, including all source/method fields,
+filters, comparison and uncertainty, without another request or calculation.
+This lets an analyst preserve the exact report they reviewed and use the existing
+offline brief renderer rather than a second browser implementation.
+
+Fetched the canonical clone and verified PR #19 merged at `bd7e39d`, with the same
+tree as `ed47af0` and all seven merged-main CI jobs successful. The prior checkout
+was clean and matched upstream; no open PRs or review feedback remained. Started
+`codex/report-json-download` from updated `origin/main`. Baseline 196 core / 22 API /
+545 frontend tests passed. No repository, global identity or 8 AM automation
+settings were changed. The published PR records exact SHA, attribution and CI.
+
+**Review files:** `web/src/report.ts`, `web/src/ReportDownload.tsx`,
+`web/src/App.tsx`, `web/src/download.test.tsx`, `web/src/test-setup.ts` and
+`docs/WEB.md#download-and-replay-the-current-report`. The existing Python
+`src/opponent_intelligence/brief.py` and its fingerprint contract were reused,
+not modified or ported.
+
+**Sports concepts:** a downloaded empty cohort is not a failed request; missing
+EPA remains null, not zero. Defense stays offense-relative. All filter ledgers,
+separate denominators, paired uncertainty states, support counts and source dates
+remain in the export even if the UI summarizes only a subset. Saving a 2024
+retrospective report acquired in 2026 cannot establish pregame information
+availability, opponent adjustment or predictive validation.
+
+**Software/statistical concepts / what to learn:** parsing and reserializing can
+change bytes and Python-decoded number representations (`1.0` versus `1`, negative
+zero and integers outside JavaScript's exact range). Keep validated response text
+and the parsed view together. A basic-cohort filename is not a full report identity;
+filters, seed and source inside the JSON distinguish reports. A native Blob URL
+needs an explicit owner/lifetime: reuse it while the link exists, revoke on report
+removal, and never pair old bytes with new controls. Browser download intent is
+not proof of a saved file. Exact replay tests serialization/integration, not
+statistical calibration or source authenticity.
+
+**Three review questions:**
+
+1. Why can `JSON.stringify` change a Python report fingerprint even when the
+   rendered measurements look identical, and how does retaining response text help?
+2. When is the object URL created, reused and revoked, and what prevents an edited,
+   stale, timed-out or failed response from exporting the wrong report?
+3. Which fields distinguish two reports with the same suggested filename, and
+   what does a byte-exact offline brief replay establish—and not establish?
+
+**Verification / self-review:** 635 frontend tests, a clean locked installation
+and type-check/build pass on Node 24.19.0. All 196 core / 22 API tests pass on Python
+3.11/3.12/3.13, with API warnings as errors and clean dependency checks. Ninety new
+frontend cases cover all 71 unchanged endpoint fixtures plus numeric/Unicode/extra
+field preservation, empty/null and error states, stale edits, timeout, repeated
+clicks, failed replacement and StrictMode/unmount resource cleanup.
+
+Seven native Chrome 155 downloads across six real-snapshot queries match response
+text exactly, with no additional API request: the full frozen comparison,
+selected-only uncertainty, both-role four-stage filters, empty pre-week-1 and
+cleared options. Every saved file renders offline with identical file/stdin output;
+the frozen CAR report reproduces committed Markdown byte-for-byte. Filtered
+defense has 3 / 136 selected/baseline plays, offense 0 / 139; these are existing
+measurements, not new findings. Keyboard Enter at 390px, desktop/mobile visual
+inspection and zero external page requests/errors passed. All 12 StrictMode URLs
+were released once; both owned servers were stopped. These are local integration
+checks, not browser CI, screen-reader certification or statistical validation.
+
+Review preserved original JSON instead of changing numeric spellings, added a
+failed-replacement cleanup test, and clarified non-unique basic filenames and
+browser-controlled saving. Relevant checks reran. No API/core calculations,
+dependencies, raw bytes, CI workflow or automation changed. Local verification
+does not itself claim remote publication or successful CI; consult the PR receipt.
+One full-suite attempt timed out after simultaneous roughly 53-second stalls in
+seven workers, including unchanged tests. The identical 635-test suite then passed
+in 11.46 seconds and the build passed; no timeout or assertion was relaxed. The
+underlying execution-stall cause was not established; check independent CI too.
+
+**Remaining / next:** a repeatable CI browser smoke flow using a clearly labeled
+synthetic immutable snapshot and the actual API/viewer. Check build/edit/error/
+download, saved-file brief replay and targeted keyboard/mobile behavior, block
+unexpected external requests and stop owned servers. Broader accessibility review
+remains open; no database is justified by the current single-snapshot flow.
+Calibration, historical availability and deployment remain unverified. Inspect
+this branch's PR and reviews first; do not merge automatically.

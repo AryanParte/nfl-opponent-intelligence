@@ -11,6 +11,8 @@ coordinates/signs; period/clock controls select Q1–Q4 or OT and inclusive seco
 remaining. All requested stages show ordered selected/baseline exclusion accounting.
 Optional game-bootstrap controls expose returned exploratory intervals, per-metric
 game support and withheld/undefined states without browser resampling.
+The current validated response can be downloaded as JSON for offline brief replay,
+retaining the API text and all returned metadata without another request.
 It never selects a filesystem path, fetches NFL data, or silently falls back to a
 synthetic response.
 
@@ -111,9 +113,58 @@ API does not justify adding a database for this view.
   regions, table headers/caption and a keyboard-focusable horizontal table support
   basic accessibility. This is not a screen-reader or WCAG conformance audit.
 
-All detailed source/method/data-quality fields remain available in the API JSON;
-this view intentionally summarizes a subset. No report downloads, down/distance
-selectors, interval charts or saved queries exist yet.
+All detailed source/method/data-quality fields remain available in the downloadable
+API JSON; this view intentionally summarizes a subset. No down/distance selectors,
+interval charts or saved-query management exist yet.
+
+## Download and replay the current report
+
+After **Build report** succeeds, **Download report JSON** offers the same response
+shown on screen. It is an aggregate report, not raw play-by-play. The browser
+controls whether/where to save and may adjust the filename; check its downloads.
+The viewer does not claim a click means a file was successfully saved.
+
+The suggested name, for example
+`nfl-oi-CAR-2024-REG-offense-before-week-19.report.json`, uses only the validated
+returned team/season/type/role/exclusive cutoff. No source label, URL, path or
+live draft input enters it. This is a **basic cohort label, not a unique report
+identifier**: different filters, seeds, snapshots or comparison settings can share
+the same suggested filename. Inspect the full cohort, method and source fields
+inside the JSON (and the renderer's fingerprint) to distinguish them.
+
+The decoder now retains both its validated report object and the original decoded
+JSON response text. The download is a UTF-8 `application/json` Blob of that text,
+not a `JSON.stringify` of the parsed object or a subset of displayed fields.
+Thus unrendered source/method fields, whitespace, numeric spellings, optional
+contexts, comparison/uncertainty, warnings, nulls and unrounded values survive.
+JavaScript reserialization can turn `1.0` into `1` or round a large integer,
+changing the Python brief fingerprint even when displayed measurements agree.
+This preserves decoded JSON text, not HTTP headers or compressed transport bytes.
+Validation still covers the viewer's consumed contract, not every unknown field.
+
+There is no additional report request, raw-data acquisition, bootstrap run or
+browser analytics. A [native download link](https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/download)
+owns one live object URL per displayed document and is keyboard-usable; repeated
+clicks reuse it. Following the [blob URL lifetime guidance](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/blob#memory_management), editing, resubmitting or
+unmounting removes the link and revokes its resource, rather than revoking during
+the click while the browser may still need it. No link exists in idle, loading,
+error, incompatible or stale-response states. Valid empty reports remain exportable
+with null measurements and provenance. A download-preparation failure leaves the
+report readable and shows a generic error without exposing exception details.
+
+Use the existing offline renderer from the repository root, replacing the example
+path with the file your browser saved:
+
+```sh
+PYTHONPATH=src python3 -m opponent_intelligence.brief \
+  --report "/path/to/nfl-oi-CAR-2024-REG-offense-before-week-19.report.json"
+```
+
+It prints Markdown without a raw snapshot, server, network or new calculation.
+It independently validates its consumed fields, rejects malformed inputs and has
+a 4 MiB input limit. See [brief replay, fingerprint and limitations](BRIEFS.md).
+Saving/re-rendering does not establish source authenticity, historical availability,
+statistical calibration or a predictive scouting finding.
 
 ## Pre-play field position
 
@@ -554,12 +605,38 @@ confirmed bootstrap does not change filtered estimates, kept seeds ungrouped for
 copying, and corrected an expected minus glyph to the existing ASCII format.
 No core/API formulas, dependencies, raw source, workflow or automation changed.
 
+On 2026-10-15, 635 frontend tests, a clean locked install and type-check/build pass
+on Node 24.19.0. All 196 core / 22 API tests and dependency checks pass on Python
+3.11/3.12/3.13, with API warnings as errors. All 71 unchanged endpoint fixtures
+are checked through response validation, Blob contents and safe filenames. Further
+tests preserve numeric spellings/large integers, Unicode and unrendered fields,
+reject incompatible responses, exclude stale/timeout/error exports, and verify
+repeated clicks, replacement/failure, unmount and StrictMode URL cleanup. jsdom
+stubs the missing URL store; it does not prove browser saving.
+
+Seven native Chrome 155 downloads across six actual pinned-snapshot API queries
+matched the response text byte-for-byte, without any extra report requests.
+Cases: full frozen comparison/1000-draw seed 20261006; selected-only 200 draws;
+four-stage filtered defense (3 selected / 136 baseline plays) and offense (0 / 139);
+empty before week 1 (0 / 0); then no comparison/bootstrap. Every saved file
+renders through the existing Python CLI, with file/stdin outputs identical. The
+first also reproduces the committed CAR historical Markdown byte-for-byte.
+Repeated download reused the same URL. All 12 StrictMode-created URLs were revoked
+exactly once after report removal. Keyboard Enter downloaded successfully at 390px
+without document overflow; desktop/mobile screenshots were inspected. No page
+errors or external page requests occurred. Both owned servers were stopped.
+These are local browser integration checks, not browser CI, cross-browser/device
+certification, a screen-reader audit or statistical validation.
+
+Complete-diff review kept the original JSON text to avoid fingerprint-changing
+reserialization, checked failed-replacement cleanup and clarified non-unique basic
+cohort filenames. No analytical definitions, API routes, dependencies, source bytes,
+CI workflows or automation changed.
+
 ## Next slice
 
-Download the current validated schema-v2 response as JSON, preserving source/method
-metadata and every optional context/comparison/uncertainty block. Use a safe
-cohort-identifying filename, no extra fetch/recomputation and no stale/loading/error
-export; test serialization and object-URL cleanup. Verify the saved file replays
-through the existing offline brief renderer instead of rewriting it in JavaScript.
-A CI browser demo and broader accessibility remain separate P1.4 work; do not mark
-the whole product surface complete on the strength of these viewer slices.
+Make a repeatable CI browser smoke flow against the actual API/viewer and a labeled
+synthetic immutable snapshot: build/edit/error/download, saved-file brief replay,
+targeted keyboard/mobile checks, no unexpected external requests and reliable
+server cleanup. Broader accessibility review remains separate; this is not a full
+WCAG audit or a reason to add storage/deployment. Inspect PR/CI and reviews first.
