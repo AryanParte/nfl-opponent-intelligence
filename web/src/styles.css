@@ -23,7 +23,7 @@ p { margin: 10px 0; }
 .section-heading > span { font-size: 12px; color: #53717c; }
 .controls { display: grid; grid-template-columns: .75fr .9fr .9fr 1fr 1.35fr; gap: 16px; }
 label { display: grid; gap: 7px; font-size: 12px; font-weight: 700; }
-input, select { min-width: 0; width: 100%; padding: 10px 12px; border: 1px solid #9fb2ba; border-radius: 5px; color: #173745; background: white; font-size: 15px; min-height: 44px; }
+input, select { min-width: 0; width: 100%; padding: 10px 12px; border: 1px solid #728892; border-radius: 5px; color: #173745; background: white; font-size: 15px; min-height: 44px; }
 .form-footer { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 20px; font-size: 12px; }
 .form-footer p { margin: 4px 0; }
 button { flex-shrink: 0; border: 0; background: #006e91; color: white; padding: 12px 18px; border-radius: 5px; font-size: 14px; font-weight: 650; min-height: 44px; }

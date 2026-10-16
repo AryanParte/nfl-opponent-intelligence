@@ -71,6 +71,54 @@ it('rejects invalid query before any network call', async () => {
   expect(fetch).not.toHaveBeenCalled();
 });
 
+it.each([
+  ['team', '?', 'team'], ['season', '1998', 'season'], ['before_week', '0', 'before_week'],
+  ['yardline_min', '101', 'yardline_min'], ['yardline_max', 'x', 'yardline_max'],
+  ['score_min', '-', 'score_min'], ['score_max', '1.5', 'score_max'],
+  ['clock_min', '901', 'clock_min'], ['clock_max', 'x', 'clock_max'],
+  ['clock_max', '120', 'period'], ['bootstrap_repetitions', '199', 'bootstrap_repetitions'],
+  ['bootstrap_seed', '-1', 'bootstrap_seed'], ['bootstrap_seed', '0', 'bootstrap_repetitions'],
+])('associates and focuses %s validation errors; clears them on edit', (name, value, invalidName) => {
+  setup();
+  const form = screen.getByRole('form') as HTMLFormElement;
+  const input = form.elements.namedItem(name) as HTMLInputElement;
+  const invalid = form.elements.namedItem(invalidName) as HTMLElement;
+  const originalHelp = invalid.getAttribute('aria-describedby');
+  expect(originalHelp).toBeTruthy();
+  fireEvent.change(input, { target: { value } });
+  fireEvent.submit(form);
+  expect(invalid).toHaveFocus();
+  expect(invalid).toHaveAttribute('aria-invalid', 'true');
+  expect(invalid).toHaveAttribute('aria-describedby', `${originalHelp} query-error`);
+  const message = document.getElementById('query-error')!.textContent!;
+  expect(invalid).toHaveAccessibleDescription(expect.stringContaining(message));
+  expect(form.querySelectorAll('[aria-invalid="true"]')).toHaveLength(1);
+  expect(fetch).not.toHaveBeenCalled();
+  // An unchanged invalid resubmission restores focus, not just the first one.
+  screen.getByRole('button', { name: 'Build report' }).focus();
+  fireEvent.submit(form);
+  expect(invalid).toHaveFocus();
+  fireEvent.change(input, { target: { value: '' } });
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  expect(form.querySelector('[aria-invalid="true"]')).toBeNull();
+  expect(invalid).toHaveAttribute('aria-describedby', originalHelp);
+});
+
+it('announces an asynchronous error without moving focus or flagging a valid field', async () => {
+  let finish!: (value: Response) => void;
+  vi.mocked(fetch).mockImplementation(() => new Promise(resolve => { finish = resolve; }));
+  setup();
+  const status = screen.getByRole('status');
+  await submit();
+  const team = screen.getByRole('textbox', { name: 'Team code' });
+  team.focus(); // Navigating without editing must not get interrupted by completion.
+  await act(async () => { finish(reply({ error: { code: 'report_busy' } }, 503)); });
+  expect(screen.getByRole('alert')).toHaveTextContent('another report');
+  expect(team).toHaveFocus();
+  expect(document.querySelector('[aria-invalid="true"]')).toBeNull();
+  expect(screen.getByRole('status')).toBe(status); // Live region stays mounted.
+});
+
 it('announces loading, prevents duplicate submits, clears results on edits and ignores stale responses', async () => {
   let finish!: (value: Response) => void;
   vi.mocked(fetch).mockImplementation(() => new Promise((resolve) => { finish = resolve; }));

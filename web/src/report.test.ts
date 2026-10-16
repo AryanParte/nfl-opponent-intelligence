@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import fixtures from './__fixtures__/reports.json';
-import { epa, fetchReport, parseQuery, parseReport, percentage, type Draft, type Query } from './report';
+import { epa, fetchReport, parseQuery, parseReport, percentage, QueryValidationError, type Draft, type Query } from './report';
 
 const query = fixtures.offense.query as Query;
 const draft: Draft = { team: 'CAR', season: '2024', before_week: '3', side: 'offense', season_type: 'REG',
@@ -60,6 +60,28 @@ describe('consumed report contract', () => {
 });
 
 describe('request boundary', () => {
+  it.each<[Partial<Draft>, (keyof Draft)[]]>([
+    [{ team: '?' }, ['team']], [{ season: '' }, ['season']], [{ before_week: '0' }, ['before_week']],
+    [{ side: 'both' }, ['side']], [{ season_type: 'PRE' }, ['season_type']],
+    [{ compare_league: 'true' as unknown as boolean }, ['compare_league']],
+    [{ team: '?', season: '' }, ['team', 'season']],
+    [{ yardline_min: '-1' }, ['yardline_min']], [{ yardline_max: '101' }, ['yardline_max']],
+    [{ yardline_min: '40', yardline_max: '20' }, ['yardline_min', 'yardline_max']],
+    [{ score_min: '-' }, ['score_min']], [{ score_max: '1.5' }, ['score_max']],
+    [{ score_min: '3', score_max: '-3' }, ['score_min', 'score_max']],
+    [{ period: 'Q5' }, ['period']], [{ clock_min: '901' }, ['clock_min']], [{ clock_max: 'x' }, ['clock_max']],
+    [{ clock_max: '120' }, ['period']],
+    [{ period: 'Q4', clock_min: '500', clock_max: '100' }, ['clock_min', 'clock_max']],
+    [{ bootstrap_repetitions: '199' }, ['bootstrap_repetitions']],
+    [{ bootstrap_seed: '-1' }, ['bootstrap_seed']],
+    [{ bootstrap_repetitions: '199', bootstrap_seed: '-1' }, ['bootstrap_repetitions', 'bootstrap_seed']],
+    [{ bootstrap_seed: '0' }, ['bootstrap_repetitions']],
+  ])('identifies only the fields needing correction for %j', (change, fields) => {
+    let failure: unknown;
+    try { parseQuery({ ...draft, ...change }); } catch (error) { failure = error; }
+    expect(failure).toBeInstanceOf(QueryValidationError);
+    expect(failure).toMatchObject({ fields });
+  });
   it('accepts the UI request and validates numbers before sending', () => {
     expect(parseQuery(draft)).toEqual(query);
     for (const change of [{ team: '../' }, { team: 'car' }, { season: '' }, { before_week: '0' },

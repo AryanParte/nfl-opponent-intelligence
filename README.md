@@ -29,8 +29,10 @@ game-bootstrap controls show exploratory intervals, per-metric game support and
 explicit unavailable/withheld states. The displayed report can be downloaded as
 its original validated JSON for offline brief replay, with full provenance and no
 new request or calculation. A synthetic Chromium integration suite connects the
-actual API, viewer, native download and offline brief in CI. Broader accessibility
-review, Decision Lab, adjustment and deployment remain on the
+actual API, viewer, native download and offline brief in CI. A
+[bounded Scout accessibility review](docs/ACCESSIBILITY.md) adds field-linked error
+recovery, contrast and keyboard/reflow regressions; screen-reader and cross-browser
+coverage remain unverified. Decision Lab, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 
@@ -432,6 +434,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Personnel/motion availability and scope decision](docs/PERSONNEL_MOTION.md)
 - [Optional local API contract and setup](docs/API.md)
 - [Local browser viewer and verification](docs/WEB.md)
+- [Bounded accessibility review and remaining coverage](docs/ACCESSIBILITY.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)
 - [Contribution and review workflow](CONTRIBUTING.md)
 - [Daily sync, commit identity, and recovery](docs/DAILY_WORKFLOW.md)

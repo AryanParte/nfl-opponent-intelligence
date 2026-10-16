@@ -1,7 +1,8 @@
 import { execFileSync } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { test as base, expect, type Page } from '@playwright/test';
+import { test as base, expect, type Page, type TestInfo } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const origin = 'http://127.0.0.1:5173';
@@ -38,6 +39,14 @@ async function build(page: Page) {
   const response = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/report');
   await page.getByRole('button', { name: 'Build report' }).click();
   return response;
+}
+
+async function scanAccessibility(page: Page, info: TestInfo, state: string) {
+  const result = await new AxeBuilder({ page }).analyze();
+  const path = info.outputPath(`axe-${state}.json`);
+  await writeFile(path, JSON.stringify(result, null, 2));
+  await info.attach(`axe-${state}`, { path, contentType: 'application/json' });
+  expect(result.violations, `${state}: automatic checks are not a complete accessibility audit`).toEqual([]);
 }
 
 test('real filtered API report, both roles, native JSON download and offline brief replay', async ({ page }, info) => {
@@ -118,7 +127,7 @@ test('invalid controls make no request; real API error and empty cohort recover 
   expect(requests).toBe(2);
 });
 
-test('editing during a delayed real response cannot publish a stale report or download', async ({ page }) => {
+test('editing during a delayed real response cannot publish a stale report or download', async ({ page }, info) => {
   let release!: () => void;
   let received!: () => void;
   const hold = new Promise<void>(resolve => { release = resolve; });
@@ -135,6 +144,7 @@ test('editing during a delayed real response cannot publish a stale report or do
     await captured;
     await expect(page.getByRole('status')).toContainText('Building report');
     await expect(page.getByRole('button', { name: 'Building' })).toBeDisabled();
+    await scanAccessibility(page, info, 'loading');
     await page.getByLabel('Team code', { exact: true }).fill('ATL');
   } finally { release(); }
   await page.unrouteAll({ behavior: 'wait' });
@@ -166,4 +176,127 @@ test('keyboard query, focusable table and viewport containment', async ({ page }
     await expect.poll(() => table.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test('accessibility scans cover idle, invalid, API error, empty and expanded evidence states', async ({ page }, info) => {
+  test.setTimeout(60_000);
+  await openViewer(page);
+  await scanAccessibility(page, info, 'idle');
+  await page.getByLabel('Maximum seconds remaining', { exact: true }).fill('120');
+  await page.getByRole('button', { name: 'Build report' }).click();
+  await expect(page.getByRole('alert')).toContainText('Choose an explicit period');
+  await scanAccessibility(page, info, 'invalid');
+  await page.getByLabel('Maximum seconds remaining', { exact: true }).fill('');
+  await page.getByLabel('Season', { exact: true }).fill('2023');
+  expect((await build(page)).status()).toBe(422);
+  await expect(page.getByRole('alert')).toBeVisible();
+  await scanAccessibility(page, info, 'api-error');
+  await page.getByLabel('Season', { exact: true }).fill('2024');
+  await page.getByLabel('Before week', { exact: true }).fill('1');
+  await build(page);
+  await expect(page.getByRole('heading', { name: 'No eligible plays match this query.' })).toBeVisible();
+  await scanAccessibility(page, info, 'empty');
+  await page.getByLabel('Before week', { exact: true }).fill('3');
+  await page.getByLabel('Maximum yards to goal', { exact: true }).fill('20');
+  await page.getByLabel('Minimum score difference', { exact: true }).fill('-7');
+  await page.getByLabel('Maximum score difference', { exact: true }).fill('0');
+  await page.getByRole('combobox', { name: 'Period', exact: true }).selectOption('Q4');
+  await page.getByLabel('Maximum seconds remaining', { exact: true }).fill('120');
+  await page.getByLabel('Compare with other teams in the same role').check();
+  await page.getByLabel('Bootstrap repetitions', { exact: true }).fill('200');
+  await build(page);
+  await expect(page.getByRole('status')).toContainText('3 eligible plays');
+  for (const summary of await page.locator('article summary').all()) {
+    await summary.focus();
+    await summary.press('Enter');
+    await expect(summary.locator('..')).toHaveAttribute('open', '');
+  }
+  await scanAccessibility(page, info, 'expanded-evidence');
+});
+
+test('invalid submission focuses its field, describes the error and permits keyboard correction', async ({ page }) => {
+  await openViewer(page);
+  const clock = page.getByLabel('Maximum seconds remaining', { exact: true });
+  const period = page.getByRole('combobox', { name: 'Period', exact: true });
+  await clock.fill('120');
+  await clock.press('Enter');
+  await expect(period).toBeFocused();
+  await expect(period).toHaveAttribute('aria-invalid', 'true');
+  await expect(period).toHaveAccessibleDescription(/Choose an explicit period/);
+  await expect(clock).not.toHaveAttribute('aria-invalid', 'true'); // The seconds themselves are valid.
+  await page.keyboard.press('q'); // Native select type-ahead, then commit with Tab.
+  await page.keyboard.press('Tab');
+  await expect(period).not.toHaveAttribute('aria-invalid', 'true');
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('status')).toContainText('Report loaded:');
+});
+
+test('full keyboard order, expanded tables and 320 CSS-pixel reflow', async ({ page }, info) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Skip to report query' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  for (const name of ['team', 'season', 'before_week', 'side', 'season_type', 'yardline_min', 'yardline_max',
+    'score_min', 'score_max', 'period', 'clock_min', 'clock_max', 'compare_league', 'bootstrap_repetitions', 'bootstrap_seed']) {
+    await page.keyboard.press('Tab');
+    await expect(page.locator(`[name="${name}"]`)).toBeFocused();
+    if (name === 'before_week') {
+      await page.keyboard.press('ControlOrMeta+A');
+      await page.keyboard.insertText('3');
+    }
+    if (name === 'compare_league') await page.keyboard.press('Space');
+    if (name === 'bootstrap_repetitions') await page.keyboard.insertText('200');
+  }
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Build report' })).toBeFocused();
+  // Browser-computed styling: axe does not check component-border contrast.
+  const colors = await page.getByLabel('Team code', { exact: true }).evaluate(element => {
+    const style = getComputedStyle(element);
+    return [style.borderTopColor, style.backgroundColor];
+  });
+  function luminance(color: string) {
+    const rgb = color.match(/\d+/g)!.map(value => Number(value) / 255)
+      .map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+    return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+  }
+  const [border, background] = colors.map(luminance);
+  expect((Math.max(border, background) + 0.05) / (Math.min(border, background) + 0.05)).toBeGreaterThanOrEqual(3);
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('status')).toHaveText('Report loaded: CAR, offense, 15 eligible plays.');
+  await page.setViewportSize({ width: 320, height: 900 });
+  for (const summary of await page.locator('article summary').all()) {
+    await summary.focus();
+    await summary.press('Enter');
+    await expect(summary.locator('..')).toHaveAttribute('open', '');
+  }
+  const tables = page.locator('article .table-scroll');
+  expect(await tables.count()).toBeGreaterThan(3); // Splits, comparisons and uncertainty.
+  for (const region of await tables.all()) {
+    await expect(region).toHaveAccessibleName(/.+/);
+    const table = region.getByRole('table');
+    await expect(table).toHaveAccessibleName(/.+/);
+    expect(await table.getByRole('columnheader').count()).toBeGreaterThan(0);
+    expect(await table.getByRole('rowheader').count()).toBeGreaterThan(0);
+    await region.focus();
+    await expect(region).toBeFocused();
+    const focus = await region.evaluate(element => {
+      const style = getComputedStyle(element);
+      return { width: style.outlineWidth, style: style.outlineStyle, offset: style.outlineOffset };
+    });
+    expect(focus).toEqual({ width: '3px', style: 'solid', offset: '4px' });
+    if (await region.evaluate(element => element.scrollWidth > element.clientWidth)) {
+      await region.press('ArrowRight');
+      await expect.poll(() => region.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+    }
+    await page.keyboard.press('Tab');
+    await expect(region).not.toBeFocused(); // No keyboard trap.
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await scanAccessibility(page, info, 'expanded-320');
+  // Inspect focused controls and tables visually; these are not screen-reader tests.
+  await page.getByLabel('Team code', { exact: true }).focus();
+  await page.screenshot({ path: info.outputPath('query-320.png') });
+  await tables.first().focus();
+  await page.screenshot({ path: info.outputPath('table-320.png') });
 });

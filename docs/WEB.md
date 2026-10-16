@@ -91,7 +91,7 @@ is invented. Its manifest exercises the production schema with fictional source
 IDs; this is not proof of a real upstream acquisition. No real raw snapshot is
 required, fetched or modified. Normal developer mode still has no synthetic fallback.
 
-Four scenarios run at desktop 1280px and narrow 390px in pinned Chromium:
+Seven scenarios run at desktop 1280px and narrow 390px in pinned Chromium:
 
 - four-stage filtered offense/defense with matched baseline and withheld
   one-game intervals, then native keyboard download of byte-identical JSON and
@@ -101,7 +101,12 @@ Four scenarios run at desktop 1280px and narrow 390px in pinned Chromium:
 - loading/edit cancellation with a delayed **actual** API response, ensuring
   stale data/downloads cannot appear;
 - keyboard skip/query/submit, focusable wide-table scrolling and no document
-  overflow at the tested widths.
+  overflow at the tested widths;
+- full-page axe checks for idle, client-invalid, API-error, empty and expanded
+  evidence states (loading is also scanned in the delayed-response scenario);
+- field-linked validation, first-invalid focus and native keyboard correction;
+- complete form tab order, keyboard disclosures, named/captioned wide tables,
+  visible focus, horizontal arrow scrolling, border contrast and 320px reflow.
 
 Browser HTTP/WebSocket requests outside the viewer origin are blocked and fail the
 test; the local Vite socket is allowed, service workers are blocked. The test-only
@@ -114,12 +119,16 @@ its owned temporary snapshot on graceful exit or startup error; forced terminati
 can leave an OS-temp directory, never a new canonical checkout.
 
 The `browser` CI job runs these checks on Linux/Python 3.13. Synthetic failure
-screenshots/traces and downloaded reports in ignored `web/test-results/` are
+screenshots/traces, axe JSON (including incomplete checks), and downloaded reports
+in ignored `web/test-results/` are
 retained as CI artifacts for seven days on failure. They contain no user data.
 This is smoke coverage of integration and targeted keyboard/layout behavior, not
 real-data reconciliation, Firefox/Safari/mobile-device certification, a production
 deployment test, screen-reader/WCAG audit, statistical calibration or performance
-benchmark. P1.4's broader bounded accessibility review remains the next unit.
+benchmark. The [bounded accessibility review](ACCESSIBILITY.md) records exact
+coverage, fixes, incomplete scan findings and assistive-technology gaps. No axe
+rules or page regions are disabled/excluded. Its dev-only MPL-2.0 dependency is
+pinned to 4.14.0 in the lockfile; nothing is added to the runtime bundle.
 
 ## Local connection decision
 
@@ -700,8 +709,9 @@ CI workflows or automation changed.
 
 ## Next slice
 
-Make a repeatable CI browser smoke flow against the actual API/viewer and a labeled
-synthetic immutable snapshot: build/edit/error/download, saved-file brief replay,
-targeted keyboard/mobile checks, no unexpected external requests and reliable
-server cleanup. Broader accessibility review remains separate; this is not a full
-WCAG audit or a reason to add storage/deployment. Inspect PR/CI and reviews first.
+P1.4's bounded local surface is complete, including browser CI and the accessibility
+review. Inspect PR/CI/reviews, then begin only P1.5's offline Run vs Pass contract
+and semantics tests. Reuse Scout's pipeline and preserve schema-v2 reports. No
+Decision Lab UI/API, models, storage or deployment belongs in that first slice.
+Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
+explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

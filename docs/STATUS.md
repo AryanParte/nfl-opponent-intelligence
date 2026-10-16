@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the additional manual run on 2026-10-15, the long-term direction is
+As of the daily run on 2026-10-16, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab**. No decision engine, model,
 new dataset or mode switch is claimed yet. The [architecture decision](DECISION_INTELLIGENCE.md)
@@ -9,37 +9,45 @@ primary-source model/data review, AI policy and the justified no-database decisi
 P1.5–P1.9 now cover decision foundations, model evaluation, richer data audit, API
 and UI; the prior operational/case-study milestone is preserved as P1.10.
 
-One remaining P1.4 unit is complete: repeatable synthetic browser integration with
-the actual API/viewer and offline brief renderer, wired into a separate CI job.
-Eight desktop/narrow Chromium cases cover both-role four-stage reports, comparison,
-withheld uncertainty, native downloads/replay, edit/stale/error/empty states and
-targeted keyboard/scroll/layout behavior. Existing formulas, routes, schemas, UI
-behavior and real snapshots are unchanged. All 196 core / 24 API tests pass on
-Python 3.11/3.12/3.13; 636 frontend tests, locked installation and type-check/build
-pass on Node 24.19.0. The eight browser cases also pass twice consecutively, without
-retries. See [browser setup and boundaries](WEB.md#repeatable-browser-integration-checks).
-The only added dependency is pinned development-only Playwright. The core still
-has no third-party runtime dependencies. The 8 AM automation is unchanged.
+P1.4's bounded local surface is complete on this branch. The final unit fixes
+field-associated validation/focus recovery and input-border contrast, makes required
+formats explicit, and expands the existing real-API synthetic browser harness with
+accessibility scans and keyboard/reflow regressions. Late API failures do not steal
+focus. All 196 core / 24 API tests pass on Python 3.11/3.12/3.13; 672 frontend tests,
+clean locked installation and type-check/build pass on Node 24.19.0. All 14 browser
+cases pass, including desktop/narrow scans and 320px table access. See the
+[bounded review, scan incompletes and actual coverage limits](ACCESSIBILITY.md).
+No screen reader ran; this is not WCAG certification. Analytics, routes, schema-v2
+reports, download bytes and snapshots are unchanged. The new dependency is pinned,
+development-only axe; the core remains standard-library-only. Next is only P1.5's
+offline Run vs Pass contract. The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
 deferred under the [source decision](PERSONNEL_MOTION.md), not inferred from
 shotgun/no-huddle or text. P1.2 stays complete for the pinned snapshot. Calibration,
 cross-game dependence, opponent adjustment, historical information availability,
-broader accessibility and deployment remain open. Reports are descriptive, not two-team
+assistive-technology/cross-browser coverage and deployment remain open. Reports are descriptive, not two-team
 projections or validated scouting recommendations.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/scout-browser-ci`, started from updated
-  `origin/main` at `b0fc74f` after observing PR #20 merged. Do not merge or enable
+- Working branch: `codex/scout-accessibility`, started from updated
+  `origin/main` at `91129ea` after observing PR #21 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/scout-browser-ci` for its exact published SHA, attribution and CI
+  `codex/scout-accessibility` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous browser CI/direction review: [PR #21](https://github.com/AryanParte/nfl-opponent-intelligence/pull/21),
+  merged at `91129ea`; its tree matches feature head `491a503`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38827620757)
+  passed all eight jobs. No open PRs or review feedback remained. Baseline
+  196 core / 24 API / 636 frontend tests passed; the first frontend attempt had
+  worker-start/test timeouts, followed by a clean two-worker baseline. The final
+  default-worker 672-test run also passed; no timeout/retry settings were loosened.
 - Previous download review: [PR #20](https://github.com/AryanParte/nfl-opponent-intelligence/pull/20),
   merged at `b0fc74f`; its tree matches feature head `3d53724`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38808695441)
@@ -143,6 +151,39 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 bounded Scout accessibility — 2026-10-16
+
+All 196 core / 24 API tests pass on Python 3.11/3.12/3.13, API warnings as errors,
+with clean pip checks. Clean locked npm installation reports no known vulnerabilities;
+672 frontend tests and type-check/build pass on Node 24.19.0. All 14 browser cases
+pass in pinned Chromium, without retries. The 71 API-produced fixtures are unchanged.
+Test-owned ports 8000/5173 are no longer listening after the run.
+
+The first browser regression reproduced missing focus on the required period after
+submitting a clock without it. Typed validation now carries field identities into
+React without re-parsing messages or duplicating validation. Existing helper text
+is retained, both ends of inverted ranges are identified, and valid seconds/seeds
+are not marked invalid for a missing prerequisite. Tests cover every validation
+branch, repeated submissions, clearing stale errors and asynchronous error focus.
+Required-control/format instructions are explicit. Input/select borders now have
+3.72:1 contrast against white rather than 2.20:1, checked from rendered styles.
+
+Seven axe scan states per desktop/narrow context have zero automatic violations;
+`incomplete` contrast entries remain for decorative glyphs and clipped/short table
+cells. Review inspected these and preserved the full JSON, rather than suppressing
+rules or equating zero violations with compliance. Browser tests cover all 15
+controls' tab order, native correction, disclosures, named/captioned tables with
+headers, focus outlines, arrow-key scrolling, exiting with Tab and 320px document
+containment. Query/table screenshots were visually inspected. Actual screen-reader,
+cross-browser, physical-device, browser-zoom and forced-colors checks did not run.
+See [ACCESSIBILITY.md](ACCESSIBILITY.md) for exact evidence and follow-up.
+
+Complete-diff review retained first-failed-rule semantics, bounded query options,
+stale-response guards and error sanitization; no analytics/data/provenance or schema
+changes. The new unmodified MPL-2.0 checker is dev-only and pinned. The automated
+scans were already green before the independently failing keyboard regression;
+both are needed. P1.4 closes within that bounded scope, not as public certification.
 
 ### P1.4 synthetic browser CI and direction update — 2026-10-15 manual run
 
@@ -688,14 +729,15 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, complete P1.4's bounded Scout
-accessibility review: form labels/instructions, error/status announcements,
-keyboard focus/order and wide tables on desktop/narrow screens. Fix reproducible
-issues, use the new synthetic browser harness and record actual assistive-technology
-coverage/limits. Do not call targeted checks WCAG certification or spend another
-unit rebuilding browser CI. Once that clean boundary is reached, begin only P1.5's
-small offline Run vs Pass contract slice, with precise cohort/candidate semantics
-and evidence states; see [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md).
+Inspect current PR CI and reviews first; do not duplicate this unit while unmerged.
+Next, begin only P1.5's small offline Run vs Pass contract slice: precise request,
+exact down/distance and other cohort semantics, dropback/sack/scramble versus
+designed-run mapping, denominators, sample requirements and unavailable/insufficient
+evidence states. Reuse the existing pipeline and preserve Scout schema v2. No
+automatic winner from a noisy mean, decision API/UI or model in that first slice;
+see [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md). Preserve the actual
+assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
+without claiming conformance or restarting P1.4/browser CI.
 Do not add storage for this single-snapshot view or imply a public deployment.
 The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add
