@@ -208,10 +208,10 @@ small modular service. Revisit DuckDB for measured local analytical scan/join ne
 or PostgreSQL for demonstrated shared transactional needs, with workload/memory/
 latency evidence and an ADR. This is an access-pattern decision, not a scale claim.
 
-This run finishes P1.4's repeatable synthetic browser/CI flow, not Decision Lab.
-Next: a bounded Scout accessibility review of forms, errors/status, keyboard focus
-and wide tables on desktop/narrow screens; record assistive-technology limitations.
-Then begin P1.5 with the first small offline contract slice. Preserve operational
+The 2026-10-15 run finished P1.4's repeatable synthetic browser/CI flow, not Decision
+Lab. The 2026-10-16 [bounded accessibility review](ACCESSIBILITY.md) closes the local
+surface boundary, with actual screen-reader/cross-browser coverage still unverified.
+Next: begin P1.5 with only the first small offline contract slice. Preserve operational
 evidence/case-study goals as P1.10; model/enrichment gates may explicitly defer an
 integration so they do not force unvalidated features into the basic decision product.
 No deployment, automatic merges or 8 AM automation changes are authorized here.

@@ -1636,3 +1636,69 @@ surface item. Then specify/test the first small offline P1.5 Run vs Pass contrac
 do not combine it with API/UI/models. Preserve the same repository and Scout
 contracts. Inspect this PR's CI/reviews before new work; do not merge or enable
 auto-merge. The existing 8 AM schedule and automation configuration are unchanged.
+
+## 2026-10-16 — Bounded Scout accessibility and error recovery
+
+**Built / why:** completed P1.4's last bounded local-surface unit. Invalid queries
+now identify and focus the relevant controls, retain their instructions and describe
+the error programmatically. Required controls/formats are explicit, input borders
+have stronger contrast, and browser coverage now includes state-by-state scans,
+full keyboard order/correction, disclosures, table access and 320px reflow. This
+makes the existing evidence easier to reach without changing football calculations.
+
+Synced the stable clone; PR #21 was merged at `91129ea`, tree-equivalent to
+`491a503`, with all eight main CI jobs green and no open PR/review feedback.
+Created `codex/scout-accessibility` from updated `origin/main`, preserving history.
+The published PR provides the exact SHA, attribution and remote-CI receipt.
+
+**Review files:** `web/src/report.ts` (`QueryValidationError`), `web/src/App.tsx`
+(field descriptions and validation-only focus), `web/src/styles.css`,
+`web/src/report.test.ts`, `web/src/App.test.tsx`, `web/e2e/scout.spec.ts`,
+`web/package-lock.json` and `docs/ACCESSIBILITY.md`.
+
+**Sports concepts:** seconds remaining need an explicit period; a valid clock value
+is not the invalid field when the period is missing. Small/empty samples, missing
+EPA and withheld one-game intervals remain visible, not zero-filled or hidden.
+Offense/defense meaning, matched baselines, denominators and provenance are unchanged.
+
+**Software/statistical concepts / what to learn:** preserve typed field identity
+at the validation boundary instead of guessing from error-message text. Link an
+error to a control without deleting its existing help. Only a synchronous rejected
+submission should move focus; a late request must not interrupt navigation.
+Automatic accessibility tools miss some keyboard and non-text-contrast problems.
+Zero detected violations is not a conformance claim, just as a green regression
+suite is not statistical calibration. Keep synthetic testing distinct from real
+observations and actual assistive-technology testing distinct from DOM assertions.
+
+**Three review questions:**
+
+1. Why does a missing period invalidate the period control, rather than valid
+   seconds, and how are inverted minimum/maximum relationships represented?
+2. Why can local validation move focus while an asynchronous API failure should
+   not, and how do repeated submission and edit tests guard that distinction?
+3. What can axe, keyboard regressions and 320px screenshots demonstrate—and what
+   screen-reader, zoom, cross-browser and statistical claims can they not support?
+
+**Verification / self-review:** 196 core / 24 API tests on Python 3.11/3.12/3.13,
+API warnings as errors, clean pip checks, 672 frontend tests, clean locked npm
+installation and type-check/build pass. Fourteen browser cases pass without retries;
+14 full-page axe scans report no automatic violations. All 71 generated API fixtures
+are unchanged. Owned test servers stop; ports 8000/5173 are free afterward.
+
+The pre-fix keyboard regression failed while the initial automated scan passed.
+Fixed field association/focus, and independently measured input-border contrast
+from 2.20:1 to 3.72:1 against white. Complete-diff review checked all validation
+branches and unchanged accepted queries, range relationships, retained help,
+repeated errors, asynchronous focus, stale results and sanitized API messages.
+Scan `incomplete` findings were inspected and retained: a decorative arrow and
+short/clipped table cells, not a clean bill of health. Expanded desktop scans and
+visual narrow screenshots support the bounded review; no actual screen reader ran.
+The unmodified MPL-2.0 checker is pinned/dev-only, not a runtime or data dependency.
+The first baseline frontend attempt hit worker-start/test timeouts; bounded-worker
+baseline and the final default-worker run passed without relaxing test timeouts.
+
+**Remaining / next:** P1.4 is complete within its documented local scope. Actual
+assistive technology, real devices, cross-browser, zoom and high-contrast settings
+remain release-readiness gaps. After PR review, begin only the small offline P1.5
+Run vs Pass contract and semantics tests; no decision UI/API/model or duplicate
+analytics. Do not merge or enable auto-merge. The 8 AM automation is unchanged.

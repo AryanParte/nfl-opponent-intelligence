@@ -70,55 +70,70 @@ export type Comparison = {
   warnings: string[];
 };
 
+/** Field identities travel with validation, never inferred from human-readable messages. */
+export class QueryValidationError extends Error {
+  constructor(message: string, readonly fields: readonly (keyof Draft)[]) {
+    super(message);
+    this.name = 'QueryValidationError';
+  }
+}
+
 export function parseQuery(draft: Draft): Query {
   const whole = (value: string, min: number, max: number) =>
     /^\d+$/.test(value) && Number(value) >= min && Number(value) <= max;
-  if (!/^[A-Z]{2,3}$/.test(draft.team) || !whole(draft.season, 1999, 9999)
-      || !whole(draft.before_week, 1, 23) || !['offense', 'defense'].includes(draft.side)
-      || !['REG', 'POST'].includes(draft.season_type) || typeof draft.compare_league !== 'boolean') {
-    throw new Error('Use a 2–3 letter uppercase team code, season 1999–9999 and cutoff week 1–23. Check the role and season type.');
+  const requiredChecks: [keyof Draft, boolean][] = [
+    ['team', /^[A-Z]{2,3}$/.test(draft.team)], ['season', whole(draft.season, 1999, 9999)],
+    ['before_week', whole(draft.before_week, 1, 23)], ['side', ['offense', 'defense'].includes(draft.side)],
+    ['season_type', ['REG', 'POST'].includes(draft.season_type)], ['compare_league', typeof draft.compare_league === 'boolean'],
+  ];
+  const invalidRequired = requiredChecks.filter(([, valid]) => !valid).map(([field]) => field);
+  if (invalidRequired.length) {
+    throw new QueryValidationError('Use a 2–3 letter uppercase team code, season 1999–9999 and cutoff week 1–23. Check the role and season type.', invalidRequired);
   }
-  const bound = (text: string): number | undefined => {
-    const value = text.trim();
+  const bound = (field: 'yardline_min' | 'yardline_max'): number | undefined => {
+    const value = draft[field].trim();
     if (value === '') return undefined;
     if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(value) || !Number.isFinite(Number(value)) || Number(value) > 100) {
-      throw new Error('Field-position bounds must be decimals from 0 to 100, or blank. Use a dot for decimals.');
+      throw new QueryValidationError('Field-position bounds must be decimals from 0 to 100, or blank. Use a dot for decimals.', [field]);
     }
     return Number(value);
   };
-  const lower = bound(draft.yardline_min), upper = bound(draft.yardline_max);
-  if ((lower ?? 0) > (upper ?? 100)) throw new Error('Minimum yards to goal must not exceed maximum yards to goal.');
-  const scoreBound = (text: string): number | undefined => {
-    const value = text.trim();
+  const lower = bound('yardline_min'), upper = bound('yardline_max');
+  if ((lower ?? 0) > (upper ?? 100)) throw new QueryValidationError('Minimum yards to goal must not exceed maximum yards to goal.', ['yardline_min', 'yardline_max']);
+  const scoreBound = (field: 'score_min' | 'score_max'): number | undefined => {
+    const value = draft[field].trim();
     if (value === '') return undefined;
     if (!/^[+-]?\d+$/.test(value) || !Number.isSafeInteger(Number(value)) || Math.abs(Number(value)) > 1000) {
-      throw new Error('Pre-play score bounds must be signed whole points from -1000 to +1000, or blank.');
+      throw new QueryValidationError('Pre-play score bounds must be signed whole points from -1000 to +1000, or blank.', [field]);
     }
     return Number(value);
   };
-  const scoreLower = scoreBound(draft.score_min), scoreUpper = scoreBound(draft.score_max);
+  const scoreLower = scoreBound('score_min'), scoreUpper = scoreBound('score_max');
   if (scoreLower !== undefined && scoreUpper !== undefined && scoreLower > scoreUpper) {
-    throw new Error('Minimum score difference must not exceed maximum score difference.');
+    throw new QueryValidationError('Minimum score difference must not exceed maximum score difference.', ['score_min', 'score_max']);
   }
   if (draft.period !== '' && !PERIODS.some(period => period === draft.period)) {
-    throw new Error('Choose Q1, Q2, Q3, Q4 or OT, or leave the period unrestricted.');
+    throw new QueryValidationError('Choose Q1, Q2, Q3, Q4 or OT, or leave the period unrestricted.', ['period']);
   }
-  const clockBound = (text: string): number | undefined => {
-    const value = text.trim();
+  const clockBound = (field: 'clock_min' | 'clock_max'): number | undefined => {
+    const value = draft[field].trim();
     if (value === '') return undefined;
-    if (!whole(value, 0, 900)) throw new Error('Clock bounds must be whole seconds from 0 to 900, or blank.');
+    if (!whole(value, 0, 900)) throw new QueryValidationError('Clock bounds must be whole seconds from 0 to 900, or blank.', [field]);
     return Number(value);
   };
-  const clockLower = clockBound(draft.clock_min), clockUpper = clockBound(draft.clock_max);
+  const clockLower = clockBound('clock_min'), clockUpper = clockBound('clock_max');
   if ((clockLower !== undefined || clockUpper !== undefined) && draft.period === '') {
-    throw new Error('Choose an explicit period before using clock bounds. Clear both clock bounds for unrestricted periods.');
+    throw new QueryValidationError('Choose an explicit period before using clock bounds. Clear both clock bounds for unrestricted periods.', ['period']);
   }
-  if ((clockLower ?? 0) > (clockUpper ?? 900)) throw new Error('Minimum seconds remaining must not exceed maximum seconds remaining.');
+  if ((clockLower ?? 0) > (clockUpper ?? 900)) throw new QueryValidationError('Minimum seconds remaining must not exceed maximum seconds remaining.', ['clock_min', 'clock_max']);
   const repetitions = draft.bootstrap_repetitions.trim(), seed = draft.bootstrap_seed.trim();
-  if ((repetitions !== '' && !whole(repetitions, 200, 1000)) || (seed !== '' && !whole(seed, 0, 4294967295))) {
-    throw new Error('Bootstrap repetitions must be whole numbers from 200 to 1000; seed must be a whole number from 0 to 4294967295. Leave both blank for no uncertainty.');
+  const invalidBootstrap: (keyof Draft)[] = [];
+  if (repetitions !== '' && !whole(repetitions, 200, 1000)) invalidBootstrap.push('bootstrap_repetitions');
+  if (seed !== '' && !whole(seed, 0, 4294967295)) invalidBootstrap.push('bootstrap_seed');
+  if (invalidBootstrap.length) {
+    throw new QueryValidationError('Bootstrap repetitions must be whole numbers from 200 to 1000; seed must be a whole number from 0 to 4294967295. Leave both blank for no uncertainty.', invalidBootstrap);
   }
-  if (seed !== '' && repetitions === '') throw new Error('Bootstrap seed requires repetitions. Clear both fields to omit uncertainty.');
+  if (seed !== '' && repetitions === '') throw new QueryValidationError('Bootstrap seed requires repetitions. Clear both fields to omit uncertainty.', ['bootstrap_repetitions']);
   return { team: draft.team, season: Number(draft.season), before_week: Number(draft.before_week),
     ...(lower === undefined ? {} : { yardline_min: lower }), ...(upper === undefined ? {} : { yardline_max: upper }),
     ...(scoreLower === undefined ? {} : { score_min: scoreLower }), ...(scoreUpper === undefined ? {} : { score_max: scoreUpper }),

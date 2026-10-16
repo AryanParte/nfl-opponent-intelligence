@@ -16,7 +16,8 @@ the validated pipeline, metrics, baselines, uncertainty, API and React UI. No ne
 repository, duplicated analytics or LLM branding layer. The differentiator is
 explainable football evidence, not a play-calling game or a clone of another site.
 See [direction, evidence layers and initial source review](docs/DECISION_INTELLIGENCE.md).
-Decision Lab is planned, not shipped. Finish P1.4's clean boundary first.
+Decision Lab is planned, not shipped. P1.4's bounded local product-surface boundary
+is complete; the next unit is only the first small offline P1.5 contract slice.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -94,7 +95,7 @@ Method calibration, cross-game dependence and historical information availabilit
 remain unverified. PR #12 was observed merged at `9f9a647`; its final feature-head
 CI passed. Inspect current PR/CI and reviews before selecting new work.
 
-### P1.4 — Product surface (in progress)
+### P1.4 — Product surface (complete within local scope, 2026-10-16)
 
 - [x] First narrow FastAPI report endpoint (2026-10-08, additional manual run):
       `GET /v1/report` over one operator-configured immutable local snapshot,
@@ -153,16 +154,19 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       native JSON download/offline brief replay, invalid/error/empty/stale states,
       keyboard/scroll checks, outbound-request guards and owned-server cleanup.
       No real raw data, external data acquisition or second analytics implementation.
-- [ ] Bounded Scout accessibility review: labels/instructions, error/status
-      announcements, keyboard focus/order and wide-table access on desktop/narrow
-      screens. Fix reproducible issues and record assistive-technology coverage and
-      remaining limits; targeted browser checks are not a full WCAG certification.
+- [x] Bounded Scout accessibility review (2026-10-16): field-associated validation
+      errors and focus recovery, explicit required/input instructions, stronger
+      control borders, automated scans of six application states plus 320px reflow,
+      keyboard order/disclosures/table scrolling, retained captions/header semantics
+      and non-interrupting asynchronous errors. 672 frontend / 14 browser tests pass.
+      [Coverage, incomplete scan findings and assistive-technology limits](docs/ACCESSIBILITY.md)
+      are explicit; this is not screen-reader testing or WCAG certification.
 
-Next coherent unit: the bounded Scout accessibility review above, using the new
-synthetic integration harness. That is P1.4's remaining product-surface acceptance
-item; do not prolong it with unrelated polish or start Decision Lab simultaneously.
-Then start only the first small P1.5 contract slice. Inspect open PRs/CI/reviews
-before branching; never duplicate unmerged work.
+Next coherent unit: the first small offline P1.5 Run vs Pass contract slice below.
+Do not prolong P1.4 with unrelated polish or combine the contract with decision
+API/UI/models. Inspect open PRs/CI/reviews before branching; never duplicate
+unmerged work. Assistive-technology/cross-browser evaluation remains a documented
+release-readiness gap, not a claim that the bounded review certified accessibility.
 
 ### P1.5 — Decision Intelligence foundation
 
