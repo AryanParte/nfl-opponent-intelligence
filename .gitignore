@@ -15,3 +15,5 @@ reports/
 node_modules/
 .cache/
 .vitest/
+web/test-results/
+web/playwright-report/

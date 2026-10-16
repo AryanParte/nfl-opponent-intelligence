@@ -1,9 +1,13 @@
-# NFL Opponent Intelligence
+# NFL Decision Intelligence
 
 A reproducible foundation for weekly NFL opponent preparation: turn play-by-play
 data into offense tendencies and defense-side summaries with explicit sample sizes,
 metric definitions, source fingerprints, and a cutoff that excludes the week being
-prepared for.
+prepared for. The existing Opponent Intelligence functionality is the **Scout /
+Analysis** mode. This same repository will evolve toward an evidence-first
+**Play Caller / Decision Lab**, starting with defensible Run vs Pass comparisons.
+Decision Lab is planned, not implemented; repository/package/CLI names stay intact.
+See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
 
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
 acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
@@ -24,13 +28,14 @@ filters and ordered selected/baseline missing-context exclusions. Bounded, opt-i
 game-bootstrap controls show exploratory intervals, per-metric game support and
 explicit unavailable/withheld states. The displayed report can be downloaded as
 its original validated JSON for offline brief replay, with full provenance and no
-new request or calculation. Browser CI, broader accessibility review, adjustment,
-and deployment remain on the
+new request or calculation. A synthetic Chromium integration suite connects the
+actual API, viewer, native download and offline brief in CI. Broader accessibility
+review, Decision Lab, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
-source of truth. The daily workflow continues existing branches and the roadmap,
+source of truth. The daily workflow preserves existing work and follows the roadmap,
 with tests, self-review, learning notes, and pushed commits for each completed unit.
 
 ## Try it

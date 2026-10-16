@@ -1,42 +1,50 @@
 # Engineering status
 
-As of the scheduled run on 2026-10-15, P1.4's local viewer can download its current
-validated schema-v2 report as JSON. The original decoded API text is retained,
-not reserialized by JavaScript, so full source/method fields, numeric spellings,
-filters, comparison, uncertainty and nulls survive offline brief replay. The safe
-filename identifies the basic cohort, not every option or snapshot. A native link
-exists only for the ready report; edits/resubmits remove it, stale/error responses
-cannot create one, and owned object URLs are cleaned up. No extra request, raw-data
-acquisition or analytics occur. See [download and replay](WEB.md#download-and-replay-the-current-report).
-Existing query bounds, denominators, support warnings and API behavior are unchanged.
-All 196 core and 22 API tests pass locally on Python 3.11/3.12/3.13; 635 frontend
-tests, clean locked install, type-check/build and real-snapshot browser checks pass
-on Node 24.19.0. All 71 synthetic API/browser fixtures remain unchanged.
-Seven native downloads across six queries match response text byte-for-byte; all
-six saved reports render offline, and the frozen CAR Markdown reproduces exactly.
-No formulas, API routes, report defaults, dependencies, raw bytes, database,
-deployment, CI workflow or daily automation changed. The core CLI still needs
-no third-party dependencies.
+As of the additional manual run on 2026-10-15, the long-term direction is
+**NFL Decision Intelligence**, with the current product preserved as **Scout /
+Analysis** and a planned **Play Caller / Decision Lab**. No decision engine, model,
+new dataset or mode switch is claimed yet. The [architecture decision](DECISION_INTELLIGENCE.md)
+records shared pipeline boundaries, Run/Pass interpretation gates, an initial
+primary-source model/data review, AI policy and the justified no-database decision.
+P1.5–P1.9 now cover decision foundations, model evaluation, richer data audit, API
+and UI; the prior operational/case-study milestone is preserved as P1.10.
+
+One remaining P1.4 unit is complete: repeatable synthetic browser integration with
+the actual API/viewer and offline brief renderer, wired into a separate CI job.
+Eight desktop/narrow Chromium cases cover both-role four-stage reports, comparison,
+withheld uncertainty, native downloads/replay, edit/stale/error/empty states and
+targeted keyboard/scroll/layout behavior. Existing formulas, routes, schemas, UI
+behavior and real snapshots are unchanged. All 196 core / 24 API tests pass on
+Python 3.11/3.12/3.13; 636 frontend tests, locked installation and type-check/build
+pass on Node 24.19.0. The eight browser cases also pass twice consecutively, without
+retries. See [browser setup and boundaries](WEB.md#repeatable-browser-integration-checks).
+The only added dependency is pinned development-only Playwright. The core still
+has no third-party runtime dependencies. The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
 deferred under the [source decision](PERSONNEL_MOTION.md), not inferred from
 shotgun/no-huddle or text. P1.2 stays complete for the pinned snapshot. Calibration,
 cross-game dependence, opponent adjustment, historical information availability,
-broader accessibility/browser CI and deployment remain open. Reports are descriptive, not two-team
+broader accessibility and deployment remain open. Reports are descriptive, not two-team
 projections or validated scouting recommendations.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/report-json-download`, started from updated
-  `origin/main` at `bd7e39d` after observing PR #19 merged. Continue this branch's
-  existing PR while unmerged; do not merge or enable auto-merge. The prior checkout
+- Working branch: `codex/scout-browser-ci`, started from updated
+  `origin/main` at `b0fc74f` after observing PR #20 merged. Do not merge or enable
+  auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/report-json-download` for its exact published SHA, attribution and CI
+  `codex/scout-browser-ci` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous download review: [PR #20](https://github.com/AryanParte/nfl-opponent-intelligence/pull/20),
+  merged at `b0fc74f`; its tree matches feature head `3d53724`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38808695441)
+  passed all seven jobs. No open PRs or review feedback remained. Baseline
+  196 core / 22 API / 635 frontend tests passed before implementation.
 - Previous uncertainty viewer review: [PR #19](https://github.com/AryanParte/nfl-opponent-intelligence/pull/19),
   merged at `bd7e39d`; its tree matches feature head `ed47af0`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38657439450)
@@ -135,6 +143,42 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.4 synthetic browser CI and direction update — 2026-10-15 manual run
+
+All 196 core / 24 API tests pass on Python 3.11/3.12/3.13 with API warnings as
+errors and clean dependency checks. All 636 frontend tests and type-check/build
+pass on Node 24.19.0. Clean locked npm installation reports no known vulnerabilities.
+Playwright 1.64.1 pins Chromium revision 1248 (156.0.8078.4 in this run); eight
+desktop/narrow cases pass, then sixteen executions with `--repeat-each=2` pass
+without retries. This is local macOS evidence; the PR's `browser` CI job separately
+verifies Linux. All 71 existing API-produced frontend fixtures remain unchanged.
+
+The test API uses the existing synthetic four-stage fixture in a temporary hashed
+snapshot. CAR offense / ATL defense select the same three plays: EPA 0.8, -0.4,
+missing; one game, two observed EPA, 0.2 EPA/play, 50% success and one dropback.
+The single baseline play has EPA 3. No future-week/POST/excluded row enters these
+queries. One-game bounds are withheld, not fabricated. Browser downloads preserve
+actual response bytes and render via the offline Python CLI without another API
+request. No real observations are used or acquired by this harness.
+
+Review found that Uvicorn re-raises SIGTERM after application shutdown, bypassing
+an outer temporary-directory context. Cleanup now occurs in the wrapped test-only
+lifespan before signal replay, with the outer context retained for startup errors.
+Lifecycle tests check this order, operator-config independence and denied outbound
+connections. Live occupied-port probes check refusal to reuse either service,
+preservation of the pre-existing owner, release of owned listeners and temporary
+snapshot cleanup. Forced process termination remains a documented OS-temp cleanup
+limitation, not a reason to touch real snapshots or another user's server.
+
+Initial harness checks caught a wrong loader import, keyword-only factory/label
+arguments and overly exact select-label locators. Corrected the harness; did not
+weaken assertions, increase timeouts or change production code. Complete-diff
+review keeps browser tests out of Vitest, includes them in TypeScript checks,
+uses one worker/no retries, blocks unexpected browser requests and adds config
+regressions. The architecture review separates model state values from action
+values, post-play features from decision-time inputs, and software licenses from
+dataset rights. No model outputs or richer-source joins were independently validated.
 
 ### P1.4 current-report JSON download — 2026-10-15
 
@@ -644,12 +688,14 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first. Next, make a repeatable CI browser smoke
-flow over a clearly labeled synthetic immutable snapshot and the actual API/viewer.
-Cover build/edit/error/download, saved-JSON-to-offline-brief replay and targeted
-keyboard/mobile checks, with unexpected external requests blocked and owned-server
-cleanup. Do not require the pinned real raw data or describe these checks as a
-full screen-reader/WCAG audit. Broader accessibility review remains open.
+Inspect current PR CI and reviews first. Next, complete P1.4's bounded Scout
+accessibility review: form labels/instructions, error/status announcements,
+keyboard focus/order and wide tables on desktop/narrow screens. Fix reproducible
+issues, use the new synthetic browser harness and record actual assistive-technology
+coverage/limits. Do not call targeted checks WCAG certification or spend another
+unit rebuilding browser CI. Once that clean boundary is reached, begin only P1.5's
+small offline Run vs Pass contract slice, with precise cohort/candidate semantics
+and evidence states; see [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md).
 Do not add storage for this single-snapshot view or imply a public deployment.
 The API must not accept arbitrary paths or fetch per request.
 The brief and availability decision exist; do not rebuild them or silently add

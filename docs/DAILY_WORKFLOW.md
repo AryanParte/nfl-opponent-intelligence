@@ -19,19 +19,21 @@ for every Git and development command. A new chat or workspace is not a new proj
    branch is behind its own upstream and the working tree is clean, fast-forward
    it. If it is ahead, retain that history. Resolve divergence carefully in the
    feature branch, without resets, forced updates, or guessing about user changes.
-4. Continue the appropriate unmerged `codex/` branch. If the prior work was merged,
-   begin the next branch from updated origin/main. Do not repeatedly branch from
-   the old initial snapshot or redo already merged work.
+4. Start each new implementation unit on a fresh `codex/` branch from updated
+   origin/main. Preserve unpublished and unmerged work; do not duplicate it on a
+   new branch. If a unit depends on an unmerged PR, select independent in-scope
+   work or report that dependency. Never branch from an old initial snapshot.
 5. Read AGENTS.md, README.md, ROADMAP.md, docs/STATUS.md, and LEARNING_LOG.md from
    this checkout. Choose one coherent unfinished unit, prioritizing regressions
-   and relevant review feedback.
+   and relevant review feedback. Follow the two-mode direction and evidence gates
+   in [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md): Scout first, then a
+   small Decision Lab slice. Do not change the existing 8 AM automation settings.
 
 Use the installed `/Library/Developer/CommandLineTools/usr/bin/git` when the
 system `/usr/bin/git` Xcode shim fails. Do not change global developer settings.
-The origin is configured as HTTPS, although this host's existing Git URL rules
-may route Git transport through SSH. Verify the owner/repository, not just the
-transport spelling. Repository-local HTTPS credential helpers are configured to
-use the existing store; no credentials are committed to this project.
+Verify the owner/repository, not just the HTTPS/SSH transport spelling. This host
+currently uses SSH; do not modify credential/global developer settings to match an
+example URL. No credentials are committed to this project.
 
 ## Finish a run
 

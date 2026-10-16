@@ -8,7 +8,15 @@ https://github.com/AryanParte/nfl-opponent-intelligence. Sync the canonical clon
 `/Users/aryanparte/Documents/nfl-opponent-intelligence`, then read the status file
 and latest commits before choosing work. Do not recreate the project in new sessions.
 
-## Project 1 — NFL Opponent Intelligence Platform
+## Project 1 — NFL Decision Intelligence (same repository)
+
+Direction updated 2026-10-15: preserve the existing Opponent Intelligence product
+as **Scout / Analysis**, then add a narrow **Play Caller / Decision Lab**. Reuse
+the validated pipeline, metrics, baselines, uncertainty, API and React UI. No new
+repository, duplicated analytics or LLM branding layer. The differentiator is
+explainable football evidence, not a play-calling game or a clone of another site.
+See [direction, evidence layers and initial source review](docs/DECISION_INTELLIGENCE.md).
+Decision Lab is planned, not shipped. Finish P1.4's clean boundary first.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -137,22 +145,84 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       ready-only links and owned object-URL cleanup. 635 frontend tests and seven
       native Chrome downloads pass; six real-snapshot reports replay offline,
       including byte-exact reproduction of the frozen historical Markdown brief.
-- [ ] Choose DuckDB/PostgreSQL only when actual access patterns justify storage;
-      record the decision. Keep a small modular service before adding components.
-- [ ] Broader accessibility review and a repeatable CI browser/end-to-end demo;
-      the first slice has labeled controls, status/alerts and local browser checks,
-      not a screen-reader/WCAG audit or browser tests in CI.
+- [x] Record the storage decision (2026-10-15 manual run): no database for one
+      bounded immutable, memory-resident snapshot and portable reports. Revisit
+      only with measured access patterns; see the architecture decision above.
+- [x] Repeatable synthetic browser integration/CI flow (2026-10-15 manual run):
+      actual FastAPI and React, desktop/narrow Chromium, both-role filtered reports,
+      native JSON download/offline brief replay, invalid/error/empty/stale states,
+      keyboard/scroll checks, outbound-request guards and owned-server cleanup.
+      No real raw data, external data acquisition or second analytics implementation.
+- [ ] Bounded Scout accessibility review: labels/instructions, error/status
+      announcements, keyboard focus/order and wide-table access on desktop/narrow
+      screens. Fix reproducible issues and record assistive-technology coverage and
+      remaining limits; targeted browser checks are not a full WCAG certification.
 
-Next coherent unit: make the local browser smoke flow repeatable in CI with a
-clearly labeled synthetic immutable snapshot and the actual API/viewer. Exercise
-build/edit/error/download behavior and saved-JSON-to-offline-brief replay, plus
-targeted keyboard/mobile checks; block unexpected external requests and reliably
-stop owned servers. Do not require the real raw snapshot or call this a full
-screen-reader/WCAG audit. Broader accessibility review remains open. Storage is
-conditional on justified access patterns; the current single-snapshot flow still
-does not justify a database. Inspect this branch's PR/CI and reviews first.
+Next coherent unit: the bounded Scout accessibility review above, using the new
+synthetic integration harness. That is P1.4's remaining product-surface acceptance
+item; do not prolong it with unrelated polish or start Decision Lab simultaneously.
+Then start only the first small P1.5 contract slice. Inspect open PRs/CI/reviews
+before branching; never duplicate unmerged work.
 
-### P1.5 — Operational evidence and case study
+### P1.5 — Decision Intelligence foundation
+
+- [ ] First small slice: a precise, offline Run vs Pass request/evidence contract
+      with exact down/distance and situational cohort semantics, candidate mapping,
+      denominators, sample requirements and null/unavailable/insufficient states.
+      Audit dropback/scramble/sack versus designed-run interpretation; no UI or model.
+- [ ] Reuse shared cohort/metric primitives for candidate frequencies, EPA/play,
+      success, play/game counts and matching leave-team-out league baselines.
+      Preserve schema-v2 Scout regression outputs; do not port formulas to React.
+- [ ] Add candidate-level support and uncertainty, explicit differences, empty and
+      missing states; test both-role meanings and offense-relative defense metrics.
+      Define comparison/abstention rules; no automatic winner from a noisy mean.
+- [ ] Admit opponent-specific evidence only after a defensible cohort/support
+      decision; otherwise mark deferred, not silently opponent-adjusted.
+- [ ] Independently reconcile synthetic examples and pinned retrospective cohorts;
+      document confounding and lack of causal/predictive validation.
+
+### P1.6 — Open-source decision-model evaluation/integration gate
+
+- [ ] Extend the initial nfl4th/fastrmodels desk review into versioned input/output,
+      assumptions, license/terms and historical model/data availability audits.
+- [ ] Compare reusable artifacts/reference R execution/adaptation against Python
+      compatibility and maintenance costs. Decide reuse/adapt/defer with evidence.
+- [ ] Independently test golden examples, transformations, possession/time/OT
+      boundaries and runtime parity before any EP/WP integration. Version models,
+      features, training windows and provenance; do not infer action values from
+      state values alone. Unsupported integrations remain explicitly deferred.
+
+### P1.7 — Richer football data audit
+
+- [ ] Extend the existing participation/FTN audit, not a second ingestion stack:
+      separate immutable manifests/hashes, attribution/terms and release-time evidence.
+- [ ] Validate joins/cardinality against PBP and audit unmatched/unknown/invalid
+      observations by team, week and candidate; no imputation of absent charting.
+- [ ] Approve only directly defensible play families with adequate samples and
+      reproducible semantics/tests. Defer weak proxies and unvalidated concepts.
+- [ ] Scope a future Big Data Bowl tracking source/research reference only after
+      checking its specific terms, coverage and identity/coordinate semantics.
+
+### P1.8 — Decision API
+
+- [ ] Narrow optional FastAPI endpoint reusing the tested decision layer and an
+      explicitly configured immutable snapshot; no request paths or downloads.
+- [ ] Return candidates, evidence, denominators, league context, warnings,
+      uncertainty, source/model versions and explicit insufficient-evidence states.
+- [ ] Bound computation and test request/response/errors/concurrency. No unexplained
+      AI score or EP/WP claim without the model-validation gate above. A documented
+      defer decision in P1.6/P1.7 must not force models/enrichment into the PBP-only API.
+
+### P1.9 — Play Caller / Decision Lab UI
+
+- [ ] Scout and Play Caller navigation in the existing React app; keep Scout intact.
+- [ ] Situation definition, supported-call selection and comparison against
+      alternatives, with clear historical versus model evidence labels.
+- [ ] Explain frequency/outcomes/league context/support/provenance; honest empty,
+      insufficient and abstention states, accessible request/download flows.
+- [ ] No browser analytics or causal-optimality/coaching/guaranteed-performance claims.
+
+### P1.10 — Operational evidence and case study (preserved from former P1.5)
 
 - [ ] Docker, repeatable builds, and CI that verifies data and API contracts.
 - [ ] Scheduled ingestion with freshness checks, retries, failure reporting, and
@@ -162,6 +232,16 @@ does not justify a database. Inspect this branch's PR/CI and reviews first.
 - [ ] Publish architecture, method, three evidence-backed football findings,
       limitations, demo video, and portfolio case study.
 - [ ] Request domain feedback through Aryan and incorporate concrete review notes.
+
+### Later decision capabilities (gated, not immediate work)
+
+More specific play families, opponent-adjusted action modeling, historical replay,
+fourth-down go/punt/field-goal mode, EP/WP action grading, tracking/spatial/route/
+coverage features and richer predictive ranking require validated evidence first.
+Challenge/daily-scenario modes are optional later UX, not the product's foundation.
+No generative AI for input/explanations/marketing; learned methods require a defined
+football target, temporal splits, leakage protection, baseline comparison and
+calibration/error analysis where relevant. Keep the four evidence layers separate.
 
 ## GitHub and portfolio presentation (alongside Project 1)
 
