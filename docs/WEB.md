@@ -16,6 +16,10 @@ retaining the API text and all returned metadata without another request.
 It never selects a filesystem path, fetches NFL data, or silently falls back to a
 synthetic response.
 
+This is the implemented **Scout / Analysis** surface of the evolving
+[NFL Decision Intelligence product](DECISION_INTELLIGENCE.md). Play Caller /
+Decision Lab is a future mode in this same app, not an existing feature.
+
 ![Local report view of the retrospective CAR 2024 cohort](examples/local-report-view.png)
 
 Screenshot captured from the real pinned snapshot via the local Vite proxy and
@@ -55,6 +59,67 @@ example controls, not preloaded observations. A different configured season
 returns an explicit API error until the controls match. Source codes are not
 validated against a team registry: an absent but syntactically valid team can
 produce an empty cohort, not proof of a real team.
+
+## Repeatable browser integration checks
+
+From the repository root, activate a Python environment with the locked optional
+API/test dependencies, then install the pinned browser test tooling:
+
+```sh
+python3 -m venv .venv/browser
+source .venv/browser/bin/activate
+python3 -m pip install -c requirements/api-constraints.txt '.[api,test-api]'
+cd web
+npm ci
+npx playwright install chromium
+npm run test:e2e
+```
+
+Use Node 24.19.0 as above. Linux CI uses `npx playwright install --with-deps
+chromium` to supply browser system libraries. Installation requires network access;
+the test flow itself uses no external football data or hosted assets. See
+[Playwright server ownership](https://playwright.dev/docs/test-webserver) and
+[CI setup](https://playwright.dev/docs/ci-intro). `npm test` remains the separate
+offline component/decoder suite; `npm run build` type-checks both suites.
+
+Ports 8000 and 5173 must be free. The runner **refuses to reuse existing servers**
+and does not kill user processes to free ports. It starts the actual FastAPI app
+with a temporary, hash-verified, immutable **SYNTHETIC** snapshot and the existing
+Vite viewer/proxy. It ignores operator snapshot configuration. The fixture reuses
+the established `time_rows` generator: every play, game ID, timestamp and outcome
+is invented. Its manifest exercises the production schema with fictional source
+IDs; this is not proof of a real upstream acquisition. No real raw snapshot is
+required, fetched or modified. Normal developer mode still has no synthetic fallback.
+
+Four scenarios run at desktop 1280px and narrow 390px in pinned Chromium:
+
+- four-stage filtered offense/defense with matched baseline and withheld
+  one-game intervals, then native keyboard download of byte-identical JSON and
+  offline Python brief replay (no second report request);
+- invalid controls without a request, actual API season error, recovery and an
+  empty cohort with unavailable rates;
+- loading/edit cancellation with a delayed **actual** API response, ensuring
+  stale data/downloads cannot appear;
+- keyboard skip/query/submit, focusable wide-table scrolling and no document
+  overflow at the tested widths.
+
+Browser HTTP/WebSocket requests outside the viewer origin are blocked and fail the
+test; the local Vite socket is allowed, service workers are blocked. The test-only
+Python server rejects outbound socket connections. These are regression guards,
+not an OS network sandbox. The report builder, schemas, formulas and renderer are
+the production code, not mocked JSON. Single-worker/no-retry execution respects the
+API's one-builder limit and does not hide flakes. Playwright terminates only owned
+servers with SIGTERM, with a five-second forced-cleanup fallback. Python removes
+its owned temporary snapshot on graceful exit or startup error; forced termination
+can leave an OS-temp directory, never a new canonical checkout.
+
+The `browser` CI job runs these checks on Linux/Python 3.13. Synthetic failure
+screenshots/traces and downloaded reports in ignored `web/test-results/` are
+retained as CI artifacts for seven days on failure. They contain no user data.
+This is smoke coverage of integration and targeted keyboard/layout behavior, not
+real-data reconciliation, Firefox/Safari/mobile-device certification, a production
+deployment test, screen-reader/WCAG audit, statistical calibration or performance
+benchmark. P1.4's broader bounded accessibility review remains the next unit.
 
 ## Local connection decision
 

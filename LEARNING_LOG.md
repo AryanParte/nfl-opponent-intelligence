@@ -1562,3 +1562,77 @@ unexpected external requests and stop owned servers. Broader accessibility revie
 remains open; no database is justified by the current single-snapshot flow.
 Calibration, historical availability and deployment remain unverified. Inspect
 this branch's PR and reviews first; do not merge automatically.
+
+## 2026-10-15 — Scout browser CI and Decision Intelligence direction (manual run)
+
+**Built / why:** a repeatable browser integration suite for existing Scout, over
+the real FastAPI app and an explicitly synthetic immutable snapshot. Desktop and
+narrow Chromium exercise both-role filtered reports, comparison/withheld intervals,
+native JSON downloads and the existing offline brief renderer. This closes the
+browser-CI unit without duplicating analytics or starting a premature decision UI.
+
+The roadmap now preserves Scout and plans Play Caller / Decision Lab through
+P1.5–P1.9; former operational/case-study work remains P1.10. The architecture record
+defines separate PBP/charting/tracking/model layers, an initial primary-source
+nfl4th/fastrmodels/participation/FTN/Big Data Bowl review, validation/licensing gates
+and a no-database decision for the current access pattern. No model or enrichment
+is integrated. No automation, source history or production calculations changed.
+
+Synced the stable clone; PR #20 was merged at `b0fc74f`, tree-equivalent to
+`3d53724`, with seven green merged-main CI jobs. No open PRs/reviews or unpublished
+work remained. Created `codex/scout-browser-ci` from updated `origin/main`.
+The published PR is the receipt for exact SHA, attribution and remote CI.
+
+**Review files:** `web/playwright.config.ts`, `web/e2e/scout.spec.ts`,
+`tests_api/browser_server.py`, `tests_api/test_browser_server.py`,
+`web/config.test.ts`, `.github/workflows/ci.yml`, `docs/WEB.md`,
+`docs/DECISION_INTELLIGENCE.md`, `ROADMAP.md` and `AGENTS.md`.
+
+**Sports concepts:** CAR offense and ATL defense describe the same invented
+three-play cohort, with offense-relative EPA. EPA/success use two observed values,
+not all three plays. One game cannot support a displayed bootstrap interval.
+Historical call frequency/outcome association is not causal call quality; a
+dropback includes sacks/scrambles, not just raw pass-type rows. Source/model
+release dates and decision-time inputs matter independently of week filtering.
+
+**Software/statistical concepts / what to learn:** component tests and live-browser
+integration catch different failures. Reuse the verified snapshot adapter, report
+builder and renderer; mock delivery timing only to check stale-response handling.
+Server/resource ownership must survive cancellation. A temporary directory around
+`uvicorn.run()` alone is insufficient when the server replays SIGTERM after
+shutdown; cleanup belongs in the application lifespan before that signal. Pre-owned
+ports must fail closed, not be reused or killed. Mature model reuse still requires
+feature/runtime parity and temporal validation; state EP/WP is not an action-value
+model, and realized pass information must not leak into pre-play inputs.
+
+**Three review questions:**
+
+1. What does byte-identical API-to-download-to-brief replay verify, and why does
+   it not establish real-world statistical calibration or causal optimality?
+2. Why did the first server harness leave temporary snapshots after SIGTERM,
+   and how do the lifespan and occupied-port checks prevent unsafe cleanup/reuse?
+3. Why can't a current nfl4th/fastrmodels artifact or an FTN charting field simply
+   be attached to a historical pre-play decision query without additional audits?
+
+**Verification / self-review:** 196 core / 24 API tests on each of Python
+3.11/3.12/3.13, API warnings as errors, clean pip checks, 636 frontend tests, clean
+locked npm install and type-check/build pass. Eight browser scenarios pass on
+desktop/narrow Chromium, also repeated twice (16 executions), no retries. Live
+occupied-port checks preserve the existing owner and verify owned listeners and
+temporary snapshots are cleaned up. All 71 existing browser-contract fixtures and
+production report outputs are unchanged; no real raw data is needed for browser CI.
+
+Initial harness failures exposed incorrect imports/keyword arguments and a select
+locator mismatch; fixed them rather than changing production behavior. The cleanup
+probe then caught the Uvicorn signal-replay issue above; added lifespan-order tests
+and reran integration. Review also enforced separate Vitest/Playwright discovery,
+type-checking of browser tests, bounded single-worker execution, outbound guards
+and explicit distinction between local checks and remote CI. No full WCAG audit,
+cross-browser certification, model output validation, enriched joins or benchmark
+is claimed. CI failure artifacts contain synthetic data only.
+
+**Remaining / next:** the bounded Scout accessibility review is P1.4's last
+surface item. Then specify/test the first small offline P1.5 Run vs Pass contract;
+do not combine it with API/UI/models. Preserve the same repository and Scout
+contracts. Inspect this PR's CI/reviews before new work; do not merge or enable
+auto-merge. The existing 8 AM schedule and automation configuration are unchanged.
