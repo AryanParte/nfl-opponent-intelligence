@@ -2,53 +2,11 @@
 
 from collections import defaultdict
 from copy import deepcopy
-from math import fsum
 
-from .pbp import Dataset, Play, _team
+from .cohort import PERIODS, context_filters, filter_context, select_population
+from .metrics import summarize_plays
+from .pbp import Dataset, Play
 from .uncertainty import build_uncertainty, validate_bootstrap
-
-
-PERIODS = ("Q1", "Q2", "Q3", "Q4", "OT")
-
-
-def _metrics(plays: list[Play], minimum_plays: int) -> dict:
-    observed_epa = [play.epa for play in plays if play.epa is not None]
-    count = len(plays)
-    epa_count = len(observed_epa)
-    dropbacks = sum(play.dropback for play in plays)
-    return {
-        "plays": count,
-        "games": len({play.game_id for play in plays}),
-        "dropbacks": dropbacks,
-        "designed_runs": count - dropbacks,
-        "dropback_rate": dropbacks / count if count else None,
-        "epa_observations": epa_count,
-        "missing_epa": count - epa_count,
-        "epa_per_play": fsum(observed_epa) / epa_count if epa_count else None,
-        "success_rate": sum(value > 0 for value in observed_epa) / epa_count if epa_count else None,
-        "small_sample": count < minimum_plays,
-        "small_epa_sample": epa_count < minimum_plays,
-    }
-
-
-def _filter_context(plays: list[Play], contexts: dict) -> tuple[list[Play], dict]:
-    """Apply the same ordered, validated bounds to either comparison population."""
-    quality = {}
-    for name, context in contexts.items():
-        field = context["field"]
-        lower, upper = context["minimum_inclusive"], context["maximum_inclusive"]
-        before = len(plays)
-        known = [play for play in plays if getattr(play, field) is not None]
-        selected = [play for play in known
-                    if (lower is None or getattr(play, field) >= lower)
-                    and (upper is None or getattr(play, field) <= upper)]
-        quality[name + "_filter"] = {
-            "plays_before_filter": before, "missing_" + field: before - len(known),
-            "outside_period" if name == "period" else "outside_range": len(known) - len(selected),
-            "plays_after_filter": len(selected),
-        }
-        plays = selected
-    return plays, quality
 
 
 def _group_situations(plays: list[Play]) -> dict[tuple[int, str], list[Play]]:
@@ -74,16 +32,16 @@ def _league_comparison(
     selected_base_count: int, contexts: dict, minimum_plays: int, role_field: str,
 ) -> dict:
     before_count = len(others)
-    baseline, quality = _filter_context(others, contexts)
+    baseline, quality = filter_context(others, contexts)
     teams = sorted({getattr(play, role_field) for play in baseline})
-    baseline_metrics = _metrics(baseline, minimum_plays)
+    baseline_metrics = summarize_plays(baseline, minimum_plays)
     baseline_groups = _group_situations(baseline)
     situations = []
     # Only the selected team's observed buckets are compared; never fall back
     # to overall league values when a matching baseline bucket is unavailable.
     for situation in report["situations"]:
         key = (situation["down"], situation["distance"])
-        metrics = _metrics(baseline_groups.get(key, []), minimum_plays)
+        metrics = summarize_plays(baseline_groups.get(key, []), minimum_plays)
         situations.append({"down": key[0], "distance": key[1], "baseline": metrics,
                            "difference": _differences(situation, metrics)})
     warnings = [
@@ -155,86 +113,28 @@ def build_report(
     The week boundary prevents including target-week outcomes. It cannot ensure
     historical availability of subsequently revised upstream values.
     """
-    _team(team, "team")
-    if side not in ("offense", "defense"):
-        raise ValueError("side must be offense or defense")
     if type(compare_league) is not bool:
         raise ValueError("compare_league must be a boolean")
     effective_seed = validate_bootstrap(bootstrap_repetitions, bootstrap_seed)
-    for name, value in (("season", season), ("before_week", before_week), ("minimum_plays", minimum_plays)):
-        if type(value) is not int:
-            raise ValueError(f"{name} must be an integer")
-    if not 1999 <= season <= 9999 or not 1 <= before_week <= 23:
-        raise ValueError("season must be 1999..9999 and before_week must be 1..23")
-    if season_type not in {"REG", "POST"} or minimum_plays < 1:
-        raise ValueError("season_type must be REG/POST and minimum_plays must be positive")
-    if not source_label.strip():
+    if type(minimum_plays) is not int:
+        raise ValueError("minimum_plays must be an integer")
+    if minimum_plays < 1:
+        raise ValueError("minimum_plays must be positive")
+    if not isinstance(source_label, str) or not source_label.strip():
         raise ValueError("source_label must describe the input data")
-    if dataset.source_manifest is not None and season != dataset.source_manifest["season"]:
-        raise ValueError("requested season differs from snapshot manifest")
-    field_position = None
-    if yardline_min is not None or yardline_max is not None:
-        for name, value in (("yardline_min", yardline_min), ("yardline_max", yardline_max)):
-            if value is not None and (type(value) not in (int, float) or not 0 <= value <= 100):
-                raise ValueError(f"{name} must be a finite number in 0..100")
-        lower = 0.0 if yardline_min is None else float(yardline_min)
-        upper = 100.0 if yardline_max is None else float(yardline_max)
-        if lower > upper:
-            raise ValueError("yardline_min must not exceed yardline_max")
-        if "yardline_100" not in dataset.optional_columns:
-            raise ValueError("field-position filtering requires the yardline_100 source column")
-        field_position = {"field": "yardline_100", "minimum_inclusive": lower,
-                          "maximum_inclusive": upper, "perspective": "offense",
-                          "missing_policy": "exclude"}
-    score_context = None
-    if score_min is not None or score_max is not None:
-        for name, value in (("score_min", score_min), ("score_max", score_max)):
-            if value is not None and type(value) is not int:
-                raise ValueError(f"{name} must be an integer number of points")
-        if score_min is not None and score_max is not None and score_min > score_max:
-            raise ValueError("score_min must not exceed score_max")
-        if "score_differential" not in dataset.optional_columns:
-            raise ValueError("score filtering requires the score_differential source column")
-        score_context = {"field": "score_differential", "minimum_inclusive": score_min,
-                         "maximum_inclusive": score_max, "perspective": "offense",
-                         "missing_policy": "exclude"}
-    period_context = None
-    if period is not None:
-        if period not in PERIODS:
-            raise ValueError("period must be Q1, Q2, Q3, Q4, or OT")
-        if "qtr" not in dataset.optional_columns:
-            raise ValueError("period filtering requires the qtr source column")
-        period_lower = 5 if period == "OT" else int(period[1])
-        period_upper = None if period == "OT" else period_lower
-        period_context = {"field": "qtr", "label": period,
-                          "minimum_inclusive": period_lower, "maximum_inclusive": period_upper,
-                          "missing_policy": "exclude"}
-    clock_context = None
-    if clock_min is not None or clock_max is not None:
-        if period is None:
-            raise ValueError("clock filtering requires an explicit period (Q1..Q4 or OT)")
-        for name, value in (("clock_min", clock_min), ("clock_max", clock_max)):
-            if value is not None and (type(value) is not int or not 0 <= value <= 900):
-                raise ValueError(f"{name} must be an integer number of seconds in 0..900")
-        clock_lower = 0 if clock_min is None else clock_min
-        clock_upper = 900 if clock_max is None else clock_max
-        if clock_lower > clock_upper:
-            raise ValueError("clock_min must not exceed clock_max")
-        if "quarter_seconds_remaining" not in dataset.optional_columns:
-            raise ValueError("clock filtering requires the quarter_seconds_remaining source column")
-        clock_context = {"field": "quarter_seconds_remaining", "minimum_inclusive": clock_lower,
-                         "maximum_inclusive": clock_upper, "unit": "seconds", "timing": "pre_play",
-                         "missing_policy": "exclude"}
-    temporal = [play for play in dataset.plays if (
-        play.season == season and play.season_type == season_type and play.week < before_week
-    )]
+    temporal, selected_base = select_population(
+        dataset, team=team, season=season, before_week=before_week, side=side, season_type=season_type,
+    )
+    contexts = context_filters(
+        dataset, yardline_min=yardline_min, yardline_max=yardline_max,
+        score_min=score_min, score_max=score_max, period=period, clock_min=clock_min, clock_max=clock_max,
+    )
     role_field = "offense" if side == "offense" else "defense"
-    selected_base = [play for play in temporal if getattr(play, role_field) == team]
-    contexts = {name: context for name, context in (
-        ("field_position", field_position), ("score_differential", score_context),
-        ("period", period_context), ("clock", clock_context),
-    ) if context is not None}
-    selected, quality = _filter_context(selected_base, contexts)
+    selected, quality = filter_context(selected_base, contexts)
+    field_position = contexts.get("field_position")
+    score_context = contexts.get("score_differential")
+    period_context = contexts.get("period")
+    clock_context = contexts.get("clock")
     field_quality = quality.get("field_position_filter")
     score_quality = quality.get("score_differential_filter")
     period_quality = quality.get("period_filter")
@@ -285,9 +185,9 @@ def build_report(
                          "eligible_rows_all_teams": len(dataset.plays),
                          "excluded_rows_by_reason": dict(sorted(dataset.exclusions.items())),
                          "eligible_rows_outside_cohort": len(dataset.plays) - len(selected)},
-        "overall": _metrics(selected, minimum_plays),
+        "overall": summarize_plays(selected, minimum_plays),
         "situations": [
-            {"down": down, "distance": distance, **_metrics(plays, minimum_plays)}
+            {"down": down, "distance": distance, **summarize_plays(plays, minimum_plays)}
             for (down, distance), plays in sorted(
                 groups.items(), key=lambda item: (item[0][0], distance_order[item[0][1]])
             )
@@ -316,7 +216,7 @@ def build_report(
     if bootstrap_repetitions is not None:
         baseline_groups = None
         if compare_league:
-            baseline, _ = _filter_context(others, contexts)
+            baseline, _ = filter_context(others, contexts)
             baseline_groups = _group_situations(baseline)
         report["uncertainty"] = build_uncertainty(
             groups, baseline_groups, repetitions=bootstrap_repetitions, seed=effective_seed,

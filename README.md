@@ -6,7 +6,8 @@ metric definitions, source fingerprints, and a cutoff that excludes the week bei
 prepared for. The existing Opponent Intelligence functionality is the **Scout /
 Analysis** mode. This same repository will evolve toward an evidence-first
 **Play Caller / Decision Lab**, starting with defensible Run vs Pass comparisons.
-Decision Lab is planned, not implemented; repository/package/CLI names stay intact.
+Decision Lab's UI is planned; its first offline Run/Pass evidence contract is
+implemented. Repository/package/CLI names stay intact.
 See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
 
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
@@ -32,7 +33,11 @@ new request or calculation. A synthetic Chromium integration suite connects the
 actual API, viewer, native download and offline brief in CI. A
 [bounded Scout accessibility review](docs/ACCESSIBILITY.md) adds field-linked error
 recovery, contrast and keyboard/reflow regressions; screen-reader and cross-browser
-coverage remain unverified. Decision Lab, adjustment and deployment remain on the
+coverage remain unverified. An [offline decision contract](docs/DECISION_CONTRACT.md)
+now selects exact down/distance situations and describes Run/Pass candidates using
+shared Scout filters and metrics. It preserves denominators, missing states and
+provenance and always withholds a preferred call; candidate baselines/uncertainty
+are next. Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 

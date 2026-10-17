@@ -1702,3 +1702,71 @@ assistive technology, real devices, cross-browser, zoom and high-contrast settin
 remain release-readiness gaps. After PR review, begin only the small offline P1.5
 Run vs Pass contract and semantics tests; no decision UI/API/model or duplicate
 analytics. Do not merge or enable auto-merge. The 8 AM automation is unchanged.
+
+## 2026-10-17 — First offline Run/Pass evidence contract (P1.5)
+
+**Built / why it matters:** after observing PR #22 merged and all eight main CI
+jobs green, started `codex/run-pass-decision-contract` from `origin/main` at
+`0c3c4a3`. Added a frozen offense-only request and executable offline contract for
+exact down/inclusive distance, optional pre-play context, observed Run/Pass
+frequencies/outcomes, counts, missing states and provenance. Extracted the existing
+cohort/metric primitives for reuse by both Scout and decision evidence. This gives
+the future Decision Lab a testable foundation without duplicating analytics or
+claiming the larger mean is the correct call.
+
+**Review these files:** `src/opponent_intelligence/decision.py` (request, candidate
+mapping, states, abstention), `cohort.py` (shared validation/selection/ledger),
+`metrics.py` and `report.py` (one set of formulas, unchanged Scout output),
+`tests/test_decision.py` (independent synthetic expectations), and
+`docs/DECISION_CONTRACT.md` (replay, semantics, source audit, limits).
+
+**Sports concepts:** sacks and scrambles are dropbacks even when raw play type is
+run; the Run label means remaining eligible non-dropbacks, not verified huddle
+intent. Exact 3rd-and-4 is not a whole medium-distance bucket. EPA/success retain
+offense perspective. Fourth-down Run/Pass frequency is conditional on eligible
+plays, not all go/punt/kick choices. RPO/aborted-play intent remains unobserved.
+
+**Software / statistical concepts:** share a pure selector and summarizer rather
+than filter and relabel a Dataset's original provenance; separate validation,
+mathematical availability, count warnings and decision validity. Preserve null
+versus zero, candidate-specific EPA denominators, distinct-game counts, ordered
+missingness and exclusive cutoffs. No hidden cohort widening, baseline fallback,
+file/network IO, new dependency or frontend formula.
+
+**Learn from this:** manually reproduce the invented first-and-ten example (Run
+1 play, Pass 2; frequencies 1/3 and 2/3; EPA 0 and 0.6) and explain why neither
+frequency nor outcome difference proves a counterfactual or coaching recommendation.
+Learn how to extend a validated system without breaking its existing consumers.
+
+**Three review questions:**
+
+1. Why is a scramble-shaped run in the Pass candidate, and what can the retained
+   dropback flag not establish about intended calls, RPOs or aborted plays?
+2. When is an unobserved Run frequency zero versus null, and why do missing EPA
+   values affect outcome denominators without removing frequency observations?
+3. Why does the contract still return no preferred call after its count warnings
+   clear, and what matching, uncertainty and validation work remains before ranking?
+
+**Verification / self-review:** 218 core / 24 API tests pass on Python
+3.11/3.12/3.13, API warnings as errors, with clean dependency checks; 672 frontend
+tests, type-check/build and 14 browser cases pass. The 71 committed API fixtures
+are unchanged. All 22 added tests use invented situations, not purported real-team
+results. Baseline 196 core / 24 API / 672 frontend tests passed before changes.
+The initial browser invocation was blocked at launch by macOS sandbox IPC; the
+approved rerun passed with no relaxed assertions, timeouts or retries. Owned
+loopback servers stop afterward. No new dependencies or data were acquired.
+
+Complete-diff review checked shared formulas/bounds, ingestion accounting, exact
+selection, source copying, cutoff leakage, candidate partitions, null states,
+role interpretation and unsupported options. Corrected the documentation's
+snapshot-loader module reference. Pinned primary field definitions and existing
+PBP attribution support observed categories only; no intended-call classifier or
+model validation was invented. No unsafe dataset substitution or statistical
+threshold masquerading as decision reliability was introduced.
+
+**Remaining / next:** add exact-match same-role leave-team-out candidate league
+baselines/differences with coverage and missing-cell semantics. Then add candidate
+support/uncertainty and independently reconcile pinned real cohorts; keep ranking
+withheld. P1.5 is not complete. No decision API/UI/model, storage, deployment or
+enrichment in this unit. Review the PR; do not merge or enable auto-merge. The
+existing 8 AM daily automation is unchanged.
