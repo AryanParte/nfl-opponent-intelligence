@@ -1,7 +1,8 @@
 # NFL Decision Intelligence — direction and architecture
 
 Decision recorded 2026-10-15. This evolves **the existing repository**, not a new
-product implementation. Scout works today; Decision Lab and new models are planned.
+product implementation. Scout works today; the first offline Decision Lab evidence
+contract was implemented on 2026-10-17. Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 
@@ -38,21 +39,27 @@ future decision comparison → future decision API → React Decision Lab
 ```
 
 `snapshots.py`/`ingestion.py` retain acquisition and hash verification; `pbp.py`
-retains eligibility and typed observations. `report.py` and `uncertainty.py` remain
-the calculation foundation. Extract reusable primitives only when a tested decision
-slice requires it; preserve existing report outputs. No second fetcher, ingestion
-stack, statistical formulas in React, parallel repository, or speculative framework.
+retains eligibility and typed observations. `cohort.py` and `metrics.py`, extracted
+for the first offline slice, share selection and metric formulas between `report.py`
+and `decision.py`; `uncertainty.py` remains the Scout resampling foundation. Extract
+only primitives a tested slice needs; preserve existing report outputs. No second
+fetcher, ingestion stack, statistical formulas in React, parallel repository, or
+speculative framework.
 
 ## First foundation slice and interpretation gates
 
-After P1.4's bounded accessibility review, first specify and test a **small offline
-decision contract**, not an endpoint/UI/model simultaneously. P1.5 then implements
-comparison incrementally through the existing analytics primitives.
+P1.4's bounded accessibility review is merged. The first **small offline decision
+contract** is implemented and tested; see [contract v1](DECISION_CONTRACT.md) for
+the request, exact filters, source audit, denominators and availability states.
+It always abstains from ranking. No endpoint/UI/model was added. Next, P1.5 adds
+matched candidate league baselines, then support/uncertainty and comparison rules
+incrementally through the existing analytics primitives. The gates below continue
+to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
-  allowed) explicitly. Today Scout reports observed down/distance buckets; it does
-  not yet filter on an exact requested down/distance. Never silently widen a sparse
-  cohort to another distance, team, season or time window.
+  allowed) explicitly. Scout still reports observed down/distance buckets; the
+  offline decision contract filters on exact down and inclusive distance. Never
+  silently widen a sparse cohort to another distance, team, season or time window.
 - Retain season/type/exclusive cutoff and offense-relative field position, score,
   period/OT and clock semantics. Define impossible/unsupported situations and missing
   context handling. The current OT filter is a historical period selector, not an

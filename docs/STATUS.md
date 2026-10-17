@@ -1,26 +1,31 @@
 # Engineering status
 
-As of the daily run on 2026-10-16, the long-term direction is
+As of the daily run on 2026-10-17, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
-Analysis** and a planned **Play Caller / Decision Lab**. No decision engine, model,
-new dataset or mode switch is claimed yet. The [architecture decision](DECISION_INTELLIGENCE.md)
+Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
+Run/Pass evidence contract now exists; no ranking/model, new dataset or mode switch
+is claimed. The [architecture decision](DECISION_INTELLIGENCE.md)
 records shared pipeline boundaries, Run/Pass interpretation gates, an initial
 primary-source model/data review, AI policy and the justified no-database decision.
 P1.5–P1.9 now cover decision foundations, model evaluation, richer data audit, API
 and UI; the prior operational/case-study milestone is preserved as P1.10.
 
-P1.4's bounded local surface is complete on this branch. The final unit fixes
-field-associated validation/focus recovery and input-border contrast, makes required
-formats explicit, and expands the existing real-API synthetic browser harness with
-accessibility scans and keyboard/reflow regressions. Late API failures do not steal
-focus. All 196 core / 24 API tests pass on Python 3.11/3.12/3.13; 672 frontend tests,
-clean locked installation and type-check/build pass on Node 24.19.0. All 14 browser
-cases pass, including desktop/narrow scans and 320px table access. See the
-[bounded review, scan incompletes and actual coverage limits](ACCESSIBILITY.md).
-No screen reader ran; this is not WCAG certification. Analytics, routes, schema-v2
-reports, download bytes and snapshots are unchanged. The new dependency is pinned,
-development-only axe; the core remains standard-library-only. Next is only P1.5's
-offline Run vs Pass contract. The 8 AM automation is unchanged.
+P1.4's bounded local surface is merged through PR #22. Today's P1.5 unit adds a
+frozen offense-only request and offline evidence builder, exact down/inclusive
+distance matching, candidate frequencies/outcomes with explicit denominators,
+play/game counts, missing states and source accounting. Scout and decision evidence
+share extracted selection/metric primitives. Sacks/scrambles stay in Pass; Run is
+the remaining eligible non-dropback category, not verified huddle intent. Every
+comparison abstains; no preference, uncertainty, league baseline or EP/WP action
+value is invented. See [contract v1 and synthetic replay](DECISION_CONTRACT.md).
+
+All 218 core / 24 API tests pass on Python 3.11/3.12/3.13; 672 frontend tests,
+type-check/build and all 14 browser cases pass. The 71 API fixtures are unchanged.
+No dependency, endpoint, frontend, raw dataset or automation change was made. Scout
+schema v2, briefs and downloads remain compatible. Actual assistive-technology and
+cross-browser gaps remain in the [bounded accessibility review](ACCESSIBILITY.md),
+not a WCAG certification. Next: matching candidate league baselines; no decision
+API/UI/model yet. The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
 deferred under the [source decision](PERSONNEL_MOTION.md), not inferred from
@@ -33,14 +38,19 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/scout-accessibility`, started from updated
-  `origin/main` at `91129ea` after observing PR #21 merged. Do not merge or enable
+- Working branch: `codex/run-pass-decision-contract`, started from updated
+  `origin/main` at `0c3c4a3` after observing PR #22 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/scout-accessibility` for its exact published SHA, attribution and CI
+  `codex/run-pass-decision-contract` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous accessibility review: [PR #22](https://github.com/AryanParte/nfl-opponent-intelligence/pull/22),
+  merged at `0c3c4a3`; its tree matches feature head `fbef667`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38960749969)
+  passed all eight jobs. No open PRs or review feedback remained. Baseline
+  196 core / 24 API / 672 frontend tests passed before implementation.
 - Previous browser CI/direction review: [PR #21](https://github.com/AryanParte/nfl-opponent-intelligence/pull/21),
   merged at `91129ea`; its tree matches feature head `491a503`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/38827620757)
@@ -151,6 +161,38 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.5 offline Run/Pass contract — 2026-10-17
+
+All 218 core / 24 API tests pass on Python 3.11/3.12/3.13, API warnings as errors;
+pip checks find no broken requirements. All 672 frontend tests, type-check/build
+and 14 pinned-Chromium browser cases pass. The first browser attempt was prevented
+from launching by macOS sandbox Mach-port permissions, before any assertions;
+the approved outside-sandbox run passed without changing tests/retries/timeouts.
+All 71 generated API fixtures match the existing committed JSON. Owned loopback
+servers stop afterward; ports 8000/5173 are free. No new packages were installed.
+
+Twenty-two new tests independently reconcile synthetic first-and-ten, sack/scramble
+mapping, exact-versus-bucket distances, bounds, cutoff/team/season/type isolation,
+fourth-down/zero-distance selectors, empty/absent/missing outcomes, separate warning
+denominators, ordered context exclusions, OT clock zero, reciprocal Scout defense,
+unsupported options, provenance copying, deterministic JSON and no builder IO.
+The contract rejects defense/opponent/model/path options rather than silently
+ignoring them. Existing Scout defense still reports offensive production allowed.
+
+Complete-diff review checked the extracted formulas/bounds, original full-source
+accounting, conditional missingness, null versus zero, candidate game counts,
+temporal exclusions, capability abstention and unchanged API/UI outputs. It caught
+and corrected a documentation reference to the wrong snapshot-loader module.
+The source audit pins the nflreadr dictionary and preserves existing PBP license
+and manifest records. Labels avoid asserting intended calls from dropback flags;
+aborted-play/RPO intent and all-snap frequencies cannot be recovered from these
+typed observations. No downloaded data or model output is used as new evidence.
+
+This is only selected-side descriptive evidence, not complete P1.5 acceptance.
+Matched candidate baselines/differences, candidate-level uncertainty and independent
+real-cohort reconciliation remain unfinished; all ranking stays withheld. Counts
+and the existing 30-play warning do not validate causality, prediction or reliability.
 
 ### P1.4 bounded Scout accessibility — 2026-10-16
 
@@ -730,12 +772,15 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 ## Follow-up
 
 Inspect current PR CI and reviews first; do not duplicate this unit while unmerged.
-Next, begin only P1.5's small offline Run vs Pass contract slice: precise request,
-exact down/distance and other cohort semantics, dropback/sack/scramble versus
-designed-run mapping, denominators, sample requirements and unavailable/insufficient
-evidence states. Reuse the existing pipeline and preserve Scout schema v2. No
-automatic winner from a noisy mean, decision API/UI or model in that first slice;
-see [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md). Preserve the actual
+Next, add P1.5's matched, available-source, same-role, leave-team-out candidate
+league baselines and explicit differences/coverage/denominators/nulls. The offline
+request, exact down/distance/context selection and selected candidate evidence are
+already implemented; do not rebuild them. Reuse the same rules for baseline plays,
+not Scout's broader distance buckets or unmatched overall values. Candidate-level
+uncertainty/support and independent real-cohort reconciliation remain subsequent
+units. Preserve Scout schema v2 and keep ranking withheld: no automatic winner from
+a noisy mean, decision API/UI or model yet. See [DECISION_CONTRACT.md](DECISION_CONTRACT.md)
+and [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md). Preserve the actual
 assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
 without claiming conformance or restarting P1.4/browser CI.
 Do not add storage for this single-snapshot view or imply a public deployment.
