@@ -4,8 +4,8 @@ from copy import deepcopy
 from dataclasses import dataclass
 
 from .cohort import context_filters, filter_context, select_population
-from .metrics import summarize_plays
-from .pbp import Dataset
+from .metrics import metric_difference, summarize_plays
+from .pbp import Dataset, Play
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -31,6 +31,109 @@ class DecisionRequest:
     clock_min: int | None = None
     clock_max: int | None = None
     minimum_plays: int = 30
+    compare_league: bool = False
+
+
+def _candidate_evidence(population: list[Play], minimum_plays: int) -> list[dict]:
+    """Identical candidate definitions and denominators for either population."""
+    candidates = []
+    for name, dropback, label in (("run", False, "Run (non-dropback)"),
+                                  ("pass", True, "Pass (dropback, including sacks/scrambles)")):
+        plays = [play for play in population if play.dropback == dropback]
+        metrics = summarize_plays(plays, minimum_plays)
+        if not population:
+            outcome_state = "empty_cohort"
+        elif not plays:
+            outcome_state = "unobserved_candidate"
+        elif not metrics["epa_observations"]:
+            outcome_state = "missing_epa"
+        else:
+            outcome_state = "available"
+        candidates.append({
+            "candidate": name, "label": label,
+            "mapping": {"source_field": "qb_dropback", "equals": int(dropback)},
+            **{key: metrics[key] for key in (
+                "plays", "games", "epa_observations", "missing_epa", "epa_per_play",
+                "success_rate", "small_sample", "small_epa_sample",
+            )},
+            "frequency": len(plays) / len(population) if population else None,
+            "frequency_denominator": len(population),
+            "availability": {"frequency": "available" if population else "empty_cohort",
+                             "outcomes": outcome_state},
+        })
+    return candidates
+
+
+def _context_warnings(contexts: dict, quality: dict, *, prefix: str = "") -> list[str]:
+    warnings = []
+    for name, context in contexts.items():
+        stage = quality[name + "_filter"]
+        if stage["missing_" + context["field"]]:
+            warnings.append(f"{prefix}{name} filter excluded {stage['missing_' + context['field']]} of "
+                            f"{stage['plays_before_filter']} surviving plays with missing "
+                            f"{context['field']}; no imputation.")
+    return warnings
+
+
+def _league_comparison(
+    evidence: dict, selected: list[Play], others: list[Play], contexts: dict, minimum_plays: int,
+) -> dict:
+    baseline, quality = filter_context(others, contexts)
+    candidates = _candidate_evidence(baseline, minimum_plays)
+    selected_by_name = {candidate["candidate"]: candidate for candidate in evidence["candidates"]}
+    for candidate in candidates:
+        dropback = candidate["mapping"]["equals"]
+        plays = [play for play in baseline if play.dropback == dropback]
+        teams = sorted({play.offense for play in plays})
+        candidate["coverage"] = {
+            "teams": teams, "team_count": len(teams),
+            "shared_games_with_selected_candidate": len(
+                {play.game_id for play in plays}
+                & {play.game_id for play in selected if play.dropback == dropback}
+            ),
+        }
+        left = selected_by_name[candidate["candidate"]]
+        candidate["difference"] = {
+            "frequency_pp": metric_difference(left["frequency"], candidate["frequency"], scale=100),
+            "epa_per_play": metric_difference(left["epa_per_play"], candidate["epa_per_play"]),
+            "success_rate_pp": metric_difference(left["success_rate"], candidate["success_rate"], scale=100),
+        }
+    teams = sorted({play.offense for play in baseline})
+    warnings = [
+        "Baseline uses only available source plays; observed teams/counts do not certify full league coverage.",
+        "Plays are pooled, not equally weighted team/game means; context mixes within requested ranges may differ.",
+        "Descriptive differences are not opponent adjustment, causal effects, predictive validation or action ranking.",
+        "Selected and baseline plays are disjoint but may share games/opponents; game counts are not independence guarantees.",
+    ]
+    if not baseline:
+        warnings.append("No matching baseline plays; frequencies, outcomes and differences are null. No fallback.")
+    if any(candidate["missing_epa"] for candidate in candidates):
+        warnings.append("Missing baseline EPA affects only candidate EPA/success denominators, not call frequency.")
+    warnings.extend(_context_warnings(contexts, quality, prefix="Baseline "))
+    return {
+        "population": {
+            "scope": "available_source_only", "side": "offense", "team_field": "posteam",
+            "excluded_team": evidence["cohort"]["team"], "weighting": "pooled_plays",
+            "plays": len(baseline), "games": len({play.game_id for play in baseline}),
+            "teams": teams, "team_count": len(teams),
+            "shared_games_with_selected": len({play.game_id for play in baseline}
+                                              & {play.game_id for play in selected}),
+        },
+        "cohort": deepcopy({key: value for key, value in evidence["cohort"].items() if key != "team"}),
+        "difference_convention": "selected_minus_baseline",
+        "difference_units": {"frequency_pp": "percentage_points",
+                             "epa_per_play": "expected_points_per_observed_play",
+                             "success_rate_pp": "percentage_points"},
+        "data_quality": {
+            "eligible_rows_same_season_type_before_week":
+                evidence["data_quality"]["eligible_rows_same_season_type_before_week"],
+            "excluded_selected_team_rows": evidence["data_quality"]["team_plays_before_context_filters"],
+            "plays_before_context_filters": len(others), "plays_after_context_filters": len(baseline),
+            "filter_order": list(contexts), **quality,
+        },
+        "candidates": candidates,
+        "warnings": warnings,
+    }
 
 
 def build_decision_evidence(
@@ -51,6 +154,8 @@ def build_decision_evidence(
         raise ValueError("distance_min must not exceed distance_max")
     if type(request.minimum_plays) is not int or request.minimum_plays < 1:
         raise ValueError("minimum_plays must be a positive integer warning threshold")
+    if type(request.compare_league) is not bool:
+        raise ValueError("compare_league must be a boolean")
     if not isinstance(source_label, str) or not source_label.strip():
         raise ValueError("source_label must describe the input data")
     temporal, team_plays = select_population(
@@ -70,31 +175,7 @@ def build_decision_evidence(
                             "maximum_inclusive": request.distance_max,
                             "missing_policy": "reject_at_ingestion"}
     selected, quality = filter_context(team_plays, contexts)
-    candidates = []
-    for name, dropback, label in (("run", False, "Run (non-dropback)"),
-                                  ("pass", True, "Pass (dropback, including sacks/scrambles)")):
-        plays = [play for play in selected if play.dropback == dropback]
-        metrics = summarize_plays(plays, request.minimum_plays)
-        if not selected:
-            outcome_state = "empty_cohort"
-        elif not plays:
-            outcome_state = "unobserved_candidate"
-        elif not metrics["epa_observations"]:
-            outcome_state = "missing_epa"
-        else:
-            outcome_state = "available"
-        candidates.append({
-            "candidate": name, "label": label,
-            "mapping": {"source_field": "qb_dropback", "equals": int(dropback)},
-            **{key: metrics[key] for key in (
-                "plays", "games", "epa_observations", "missing_epa", "epa_per_play",
-                "success_rate", "small_sample", "small_epa_sample",
-            )},
-            "frequency": len(plays) / len(selected) if selected else None,
-            "frequency_denominator": len(selected),
-            "availability": {"frequency": "available" if selected else "empty_cohort",
-                             "outcomes": outcome_state},
-        })
+    candidates = _candidate_evidence(selected, request.minimum_plays)
     source = {"label": source_label, "sha256": dataset.source_sha256}
     if dataset.source_manifest is not None:
         source["snapshot"] = deepcopy(dataset.source_manifest)
@@ -104,19 +185,14 @@ def build_decision_evidence(
         "Descriptive associations are not causal effects, guaranteed future performance or coaching recommendations.",
         "Week filtering does not reconstruct historical source availability or EPA model training.",
         "Small-sample flags are count warnings, not validated reliability or ranking thresholds.",
-        "League baselines, candidate uncertainty, opponent adjustment and EP/WP action values are not implemented here.",
+        "Candidate uncertainty, opponent adjustment and EP/WP action values are not implemented here.",
     ]
     if not selected:
         warnings.append("No matching plays; no widening or fallback. Frequencies and outcomes are null.")
     if any(candidate["missing_epa"] for candidate in candidates):
         warnings.append("Missing EPA changes only candidate EPA/success denominators, not call frequency.")
-    for name, context in contexts.items():
-        stage = quality[name + "_filter"]
-        if stage["missing_" + context["field"]]:
-            warnings.append(f"{name} filter excluded {stage['missing_' + context['field']]} of "
-                            f"{stage['plays_before_filter']} surviving plays with missing "
-                            f"{context['field']}; no imputation.")
-    return {
+    warnings.extend(_context_warnings(contexts, quality))
+    evidence = {
         "contract_version": 1,
         "evidence_kind": "descriptive_observed_calls",
         "source": source,
@@ -142,3 +218,9 @@ def build_decision_evidence(
                        "reason": "candidate_comparison_not_validated"},
         "warnings": warnings,
     }
+    if request.compare_league:
+        others = [play for play in temporal if play.offense != request.team]
+        evidence["league_comparison"] = _league_comparison(
+            evidence, selected, others, contexts, request.minimum_plays,
+        )
+    return evidence

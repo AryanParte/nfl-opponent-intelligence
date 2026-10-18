@@ -2,7 +2,8 @@
 
 Decision recorded 2026-10-15. This evolves **the existing repository**, not a new
 product implementation. Scout works today; the first offline Decision Lab evidence
-contract was implemented on 2026-10-17. Decision API/UI and new models remain planned.
+contract was implemented on 2026-10-17, with matched candidate league baselines on
+2026-10-18. Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 
@@ -51,10 +52,11 @@ speculative framework.
 P1.4's bounded accessibility review is merged. The first **small offline decision
 contract** is implemented and tested; see [contract v1](DECISION_CONTRACT.md) for
 the request, exact filters, source audit, denominators and availability states.
-It always abstains from ranking. No endpoint/UI/model was added. Next, P1.5 adds
-matched candidate league baselines, then support/uncertainty and comparison rules
-incrementally through the existing analytics primitives. The gates below continue
-to apply; they are not claims that all decision capabilities are implemented.
+It always abstains from ranking. Opt-in exact-matched candidate league baselines
+now reuse the same selector, candidate summaries and null-preserving differences.
+No endpoint/UI/model was added. Next, P1.5 adds candidate support/uncertainty and
+comparison rules incrementally through the existing analytics primitives. The gates
+below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
   allowed) explicitly. Scout still reports observed down/distance buckets; the

@@ -5,6 +5,11 @@ from math import fsum
 from .pbp import Play
 
 
+def metric_difference(selected: float | None, baseline: float | None, *, scale: int = 1) -> float | None:
+    """Selected minus baseline; an undefined estimate cannot become zero."""
+    return None if selected is None or baseline is None else (selected - baseline) * scale
+
+
 def summarize_plays(plays: list[Play], minimum_plays: int) -> dict:
     observed_epa = [play.epa for play in plays if play.epa is not None]
     count = len(plays)

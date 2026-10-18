@@ -35,9 +35,11 @@ actual API, viewer, native download and offline brief in CI. A
 recovery, contrast and keyboard/reflow regressions; screen-reader and cross-browser
 coverage remain unverified. An [offline decision contract](docs/DECISION_CONTRACT.md)
 now selects exact down/distance situations and describes Run/Pass candidates using
-shared Scout filters and metrics. It preserves denominators, missing states and
-provenance and always withholds a preferred call; candidate baselines/uncertainty
-are next. Decision Lab's API/UI, adjustment and deployment remain on the
+shared Scout filters and metrics. Opt-in same-role leave-team-out candidate
+baselines expose pooled evidence, coverage and explicit differences without changing
+selected evidence. Denominators, missing states and provenance stay visible, and
+a preferred call is always withheld; candidate uncertainty is next.
+Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 
@@ -418,6 +420,10 @@ inclusion policy and why the current output is descriptive rather than a forecas
     the consumed API contract and formats values without changing measurements.
     Frontend tests cover states/races/errors; `tests_api/test_frontend_contract.py`
     checks that committed synthetic browser fixtures match the actual endpoint.
+12. `decision.py` defines the offline Run/Pass contract and matching candidate
+    baselines using shared `cohort.py` selection and `metrics.py` summaries/differences.
+    `tests/test_decision.py` and `tests/test_decision_league.py` check exact matching,
+    interpretation, denominators, pooling, coverage and unavailable states.
 
 The pure analytical functions serve both the CLI and the optional FastAPI adapter.
 The first React view consumes that API; richer product controls remain unfinished
