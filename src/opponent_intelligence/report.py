@@ -4,7 +4,7 @@ from collections import defaultdict
 from copy import deepcopy
 
 from .cohort import PERIODS, context_filters, filter_context, select_population
-from .metrics import summarize_plays
+from .metrics import metric_difference, summarize_plays
 from .pbp import Dataset, Play
 from .uncertainty import build_uncertainty, validate_bootstrap
 
@@ -22,8 +22,7 @@ def _differences(selected: dict, baseline: dict) -> dict:
     for metric, output, scale in (("dropback_rate", "dropback_rate_pp", 100),
                                   ("success_rate", "success_rate_pp", 100),
                                   ("epa_per_play", "epa_per_play", 1)):
-        left, right = selected[metric], baseline[metric]
-        differences[output] = None if left is None or right is None else (left - right) * scale
+        differences[output] = metric_difference(selected[metric], baseline[metric], scale=scale)
     return differences
 
 

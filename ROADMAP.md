@@ -17,8 +17,8 @@ repository, duplicated analytics or LLM branding layer. The differentiator is
 explainable football evidence, not a play-calling game or a clone of another site.
 See [direction, evidence layers and initial source review](docs/DECISION_INTELLIGENCE.md).
 Decision Lab's API/UI remain planned. P1.4's bounded local surface is complete;
-P1.5's first offline evidence contract is implemented. The next unit adds matched
-candidate league baselines, not a preferred-call label or model.
+P1.5's offline evidence contract and matched candidate league baselines are
+implemented. Next is candidate support/uncertainty, not a preferred-call label or model.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -163,9 +163,9 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       [Coverage, incomplete scan findings and assistive-technology limits](docs/ACCESSIBILITY.md)
       are explicit; this is not screen-reader testing or WCAG certification.
 
-P1.4 is merged and verified through PR #22. Continue the P1.5 candidate-baseline
-slice below after review of the first offline contract. Do not prolong P1.4 with
-unrelated polish or combine foundation work with decision API/UI/models.
+P1.4 is merged and verified through PR #22; the first P1.5 contract merged as PR #23.
+Continue P1.5 below after review of the candidate-baseline slice. Do not prolong
+P1.4 with unrelated polish or combine foundation work with decision API/UI/models.
 Inspect open PRs/CI/reviews before branching; never duplicate
 unmerged work. Assistive-technology/cross-browser evaluation remains a documented
 release-readiness gap, not a claim that the bounded review certified accessibility.
@@ -179,16 +179,18 @@ release-readiness gap, not a claim that the bounded review certified accessibili
       shared selection/metrics, explicit no-ranking state, no UI or model.
       [Contract and synthetic replay](docs/DECISION_CONTRACT.md); 22 new tests,
       218 core / 24 API / 672 frontend / 14 browser checks pass. Scout v2 unchanged.
-- [ ] Reuse shared cohort/metric primitives for candidate frequencies, EPA/play,
+- [x] Reuse shared cohort/metric primitives for candidate frequencies, EPA/play,
       success, play/game counts and matching leave-team-out league baselines.
-      Selected-candidate counts/outcomes are done in the first slice. **Next unit:**
-      exact-match available-source, same-role, leave-team-out candidate baselines,
-      explicit differences/denominators/coverage/nulls. Do not substitute Scout's
-      broader distance buckets or unlock ranking from point estimates.
-      Preserve schema-v2 Scout regression outputs; do not port formulas to React.
-- [ ] Add candidate-level support and uncertainty, explicit differences, empty and
-      missing states; test both-role meanings and offense-relative defense metrics.
-      Define comparison/abstention rules; no automatic winner from a noisy mean.
+      Baselines completed 2026-10-18: opt-in exact matching, pooled-play weights,
+      explicit differences/units, candidate coverage/shared games, separate ledgers
+      and null handling; 20 new synthetic tests. No broader-bucket fallback,
+      opponent adjustment or preferred-call label. Scout schema v2 is unchanged.
+- [ ] **Next unit:** candidate-level per-metric game support and exploratory paired
+      whole-game uncertainty, reusing existing resampling and shared-game weights.
+      Differences/empty/missing point states already exist; add interval availability
+      and withholding states, test role interpretations, preserve offense-relative
+      Scout defense metrics. Keep comparison/ranking withheld pending a justified
+      policy; no automatic winner from a noisy mean or nominal interval.
 - [ ] Admit opponent-specific evidence only after a defensible cohort/support
       decision; otherwise mark deferred, not silently opponent-adjusted.
 - [ ] Independently reconcile synthetic examples and pinned retrospective cohorts;

@@ -1770,3 +1770,72 @@ support/uncertainty and independently reconcile pinned real cohorts; keep rankin
 withheld. P1.5 is not complete. No decision API/UI/model, storage, deployment or
 enrichment in this unit. Review the PR; do not merge or enable auto-merge. The
 existing 8 AM daily automation is unchanged.
+
+## 2026-10-18 — Matched Run/Pass league baselines (P1.5)
+
+**Built / why it matters:** after observing PR #23 merged at `5010cd7` with all
+eight main CI jobs green and no open PR/review feedback, started
+`codex/decision-league-baselines` from updated `origin/main`. Added opt-in
+leave-offense-out Run/Pass baselines to the offline contract. Both populations use
+the same exact down, inclusive distance, optional contexts and temporal window.
+Pooled metrics, explicit differences, coverage and missingness give descriptive
+team evidence a traceable comparison without inventing a preferred call.
+
+**Review these files:** `src/opponent_intelligence/decision.py` (shared candidate
+evidence, baseline selection/coverage/ledgers), `metrics.py` and `report.py`
+(one null-aware difference formula), `tests/test_decision_league.py` (independent
+synthetic calculations), and `docs/DECISION_CONTRACT.md` (replay and semantics).
+
+**Sports concepts:** exclude the selected offense, not its opponents or whole
+games; an opposing offense's plays against that franchise can remain. Sacks and
+scrambles stay in Pass. Both groups use offense-relative EPA/score/field context.
+A 3rd-and-4 baseline is not a medium-distance bucket; broader requested ranges can
+still have unequal situation mixes. Available teams are not certified full-league
+coverage, and descriptive differences are not opponent-strength adjustment.
+
+**Software / statistical concepts:** reuse the same selector, summarizer and
+difference arithmetic. Pooled EPA weights observed plays, not teams equally:
+invented ATL Pass EPA `[1, -1, missing]` and NO `[3]` yield 1, not 1.5. The missing
+play still contributes to frequency. Percentage-point differences are not percent
+changes. Play-disjoint populations can share games; candidate game totals overlap
+and do not certify independent observations. Keep full-source provenance separate
+from each population's ordered, conditional exclusion ledger.
+
+**Learn from this:** reproduce the synthetic example by hand, then trace its
+denominators and nulls through the builder and tests. Explain why a zero observed
+frequency is meaningful in a nonempty cohort while absent EPA is unavailable,
+and why neither matched filters nor a positive difference establishes a winner.
+
+**Three review questions:**
+
+1. Why does pooled Pass EPA equal 1 rather than 1.5 in the example, and which
+   denominator still includes the missing-EPA play?
+2. Which offensive plays are excluded from the baseline, when can games overlap,
+   and why must candidate game counts not be summed as independent samples?
+3. When is a frequency difference defined while an outcome difference is null,
+   and why do exact matching and cleared count warnings still not justify ranking?
+
+**Verification / self-review:** 238 core / 24 API tests pass on each of Python
+3.11/3.12/3.13, API warnings as errors, with clean pip checks; 672 frontend tests,
+type-check/build and 14 browser cases pass. All 71 API-produced fixtures are
+unchanged. Baseline 218 core / 24 API / 672 frontend tests passed before changes.
+The 20 new tests use explicitly invented rows; no real-team results or validation
+are claimed. Browser process IPC required approved outside-sandbox execution;
+no retries, assertion changes or timeout increases. Owned test servers stop and
+ports 8000/5173 are free. No dependencies or raw datasets were acquired.
+
+Complete-diff review checked cutoff/role isolation, no bucket fallback, candidate
+partitions, source accounting, conditional missingness, pooled denominators, shared
+games, signed units, null propagation and unchanged Scout outputs. Added explicit
+inclusive-distance and OT/clock-zero tests during review. Documented unequal
+within-range mixes and retained capability abstention even above count-warning
+thresholds. Primary field definitions were rechecked against the pinned dictionary;
+no new source/model/license assumptions were introduced. The published PR records
+the exact commit, attribution and remote-CI receipt separately from local checks.
+
+**Remaining / next:** candidate-level per-metric game support and exploratory
+paired whole-game uncertainty using existing resampling with shared-game weights.
+Keep interval-withholding and ranking separate; independent pinned real-cohort
+reconciliation and a justified comparison policy still remain. P1.5 is not complete;
+no decision API/UI/model, enrichment, storage or deployment in this unit. Review
+the PR; do not merge or enable auto-merge. The 8 AM automation is unchanged.
