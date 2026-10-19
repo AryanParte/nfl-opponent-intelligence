@@ -5,6 +5,7 @@ from math import ceil, fsum, isclose
 from random import Random
 from typing import NamedTuple
 
+from .metrics import metric_difference
 from .pbp import Play
 
 
@@ -51,14 +52,21 @@ def _game_totals(plays: list[Play]) -> dict:
     return totals
 
 
-def _weighted_metrics(totals: dict, weights: dict) -> tuple:
+def _weighted_metrics(totals: dict, weights: dict, *, frequency_parent: dict | None = None) -> tuple:
     rows = [(values, weights[game]) for game, values in totals.items() if weights.get(game, 0)]
     plays = sum(v.plays * w for v, w in rows)
     observed = sum(v.epa_observations * w for v, w in rows)
+    if frequency_parent is None:
+        frequency = sum(v.dropbacks * w for v, w in rows) / plays if plays else None
+    else:
+        # Candidate absence is zero frequency in a nonempty parent, not a
+        # missing observation. Never condition frequency on candidate presence.
+        parent_plays = sum(v.plays * weights.get(game, 0) for game, v in frequency_parent.items())
+        frequency = plays / parent_plays if parent_plays else None
     # Pool play numerators/denominators, not unweighted game averages. Normalize
     # before multiplying EPA sums to avoid overflow from large multiplicities.
     return (
-        sum(v.dropbacks * w for v, w in rows) / plays if plays else None,
+        frequency,
         sum(v.positive_epa * w for v, w in rows) / observed if observed else None,
         fsum(v.epa_sum * (w / observed) for v, w in rows) if observed else None,
     )
@@ -93,31 +101,18 @@ def _summary(values: list[float], support: dict, attempted: int, unit: str) -> d
             "valid_replicates": len(values), "undefined_replicates": attempted - len(values)}
 
 
-def build_uncertainty(
-    selected_groups: dict[tuple[int, str], list[Play]],
-    baseline_groups: dict[tuple[int, str], list[Play]] | None,
-    *, repetitions: int, seed: int,
-) -> dict:
-    """Use one joint game-multiplicity draw for every population and situation.
+def _bootstrap_rows(
+    totals: dict, keys: list, *, repetitions: int, seed: int, candidate_frequencies: bool = False,
+) -> tuple[dict, dict]:
+    """Shared draws, differences and withholding for Scout or candidate cells.
 
-    Inputs have already passed the report's role, time, and context selection.
-    None means comparison was not requested; an empty dict is a requested but
-    empty baseline. Overall includes baseline-only buckets, even though the
-    situation output contains only buckets observed for the selected team.
+    Each population's None key defines its full filtered game frame. Candidate
+    frequencies also use that parent denominator; their outcomes use cell totals.
+    Scout cells use their own denominator for both frequency and outcomes.
     """
-    comparison = baseline_groups is not None
-    populations = {"selected": selected_groups}
-    if comparison:
-        populations["baseline"] = baseline_groups
-    distance_order = {"short": 0, "medium": 1, "long": 2}
-    keys = [None] + sorted(selected_groups, key=lambda k: (k[0], distance_order[k[1]]))
-    totals = {}
-    for name, groups in populations.items():
-        totals[name] = {key: _game_totals(
-            [p for plays in groups.values() for p in plays] if key is None else groups.get(key, [])
-        ) for key in keys}
+    comparison = "baseline" in totals
     games = sorted({game for population in totals.values() for game in population[None]})
-    samples = {key: {name: [[], [], []] for name in populations} for key in keys}
+    samples = {key: {name: [[], [], []] for name in totals} for key in keys}
     if comparison:
         for key in keys:
             samples[key]["difference"] = [[], [], []]
@@ -128,10 +123,12 @@ def build_uncertainty(
         # the two populations independently would destroy this paired structure.
         weights = Counter(games[rng.randrange(len(games))] for _ in games)
         for key in keys:
-            estimates = {name: _weighted_metrics(by_key[key], weights) for name, by_key in totals.items()}
+            estimates = {name: _weighted_metrics(
+                by_key[key], weights, frequency_parent=by_key[None] if candidate_frequencies else None,
+            ) for name, by_key in totals.items()}
             if comparison:
                 estimates["difference"] = tuple(
-                    None if left is None or right is None else (left - right) * scale
+                    metric_difference(left, right, scale=scale)
                     for left, right, scale in zip(estimates["selected"], estimates["baseline"], (100, 100, 1))
                 )
             for name, metrics in estimates.items():
@@ -144,11 +141,14 @@ def build_uncertainty(
         rows[key] = {}
         for name, distributions in samples[key].items():
             metric_names = DIFFERENCES if name == "difference" else METRICS
+            if candidate_frequencies:
+                metric_names = ("frequency_pp" if name == "difference" else "frequency", *metric_names[1:])
             rows[key][name] = {}
             for index, (metric, values) in enumerate(zip(metric_names, distributions)):
-                sides = populations if name == "difference" else [name]
+                sides = totals if name == "difference" else [name]
+                support_key = None if candidate_frequencies and index == 0 else key
                 support = {side: sum((v.plays if index == 0 else v.epa_observations) > 0
-                                     for v in totals[side][key].values())
+                                     for v in totals[side][support_key].values())
                            for side in sides}
                 unit = ("expected_points_per_observed_play" if index == 2
                         else "percentage_points" if name == "difference" else "proportion")
@@ -162,8 +162,6 @@ def build_uncertainty(
         "shared_game_weights": comparison,
         "minimum_support_games": MINIMUM_GAMES, "few_games_warning_below": FEW_GAMES,
         "minimum_valid_fraction": MINIMUM_VALID_FRACTION,
-        "overall": rows[None],
-        "situations": [{"down": key[0], "distance": key[1], **rows[key]} for key in keys[1:]],
         "warnings": [
             "Exploratory pointwise percentile intervals, not calibrated coverage, significance tests, or predictions.",
             "Whole-game resampling retains within-game dependence; repeated teams/opponents across games remain dependent.",
@@ -172,4 +170,55 @@ def build_uncertainty(
             "Constant or near-zero-width percentile intervals are withheld, not interpreted as certainty.",
             "Selection is fixed before resampling; source availability, missing-data bias, and upstream EPA model uncertainty are not estimated.",
         ],
-    }
+    }, rows
+
+
+def build_uncertainty(
+    selected_groups: dict[tuple[int, str], list[Play]],
+    baseline_groups: dict[tuple[int, str], list[Play]] | None,
+    *, repetitions: int, seed: int,
+) -> dict:
+    """Scout adapter: keep overall and selected-team observed situation cells.
+
+    Inputs already passed role/time/context selection. None means no comparison;
+    an empty dict is a requested empty baseline. Overall includes baseline-only
+    buckets even when they are absent from selected-team situation output.
+    """
+    populations = {"selected": selected_groups}
+    if baseline_groups is not None:
+        populations["baseline"] = baseline_groups
+    distance_order = {"short": 0, "medium": 1, "long": 2}
+    keys = [None] + sorted(selected_groups, key=lambda k: (k[0], distance_order[k[1]]))
+    totals = {name: {key: _game_totals(
+        [p for plays in groups.values() for p in plays] if key is None else groups.get(key, [])
+    ) for key in keys} for name, groups in populations.items()}
+    metadata, rows = _bootstrap_rows(totals, keys, repetitions=repetitions, seed=seed)
+    # Preserve Scout's serialized field order as well as its numerical output.
+    warnings = metadata.pop("warnings")
+    return {**metadata, "overall": rows[None],
+            "situations": [{"down": key[0], "distance": key[1], **rows[key]} for key in keys[1:]],
+            "warnings": warnings}
+
+
+def build_candidate_uncertainty(
+    selected: list[Play], baseline: list[Play] | None, *, repetitions: int, seed: int,
+) -> dict:
+    """Offline decision adapter; one fixed exact cohort, two observed candidates.
+
+    Do not resample candidates independently or filter out missing EPA before
+    defining the frame. Run/Pass use identical game weights and parent frequencies.
+    """
+    populations = {"selected": selected}
+    if baseline is not None:
+        populations["baseline"] = baseline
+    totals = {name: {None: _game_totals(plays), **{
+        key: _game_totals([p for p in plays if p.dropback == dropback])
+        for key, dropback in (("run", False), ("pass", True))
+    }} for name, plays in populations.items()}
+    metadata, rows = _bootstrap_rows(totals, ["run", "pass"], repetitions=repetitions, seed=seed,
+                                     candidate_frequencies=True)
+    metadata["warnings"].append(
+        "Candidate frequency support counts parent-cohort games, including candidate absences; "
+        "EPA/success support counts games with observed candidate EPA. No call ranking or causal inference."
+    )
+    return {**metadata, "candidates": [{"candidate": key, **rows[key]} for key in ("run", "pass")]}

@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from .cohort import context_filters, filter_context, select_population
 from .metrics import metric_difference, summarize_plays
 from .pbp import Dataset, Play
+from .uncertainty import build_candidate_uncertainty, validate_bootstrap
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -32,6 +33,8 @@ class DecisionRequest:
     clock_max: int | None = None
     minimum_plays: int = 30
     compare_league: bool = False
+    bootstrap_repetitions: int | None = None
+    bootstrap_seed: int | None = None
 
 
 def _candidate_evidence(population: list[Play], minimum_plays: int) -> list[dict]:
@@ -77,7 +80,7 @@ def _context_warnings(contexts: dict, quality: dict, *, prefix: str = "") -> lis
 
 def _league_comparison(
     evidence: dict, selected: list[Play], others: list[Play], contexts: dict, minimum_plays: int,
-) -> dict:
+) -> tuple[dict, list[Play]]:
     baseline, quality = filter_context(others, contexts)
     candidates = _candidate_evidence(baseline, minimum_plays)
     selected_by_name = {candidate["candidate"]: candidate for candidate in evidence["candidates"]}
@@ -133,7 +136,7 @@ def _league_comparison(
         },
         "candidates": candidates,
         "warnings": warnings,
-    }
+    }, baseline
 
 
 def build_decision_evidence(
@@ -156,6 +159,7 @@ def build_decision_evidence(
         raise ValueError("minimum_plays must be a positive integer warning threshold")
     if type(request.compare_league) is not bool:
         raise ValueError("compare_league must be a boolean")
+    bootstrap_seed = validate_bootstrap(request.bootstrap_repetitions, request.bootstrap_seed)
     if not isinstance(source_label, str) or not source_label.strip():
         raise ValueError("source_label must describe the input data")
     temporal, team_plays = select_population(
@@ -185,7 +189,7 @@ def build_decision_evidence(
         "Descriptive associations are not causal effects, guaranteed future performance or coaching recommendations.",
         "Week filtering does not reconstruct historical source availability or EPA model training.",
         "Small-sample flags are count warnings, not validated reliability or ranking thresholds.",
-        "Candidate uncertainty, opponent adjustment and EP/WP action values are not implemented here.",
+        "Opponent adjustment and EP/WP action values are not implemented here.",
     ]
     if not selected:
         warnings.append("No matching plays; no widening or fallback. Frequencies and outcomes are null.")
@@ -218,9 +222,14 @@ def build_decision_evidence(
                        "reason": "candidate_comparison_not_validated"},
         "warnings": warnings,
     }
+    baseline = None
     if request.compare_league:
         others = [play for play in temporal if play.offense != request.team]
-        evidence["league_comparison"] = _league_comparison(
+        evidence["league_comparison"], baseline = _league_comparison(
             evidence, selected, others, contexts, request.minimum_plays,
+        )
+    if request.bootstrap_repetitions is not None:
+        evidence["uncertainty"] = build_candidate_uncertainty(
+            selected, baseline, repetitions=request.bootstrap_repetitions, seed=bootstrap_seed,
         )
     return evidence

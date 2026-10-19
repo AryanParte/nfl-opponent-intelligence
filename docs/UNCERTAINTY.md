@@ -124,3 +124,26 @@ These verify implementation, not statistical coverage. Coverage simulation and
 alternative cross-game/small-sample methods remain future methodological work;
 do not label this first method calibrated or use an interval excluding zero as
 a claim of team strength or predictive quality.
+
+## Offline decision adapter (2026-10-19)
+
+The Run/Pass contract now reuses this sampler, sufficient totals, paired differences,
+quantiles, support gates and warnings. Scout schema-v2 JSON, including field order,
+is unchanged; all 71 endpoint-produced fixtures remain regression checks. The
+separate [decision contract](DECISION_CONTRACT.md#optional-candidate-uncertainty)
+describes its `uncertainty.candidates` shape and optional request fields.
+
+Candidate frequency divides candidate plays by **all matching parent plays**;
+its support counts parent games, including games where the candidate is absent.
+Candidate EPA/success support instead counts games with observed candidate EPA.
+Both calls and populations share the same game draws. Never resample only games
+where a call was observed, average game means or subtract interval endpoints.
+No candidate/parent denominator, point estimate or preferred-call policy is changed.
+
+Sixteen candidate tests include a separate exhaustive five-game expansion,
+asymmetric support, missing/empty/zero states, undefined draws, exact 95%-valid
+boundaries, fixed filters, RNG isolation and reciprocal Scout defense meaning.
+Primary references above were rechecked for paired resampling and few-cluster
+limitations. This is implementation verification, not validation of a new
+inference method or authorization to rank actions. Independent real-cohort
+candidate reconciliation and cross-game/calibration research remain unfinished.

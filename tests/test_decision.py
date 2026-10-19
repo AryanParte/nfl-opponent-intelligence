@@ -195,7 +195,7 @@ class DecisionTests(unittest.TestCase):
         with self.assertRaises(FrozenInstanceError):
             self.request.down = 2
         for field, value in (("side", "defense"), ("opponent", "ATL"), ("play_family", "RPO"),
-                             ("snapshot_path", "/tmp/data.csv"), ("bootstrap_repetitions", 100)):
+                             ("snapshot_path", "/tmp/data.csv"), ("model", "invented")):
             with self.subTest(field=field), self.assertRaises(TypeError):
                 replace(self.request, **{field: value})
 

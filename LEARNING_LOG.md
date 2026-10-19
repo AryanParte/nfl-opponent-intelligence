@@ -1839,3 +1839,71 @@ Keep interval-withholding and ranking separate; independent pinned real-cohort
 reconciliation and a justified comparison policy still remain. P1.5 is not complete;
 no decision API/UI/model, enrichment, storage or deployment in this unit. Review
 the PR; do not merge or enable auto-merge. The 8 AM automation is unchanged.
+
+## 2026-10-19 — Candidate-level game support and exploratory uncertainty (P1.5)
+
+**Built / why:** after PR #24 merged at `6246a3b` (same tree as `c06c7fa`) and all
+eight main CI jobs passed, started `codex/decision-candidate-uncertainty` from
+updated `origin/main`. Added optional seeded whole-game intervals and per-metric
+support for Run/Pass and matching league differences. Extracted the existing
+resampling loop for both Scout and decision adapters rather than building another
+bootstrap. This makes sparse evidence visible without pretending to select a call.
+
+**Review files:** `src/opponent_intelligence/uncertainty.py` (shared draws,
+candidate frequency denominator, support and withholding), `decision.py` (bounded
+opt-in, reused filtered baseline), `tests/test_decision_uncertainty.py` (independent
+expanded-play oracle), and `docs/DECISION_CONTRACT.md` / `docs/UNCERTAINTY.md`.
+
+**Sports concepts:** games contribute different numbers of calls; pooled metrics
+are not game averages. A game with no Run still informs Run frequency. Missing EPA
+does not erase a call, but cannot support its EPA/success estimate. Both calls and
+opposing offenses can share game effects; repeated opponents across different games
+remain dependent. Sacks/scrambles stay in Pass and defense EPA stays offense-relative.
+
+**Software/statistical concepts / learn:** distinguish three counts: candidate
+games, parent games for frequency support, and candidate observed-EPA games for
+outcome support. Sample one shared game frame, retain multiplicities for both
+calls/populations, and calculate differences within each draw. Never subtract
+marginal interval endpoints, redraw missing denominators or equate a constant
+bootstrap with certainty. Reuse the existing method/metadata and keep contracts
+separate; 200–10000 draws bound this offline option, not a new API. Five-game and
+95%-valid gates are safeguards, not reliability or decision thresholds.
+
+**Three review questions:**
+
+1. If Run occurs in only one of five matching games, why can its frequency have
+   five support games while its EPA has at most one, and what if that EPA is missing?
+2. Why must selected/league and Run/Pass share game draws, and why can a paired
+   EPA difference be constant even when both marginal intervals vary?
+3. What distinguishes undefined, insufficient-game, too-few-valid and degenerate
+   intervals, and why does even an available interval not justify ranking calls?
+
+**Verification / self-review:** 254 core / 24 API tests pass on each Python
+3.11/3.12/3.13 with API warnings as errors and clean pip checks; 672 frontend tests
+and type-check/build pass. The 16 new tests include all 3,125 ordered five-game
+draws, separate quantiles, support asymmetry, zero/missing/empty cases, exact 95%
+boundaries, no redraw/opt-out sampling, fixed cutoffs, RNG/row-order stability and
+Scout defense compatibility. All 71 API-produced fixtures are unchanged; six Scout
+uncertainty cases match main byte-for-byte, including key order. Baseline 238 core /
+24 API tests passed before implementation. Synthetic doc replay confirms low-support
+interval withholding. No raw datasets, dependencies or models were acquired.
+
+Browser run one passed 13/14 cases but a narrow accessibility evaluation took about
+94 seconds and exceeded the existing 60-second test limit. Its emitted scans had
+no automatic violations; cause remains unconfirmed. Retained its synthetic trace
+locally as recorded in STATUS. The unchanged full rerun passed all 14 in 15.5 seconds;
+no timeouts/assertions/retry settings were loosened. Owned listeners stopped.
+
+Complete-diff review checked denominator/null semantics, shared frames, support
+precedence, paired units, temporal isolation, source accounting and unchanged
+Scout serialization. Added asymmetric-support and baseline-only-draw tests and
+clarified the inherited population-pairing flag; removed stale architecture
+next-step text. Rechecked primary cluster-bootstrap and
+paired-sampling references without copying code or claiming NFL calibration.
+The published PR records actual SHA, attribution and remote CI separately.
+
+**Remaining / next:** independently reconcile pinned retrospective candidate
+points, baselines, support and seeded intervals from raw source rows. Then document
+the remaining abstention/opponent-evidence policy. Keep ranking withheld; P1.5 is
+not yet complete. No decision API/UI/model, enrichment, database or deployment.
+Review the PR without merging or auto-merge. The 8 AM automation is unchanged.
