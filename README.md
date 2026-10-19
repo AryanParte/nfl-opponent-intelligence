@@ -38,7 +38,9 @@ now selects exact down/distance situations and describes Run/Pass candidates usi
 shared Scout filters and metrics. Opt-in same-role leave-team-out candidate
 baselines expose pooled evidence, coverage and explicit differences without changing
 selected evidence. Denominators, missing states and provenance stay visible, and
-a preferred call is always withheld; candidate uncertainty is next.
+a preferred call is always withheld. Optional candidate-level game support and
+exploratory paired intervals now reuse Scout's resampling engine; independent
+retrospective candidate reconciliation is next.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
@@ -424,6 +426,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
     baselines using shared `cohort.py` selection and `metrics.py` summaries/differences.
     `tests/test_decision.py` and `tests/test_decision_league.py` check exact matching,
     interpretation, denominators, pooling, coverage and unavailable states.
+    `tests/test_decision_uncertainty.py` checks candidate denominators/support and
+    the shared resampler against all 3,125 draws of an invented five-game sample.
 
 The pure analytical functions serve both the CLI and the optional FastAPI adapter.
 The first React view consumes that API; richer product controls remain unfinished

@@ -1,6 +1,7 @@
 # Offline Run/Pass evidence contract v1
 
 First P1.5 slice, 2026-10-17; optional matched candidate baselines added 2026-10-18.
+Optional candidate-level game support and exploratory intervals added 2026-10-19.
 This is a Python-only **descriptive evidence builder**,
 not a new API, CLI, browser mode, predictive model or recommendation engine. Scout
 schema v2, endpoints, briefs and UI stay unchanged. The request and JSON-compatible
@@ -20,7 +21,8 @@ from opponent_intelligence.pbp import load_csv
 
 dataset = load_csv(Path("tests/fixtures/synthetic_pbp.csv"))
 request = DecisionRequest(team="CAR", season=2024, before_week=3,
-                          down=1, distance_min=10, distance_max=10, compare_league=True)
+                          down=1, distance_min=10, distance_max=10, compare_league=True,
+                          bootstrap_repetitions=200, bootstrap_seed=0)
 result = build_decision_evidence(
     dataset, request, source_label="Invented test fixture; not real NFL observations",
 )
@@ -36,6 +38,10 @@ The optional baseline has one ATL Pass with EPA 3: Pass's selected-minus-baselin
 EPA difference is -2.4 and frequency difference is about -33.33 percentage points.
 Baseline Run frequency is 0, but its EPA/success and outcome differences are null.
 One available opposing offense is not certified league coverage.
+The optional uncertainty block withholds all intervals here: frequency has two
+selected support games and one baseline game; Run and Pass each have only one
+selected observed-EPA game. Baseline Run outcomes have zero support and are
+`undefined_estimate`, not a zero-width interval. More draws cannot add games.
 For real offline work, load the already acquired immutable snapshot with the
 existing `ingestion.load_snapshot` function; the builder never opens paths or
 downloads data. The caller retains responsibility for a truthful source label.
@@ -56,10 +62,12 @@ raise `TypeError`; invalid supported values raise `ValueError`. No silent coerci
 | `yardline_min/max`, `score_min/max`, `period`, `clock_min/max` | Same pre-play, offense-relative bounds, optional-header checks, missing-value exclusions and defaults as [Scout](METRICS.md). Clock requires a period. |
 | `minimum_plays` | Positive integer count-warning threshold, default 30; not an accuracy, independence or ranking guarantee. |
 | `compare_league` | Boolean, default `False`. `True` adds same-role leave-team-out candidate baselines; no new data is loaded. Integer/string lookalikes are rejected. |
+| `bootstrap_repetitions` | Optional integer 200–10000; omitted means no uncertainty block or resampling. Uses the existing offline bootstrap bounds. |
+| `bootstrap_seed` | Optional integer 0–4294967295, default 0 when repetitions are set. Seed alone is invalid. Booleans/strings/floats are rejected. |
 
 Booleans, numeric strings and floats are not accepted for integer fields. Field
 position alone accepts finite integers/floats in 0–100. No `side`, opponent,
-play-family, filesystem-path, model, interval or fallback option exists here.
+play-family, filesystem-path, model or fallback option exists here.
 Defense remains a Scout capability, with offensive production **allowed** rather
 than sign-flipped EPA or a defensive stop rate.
 
@@ -141,9 +149,8 @@ ingestion, browser calculation or second outcome formula was added.
 Minimum point-estimate support is one parent play for frequency and one candidate
 EPA observation for outcomes, explicitly recorded in `estimation_policy`. This
 means mathematically defined, **not reliable**. Even clearing the 30-count warning
-does not validate a comparison. Candidate uncertainty/game-support rules are not
-implemented in this slice; Scout's five-game resampling gate is not repurposed as
-a decision-reliability threshold.
+does not validate a comparison. Optional game support/interval rules below reuse
+Scout's safeguards, not a decision-reliability threshold.
 
 `comparison` always returns `status: insufficient_evidence`,
 `reason: candidate_comparison_not_validated`, and `preferred_candidate: null`.
@@ -188,8 +195,9 @@ unobserved confounding. No nearest-bucket, overall-league or other-season fallba
 The single parent `source` hash/manifest applies to **both** populations; no second
 snapshot or relabeled subset is created. The two populations have disjoint plays,
 but games/opponents can overlap. Neither parent game totals nor candidate shared-game
-counts should be summed across candidates. These counts do not supply an uncertainty
-interval, correct cross-game dependence or replace future per-metric game support.
+counts should be summed across candidates. These coverage counts do not themselves
+supply an uncertainty interval or correct cross-game dependence; optional
+per-metric support is defined separately below.
 
 The baseline ledger satisfies:
 
@@ -215,8 +223,73 @@ All-missing EPA also leaves frequency intact but blocks outcome differences.
 The top-level `comparison` **still abstains** with
 `candidate_comparison_not_validated`. Matched descriptive differences, even above
 count-warning thresholds, are not enough to choose between Run and Pass. No
-candidate uncertainty, opponent-strength adjustment, causal/predictive validation
-or EP/WP action model is implemented by this extension.
+opponent-strength adjustment, causal/predictive validation or EP/WP action model
+is implemented by these descriptive extensions.
+
+## Optional candidate uncertainty
+
+`bootstrap_repetitions` adds only top-level `uncertainty` within contract v1.
+Existing candidate values, baseline comparisons, source and no-ranking state do
+not change. No repetitions means no new block or resampling cost. This is not
+Scout's `uncertainty.overall/situations` shape; decision evidence uses
+`uncertainty.candidates`, in Run/Pass order, with `candidate`, `selected` and,
+when comparison is requested, `baseline` and `difference`.
+
+The adapter reuses [the existing game-cluster procedure and status gates](UNCERTAINTY.md),
+not a second sampler, percentile formula or confidence policy. Filter the exact
+cohort once, then draw G games with replacement from its sorted G observed game IDs
+(the selected/baseline union when comparison is on). Each draw gives **both calls
+and both populations the same game multiplicities**. Missing-EPA plays remain in
+the frame. Games with no observations for a particular call are not discarded.
+
+For each call and population, recompute:
+
+| Metric | Replicate denominator | `support_games` |
+| --- | --- | --- |
+| `frequency` | All eligible parent-cohort plays in that draw | Games with parent-cohort plays, including games with zero observations of this call |
+| `epa_per_play`, `success_rate` | Observed EPA for this candidate in that draw | Games with at least one observed EPA for this candidate |
+
+The point-evidence candidate `games` field remains all games with that candidate's
+plays, including missing EPA. It is neither frequency-denominator support nor
+necessarily observed-EPA support. For example, a call observed once in one of five
+parent games has five frequency-support games but at most one EPA-support game.
+Zero observations of a call across a nonempty parent yields zero frequency in all
+defined draws and a withheld `degenerate_interval`, not certainty that it is never
+called. Its outcome estimate is undefined. A draw with no parent plays has null
+frequency, not zero, and is counted as undefined rather than redrawn.
+
+Differences are **selected minus matching league candidate** within each shared
+draw, not Run minus Pass, and not subtraction of marginal interval endpoints.
+Difference keys are `frequency_pp`, `success_rate_pp`, `epa_per_play`; both required
+populations' support is reported. One well-supported side cannot rescue the other.
+Individual rate intervals use proportions; differences use percentage points.
+
+Entries expose `interval`, `status`, `unit`, `support_games`, `few_games`, and
+valid/undefined replicate counts. Status precedence is `undefined_estimate`,
+`insufficient_games` (below five on either required side),
+`too_few_valid_replicates` (below 95% defined draws), `degenerate_interval`, then
+`ok`. Fewer than 20 support games also warns. Gates are application safeguards,
+not calibration or decision reliability. Empty union frames perform zero draws;
+the two candidates and their unavailable states remain visible. Metadata preserves
+method `game_cluster_percentile_v1`, nominal 0.95 level, seed/RNG, linear quantiles,
+frame size, requested/performed draws, shared weights and thresholds.
+The inherited `shared_game_weights` flag indicates selected/baseline pairing: it
+is false for selected-only evidence. Run and Pass still share the same draws in
+that mode; false does not mean the calls were sampled independently.
+
+These are exploratory pointwise intervals, not simultaneous bounds, significance
+tests, predictions, or a Run-versus-Pass decision rule. Cross-game team/opponent
+dependence, confounding, source/model history, missingness bias and upstream EPA
+model uncertainty remain unaddressed. Comparison changes the game frame and can
+change selected-side intervals. Even an `ok` interval excluding zero never unlocks
+a preferred call. Existing [primary references](UNCERTAINTY.md#what-is-estimated)
+motivate reuse, not NFL calibration; no external implementation was installed.
+
+`tests/test_decision_uncertainty.py` independently expands all 3,125 ordered draws
+of five invented games, checks pooled candidate statistics and paired differences
+against separate quantiles, and covers every support/withholding state. The
+shared game effects cancel in a candidate EPA contrast despite varying marginal
+intervals. Synthetic verification does not establish real-world coverage.
 
 ## Limits and next slice
 
@@ -226,9 +299,7 @@ later source revision or upstream EPA model was available at that time. Outcomes
 are historical offense-relative values; selection bias and unobserved confounding
 remain. No causal, out-of-sample, game-rule or coaching validation is claimed.
 
-Next: candidate-level per-metric game support and exploratory paired whole-game
-uncertainty, reusing the existing resampling implementation and retaining shared
-game weights. Define missing/low-support/withheld interval states without turning
-them into reliability guarantees or ranking. Independent pinned real-cohort
-reconciliation and a justified comparison policy remain unfinished. No API/UI/model
-until these foundation contracts are tested and independently reconciled.
+Next: independently reconcile candidate points, baselines, game support and seeded
+intervals on pinned retrospective cohorts directly from raw source rows. Document
+the remaining abstention/opponent-evidence policy; keep ranking withheld. No
+API/UI/model until these foundation contracts are tested and independently reconciled.

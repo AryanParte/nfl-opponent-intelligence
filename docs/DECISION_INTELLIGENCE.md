@@ -3,7 +3,8 @@
 Decision recorded 2026-10-15. This evolves **the existing repository**, not a new
 product implementation. Scout works today; the first offline Decision Lab evidence
 contract was implemented on 2026-10-17, with matched candidate league baselines on
-2026-10-18. Decision API/UI and new models remain planned.
+2026-10-18 and candidate support/exploratory uncertainty on 2026-10-19.
+Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 
@@ -42,7 +43,8 @@ future decision comparison → future decision API → React Decision Lab
 `snapshots.py`/`ingestion.py` retain acquisition and hash verification; `pbp.py`
 retains eligibility and typed observations. `cohort.py` and `metrics.py`, extracted
 for the first offline slice, share selection and metric formulas between `report.py`
-and `decision.py`; `uncertainty.py` remains the Scout resampling foundation. Extract
+and `decision.py`; `uncertainty.py` now shares resampling between Scout and decision
+adapters, retaining each contract's metric denominators and output shape. Extract
 only primitives a tested slice needs; preserve existing report outputs. No second
 fetcher, ingestion stack, statistical formulas in React, parallel repository, or
 speculative framework.
@@ -54,8 +56,10 @@ contract** is implemented and tested; see [contract v1](DECISION_CONTRACT.md) fo
 the request, exact filters, source audit, denominators and availability states.
 It always abstains from ranking. Opt-in exact-matched candidate league baselines
 now reuse the same selector, candidate summaries and null-preserving differences.
-No endpoint/UI/model was added. Next, P1.5 adds candidate support/uncertainty and
-comparison rules incrementally through the existing analytics primitives. The gates
+Candidate support and exploratory intervals now reuse the shared resampler with
+parent-frequency and candidate-EPA denominators. No endpoint/UI/model was added.
+Next, independently reconcile pinned real cohorts and document the remaining
+comparison/opponent-evidence policy without unlocking ranking. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -220,7 +224,8 @@ latency evidence and an ADR. This is an access-pattern decision, not a scale cla
 The 2026-10-15 run finished P1.4's repeatable synthetic browser/CI flow, not Decision
 Lab. The 2026-10-16 [bounded accessibility review](ACCESSIBILITY.md) closes the local
 surface boundary, with actual screen-reader/cross-browser coverage still unverified.
-Next: begin P1.5 with only the first small offline contract slice. Preserve operational
+P1.5's offline contract, baselines and support/uncertainty now exist; independent
+real-cohort reconciliation and comparison-policy gates remain. Preserve operational
 evidence/case-study goals as P1.10; model/enrichment gates may explicitly defer an
 integration so they do not force unvalidated features into the basic decision product.
 No deployment, automatic merges or 8 AM automation changes are authorized here.
