@@ -4,6 +4,7 @@ Decision recorded 2026-10-15. This evolves **the existing repository**, not a ne
 product implementation. Scout works today; the first offline Decision Lab evidence
 contract was implemented on 2026-10-17, with matched candidate league baselines on
 2026-10-18 and candidate support/exploratory uncertainty on 2026-10-19.
+Independent pinned real-cohort reconciliation followed on 2026-10-20.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -58,8 +59,9 @@ It always abstains from ranking. Opt-in exact-matched candidate league baselines
 now reuse the same selector, candidate summaries and null-preserving differences.
 Candidate support and exploratory intervals now reuse the shared resampler with
 parent-frequency and candidate-EPA denominators. No endpoint/UI/model was added.
-Next, independently reconcile pinned real cohorts and document the remaining
-comparison/opponent-evidence policy without unlocking ranking. The gates
+The [pinned real-cohort audit](DECISION_AUDIT.md) verifies these calculations using
+a repository-only raw-record oracle, not a second production stack. Next, document
+the remaining comparison/opponent-evidence policy without unlocking ranking. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -224,8 +226,8 @@ latency evidence and an ADR. This is an access-pattern decision, not a scale cla
 The 2026-10-15 run finished P1.4's repeatable synthetic browser/CI flow, not Decision
 Lab. The 2026-10-16 [bounded accessibility review](ACCESSIBILITY.md) closes the local
 surface boundary, with actual screen-reader/cross-browser coverage still unverified.
-P1.5's offline contract, baselines and support/uncertainty now exist; independent
-real-cohort reconciliation and comparison-policy gates remain. Preserve operational
+P1.5's offline contract, baselines and support/uncertainty are independently
+reconciled; the comparison/opponent-policy gate remains. Preserve operational
 evidence/case-study goals as P1.10; model/enrichment gates may explicitly defer an
 integration so they do not force unvalidated features into the basic decision product.
 No deployment, automatic merges or 8 AM automation changes are authorized here.

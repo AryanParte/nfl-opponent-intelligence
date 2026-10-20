@@ -39,8 +39,11 @@ shared Scout filters and metrics. Opt-in same-role leave-team-out candidate
 baselines expose pooled evidence, coverage and explicit differences without changing
 selected evidence. Denominators, missing states and provenance stay visible, and
 a preferred call is always withheld. Optional candidate-level game support and
-exploratory paired intervals now reuse Scout's resampling engine; independent
-retrospective candidate reconciliation is next.
+exploratory paired intervals now reuse Scout's resampling engine. An
+[independent pinned-snapshot audit](docs/DECISION_AUDIT.md) reconciles eight
+retrospective situations and 144 interval entries directly from raw records;
+this verifies calculations, not statistical coverage or decision quality.
+Comparison/abstention and opponent-evidence policy is next.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
@@ -428,6 +431,9 @@ inclusion policy and why the current output is descriptive rather than a forecas
     interpretation, denominators, pooling, coverage and unavailable states.
     `tests/test_decision_uncertainty.py` checks candidate denominators/support and
     the shared resampler against all 3,125 draws of an invented five-game sample.
+    Repository-only `validation/decision_audit.py` independently checks raw-record
+    cohorts and expanded-game intervals; its synthetic/mutation tests run in CI.
+    The real-snapshot receipt replays offline with the documented pinned inputs.
 
 The pure analytical functions serve both the CLI and the optional FastAPI adapter.
 The first React view consumes that API; richer product controls remain unfinished
@@ -443,6 +449,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Data contract and provenance](docs/DATA_CONTRACT.md)
 - [Raw snapshots, source terms, and acquisition evidence](docs/INGESTION.md)
 - [Real-season audit and cohort reconciliation](docs/REAL_DATA_AUDIT.md)
+- [Independent Run/Pass reconciliation and replay](docs/DECISION_AUDIT.md)
 - [Metric definitions](docs/METRICS.md)
 - [Exploratory uncertainty method](docs/UNCERTAINTY.md)
 - [Historical brief format and examples](docs/BRIEFS.md)

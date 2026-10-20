@@ -120,6 +120,9 @@ semantics, immutability, deterministic CLI output, and RNG isolation.
 
 The [pinned-data check](REAL_DATA_AUDIT.md#uncertainty-extension-2026-10-06)
 reconciles actual-source support and intervals against independent calculations.
+The later [decision audit](DECISION_AUDIT.md) checks candidate-specific denominators,
+support and all 144 interval entries across eight pinned Run/Pass situations,
+using expanded raw rows and separate quantiles rather than this engine's totals.
 These verify implementation, not statistical coverage. Coverage simulation and
 alternative cross-game/small-sample methods remain future methodological work;
 do not label this first method calibrated or use an interval excluding zero as

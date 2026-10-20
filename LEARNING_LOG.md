@@ -1907,3 +1907,68 @@ points, baselines, support and seeded intervals from raw source rows. Then docum
 the remaining abstention/opponent-evidence policy. Keep ranking withheld; P1.5 is
 not yet complete. No decision API/UI/model, enrichment, database or deployment.
 Review the PR without merging or auto-merge. The 8 AM automation is unchanged.
+
+## 2026-10-20 — Independent pinned Run/Pass reconciliation (P1.5)
+
+**Built / why:** after PR #25 merged at `571a3a9` (same tree as `5136091`) with
+all eight main CI jobs green, started `codex/decision-real-cohort-audit` from
+updated main. Added a repository-only raw-record oracle and compact aggregate
+receipt for eight predeclared situations. Checked all 34,902 eligible identities,
+candidate points/baselines, ordered exclusion ledgers, source/cutoff identity and
+144 interval entries. This gives reproducible evidence that the implementation
+matches its declared calculations without calling those calculations a validated
+football decision policy.
+
+**Review files:** `validation/decision_audit.py` (raw predicates, Decimal ratios,
+expanded-game draws and separate quantiles), `tests/test_decision_audit.py`
+(hand expectations, source guards and deliberate corruption), `docs/DECISION_AUDIT.md`
+and `docs/evidence/pbp-2024-23370d5d10f8.decision-audit.json`.
+
+**Sports concepts:** raw run plays can still be Pass dropbacks; EPA stays relative
+to the offense. First-and-ten, exact third-and-four, late-game ranges, OT and
+postseason have different support. The midseason CAR third-and-four cohort has
+eight selected and 113 baseline games with seven shared, so its union is 114,
+not 121. Empty selected postseason evidence is not filled with league values.
+
+**Software/statistical concepts / learn:** independent arithmetic tests need
+expectations from raw inputs, not another call to the implementation. Decimal
+ratios and expanded raw game draws check production sufficient totals; separate
+inclusive quantiles check interpolation. Hashes identify inputs/expected-field
+subsets, not correctness. Reproducibility, external source validity, interval
+calibration and causal identification are different claims. Keep audit code out
+of production; a matching seeded run does not establish decision quality.
+
+**Three review questions:**
+
+1. Why can two populations have disjoint plays but overlapping games, and how
+   does that change the resampling frame and paired differences?
+2. Which steps of this oracle are independent, which intentionally share the
+   source/procedure, and what mistakes could agreement still fail to detect?
+3. Why do matching hashes and all 144 passing interval checks still not justify
+   recommending Run or Pass or claiming leakage-free historical forecasting?
+
+**Verification / self-review:** 267 core / 24 API tests pass on each Python
+3.11/3.12/3.13; API warnings as errors, dependency checks clean. Baseline 254 core /
+24 API passed on Python 3.13 before implementation. Thirteen new tests include
+twelve injected result mutations, exact case/receipt consistency and strict
+failures without partial JSON. Eight real cohorts / 144 interval entries and exact
+receipt replay pass on all three Python versions with networking blocked.
+All 672 frontend tests, TypeScript/build and 14 browser cases pass (17.3 seconds,
+first run, no retries); all 71 API fixtures stay unchanged. Owned servers stopped.
+
+Review clarified the checked subset and metadata, isolated decimal/RNG state,
+strengthened oracle-independence and mutation checks, and recorded original
+source attribution separately from derived aggregates. It also captured provenance
+before the builder and made exact receipt comparisons reject boolean/numeric type
+substitutions. The pinned source has no
+missing EPA/context among eligible rows; synthetic checks cover those branches.
+Results include 66 available, 48 insufficient-game and 30 undefined interval
+entries, not a sample selected for attractive outcomes. Source/dictionary terms
+were rechecked; no external code, raw data or models copied into Git.
+Publication SHA, attribution and remote CI receipt are recorded in the PR.
+
+**Remaining / next:** document justified comparison/abstention and opponent-evidence
+policy. Keep preferred calls withheld; defer opponent adjustment without a valid
+cohort/support method. P1.5 is not yet complete. No new model, endpoint, UI,
+database or deployment; preserve Scout. Do not merge/enable auto-merge.
+The 8 AM automation is unchanged.
