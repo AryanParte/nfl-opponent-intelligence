@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-19, the long-term direction is
+As of the daily run on 2026-10-20, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -12,25 +12,23 @@ primary-source model/data review, AI policy and the justified no-database decisi
 P1.5–P1.9 now cover decision foundations, model evaluation, richer data audit, API
 and UI; the prior operational/case-study milestone is preserved as P1.10.
 
-P1.4's bounded surface is merged through PR #22; the offline P1.5 contract and
-baselines are merged as PRs #23/#24. Today's P1.5 unit adds strict bounded bootstrap
-options and candidate-level support/intervals, reusing Scout's resampling loop,
-quantiles, paired differences and withholding gates. Both calls and populations
-share whole-game multiplicities after fixed exact filtering. Frequency support
-uses parent-cohort games; outcomes use observed candidate-EPA games. Missing,
-absent, sparse and degenerate estimates stay explicit, not zero-filled or ranked.
-No opponent adjustment, causal/predictive validation, preferred call or EP/WP
-action value is claimed. See [contract v1 and replay](DECISION_CONTRACT.md).
+P1.4's bounded surface is merged through PR #22; P1.5's offline contract, baselines
+and candidate uncertainty are merged through PR #25. Today's P1.5 unit is a
+[replayable independent raw-record reconciliation](DECISION_AUDIT.md): eight
+predeclared situations and 144 interval entries on the existing pinned 2024
+snapshot. The repository-only oracle uses Decimal arithmetic, expanded game rows
+and separate quantiles, not the production selectors/statistical helpers.
+Counts, missing states, cutoffs, support, provenance and no-ranking states agree.
+No opponent adjustment, statistical calibration or decision-quality validation
+is claimed. The product remains unchanged.
 
-All 254 core / 24 API tests pass on Python 3.11/3.12/3.13; 672 frontend tests,
-type-check/build and a full 14-case browser rerun pass. The initial browser run
-had one accessibility evaluation timeout, detailed below. All 71 API fixtures are unchanged.
-No dependency, endpoint, frontend, raw dataset or automation change was made. Scout
+All 267 core / 24 API tests pass on Python 3.11/3.12/3.13; 672 frontend tests,
+type-check/build and all 14 browser cases pass. All 71 API fixtures are unchanged.
+No production, dependency, endpoint, frontend, raw dataset or automation change was made. Scout
 schema v2, briefs and downloads remain compatible. Actual assistive-technology and
 cross-browser gaps remain in the [bounded accessibility review](ACCESSIBILITY.md),
-not a WCAG certification. Next: independent pinned retrospective candidate point,
-baseline, support and interval reconciliation against raw rows, followed by a
-justified comparison/opponent-evidence policy. No decision API/UI/model yet.
+not a WCAG certification. Next: justified comparison/abstention and
+opponent-evidence policy, keeping ranking withheld. No decision API/UI/model yet.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -44,14 +42,20 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/decision-candidate-uncertainty`, started from updated
-  `origin/main` at `6246a3b` after observing PR #24 merged. Do not merge or enable
+- Working branch: `codex/decision-real-cohort-audit`, started from updated
+  `origin/main` at `571a3a9` after observing PR #25 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/decision-candidate-uncertainty` for its exact published SHA, attribution and CI
+  `codex/decision-real-cohort-audit` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous candidate-uncertainty review: [PR #25](https://github.com/AryanParte/nfl-opponent-intelligence/pull/25),
+  merged at `571a3a9`; its tree matches feature head `5136091`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39341179653)
+  passed all eight jobs. No open PRs/reviews/comments remained. Baseline 254 core /
+  24 API tests passed locally on Python 3.13 before changes; checkout was clean,
+  matching upstream with no unpublished commits.
 - Previous candidate-baseline review: [PR #24](https://github.com/AryanParte/nfl-opponent-intelligence/pull/24),
   merged at `6246a3b`; its tree matches feature head `c06c7fa`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39146577536)
@@ -177,6 +181,38 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.5 independent real-cohort reconciliation — 2026-10-20
+
+Thirteen new synthetic oracle tests cover hand calculations, raw eligibility,
+dropback mapping, missing/zero values, temporal and context boundaries, independent
+sampling, support gates, numeric strictness, deterministic RNG/decimal isolation,
+wrong-source rejection, fail-closed receipt checks, committed-case consistency
+and twelve injected production-result mutations. All 267 core / 24 API tests pass
+on Python 3.11/3.12/3.13, with API warnings as errors and clean dependency checks.
+The pip cache was unavailable under sandbox permissions; no package changes were needed.
+
+The eight real cases/144 interval entries and exact saved receipt replay pass on
+all three Python versions with network connection creation blocked. Both pinned
+hashes are enforced, and all 34,902 raw eligible identities agree with the adapter.
+The compact aggregate receipt includes the unchanged acquisition/attribution
+manifest; raw data remains ignored. Outcomes: 66 interval entries `ok`, 48
+`insufficient_games`, 30 `undefined_estimate`. None unlocks a preferred call.
+
+All 672 frontend tests, TypeScript/build and all 14 synthetic browser cases pass
+(17.3 seconds, first run, no retries). API fixture replay keeps all 71 fixtures
+unchanged. Test-owned servers shut down; no persistent localhost service was started.
+
+Complete-diff review kept the oracle outside the installed product, made method/
+cohort metadata checks explicit, added deliberate-corruption/receipt tests, and
+separated derived-aggregate attribution from the original raw-archive manifest.
+Source expectations are copied before the builder; exact saved-receipt comparisons
+reject boolean/numeric type substitutions, with regression coverage for both.
+The oracle uses a declared expected-field subset rather than claiming full-response
+or external football validation. Real eligible rows have no missing EPA/context;
+synthetic tests cover those branches. No runtime behavior, dependencies, raw source,
+API/UI/model or automation change. Remaining: explicit comparison/abstention and
+opponent-evidence policy; calibration and causal/predictive validation are not done.
 
 ### P1.5 candidate game support and exploratory uncertainty — 2026-10-19
 

@@ -1,0 +1,989 @@
+{
+  "absolute_tolerance": 1e-12,
+  "audit_version": 1,
+  "cases": [
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": null,
+            "frequency_pp": null,
+            "success_rate_pp": null
+          },
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "success_rate": null
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": null,
+            "frequency_pp": null,
+            "success_rate_pp": null
+          },
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "success_rate": null
+        }
+      ],
+      "baseline_population": {
+        "games": 0,
+        "plays": 0,
+        "shared_games_with_selected": 0,
+        "team_count": 0
+      },
+      "id": "car-empty-before-week-one",
+      "population": {
+        "games": 0,
+        "plays": 0
+      },
+      "reference_sha256": "f863266ac6d5d65c255fe462701abbb2a727d6f2df07f6c0cc4decdd3333cd1b",
+      "request": {
+        "before_week": 1,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "compare_league": true,
+        "distance_max": 10,
+        "distance_min": 10,
+        "down": 1,
+        "minimum_plays": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "team": "CAR"
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "success_rate": null
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "success_rate": null
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 0,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": null,
+            "status": "undefined_estimate",
+            "support_games": {
+              "selected": 0
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 0
+          },
+          "run": {
+            "few_games": true,
+            "interval": null,
+            "status": "undefined_estimate",
+            "support_games": {
+              "selected": 0
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 0
+          }
+        },
+        "status_counts": {
+          "undefined_estimate": 18
+        }
+      }
+    },
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": -0.06010556625964399,
+            "frequency_pp": -6.689282902875136,
+            "success_rate_pp": -5.107339378439122
+          },
+          "epa_observations": 759,
+          "epa_per_play": -0.11082449183995936,
+          "frequency": 0.5263522884882108,
+          "frequency_denominator": 1442,
+          "games": 32,
+          "missing_epa": 0,
+          "plays": 759,
+          "success_rate": 0.3451910408432148
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": -0.44487353836029686,
+            "frequency_pp": 6.689282902875136,
+            "success_rate_pp": -14.048316251830162
+          },
+          "epa_observations": 683,
+          "epa_per_play": 0.07342774476619894,
+          "frequency": 0.4736477115117892,
+          "frequency_denominator": 1442,
+          "games": 32,
+          "missing_epa": 0,
+          "plays": 683,
+          "success_rate": 0.4904831625183016
+        }
+      ],
+      "baseline_population": {
+        "games": 32,
+        "plays": 1442,
+        "shared_games_with_selected": 2,
+        "team_count": 31
+      },
+      "id": "car-early-first-ten",
+      "population": {
+        "games": 2,
+        "plays": 37
+      },
+      "reference_sha256": "a2c4020a097d735895cc14fed4a0ab5f37e30de5432b77f9830a69788c2d199d",
+      "request": {
+        "before_week": 3,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "compare_league": true,
+        "distance_max": 10,
+        "distance_min": 10,
+        "down": 1,
+        "minimum_plays": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "team": "CAR"
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 17,
+          "epa_per_play": -0.17093005809960335,
+          "frequency": 0.4594594594594595,
+          "frequency_denominator": 37,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 17,
+          "success_rate": 0.29411764705882354
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 20,
+          "epa_per_play": -0.37144579359409796,
+          "frequency": 0.5405405405405406,
+          "frequency_denominator": 37,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 20,
+          "success_rate": 0.35
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 32,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 2
+            },
+            "undefined_replicates": 34,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 166
+          },
+          "run": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 2
+            },
+            "undefined_replicates": 34,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 166
+          }
+        },
+        "status_counts": {
+          "insufficient_games": 12,
+          "ok": 6
+        }
+      }
+    },
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": 0.1456938113638266,
+            "frequency_pp": -1.4785967927320531,
+            "success_rate_pp": 7.912846607338997
+          },
+          "epa_observations": 6373,
+          "epa_per_play": -0.09781505673649003,
+          "frequency": 0.5031580609505764,
+          "frequency_denominator": 12666,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 6373,
+          "success_rate": 0.3494429624980386
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": -0.0715186532064251,
+            "frequency_pp": 1.4785967927320531,
+            "success_rate_pp": -4.987985688764332
+          },
+          "epa_observations": 6293,
+          "epa_per_play": 0.09372619274462017,
+          "frequency": 0.49684193904942364,
+          "frequency_denominator": 12666,
+          "games": 272,
+          "missing_epa": 0,
+          "plays": 6293,
+          "success_rate": 0.4892737962815827
+        }
+      ],
+      "baseline_population": {
+        "games": 272,
+        "plays": 12666,
+        "shared_games_with_selected": 17,
+        "team_count": 31
+      },
+      "id": "car-full-first-ten",
+      "population": {
+        "games": 17,
+        "plays": 387
+      },
+      "reference_sha256": "6fb35b5de2ffef6ff91603df49192412fa93e79ad2bc6df746a1aab88ef5e69f",
+      "request": {
+        "before_week": 19,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "compare_league": true,
+        "distance_max": 10,
+        "distance_min": 10,
+        "down": 1,
+        "minimum_plays": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "team": "CAR"
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 189,
+          "epa_per_play": 0.04787875462733653,
+          "frequency": 0.4883720930232558,
+          "frequency_denominator": 387,
+          "games": 17,
+          "missing_epa": 0,
+          "plays": 189,
+          "success_rate": 0.42857142857142855
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 198,
+          "epa_per_play": 0.022207539538195067,
+          "frequency": 0.5116279069767442,
+          "frequency_denominator": 387,
+          "games": 17,
+          "missing_epa": 0,
+          "plays": 198,
+          "success_rate": 0.4393939393939394
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 272,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.1067412913715907,
+              "upper": 0.13065978430053957
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 200
+          },
+          "run": {
+            "few_games": true,
+            "interval": {
+              "lower": -0.057345272741471144,
+              "upper": 0.14985126672563417
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 17
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 200
+          }
+        },
+        "status_counts": {
+          "ok": 18
+        }
+      }
+    },
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": -0.18501290114291455,
+            "frequency_pp": 12.224209898628503,
+            "success_rate_pp": 1.1904761904761905
+          },
+          "epa_observations": 28,
+          "epa_per_play": -0.32548467923840213,
+          "frequency": 0.10852713178294573,
+          "frequency_denominator": 258,
+          "games": 25,
+          "missing_epa": 0,
+          "plays": 28,
+          "success_rate": 0.32142857142857145
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": -0.052915217933050394,
+            "frequency_pp": -12.224209898628503,
+            "success_rate_pp": -7.391304347826087
+          },
+          "epa_observations": 230,
+          "epa_per_play": 0.000417006692888393,
+          "frequency": 0.8914728682170543,
+          "frequency_denominator": 258,
+          "games": 108,
+          "missing_epa": 0,
+          "plays": 230,
+          "success_rate": 0.47391304347826085
+        }
+      ],
+      "baseline_population": {
+        "games": 113,
+        "plays": 258,
+        "shared_games_with_selected": 7,
+        "team_count": 31
+      },
+      "id": "car-midseason-third-four",
+      "population": {
+        "games": 8,
+        "plays": 13
+      },
+      "reference_sha256": "1efd8da4fb2aed1564f38ca81a1e772d5749d9dcb26f4e7985a2f8bface66848",
+      "request": {
+        "before_week": 10,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "compare_league": true,
+        "distance_max": 4,
+        "distance_min": 4,
+        "down": 3,
+        "minimum_plays": 30,
+        "season": 2024,
+        "season_type": "REG",
+        "team": "CAR"
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 3,
+          "epa_per_play": -0.5104975803813167,
+          "frequency": 0.23076923076923078,
+          "frequency_denominator": 13,
+          "games": 3,
+          "missing_epa": 0,
+          "plays": 3,
+          "success_rate": 0.3333333333333333
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 10,
+          "epa_per_play": -0.052498211240162,
+          "frequency": 0.7692307692307693,
+          "frequency_denominator": 13,
+          "games": 7,
+          "missing_epa": 0,
+          "plays": 10,
+          "success_rate": 0.4
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 114,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": {
+              "lower": -1.5562301200978812,
+              "upper": 1.1070089021482277
+            },
+            "status": "ok",
+            "support_games": {
+              "selected": 7
+            },
+            "undefined_replicates": 0,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 200
+          },
+          "run": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 3
+            },
+            "undefined_replicates": 9,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 191
+          }
+        },
+        "status_counts": {
+          "insufficient_games": 4,
+          "ok": 14
+        }
+      }
+    },
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": 0.11584874181696828,
+            "frequency_pp": -16.274509803921568,
+            "success_rate_pp": 32.432432432432435
+          },
+          "epa_observations": 37,
+          "epa_per_play": 0.08488756188037173,
+          "frequency": 0.3627450980392157,
+          "frequency_denominator": 102,
+          "games": 35,
+          "missing_epa": 0,
+          "plays": 37,
+          "success_rate": 0.6756756756756757
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": 1.2319805689943757,
+            "frequency_pp": 16.274509803921568,
+            "success_rate_pp": 0.7692307692307693
+          },
+          "epa_observations": 65,
+          "epa_per_play": -0.03530713005185023,
+          "frequency": 0.6372549019607843,
+          "frequency_denominator": 102,
+          "games": 59,
+          "missing_epa": 0,
+          "plays": 65,
+          "success_rate": 0.49230769230769234
+        }
+      ],
+      "baseline_population": {
+        "games": 86,
+        "plays": 102,
+        "shared_games_with_selected": 0,
+        "team_count": 29
+      },
+      "id": "car-late-close-range",
+      "population": {
+        "games": 5,
+        "plays": 5
+      },
+      "reference_sha256": "5a37b7d53ff960a48b58cda40f7112f508630cce570aa86483b70c74b79eb1c8",
+      "request": {
+        "before_week": 19,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "clock_max": 300,
+        "compare_league": true,
+        "distance_max": 4,
+        "distance_min": 1,
+        "down": 3,
+        "minimum_plays": 30,
+        "period": "Q4",
+        "score_max": 0,
+        "season": 2024,
+        "season_type": "REG",
+        "team": "CAR",
+        "yardline_max": 50
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 1,
+          "epa_per_play": 0.20073630369734,
+          "frequency": 0.2,
+          "frequency_denominator": 5,
+          "games": 1,
+          "missing_epa": 0,
+          "plays": 1,
+          "success_rate": 1.0
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 4,
+          "epa_per_play": 1.1966734389425255,
+          "frequency": 0.8,
+          "frequency_denominator": 5,
+          "games": 4,
+          "missing_epa": 0,
+          "plays": 4,
+          "success_rate": 0.5
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 91,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 4
+            },
+            "undefined_replicates": 3,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 197
+          },
+          "run": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 1
+            },
+            "undefined_replicates": 85,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 115
+          }
+        },
+        "status_counts": {
+          "insufficient_games": 8,
+          "ok": 10
+        }
+      }
+    },
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": 0.3298236500776659,
+            "frequency_pp": 30.21276595744681,
+            "success_rate_pp": 9.523809523809524
+          },
+          "epa_observations": 14,
+          "epa_per_play": 0.04247543903822477,
+          "frequency": 0.2978723404255319,
+          "frequency_denominator": 47,
+          "games": 7,
+          "missing_epa": 0,
+          "plays": 14,
+          "success_rate": 0.5714285714285714
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": -0.7334143210530534,
+            "frequency_pp": -30.21276595744681,
+            "success_rate_pp": -13.636363636363637
+          },
+          "epa_observations": 33,
+          "epa_per_play": 0.5695915905446528,
+          "frequency": 0.7021276595744681,
+          "frequency_denominator": 47,
+          "games": 14,
+          "missing_epa": 0,
+          "plays": 33,
+          "success_rate": 0.6363636363636364
+        }
+      ],
+      "baseline_population": {
+        "games": 14,
+        "plays": 47,
+        "shared_games_with_selected": 2,
+        "team_count": 18
+      },
+      "id": "car-overtime-second-down",
+      "population": {
+        "games": 4,
+        "plays": 5
+      },
+      "reference_sha256": "92d44f43935f3b5b29d33d7fc3f4ac67f0f55fa5e572fdfc72351f7269d75851",
+      "request": {
+        "before_week": 19,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "compare_league": true,
+        "distance_max": 10,
+        "distance_min": 0,
+        "down": 2,
+        "minimum_plays": 30,
+        "period": "OT",
+        "season": 2024,
+        "season_type": "REG",
+        "team": "CAR"
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 3,
+          "epa_per_play": 0.37229908911589066,
+          "frequency": 0.6,
+          "frequency_denominator": 5,
+          "games": 3,
+          "missing_epa": 0,
+          "plays": 3,
+          "success_rate": 0.6666666666666666
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 2,
+          "epa_per_play": -0.1638227305084005,
+          "frequency": 0.4,
+          "frequency_denominator": 5,
+          "games": 2,
+          "missing_epa": 0,
+          "plays": 2,
+          "success_rate": 0.5
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 16,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 2
+            },
+            "undefined_replicates": 21,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 179
+          },
+          "run": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 3
+            },
+            "undefined_replicates": 5,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 195
+          }
+        },
+        "status_counts": {
+          "insufficient_games": 12,
+          "ok": 6
+        }
+      }
+    },
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": -0.02609547011774042,
+            "frequency_pp": -19.09090909090909,
+            "success_rate_pp": 3.7037037037037037
+          },
+          "epa_observations": 54,
+          "epa_per_play": 0.06086058687172609,
+          "frequency": 0.4909090909090909,
+          "frequency_denominator": 110,
+          "games": 12,
+          "missing_epa": 0,
+          "plays": 54,
+          "success_rate": 0.6296296296296297
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": -0.5657565598965001,
+            "frequency_pp": 19.09090909090909,
+            "success_rate_pp": -16.071428571428573
+          },
+          "epa_observations": 56,
+          "epa_per_play": 0.3494401599503551,
+          "frequency": 0.509090909090909,
+          "frequency_denominator": 110,
+          "games": 13,
+          "missing_epa": 0,
+          "plays": 56,
+          "success_rate": 0.5892857142857143
+        }
+      ],
+      "baseline_population": {
+        "games": 13,
+        "plays": 110,
+        "shared_games_with_selected": 3,
+        "team_count": 13
+      },
+      "id": "kc-postseason-third-short",
+      "population": {
+        "games": 3,
+        "plays": 10
+      },
+      "reference_sha256": "cee8b0d41a358ac6d3397b771fce38046130badfa8368b7990dd6e54608e59b0",
+      "request": {
+        "before_week": 23,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "compare_league": true,
+        "distance_max": 4,
+        "distance_min": 1,
+        "down": 3,
+        "minimum_plays": 30,
+        "season": 2024,
+        "season_type": "POST",
+        "team": "KC"
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 3,
+          "epa_per_play": 0.034765116753985664,
+          "frequency": 0.3,
+          "frequency_denominator": 10,
+          "games": 3,
+          "missing_epa": 0,
+          "plays": 3,
+          "success_rate": 0.6666666666666666
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 7,
+          "epa_per_play": -0.216316399946145,
+          "frequency": 0.7,
+          "frequency_denominator": 10,
+          "games": 3,
+          "missing_epa": 0,
+          "plays": 7,
+          "success_rate": 0.42857142857142855
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 13,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 3
+            },
+            "undefined_replicates": 4,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 196
+          },
+          "run": {
+            "few_games": true,
+            "interval": null,
+            "status": "insufficient_games",
+            "support_games": {
+              "selected": 3
+            },
+            "undefined_replicates": 4,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 196
+          }
+        },
+        "status_counts": {
+          "insufficient_games": 12,
+          "ok": 6
+        }
+      }
+    },
+    {
+      "baseline": [
+        {
+          "candidate": "run",
+          "difference": {
+            "epa_per_play": null,
+            "frequency_pp": null,
+            "success_rate_pp": null
+          },
+          "epa_observations": 323,
+          "epa_per_play": 0.041782572318820856,
+          "frequency": 0.5218093699515347,
+          "frequency_denominator": 619,
+          "games": 13,
+          "missing_epa": 0,
+          "plays": 323,
+          "success_rate": 0.42105263157894735
+        },
+        {
+          "candidate": "pass",
+          "difference": {
+            "epa_per_play": null,
+            "frequency_pp": null,
+            "success_rate_pp": null
+          },
+          "epa_observations": 296,
+          "epa_per_play": 0.016692941365341586,
+          "frequency": 0.4781906300484653,
+          "frequency_denominator": 619,
+          "games": 13,
+          "missing_epa": 0,
+          "plays": 296,
+          "success_rate": 0.5033783783783784
+        }
+      ],
+      "baseline_population": {
+        "games": 13,
+        "plays": 619,
+        "shared_games_with_selected": 0,
+        "team_count": 14
+      },
+      "id": "car-absent-postseason",
+      "population": {
+        "games": 0,
+        "plays": 0
+      },
+      "reference_sha256": "0b60b97c79ee725d15d6d86ae6762a9b601c1fca474954bbe15fcb764dce0271",
+      "request": {
+        "before_week": 23,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17,
+        "compare_league": true,
+        "distance_max": 10,
+        "distance_min": 10,
+        "down": 1,
+        "minimum_plays": 30,
+        "season": 2024,
+        "season_type": "POST",
+        "team": "CAR"
+      },
+      "selected": [
+        {
+          "candidate": "run",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "success_rate": null
+        },
+        {
+          "candidate": "pass",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "missing_epa": 0,
+          "plays": 0,
+          "success_rate": null
+        }
+      ],
+      "uncertainty": {
+        "checked_entries": 18,
+        "resampling_games": 13,
+        "selected_epa": {
+          "pass": {
+            "few_games": true,
+            "interval": null,
+            "status": "undefined_estimate",
+            "support_games": {
+              "selected": 0
+            },
+            "undefined_replicates": 200,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 0
+          },
+          "run": {
+            "few_games": true,
+            "interval": null,
+            "status": "undefined_estimate",
+            "support_games": {
+              "selected": 0
+            },
+            "undefined_replicates": 200,
+            "unit": "expected_points_per_observed_play",
+            "valid_replicates": 0
+          }
+        },
+        "status_counts": {
+          "ok": 6,
+          "undefined_estimate": 12
+        }
+      }
+    }
+  ],
+  "eligible_rows": 34902,
+  "kind": "retrospective_software_reconciliation_not_model_validation",
+  "method": "raw_decimal_expanded_game_rows_statistics_inclusive_quantiles",
+  "modifications": "Derived aggregate audit results; no raw rows redistributed or source bytes changed.",
+  "source": {
+    "archive": {
+      "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+      "size_bytes": 19362351
+    },
+    "decoded_csv": {
+      "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+      "size_bytes": 99483794
+    },
+    "license": {
+      "attribution": "nflverse play-by-play data",
+      "identifier": "CC-BY-4.0",
+      "modifications": "Archive retained byte-for-byte; no data transformations.",
+      "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "retrieved_at_utc": "2026-09-30T00:19:00.168819+00:00",
+    "schema_version": 1,
+    "season": 2024,
+    "source": {
+      "asset_id": 512957856,
+      "asset_name": "play_by_play_2024.csv.gz",
+      "asset_updated_at_utc": "2026-08-13T12:26:27Z",
+      "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+      "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+      "release_id": 58152862,
+      "release_tag": "pbp",
+      "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+      "size_bytes": 19362351
+    }
+  }
+}

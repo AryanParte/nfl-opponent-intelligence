@@ -299,7 +299,9 @@ later source revision or upstream EPA model was available at that time. Outcomes
 are historical offense-relative values; selection bias and unobserved confounding
 remain. No causal, out-of-sample, game-rule or coaching validation is claimed.
 
-Next: independently reconcile candidate points, baselines, game support and seeded
-intervals on pinned retrospective cohorts directly from raw source rows. Document
-the remaining abstention/opponent-evidence policy; keep ranking withheld. No
-API/UI/model until these foundation contracts are tested and independently reconciled.
+The [2026-10-20 pinned-snapshot reconciliation](DECISION_AUDIT.md) now independently
+checks candidate points, baselines, game support and seeded intervals on eight
+predeclared situations directly from raw records. It verifies implementation,
+not statistical calibration, intended calls or causal decision quality.
+Next: document the remaining abstention/opponent-evidence policy; keep ranking
+withheld. No API/UI/model until the remaining foundation gate is resolved.

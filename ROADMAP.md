@@ -18,8 +18,9 @@ explainable football evidence, not a play-calling game or a clone of another sit
 See [direction, evidence layers and initial source review](docs/DECISION_INTELLIGENCE.md).
 Decision Lab's API/UI remain planned. P1.4's bounded local surface is complete;
 P1.5's offline contract, matched candidate baselines and exploratory uncertainty
-are implemented. Next is independent pinned real-cohort reconciliation, not a
-preferred-call label or model.
+are implemented and independently reconciled on pinned retrospective cohorts.
+Next is comparison/abstention and opponent-evidence policy, not a preferred-call
+label or model.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -164,8 +165,8 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       [Coverage, incomplete scan findings and assistive-technology limits](docs/ACCESSIBILITY.md)
       are explicit; this is not screen-reader testing or WCAG certification.
 
-P1.4 is merged and verified through PR #22; P1.5's contract/baselines merged as
-PRs #23/#24. Continue below after review of candidate uncertainty. Do not prolong
+P1.4 is merged and verified through PR #22; P1.5's contract/baselines/uncertainty
+merged as PRs #23–#25. Continue below after review of the real-cohort audit. Do not prolong
 P1.4 with unrelated polish or combine foundation work with decision API/UI/models.
 Inspect open PRs/CI/reviews before branching; never duplicate
 unmerged work. Assistive-technology/cross-browser evaluation remains a documented
@@ -191,11 +192,14 @@ release-readiness gap, not a claim that the bounded review certified accessibili
       cohorts, parent-frequency versus candidate-EPA support, null/undefined counts,
       strict bounded opt-in. Sixteen new tests including all 3,125 ordered five-game
       draws; Scout outputs/defense meaning unchanged. Ranking remains withheld.
-- [ ] **Next unit:** independently reconcile pinned retrospective candidate points,
-      baselines, per-metric support and seeded intervals directly from raw rows.
-      Synthetic enumeration is complete, not real-data or coverage validation.
-      Preserve hashes, temporal cutoffs and confounding/availability limitations.
-- [ ] Document justified comparison/abstention and opponent-evidence policy after
+- [x] Independently reconcile pinned retrospective candidate points, baselines,
+      per-metric support and seeded intervals directly from raw rows (2026-10-20):
+      eight predeclared situations, all 34,902 eligible identities, 144 interval
+      entries and exact receipt replay on Python 3.11–3.13. Repository-only oracle,
+      Decimal arithmetic, expanded game rows, separate quantiles and synthetic
+      mutation tests; [evidence/replay](docs/DECISION_AUDIT.md). No raw redistribution,
+      production changes, coverage/model validation or historical-availability claim.
+- [ ] **Next unit:** document justified comparison/abstention and opponent-evidence policy after
       reconciliation; no winner from a noisy mean or nominal interval. Admit
       opponent-specific evidence only after a defensible cohort/support decision;
       otherwise mark deferred, not silently opponent-adjusted.
