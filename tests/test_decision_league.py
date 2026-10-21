@@ -302,8 +302,10 @@ class DecisionLeagueTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(json.loads(json.dumps(first, allow_nan=False)), first)
         self.assertTrue(all(not c["small_epa_sample"] for c in first["league_comparison"]["candidates"]))
-        self.assertEqual(first["comparison"], {"status": "insufficient_evidence", "preferred_candidate": None,
-                                               "reason": "candidate_comparison_not_validated"})
+        self.assertEqual({key: first["comparison"][key] for key in
+                          ("status", "preferred_candidate", "reason")},
+                         {"status": "insufficient_evidence", "preferred_candidate": None,
+                          "reason": "candidate_comparison_not_validated"})
         self.assertNotIn("uncertainty", first)
         self.assertNotIn("uncertainty", first["league_comparison"])
 

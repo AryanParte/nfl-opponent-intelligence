@@ -43,7 +43,11 @@ exploratory paired intervals now reuse Scout's resampling engine. An
 [independent pinned-snapshot audit](docs/DECISION_AUDIT.md) reconciles eight
 retrospective situations and 144 interval entries directly from raw records;
 this verifies calculations, not statistical coverage or decision quality.
-Comparison/abstention and opponent-evidence policy is next.
+The [comparison/abstention policy](docs/DECISION_POLICY.md) now exposes explicit
+Pass-minus-Run descriptive differences, null reasons and deferred opponent
+conditioning. It always withholds a preferred call, even for large samples or
+non-overlapping exploratory intervals. P1.5's descriptive foundation is complete;
+versioned open-source model evaluation is next, not automatic model integration.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
@@ -434,6 +438,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
     Repository-only `validation/decision_audit.py` independently checks raw-record
     cohorts and expanded-game intervals; its synthetic/mutation tests run in CI.
     The real-snapshot receipt replays offline with the documented pinned inputs.
+    `tests/test_decision_policy.py` checks descriptive contrast signs/units,
+    missing states and the strict separation between arithmetic and ranking.
 
 The pure analytical functions serve both the CLI and the optional FastAPI adapter.
 The first React view consumes that API; richer product controls remain unfinished
@@ -450,6 +456,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Raw snapshots, source terms, and acquisition evidence](docs/INGESTION.md)
 - [Real-season audit and cohort reconciliation](docs/REAL_DATA_AUDIT.md)
 - [Independent Run/Pass reconciliation and replay](docs/DECISION_AUDIT.md)
+- [Run/Pass comparison, abstention and opponent-evidence policy](docs/DECISION_POLICY.md)
 - [Metric definitions](docs/METRICS.md)
 - [Exploratory uncertainty method](docs/UNCERTAINTY.md)
 - [Historical brief format and examples](docs/BRIEFS.md)

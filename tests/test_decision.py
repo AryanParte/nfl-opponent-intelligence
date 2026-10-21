@@ -160,8 +160,10 @@ class DecisionTests(unittest.TestCase):
         self.assertEqual(result["estimation_policy"], {"frequency_minimum_parent_plays": 1,
                                                        "outcome_minimum_epa_observations": 1,
                                                        "minimum_plays_warning": 1})
-        self.assertEqual(result["comparison"], {"status": "insufficient_evidence", "preferred_candidate": None,
-                                                "reason": "candidate_comparison_not_validated"})
+        self.assertEqual({key: result["comparison"][key] for key in
+                          ("status", "preferred_candidate", "reason")},
+                         {"status": "insufficient_evidence", "preferred_candidate": None,
+                          "reason": "candidate_comparison_not_validated"})
         self.assertNotIn("league_comparison", result)
         self.assertNotIn("uncertainty", result)
         self.assertTrue(any("not implemented" in warning for warning in result["warnings"]))
@@ -287,6 +289,11 @@ class DecisionTests(unittest.TestCase):
         evidence = self.evidence(dataset, down=3, distance_min=4, distance_max=4, **bounds)
         run, passed = evidence["candidates"]
         self.assertEqual((run["epa_per_play"], passed["epa_per_play"]), (-0.5, 0.5))
+        contrast = evidence["comparison"]["descriptive_contrast"]["metrics"]
+        self.assertEqual(contrast["epa_per_play"]["value"], 1)
+        self.assertEqual(contrast["success_rate_pp"]["value"], 100)
+        # Positive remains offensive production, not defensive benefit or stops.
+        self.assertIsNone(evidence["comparison"]["preferred_candidate"])
         self.assertEqual(evidence["population"], {"plays": 2, "games": 1})
         self.assertEqual((run["games"], passed["games"]), (1, 1))  # Shared game, not two games.
 

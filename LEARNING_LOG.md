@@ -1972,3 +1972,75 @@ policy. Keep preferred calls withheld; defer opponent adjustment without a valid
 cohort/support method. P1.5 is not yet complete. No new model, endpoint, UI,
 database or deployment; preserve Scout. Do not merge/enable auto-merge.
 The 8 AM automation is unchanged.
+
+## 2026-10-21 — Descriptive comparison and mandatory abstention (P1.5)
+
+**Built / why:** after PR #26 merged at `e3e8674` with all eight main CI jobs
+green and no open PRs/reviews, started `codex/decision-evidence-policy` from
+updated main. Added a versioned comparison policy: selected-offense Pass-minus-Run
+differences in frequency, EPA/play and success, explicit units and per-candidate
+unavailable reasons, mandatory preferred-call abstention and deferred opponent
+conditioning. Reused the existing null-preserving difference helper. This closes
+P1.5's descriptive foundation without pretending a difference is a validated
+answer to "what should I call?"
+
+**Review files:** `src/opponent_intelligence/decision.py` (`_candidate_comparison`),
+`tests/test_decision_policy.py`, the reciprocal-role check in `tests/test_decision.py`,
+and `docs/DECISION_POLICY.md` (contract, opponent gates, references and raw replay).
+ROADMAP and STATUS now point to the first bounded P1.6 audit, not completed work.
+
+**Sports concepts:** Pass includes sacks/scrambles; Run/Pass frequency is conditional
+on eligible plays, not all snaps or fourth-down choices. Success means EPA > 0,
+not conversion or win probability. Own-offense history, defense production allowed,
+head-to-head history and a future matchup projection are different estimands.
+EPA stays offense-relative; no sign reversal makes this a defensive recommendation.
+
+**Software/statistical concepts / learn:** separate mathematical availability,
+uncertainty-method availability and permission to rank. Missing outcomes produce
+null contrasts with reasons, while absent calls can have true zero frequency.
+Different observed-EPA denominators matter. A nominal interval, count threshold or
+maximum mean does not identify an unplayed action's outcome. Additive metadata
+must preserve old values and document exact-key consumer compatibility. Keep
+retrospective provenance distinct from evidence of decision-time availability.
+
+**Three review questions:**
+
+1. How do Pass-minus-Run and selected-minus-league contrasts differ in population,
+   denominator, units and interpretation?
+2. Why is the frequency contrast +100 pp when Run is absent (-100 when Pass is
+   absent), yet its EPA contrast is null, and why can't league EPA fill that gap?
+3. Why do large samples and non-overlapping exploratory intervals still leave
+   `preferred_candidate` null, and what must precede opponent-conditioned ranking?
+
+**Verification / self-review:** 281 core / 24 API tests pass on each Python
+3.11/3.12/3.13; API warnings as errors, dependency checks clean. Baseline was
+267 / 24 on Python 3.13. Fourteen new tests include 36 exact-rational sample pairs,
+hand calculations, every input-availability state, non-overlapping `ok` intervals,
+threshold/league isolation, exact context/time cutoffs, forbidden options and no IO.
+Eight pinned real cohorts / 24 contrasts match raw Decimal expectations on all
+three versions, with prior fields byte-exact against merged main and the original
+144-interval receipt unchanged. Networking was blocked; raw bytes were untouched.
+
+The first frontend run had seven timeouts during a shared roughly 467-second
+stall (665/672 passed); the cause is unconfirmed. The unchanged default-worker
+suite then passed all 672 tests in 6.43 seconds without a concurrent Python suite,
+followed by TypeScript/build. No timeout/retry/assertion changes. All 14 browser
+cases passed first run in 46.7 seconds; 71 API fixtures are unchanged. Test-owned
+servers stopped, with ports 8000/5173 free.
+
+Complete-diff review strengthened reciprocal offense/defense and nonempty OT/
+fourth-down regression coverage, separated the contrast from existing marginal/
+league intervals, clarified exact-key compatibility and the frozen audit's checked
+subset, and fixed stale continuation notes. The policy distinguishes project
+decisions from primary-source definitions and modeling assumptions; it adds no
+external code, model, source or license assumption. Final relevant checks were
+rerun after review. Publication SHA/attribution and exact-head CI belong in the PR.
+
+**Remaining / next:** P1.5 is complete only within descriptive-only scope.
+Run/Pass contrast intervals, preferred calls and opponent conditioning remain
+unimplemented/deferred; this is not causal or predictive validation. Next, extend
+the existing nfl4th desk review into one version-pinned input/output, terms,
+assumptions and historical-availability audit with a reuse/adapt/defer decision.
+Do not jump to model execution, fastrmodels, new data, API/UI or fourth-down mode
+in that same unit. Preserve Scout and history; do not merge or enable auto-merge.
+The 8 AM automation is unchanged.

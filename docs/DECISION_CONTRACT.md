@@ -2,6 +2,8 @@
 
 First P1.5 slice, 2026-10-17; optional matched candidate baselines added 2026-10-18.
 Optional candidate-level game support and exploratory intervals added 2026-10-19.
+Explicit descriptive contrast/abstention policy added 2026-10-21; see
+[comparison and opponent-evidence policy](DECISION_POLICY.md).
 This is a Python-only **descriptive evidence builder**,
 not a new API, CLI, browser mode, predictive model or recommendation engine. Scout
 schema v2, endpoints, briefs and UI stay unchanged. The request and JSON-compatible
@@ -158,6 +160,19 @@ This is a capability/validation abstention even in large samples, not a test of
 whether the point estimates happen to differ. There is no automatic winner,
 fallback baseline, confidence score, EP/WP impact or model-estimated counterfactual.
 
+The same block now includes `policy_version: descriptive_only_v1`, an explicit
+`descriptive_contrast` over the selected offense, and deferred `opponent_evidence`.
+The contrast subtracts **Run from Pass** for frequency/success (percentage points)
+and observed EPA/play, reusing `metric_difference`. Per-metric `value`, `unit`,
+`status` and `unavailable_candidates` distinguish undefined inputs from observed
+zero differences. Candidate counts/denominators and warnings remain required
+context. No Run/Pass contrast interval is implemented: its `uncertainty` returns
+`status: not_implemented`, `interval: null`, even when individual candidate or
+selected-minus-league intervals exist. Neither optional baselines/resampling nor
+warning thresholds alter this block. See [exact states, interpretation, opponent
+deferral and future admission gates](DECISION_POLICY.md). This is additive within
+v1; the original three abstention fields retain their values, and Scout is unchanged.
+
 ## Matched candidate league baselines
 
 `compare_league=True` adds `league_comparison` within contract v1. Omit it for
@@ -291,7 +306,7 @@ against separate quantiles, and covers every support/withholding state. The
 shared game effects cancel in a candidate EPA contrast despite varying marginal
 intervals. Synthetic verification does not establish real-world coverage.
 
-## Limits and next slice
+## Limits and foundation boundary
 
 Source hash and a deep-copied snapshot manifest (when supplied by the snapshot
 loader) preserve provenance. Filtering before a week does not establish that a
@@ -303,5 +318,9 @@ The [2026-10-20 pinned-snapshot reconciliation](DECISION_AUDIT.md) now independe
 checks candidate points, baselines, game support and seeded intervals on eight
 predeclared situations directly from raw records. It verifies implementation,
 not statistical calibration, intended calls or causal decision quality.
-Next: document the remaining abstention/opponent-evidence policy; keep ranking
-withheld. No API/UI/model until the remaining foundation gate is resolved.
+The [2026-10-21 policy](DECISION_POLICY.md) closes the remaining P1.5 foundation
+gate within descriptive-only scope. Preferred calls and opponent conditioning
+remain explicitly deferred, not implicitly approved by completion of a milestone.
+Next: a bounded, version-pinned nfl4th input/output, terms, assumptions and
+historical-availability audit under P1.6 before any model integration. API/UI and
+richer data remain separate later units.
