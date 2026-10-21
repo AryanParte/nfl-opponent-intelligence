@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-20, the long-term direction is
+As of the daily run on 2026-10-21, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -12,23 +12,21 @@ primary-source model/data review, AI policy and the justified no-database decisi
 P1.5–P1.9 now cover decision foundations, model evaluation, richer data audit, API
 and UI; the prior operational/case-study milestone is preserved as P1.10.
 
-P1.4's bounded surface is merged through PR #22; P1.5's offline contract, baselines
-and candidate uncertainty are merged through PR #25. Today's P1.5 unit is a
-[replayable independent raw-record reconciliation](DECISION_AUDIT.md): eight
-predeclared situations and 144 interval entries on the existing pinned 2024
-snapshot. The repository-only oracle uses Decimal arithmetic, expanded game rows
-and separate quantiles, not the production selectors/statistical helpers.
-Counts, missing states, cutoffs, support, provenance and no-ranking states agree.
-No opponent adjustment, statistical calibration or decision-quality validation
-is claimed. The product remains unchanged.
+P1.4's bounded surface is merged through PR #22; P1.5's contract, baselines,
+candidate uncertainty and independent raw reconciliation are merged through PR #26.
+Today's [comparison/abstention policy](DECISION_POLICY.md) adds selected-offense
+Pass-minus-Run descriptive differences with explicit units and unavailable-candidate
+reasons. It never ranks, fabricates a contrast interval or borrows league values.
+Opponent conditioning is explicitly deferred with admission gates. This completes
+P1.5's descriptive foundation, not causal/predictive or decision-quality validation.
 
-All 267 core / 24 API tests pass on Python 3.11/3.12/3.13; 672 frontend tests,
-type-check/build and all 14 browser cases pass. All 71 API fixtures are unchanged.
-No production, dependency, endpoint, frontend, raw dataset or automation change was made. Scout
-schema v2, briefs and downloads remain compatible. Actual assistive-technology and
-cross-browser gaps remain in the [bounded accessibility review](ACCESSIBILITY.md),
-not a WCAG certification. Next: justified comparison/abstention and
-opponent-evidence policy, keeping ranking withheld. No decision API/UI/model yet.
+All 281 core / 24 API tests pass on Python 3.11/3.12/3.13. Frontend verification
+and the first-run timeout observation are recorded below. Scout schema v2, the API,
+frontend, briefs, downloads and all 71 API fixtures remain unchanged. No dependency,
+new dataset, model or automation change. Actual assistive-technology/cross-browser
+gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
+certification. Next: P1.6's first bounded, version-pinned nfl4th interface/terms/
+assumptions/availability audit, not immediate model integration or a new endpoint.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -42,14 +40,19 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/decision-real-cohort-audit`, started from updated
-  `origin/main` at `571a3a9` after observing PR #25 merged. Do not merge or enable
+- Working branch: `codex/decision-evidence-policy`, started from updated
+  `origin/main` at `e3e8674` after observing PR #26 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/decision-real-cohort-audit` for its exact published SHA, attribution and CI
+  `codex/decision-evidence-policy` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous real-cohort reconciliation review: [PR #26](https://github.com/AryanParte/nfl-opponent-intelligence/pull/26),
+  merged at `e3e8674`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39511918187)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The previous clean checkout matched its upstream (no unpublished
+  commits). Baseline 267 core / 24 API tests passed on Python 3.13 before changes.
 - Previous candidate-uncertainty review: [PR #25](https://github.com/AryanParte/nfl-opponent-intelligence/pull/25),
   merged at `571a3a9`; its tree matches feature head `5136091`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39341179653)
@@ -181,6 +184,48 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.5 comparison/abstention and opponent-evidence policy — 2026-10-21
+
+Fourteen new synthetic tests check hand-calculated and 36 exact-rational candidate
+pairs, signs/percentage-point units, candidate-specific unavailable reasons,
+missing/zero/empty outcomes, thresholds, league/interval isolation, non-overlapping
+`ok` intervals without ranking, exact cutoffs/context, OT/fourth-down selection,
+unsupported inputs and deterministic output without IO or implicit resampling.
+The reciprocal Scout defense test now also checks that a positive Pass-minus-Run
+contrast remains offensive production, not defensive stops or a sign reversal.
+All 281 core / 24 API tests pass on each Python 3.11/3.12/3.13 (API warnings as
+errors); dependency checks are clean. Baseline was 267 / 24 on Python 3.13.
+
+Eight pinned real cohorts / 24 new contrast values match independently selected
+raw-record Decimal calculations on all three Python versions with networking
+blocked. All previous decision fields match merged `e3e8674` byte-for-byte after
+removing only the three additive comparison fields. The original eight-case /
+144-interval receipt replays exactly, including its unchanged source manifest.
+Its fingerprints cover the original field subset, not the new policy fields;
+[additional replay instructions](DECISION_POLICY.md#verification-and-next-boundary)
+make that boundary explicit. No raw source was acquired or modified.
+
+The first frontend run passed 665/672 tests; seven tests timed out with a shared
+roughly 467-second stall (478.29 seconds total). The cause is unconfirmed; no
+frontend source changed. The unchanged default-worker suite then passed all
+672 tests in 6.43 seconds with no concurrent Python suite, followed by successful
+TypeScript/build. No timeout, retry or assertion settings were changed. All
+14 browser cases passed on the first browser run (46.7 seconds, retries disabled).
+All 71 API fixtures remain unchanged; test-owned servers stopped and ports
+8000/5173 are free afterward. These are local checks, not deployment evidence.
+
+Complete-diff review distinguished arithmetic availability, interval capability
+and preferred-call abstention; kept league differences out of the selected
+contrast; checked null reasons, denominators, source/cutoff identity and exact-key
+compatibility; strengthened reciprocal-role and nonempty OT/fourth-down coverage;
+and corrected stale continuation notes that still requested completed baselines.
+It also separated retrospective source disclosure from decision-time availability
+requirements. Existing candidate/game support remains visible; no arbitrary
+ranking/support threshold, opponent projection or interval is invented. Primary
+field/method references were checked, with project policy distinguished from
+source claims. No external code/model/data, new dependency, API/UI or automation
+change. Next: the first bounded P1.6 nfl4th interface/terms/availability audit.
 
 ### P1.5 independent real-cohort reconciliation — 2026-10-20
 
@@ -888,15 +933,15 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 ## Follow-up
 
 Inspect current PR CI and reviews first; do not duplicate this unit while unmerged.
-Next, add P1.5's matched, available-source, same-role, leave-team-out candidate
-league baselines and explicit differences/coverage/denominators/nulls. The offline
-request, exact down/distance/context selection and selected candidate evidence are
-already implemented; do not rebuild them. Reuse the same rules for baseline plays,
-not Scout's broader distance buckets or unmatched overall values. Candidate-level
-uncertainty/support and independent real-cohort reconciliation remain subsequent
-units. Preserve Scout schema v2 and keep ranking withheld: no automatic winner from
-a noisy mean, decision API/UI or model yet. See [DECISION_CONTRACT.md](DECISION_CONTRACT.md)
-and [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md). Preserve the actual
+P1.5 is complete within descriptive-only scope: request/cohorts, candidate metrics,
+matched league context, exploratory support/intervals, independent raw audit and
+comparison/abstention/opponent policy. Do not rebuild these or unlock ranking from
+counts, differences or nominal intervals. See [DECISION_POLICY.md](DECISION_POLICY.md).
+Next is one bounded P1.6 nfl4th audit, extending the initial pinned desk review:
+versioned input/output semantics, license/terms, assumptions, availability and a
+mapping to the current typed dataset. Record reuse/adapt/defer and missing evidence
+before runtime integration. Keep fastrmodels, new data, model execution, API/UI and
+fourth-down mode as separate gated units. Preserve Scout schema v2 and the actual
 assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
 without claiming conformance or restarting P1.4/browser CI.
 Do not add storage for this single-snapshot view or imply a public deployment.

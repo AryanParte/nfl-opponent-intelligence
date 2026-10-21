@@ -78,6 +78,44 @@ def _context_warnings(contexts: dict, quality: dict, *, prefix: str = "") -> lis
     return warnings
 
 
+def _candidate_comparison(candidates: list[dict]) -> dict:
+    """Separate arithmetic availability from permission to rank observed calls.
+
+    Only the already selected candidate summaries enter this policy. League
+    estimates, count thresholds and bootstrap endpoints cannot unlock a winner.
+    """
+    by_name = {candidate["candidate"]: candidate for candidate in candidates}
+    run, passed = by_name["run"], by_name["pass"]
+    metrics = {}
+    for name, field, scale, unit, availability in (
+        ("frequency_pp", "frequency", 100, "percentage_points", "frequency"),
+        ("epa_per_play", "epa_per_play", 1, "expected_points_per_observed_play", "outcomes"),
+        ("success_rate_pp", "success_rate", 100, "percentage_points", "outcomes"),
+    ):
+        value = metric_difference(passed[field], run[field], scale=scale)
+        metrics[name] = {
+            "value": value, "unit": unit,
+            "status": "unavailable" if value is None else "available",
+            "unavailable_candidates": {
+                candidate["candidate"]: candidate["availability"][availability]
+                for candidate in (run, passed) if candidate[field] is None
+            },
+        }
+    return {
+        "status": "insufficient_evidence", "preferred_candidate": None,
+        "reason": "candidate_comparison_not_validated",
+        "policy_version": "descriptive_only_v1",
+        "descriptive_contrast": {
+            "population": "selected_offense", "direction": "pass_minus_run",
+            "metrics": metrics,
+            "uncertainty": {"status": "not_implemented", "interval": None},
+        },
+        "opponent_evidence": {
+            "status": "deferred", "reason": "opponent_conditioning_not_validated",
+        },
+    }
+
+
 def _league_comparison(
     evidence: dict, selected: list[Play], others: list[Play], contexts: dict, minimum_plays: int,
 ) -> tuple[dict, list[Play]]:
@@ -218,8 +256,7 @@ def build_decision_evidence(
             "filter_order": list(contexts), **quality,
         },
         "candidates": candidates,
-        "comparison": {"status": "insufficient_evidence", "preferred_candidate": None,
-                       "reason": "candidate_comparison_not_validated"},
+        "comparison": _candidate_comparison(candidates),
         "warnings": warnings,
     }
     baseline = None

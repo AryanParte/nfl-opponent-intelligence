@@ -122,6 +122,9 @@ calibrated coverage. Matching this source/procedure does not validate annotation
 upstream EPA, intended calls, causal effects, cross-game dependence or selection
 bias. A 2026 retrieval is not proof of information availability in 2024.
 
-Next: document justified comparison/abstention and opponent-evidence policy.
-Keep ranking withheld and opponent adjustment deferred unless defensible;
-no decision API/UI/model is introduced by this audit.
+Follow-up (2026-10-21): the [comparison/abstention policy](DECISION_POLICY.md) is
+implemented. The frozen receipt still checks this audit's original expected-field
+subset, not the additive policy/contrast fields. New synthetic policy tests and
+the subsequent real-cohort contrast checks are recorded in [STATUS](STATUS.md).
+Ranking and opponent adjustment remain deferred; no decision API/UI/model is
+introduced by this audit.

@@ -19,8 +19,9 @@ See [direction, evidence layers and initial source review](docs/DECISION_INTELLI
 Decision Lab's API/UI remain planned. P1.4's bounded local surface is complete;
 P1.5's offline contract, matched candidate baselines and exploratory uncertainty
 are implemented and independently reconciled on pinned retrospective cohorts.
-Next is comparison/abstention and opponent-evidence policy, not a preferred-call
-label or model.
+Its comparison/abstention policy closes the descriptive foundation: explicit
+Pass-minus-Run differences, no preferred-call label, opponent conditioning deferred.
+Next is P1.6's version-pinned source/model audit, not immediate model integration.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -166,13 +167,13 @@ CI passed. Inspect current PR/CI and reviews before selecting new work.
       are explicit; this is not screen-reader testing or WCAG certification.
 
 P1.4 is merged and verified through PR #22; P1.5's contract/baselines/uncertainty
-merged as PRs #23–#25. Continue below after review of the real-cohort audit. Do not prolong
+merged as PRs #23–#25, with the real-cohort audit merged as PR #26. Do not prolong
 P1.4 with unrelated polish or combine foundation work with decision API/UI/models.
 Inspect open PRs/CI/reviews before branching; never duplicate
 unmerged work. Assistive-technology/cross-browser evaluation remains a documented
 release-readiness gap, not a claim that the bounded review certified accessibility.
 
-### P1.5 — Decision Intelligence foundation
+### P1.5 — Decision Intelligence foundation (descriptive scope complete, 2026-10-21)
 
 - [x] First small slice (2026-10-17): a precise, offline Run vs Pass request/evidence contract
       with exact down/distance and situational cohort semantics, candidate mapping,
@@ -199,15 +200,25 @@ release-readiness gap, not a claim that the bounded review certified accessibili
       Decimal arithmetic, expanded game rows, separate quantiles and synthetic
       mutation tests; [evidence/replay](docs/DECISION_AUDIT.md). No raw redistribution,
       production changes, coverage/model validation or historical-availability claim.
-- [ ] **Next unit:** document justified comparison/abstention and opponent-evidence policy after
-      reconciliation; no winner from a noisy mean or nominal interval. Admit
-      opponent-specific evidence only after a defensible cohort/support decision;
-      otherwise mark deferred, not silently opponent-adjusted.
+- [x] Comparison/abstention and opponent-evidence policy (2026-10-21): explicit
+      selected-offense Pass-minus-Run descriptive differences with units and
+      candidate-specific unavailable reasons; ranking always withheld. No contrast
+      interval is invented from marginal/league bounds. Opponent conditioning is
+      explicitly deferred with cohort/support/temporal validation gates, not
+      silently adjusted. [Policy](docs/DECISION_POLICY.md); 14 new synthetic tests.
+
+This completes the offline **descriptive** foundation, not causal, predictive or
+preferred-call validation. No winner label, opponent model or new API/UI is implied.
+Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
 
 ### P1.6 — Open-source decision-model evaluation/integration gate
 
-- [ ] Extend the initial nfl4th/fastrmodels desk review into versioned input/output,
-      assumptions, license/terms and historical model/data availability audits.
+- [ ] **Next unit:** extend the initial nfl4th desk review into one version-pinned
+      input/output, assumptions, license/terms and historical model/data availability
+      audit. Map requirements to the current typed dataset; document reuse/adapt/defer
+      and missing evidence before acquiring/converting model artifacts. Keep this
+      separate from fastrmodels, runtime integration, API/UI and fourth-down mode.
+- [ ] Apply the same versioned evaluation gate to fastrmodels and its model artifacts.
 - [ ] Compare reusable artifacts/reference R execution/adaptation against Python
       compatibility and maintenance costs. Decide reuse/adapt/defer with evidence.
 - [ ] Independently test golden examples, transformations, possession/time/OT

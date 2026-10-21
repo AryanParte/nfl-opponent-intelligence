@@ -149,4 +149,8 @@ boundaries, fixed filters, RNG isolation and reciprocal Scout defense meaning.
 Primary references above were rechecked for paired resampling and few-cluster
 limitations. This is implementation verification, not validation of a new
 inference method or authorization to rank actions. Independent real-cohort
-candidate reconciliation and cross-game/calibration research remain unfinished.
+candidate reconciliation is recorded in [the pinned audit](DECISION_AUDIT.md);
+cross-game/calibration research remains unfinished. The
+[comparison policy](DECISION_POLICY.md) separately exposes a descriptive
+Pass-minus-Run point contrast, whose interval is explicitly `not_implemented`.
+Existing candidate/league bounds cannot supply that interval or unlock ranking.
