@@ -6,6 +6,7 @@ contract was implemented on 2026-10-17, with matched candidate league baselines 
 2026-10-18 and candidate support/exploratory uncertainty on 2026-10-19.
 Independent pinned real-cohort reconciliation followed on 2026-10-20.
 The comparison/abstention policy closed P1.5's descriptive foundation on 2026-10-21.
+A bounded nfl4th interface audit followed on 2026-10-22 with runtime use deferred.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -65,8 +66,9 @@ a repository-only raw-record oracle, not a second production stack. The
 [comparison policy](DECISION_POLICY.md) now adds explicit selected-offense
 Pass-minus-Run descriptive contrasts, preserves mandatory abstention, and defers
 opponent conditioning with concrete admission gates. It does not add contrast
-intervals or turn existing exploratory intervals into a ranking test. Next is a
-bounded P1.6 nfl4th input/output/version/terms/availability audit. The gates
+intervals or turn existing exploratory intervals into a ranking test. The first
+[P1.6 nfl4th audit](NFL4TH_AUDIT.md) now maps versioned interfaces, terms and
+availability gaps; next is the separate fastrmodels audit. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -129,6 +131,14 @@ independent validation of model outputs. No model/data artifacts were installed,
 redistributed or converted. Favor validated reuse/adaptation over needless rebuilding.
 
 ### nfl4th — evaluate in P1.6; fourth-down mode remains later
+
+**Follow-up, 2026-10-22:** the [bounded interface audit](NFL4TH_AUDIT.md) and its
+receipt supersede this screening decision's next step, not its historical source
+pin. Reuse as a methodological reference; defer runtime integration. The current
+typed inputs, separate mutable model/schedule assets, unresolved binary lineage
+and untested transformations do not meet admission gates. No R/Python parity,
+probabilities or calibration were validated. Keep the source/model/context layer
+separate from Run/Pass descriptions; no request-time downloads or fabricated state.
 
 Reviewed upstream commit `aca8c66fee105c1e5355c0daf962f64d4353e42b`:
 [MIT license](https://github.com/nflverse/nfl4th/blob/aca8c66fee105c1e5355c0daf962f64d4353e42b/LICENSE.md),

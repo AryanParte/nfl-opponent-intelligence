@@ -2044,3 +2044,66 @@ assumptions and historical-availability audit with a reuse/adapt/defer decision.
 Do not jump to model execution, fastrmodels, new data, API/UI or fourth-down mode
 in that same unit. Preserve Scout and history; do not merge or enable auto-merge.
 The 8 AM automation is unchanged.
+
+## 2026-10-22 — nfl4th interface and reproducibility gate (P1.6)
+
+**Built / why:** synced the canonical clone after PR #27 merged at `a561ffa`;
+all eight main CI jobs passed, with no open PRs or review feedback. Started
+`codex/nfl4th-interface-audit` from fetched main. Expanded the initial desk review
+into a source-pinned nfl4th audit, typed-input mapping, asset-metadata receipt and
+seven offline drift checks. The decision is methodological reuse with runtime
+integration deferred. This avoids treating a go/punt/FG model as Run/Pass evidence
+or confusing a pinned R package with a reproducible end-to-end prediction.
+
+**Review files:** `docs/NFL4TH_AUDIT.md` (findings, source citations, admission
+gates), `docs/evidence/nfl4th-1.0.7-interface-audit.json` (pins, thirteen inputs,
+ten output units and five asset observations), `tests/test_nfl4th_audit.py`
+(contract-drift checks), and the updated architecture, ROADMAP and STATUS.
+
+**Sports concepts:** go-for-it conversion differs from EPA > 0 success; action WP
+differs from historical EPA/play. WP must keep the original offense's perspective
+across turnovers, scores and clock transitions. Home/away, kickoff and timeout
+context cannot be guessed from offense/defense. The eligible Run/Pass population
+is not the complete fourth-down action universe. No OT or current-rule support
+was established by finding a historical quarter/year field.
+
+**Software/statistical concepts / learn:** package source, dependency runtime,
+model binaries and schedule data need separate pins and provenance. An API digest
+is not a locally verified hash. A release date is not a training cutoff or a row's
+decision-time availability. Script training windows do not prove binary lineage;
+random-fold CV does not establish temporal generalization. Parity is a separate
+gate from calibration and causal decision quality. A documented defer decision is
+useful engineering progress, not a reason to invent missing inputs or rebuild models.
+
+**Three review questions:**
+
+1. Why can't nfl4th's go/punt/FG WP outputs choose Run versus Pass, and how do
+   conversion probability, EPA success and percentage-point go boost differ?
+2. Which five manual inputs are absent from typed Play, and why don't our cohort
+   ranges, game IDs or current raw snapshots automatically supply valid model states?
+3. Why can two machines on the same package version produce different results,
+   and what evidence must precede a historical, offline Python/R integration claim?
+
+**Verification / self-review:** baseline 281 core tests passed on Python 3.13.
+All 288 core / 24 API tests pass on each Python 3.11/3.12/3.13; API warnings are
+errors and dependency checks are clean. All 672 frontend tests, TypeScript/build
+and 14 synthetic Chromium cases passed first attempt, without relaxed settings.
+Temporary test servers stopped and ports 8000/5173 are free. The new tests guard
+record consistency against the actual contracts; they do not execute R, validate
+remote artifacts, attest model outputs or establish predictive quality.
+
+Full-diff review found and fixed a commit/tree identity mixup, confirmed the root
+tree through the Git commit endpoint, reconfirmed all sixteen blob IDs and added
+an independently checked identity-pair assertion. It also preserved earlier PR
+receipts and distinguished missing typed fields from raw-data absence, source
+training recipes from binary lineage, and advertised hashes from verified bytes.
+Core/API suites were rerun after review. The documentation-write approval timed
+out once before applying; the permitted retry succeeded. Publication SHA,
+attribution and exact-head CI are in the PR, not inferred from local tests.
+
+**Remaining / next:** perform the separate bounded fastrmodels EP/WP interface,
+terms, serialization/runtime, artifact-lineage and historical-availability audit.
+No acquisition/conversion, new model runtime, API/UI or enrichment in that unit.
+No production code, dataset, dependency or automation changed today. Ranking,
+opponent adjustment and fourth-down mode remain deferred. No merge or auto-merge;
+the existing 8 AM schedule is unchanged.

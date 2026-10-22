@@ -1,0 +1,275 @@
+{
+  "audit_schema_version": 1,
+  "observed_on": "2026-10-22",
+  "scope": "Static source/interface audit; no R execution, artifact acquisition, output parity, calibration or historical-availability certification.",
+  "upstream": {
+    "repository": "nflverse/nfl4th",
+    "version": "1.0.7",
+    "tag": "v1.0.7",
+    "resolved_commit": "00bc3573f7e740244dc5dcbc7588f31dbd56254d",
+    "tree_sha1": "82a285d0b8f0d25e95b6544ab73259f1e06d88ae",
+    "release_published_at": "2026-03-25T14:36:10Z",
+    "release_target_commitish": "886c61a329be47f3bb294e1a5ab65806cf4db39f"
+  },
+  "source_blobs": [
+    {
+      "path": "DESCRIPTION",
+      "git_blob_sha1": "823c784397a9cdc0406eb58ca47bf2ee330aede4"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob_sha1": "daf2eebf213ee75b9fd82262402c8873e48420d1"
+    },
+    {
+      "path": "LICENSE.md",
+      "git_blob_sha1": "d182436e899fa7b28334f7ccd2a835e7181c70dc"
+    },
+    {
+      "path": "README.md",
+      "git_blob_sha1": "458022af5e21458276354964bcdcacb408b360a4"
+    },
+    {
+      "path": "R/wrapper.R",
+      "git_blob_sha1": "34be149fbc7fbcf75e521f5acef07044988201df"
+    },
+    {
+      "path": "R/helpers.R",
+      "git_blob_sha1": "3432d4130e16674bc7ad7b2f8beed9e3892be7a1"
+    },
+    {
+      "path": "R/decision_functions.R",
+      "git_blob_sha1": "e88f79ed8ed6902d40c48823a829d79f2078361e"
+    },
+    {
+      "path": "R/apply_win_prob.R",
+      "git_blob_sha1": "404601419ab891324bb3125389657c1a99a03c7d"
+    },
+    {
+      "path": "R/cache.R",
+      "git_blob_sha1": "7611b92a0415cd53386e9d6a700ca65ed4ad9bed"
+    },
+    {
+      "path": "R/zzz.R",
+      "git_blob_sha1": "aa14f6706ddb1c2dddade726a3e0ffe76b445d42"
+    },
+    {
+      "path": "data-raw/_go_for_it_and_2pt_models.R",
+      "git_blob_sha1": "3e146bb129928a68434d1f8b2129311f82494035"
+    },
+    {
+      "path": "data-raw/_punt_and_fg_models.R",
+      "git_blob_sha1": "eb53557e94eea1962a45e532845ded11e41147e8"
+    },
+    {
+      "path": "data-raw/build_sysdata.R",
+      "git_blob_sha1": "f71392eaab2b4fb46aa45ae0783575b346a34521"
+    },
+    {
+      "path": "data-raw/model_archive.R",
+      "git_blob_sha1": "e78f28619ff191f4922e42aab73018c20648c7ef"
+    },
+    {
+      "path": "data-raw/_save_computed_numbers.R",
+      "git_blob_sha1": "a52c6c3788dcc6848588ee99ba75234c76b49068"
+    },
+    {
+      "path": "tests/testthat/test-wrapper.R",
+      "git_blob_sha1": "a3ab3247913215fdff1b922bc044fa81977a4d31"
+    }
+  ],
+  "local_contract": {
+    "Play": [
+      "game_id",
+      "play_id",
+      "season",
+      "season_type",
+      "week",
+      "offense",
+      "defense",
+      "down",
+      "yards_to_go",
+      "dropback",
+      "epa",
+      "yardline_100",
+      "score_differential",
+      "qtr",
+      "quarter_seconds_remaining"
+    ],
+    "DecisionRequest": [
+      "team",
+      "season",
+      "before_week",
+      "down",
+      "distance_min",
+      "distance_max",
+      "season_type",
+      "yardline_min",
+      "yardline_max",
+      "score_min",
+      "score_max",
+      "period",
+      "clock_min",
+      "clock_max",
+      "minimum_plays",
+      "compare_league",
+      "bootstrap_repetitions",
+      "bootstrap_seed"
+    ]
+  },
+  "manual_inputs": [
+    {
+      "upstream": "home_team",
+      "play_field": null,
+      "availability": "missing_from_typed_play"
+    },
+    {
+      "upstream": "away_team",
+      "play_field": null,
+      "availability": "missing_from_typed_play"
+    },
+    {
+      "upstream": "posteam",
+      "play_field": "offense",
+      "availability": "present",
+      "constraint": "Canonical team aliases and home/away membership need validation."
+    },
+    {
+      "upstream": "type",
+      "play_field": "season_type",
+      "availability": "present",
+      "constraint": "Explicit REG -> reg and POST -> post; never default other values to postseason."
+    },
+    {
+      "upstream": "season",
+      "play_field": "season",
+      "availability": "present",
+      "constraint": "Schedule lookup filters >2013; this does not validate every later rules era."
+    },
+    {
+      "upstream": "qtr",
+      "play_field": "qtr",
+      "availability": "nullable",
+      "constraint": "Regulation-only candidate scope. No OT support established."
+    },
+    {
+      "upstream": "quarter_seconds_remaining",
+      "play_field": "quarter_seconds_remaining",
+      "availability": "nullable",
+      "constraint": "Exact state, not a cohort clock range. Last-15-second path difference needs a gate."
+    },
+    {
+      "upstream": "ydstogo",
+      "play_field": "yards_to_go",
+      "availability": "present",
+      "constraint": "Exact distance; a DecisionRequest range is not one model state."
+    },
+    {
+      "upstream": "yardline_100",
+      "play_field": "yardline_100",
+      "availability": "nullable",
+      "constraint": "Offense-relative. Float contract is not proven compatible with discrete punt-table joins."
+    },
+    {
+      "upstream": "score_differential",
+      "play_field": "score_differential",
+      "availability": "nullable",
+      "constraint": "Pre-play, possession-team perspective; validate sign across state transitions."
+    },
+    {
+      "upstream": "home_opening_kickoff",
+      "play_field": null,
+      "availability": "missing_from_typed_play"
+    },
+    {
+      "upstream": "posteam_timeouts_remaining",
+      "play_field": null,
+      "availability": "missing_from_typed_play"
+    },
+    {
+      "upstream": "defteam_timeouts_remaining",
+      "play_field": null,
+      "availability": "missing_from_typed_play"
+    }
+  ],
+  "output_units": {
+    "go_boost": "percentage_points",
+    "first_down_prob": "probability",
+    "wp_fail": "probability",
+    "wp_succeed": "probability",
+    "go_wp": "probability",
+    "fg_make_prob": "probability",
+    "miss_fg_wp": "probability",
+    "make_fg_wp": "probability",
+    "fg_wp": "probability",
+    "punt_wp": "probability"
+  },
+  "model_artifact_observations": [
+    {
+      "tag": "model_archive",
+      "name": "fd_model.rds",
+      "asset_id": 350659455,
+      "bytes": 9107324,
+      "api_advertised_digest": "sha256:db1c1763e763df41e11e013088d77889ddf57f75025e8529e1f587e0c2c4c31a",
+      "created_at": "2026-02-04T16:16:21Z",
+      "updated_at": "2026-02-04T16:16:30Z",
+      "local_sha256": null
+    },
+    {
+      "tag": "model_archive",
+      "name": "wp_model.rds",
+      "asset_id": 350659500,
+      "bytes": 2422111,
+      "api_advertised_digest": "sha256:80adad2eb8d5cfb1e9610a31e7b123f9d88f73ce6706fba1ebf9da1b1cc54483",
+      "created_at": "2026-02-04T16:16:30Z",
+      "updated_at": "2026-02-04T16:16:32Z",
+      "local_sha256": null
+    },
+    {
+      "tag": "model_archive",
+      "name": "two_pt_model.ubj",
+      "asset_id": 350658891,
+      "bytes": 25193,
+      "api_advertised_digest": "sha256:66c274d69ee264f0e0b1de1f2bfd14004ce6c924e5a7d3377d9adbb18fa32253",
+      "created_at": "2026-02-04T16:14:48Z",
+      "updated_at": "2026-02-04T16:14:49Z",
+      "local_sha256": null
+    },
+    {
+      "tag": "nfl4th_infrastructure",
+      "name": "pre_computed_go_boost.rds",
+      "asset_id": 666285297,
+      "bytes": 1540013,
+      "api_advertised_digest": "sha256:57134fe05b1cc2525f64bf2abc01630e714dfd8f0cf5036bc00c52e98d104f83",
+      "created_at": "2026-10-22T15:37:28Z",
+      "updated_at": "2026-10-22T15:37:29Z",
+      "local_sha256": null
+    },
+    {
+      "tag": "nfl4th_infrastructure",
+      "name": "pre_computed_go_boost_2024.rds",
+      "asset_id": 289165632,
+      "bytes": 135104,
+      "api_advertised_digest": "sha256:54ab0354b9f0c066e273d174920f368cbd14cf7df1450a2e2a63a155ed05bb84",
+      "created_at": "2025-09-03T10:25:14Z",
+      "updated_at": "2025-09-03T10:25:14Z",
+      "local_sha256": null
+    }
+  ],
+  "assessment": {
+    "decision": "defer_runtime_integration",
+    "reuse": "Methodological reference for later go/punt/field-goal support, not Run/Pass ranking.",
+    "adaptation": "Evaluate a pinned isolated R reference before considering Python transformations or artifact conversion.",
+    "model_bytes_downloaded": false,
+    "model_outputs_validated": false,
+    "historical_availability_established": false,
+    "gates": [
+      "asset_specific_terms_and_notices",
+      "local_byte_hashes_and_exact_runtime_dependencies",
+      "training_lineage_and_decision_time_feature_availability",
+      "validated_state_inputs_and_schedule_join_cardinality",
+      "independent_golden_vectors_and_R_Python_parity",
+      "time_possession_overtime_and_rules_era_boundaries",
+      "temporal_validation_baselines_and_calibration"
+    ]
+  }
+}
