@@ -46,8 +46,11 @@ this verifies calculations, not statistical coverage or decision quality.
 The [comparison/abstention policy](docs/DECISION_POLICY.md) now exposes explicit
 Pass-minus-Run descriptive differences, null reasons and deferred opponent
 conditioning. It always withholds a preferred call, even for large samples or
-non-overlapping exploratory intervals. P1.5's descriptive foundation is complete;
-versioned open-source model evaluation is next, not automatic model integration.
+non-overlapping exploratory intervals. P1.5's descriptive foundation is complete.
+A [pinned nfl4th interface audit](docs/NFL4TH_AUDIT.md) now records input gaps,
+separate model/data dependencies and historical-availability limits. It defers
+runtime integration; fourth-down WP is not Run/Pass evidence. The separate
+fastrmodels evaluation is next, not automatic model integration.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.

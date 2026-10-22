@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-21, the long-term direction is
+As of the daily run on 2026-10-22, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -12,21 +12,21 @@ primary-source model/data review, AI policy and the justified no-database decisi
 P1.5–P1.9 now cover decision foundations, model evaluation, richer data audit, API
 and UI; the prior operational/case-study milestone is preserved as P1.10.
 
-P1.4's bounded surface is merged through PR #22; P1.5's contract, baselines,
-candidate uncertainty and independent raw reconciliation are merged through PR #26.
-Today's [comparison/abstention policy](DECISION_POLICY.md) adds selected-offense
-Pass-minus-Run descriptive differences with explicit units and unavailable-candidate
-reasons. It never ranks, fabricates a contrast interval or borrows league values.
-Opponent conditioning is explicitly deferred with admission gates. This completes
-P1.5's descriptive foundation, not causal/predictive or decision-quality validation.
+P1.4's bounded surface is merged through PR #22; P1.5's descriptive foundation
+is merged through PR #27, including the [comparison/abstention policy](DECISION_POLICY.md).
+Today's [nfl4th audit](NFL4TH_AUDIT.md) starts P1.6: version-pinned interfaces,
+input gaps, assumptions, stated terms and historical-availability limits, with a
+machine-readable source/asset-metadata receipt and offline drift checks. Runtime
+integration is deferred. Go/punt/FG WP is not Run/Pass evidence; no model or new
+data was acquired, installed or executed. Probability parity, calibration, binary
+lineage and decision-time availability remain unverified.
 
-All 281 core / 24 API tests pass on Python 3.11/3.12/3.13. Frontend verification
-and the first-run timeout observation are recorded below. Scout schema v2, the API,
-frontend, briefs, downloads and all 71 API fixtures remain unchanged. No dependency,
-new dataset, model or automation change. Actual assistive-technology/cross-browser
+Verification for this unit is recorded below. Scout schema v2, the API, frontend,
+briefs, downloads and all 71 API fixtures remain unchanged. No dependency, new
+dataset, model or automation change. Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: P1.6's first bounded, version-pinned nfl4th interface/terms/
-assumptions/availability audit, not immediate model integration or a new endpoint.
+certification. Next: P1.6's separate bounded fastrmodels interface/terms/artifact/
+availability audit, not immediate model integration or a new endpoint.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -40,14 +40,19 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/decision-evidence-policy`, started from updated
-  `origin/main` at `e3e8674` after observing PR #26 merged. Do not merge or enable
+- Working branch: `codex/nfl4th-interface-audit`, started from updated
+  `origin/main` at `a561ffa` after observing PR #27 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/decision-evidence-policy` for its exact published SHA, attribution and CI
+  `codex/nfl4th-interface-audit` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous comparison-policy review: [PR #27](https://github.com/AryanParte/nfl-opponent-intelligence/pull/27),
+  merged at `a561ffa`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39677114041)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The previous clean checkout matched its upstream (no unpublished
+  commits). Before edits, baseline 281 core tests passed on Python 3.13.
 - Previous real-cohort reconciliation review: [PR #26](https://github.com/AryanParte/nfl-opponent-intelligence/pull/26),
   merged at `e3e8674`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39511918187)
   passed all eight jobs. No open PRs/reviews/comments remained; only main remained
@@ -184,6 +189,42 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.6 nfl4th source/interface and availability audit — 2026-10-22
+
+[The audit](NFL4TH_AUDIT.md) pins the resolved v1.0.7 source commit, sixteen
+inspected file identities, thirteen manual input mappings and ten output units.
+Five upstream inputs are missing from typed Play, four nullable and four present
+subject to semantic checks. Cohort ranges/cutoffs are not single game states.
+Separate schedule/model caches, precompute downloads, R/mgcv/XGBoost compatibility,
+possession/time/rules assumptions and incomplete artifact training lineage prevent
+runtime admission. Reuse as a methodology reference; defer integration.
+
+The receipt captures five release-asset observations with advertised digests, IDs,
+sizes and dates; no binary bytes were acquired, so every local digest is null.
+The package version, resolved commit, root tree, release target and artifact dates
+are separate identities. Training-script windows are not certified binary windows.
+Terms are recorded as package statements, not blanket asset/data legal clearance.
+
+Seven new offline tests guard actual Play/DecisionRequest field drift, nullable/
+missing classifications, the independently transcribed manual interface, output
+units, source links/pins, unverified digest status and the deferred assessment.
+They do not attest upstream behavior, model outputs or historical availability.
+All 288 core / 24 API tests pass on Python 3.11/3.12/3.13 (API warnings as errors);
+dependency checks are clean. All 672 frontend tests, TypeScript/build and 14
+synthetic Chromium integration tests passed first attempt. Test-owned servers
+stopped; ports 8000/5173 are free. No retries/timeouts/assertions were loosened.
+
+Complete-diff review corrected an initial commit-ID/tree-ID mixup using the Git
+commit endpoint and added a fixed-pair regression assertion. The explicit tree
+lookup reconfirmed all sixteen source blob IDs, also matching the earlier desk
+review's source files (not its entire tree). Review kept missing typed inputs
+distinct from unaudited raw-column availability, conditional WP distinct from EPA
+success, API-advertised hashes distinct from verified bytes and source scripts
+distinct from artifact lineage. Earlier learning records and PR history are kept.
+Final core/API verification was rerun after review; exact-head remote CI and
+attribution are recorded in this branch's PR. No production code, data, dependency,
+API fixture or automation changed. Next is the separate bounded fastrmodels audit.
 
 ### P1.5 comparison/abstention and opponent-evidence policy — 2026-10-21
 
@@ -937,11 +978,13 @@ P1.5 is complete within descriptive-only scope: request/cohorts, candidate metri
 matched league context, exploratory support/intervals, independent raw audit and
 comparison/abstention/opponent policy. Do not rebuild these or unlock ranking from
 counts, differences or nominal intervals. See [DECISION_POLICY.md](DECISION_POLICY.md).
-Next is one bounded P1.6 nfl4th audit, extending the initial pinned desk review:
-versioned input/output semantics, license/terms, assumptions, availability and a
-mapping to the current typed dataset. Record reuse/adapt/defer and missing evidence
-before runtime integration. Keep fastrmodels, new data, model execution, API/UI and
-fourth-down mode as separate gated units. Preserve Scout schema v2 and the actual
+The first bounded P1.6 [nfl4th audit](NFL4TH_AUDIT.md) is complete; runtime use is
+deferred, not validated. Next is the separate fastrmodels audit: pin source and
+record EP/WP targets/features, interfaces, terms, serialization/runtime and binary
+lineage/availability evidence. Record reuse/adapt/defer before acquiring/converting
+artifacts. No new data, model execution, API/UI or fourth-down mode in that unit.
+Do not repeat the nfl4th audit or infer that its training scripts attest release
+binaries. Preserve Scout schema v2 and the actual
 assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
 without claiming conformance or restarting P1.4/browser CI.
 Do not add storage for this single-snapshot view or imply a public deployment.

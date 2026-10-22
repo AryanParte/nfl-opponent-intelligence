@@ -21,7 +21,9 @@ P1.5's offline contract, matched candidate baselines and exploratory uncertainty
 are implemented and independently reconciled on pinned retrospective cohorts.
 Its comparison/abstention policy closes the descriptive foundation: explicit
 Pass-minus-Run differences, no preferred-call label, opponent conditioning deferred.
-Next is P1.6's version-pinned source/model audit, not immediate model integration.
+P1.6's first [nfl4th interface audit](docs/NFL4TH_AUDIT.md) is complete with
+runtime integration deferred. Next is the separate fastrmodels audit, not model
+execution or an endpoint.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -213,12 +215,18 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
 
 ### P1.6 — Open-source decision-model evaluation/integration gate
 
-- [ ] **Next unit:** extend the initial nfl4th desk review into one version-pinned
+- [x] Extend the initial nfl4th desk review into one version-pinned
       input/output, assumptions, license/terms and historical model/data availability
-      audit. Map requirements to the current typed dataset; document reuse/adapt/defer
-      and missing evidence before acquiring/converting model artifacts. Keep this
-      separate from fastrmodels, runtime integration, API/UI and fourth-down mode.
-- [ ] Apply the same versioned evaluation gate to fastrmodels and its model artifacts.
+      audit (2026-10-22): [findings and gate](docs/NFL4TH_AUDIT.md), source/asset
+      metadata receipt and seven offline contract-drift checks. Thirteen manual
+      inputs mapped; five missing and four nullable in typed Play. Reuse as
+      methodological reference; defer runtime use pending context, asset terms,
+      verified bytes/lineage, parity and temporal validation. No models acquired
+      or executed; metadata digests are not local verification.
+- [ ] **Next unit:** apply the same bounded versioned evaluation to fastrmodels:
+      EP/WP feature/target and runtime interfaces, terms, serialization, artifact
+      lineage and historical availability. Record reuse/adapt/defer before any
+      acquisition/conversion. Keep model execution, API/UI and enrichment separate.
 - [ ] Compare reusable artifacts/reference R execution/adaptation against Python
       compatibility and maintenance costs. Decide reuse/adapt/defer with evidence.
 - [ ] Independently test golden examples, transformations, possession/time/OT
