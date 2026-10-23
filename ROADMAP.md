@@ -21,9 +21,10 @@ P1.5's offline contract, matched candidate baselines and exploratory uncertainty
 are implemented and independently reconciled on pinned retrospective cohorts.
 Its comparison/abstention policy closes the descriptive foundation: explicit
 Pass-minus-Run differences, no preferred-call label, opponent conditioning deferred.
-P1.6's first [nfl4th interface audit](docs/NFL4TH_AUDIT.md) is complete with
-runtime integration deferred. Next is the separate fastrmodels audit, not model
-execution or an endpoint.
+P1.6's [nfl4th](docs/NFL4TH_AUDIT.md) and
+[fastrmodels EP/WP](docs/FASTRMODELS_AUDIT.md) interface audits are complete with
+runtime integration deferred. Next is the bounded EP-only reference-strategy
+decision, not a model endpoint or an action-ranking claim.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -223,12 +224,20 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       methodological reference; defer runtime use pending context, asset terms,
       verified bytes/lineage, parity and temporal validation. No models acquired
       or executed; metadata digests are not local verification.
-- [ ] **Next unit:** apply the same bounded versioned evaluation to fastrmodels:
-      EP/WP feature/target and runtime interfaces, terms, serialization, artifact
-      lineage and historical availability. Record reuse/adapt/defer before any
-      acquisition/conversion. Keep model execution, API/UI and enrichment separate.
-- [ ] Compare reusable artifacts/reference R execution/adaptation against Python
-      compatibility and maintenance costs. Decide reuse/adapt/defer with evidence.
+- [x] Bounded versioned fastrmodels EP/WP evaluation (2026-10-23):
+      [findings and gate](docs/FASTRMODELS_AUDIT.md), separate artifact/consumer
+      source pins, fourteen raw-input mappings, 18/11/12 ordered model features,
+      terms, serialization and three artifact-metadata observations. Eight offline
+      checks guard receipt/typed-contract drift, not model predictions. Reuse
+      candidate artifacts/methodology; defer runtime integration pending context,
+      acquisition/lineage, parity and temporal validation. No model bytes acquired,
+      no R installed and no model inference or probability validation performed.
+- [ ] **Next unit:** compare an isolated pinned R reference, direct UBJ/Python
+      reuse and explicit deferral for the smallest EP-only offline experiment.
+      Decide and document runtime/maintenance tradeoffs, artifact terms/acquisition
+      plan, independent golden-vector protocol and exit criteria before installing
+      or converting artifacts. Keep WP, enrichment, API/UI and fourth-down mode
+      separate; lack of verified context must not trigger fabricated defaults.
 - [ ] Independently test golden examples, transformations, possession/time/OT
       boundaries and runtime parity before any EP/WP integration. Version models,
       features, training windows and provenance; do not infer action values from

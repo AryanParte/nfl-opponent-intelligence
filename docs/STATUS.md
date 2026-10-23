@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-22, the long-term direction is
+As of the daily run on 2026-10-23, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -14,19 +14,21 @@ and UI; the prior operational/case-study milestone is preserved as P1.10.
 
 P1.4's bounded surface is merged through PR #22; P1.5's descriptive foundation
 is merged through PR #27, including the [comparison/abstention policy](DECISION_POLICY.md).
-Today's [nfl4th audit](NFL4TH_AUDIT.md) starts P1.6: version-pinned interfaces,
-input gaps, assumptions, stated terms and historical-availability limits, with a
-machine-readable source/asset-metadata receipt and offline drift checks. Runtime
-integration is deferred. Go/punt/FG WP is not Run/Pass evidence; no model or new
-data was acquired, installed or executed. Probability parity, calibration, binary
-lineage and decision-time availability remain unverified.
+P1.6's [nfl4th audit](NFL4TH_AUDIT.md) is merged through PR #28. Today's separate
+[fastrmodels EP/WP audit](FASTRMODELS_AUDIT.md) records artifact/consumer source
+pins, inputs/features/targets, serialization, terms and historical-availability
+limits, with a machine-readable metadata receipt and offline drift checks.
+Runtime integration remains deferred. State EP/WP is not action value; no model
+or new data was acquired, installed or executed. Probability parity, calibration,
+binary lineage and decision-time availability remain unverified.
 
 Verification for this unit is recorded below. Scout schema v2, the API, frontend,
 briefs, downloads and all 71 API fixtures remain unchanged. No dependency, new
 dataset, model or automation change. Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: P1.6's separate bounded fastrmodels interface/terms/artifact/
-availability audit, not immediate model integration or a new endpoint.
+certification. Next: P1.6's bounded EP-only offline reference-strategy decision,
+with acquisition/runtime/parity criteria before installing or converting artifacts;
+not immediate model integration or a new endpoint.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -40,14 +42,20 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/nfl4th-interface-audit`, started from updated
-  `origin/main` at `a561ffa` after observing PR #27 merged. Do not merge or enable
+- Working branch: `codex/fastrmodels-interface-audit`, started from updated
+  `origin/main` at `df4cb2c` after observing PR #28 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/nfl4th-interface-audit` for its exact published SHA, attribution and CI
+  `codex/fastrmodels-interface-audit` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous nfl4th audit review: [PR #28](https://github.com/AryanParte/nfl-opponent-intelligence/pull/28),
+  merged at `df4cb2c`; its tree matches feature head `d01e76a`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39851226389)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The previous clean checkout matched its upstream (no unpublished
+  commits). Baseline 288 core / 24 API tests passed on Python 3.13 before changes.
 - Previous comparison-policy review: [PR #27](https://github.com/AryanParte/nfl-opponent-intelligence/pull/27),
   merged at `a561ffa`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/39677114041)
   passed all eight jobs. No open PRs/reviews/comments remained; only main remained
@@ -189,6 +197,40 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.6 fastrmodels EP/WP source/interface audit — 2026-10-23
+
+[The audit](FASTRMODELS_AUDIT.md) pins fastrmodels 2.1.0 and its nflfastR 6.0.0
+consumer separately, with fifteen source-file identities and ordered 18/11/12
+EP/WP/spread-WP feature inventories. Of fourteen distinct raw wrapper inputs,
+four are present, two nullable, two require validated clock derivation and six
+are missing from typed Play. Raw CSV availability was not re-audited. The WP
+wrapper calculates both spread/no-spread outputs; its twelve-input contract
+differs from the eleven-feature no-spread model. Standalone/bulk paths differ
+in neutral-site and missing-spread/kickoff handling. None supplies Run/Pass values.
+
+Three package/archive artifact identities, sizes and dates are recorded without
+acquiring bytes. Archive API digests were null; local hashes and verified training
+windows remain null. MIT package notices do not certify separate data rights.
+R-container/raw-vector/UBJ formats need explicit conversion/parity checks; source
+recipes and release dates do not attest binary lineage or historical availability.
+Reuse remains a candidate; runtime admission is deferred.
+
+Eight new offline tests guard the typed-input mappings, missing/null/derived states,
+ordered features/classes/units, source pin/link coverage, unknown digest/lineage
+states and remaining admission gates. They do not execute or validate a model.
+All 296 core / 24 API tests passed on each Python 3.11/3.12/3.13 (API warnings as
+errors), with no broken dependencies. All 672 frontend tests, TypeScript/build and
+14 synthetic Chromium tests passed first attempt; no settings were loosened.
+
+Complete-diff review corrected the signed-score time-scaling description and
+clarified that future-derived training labels/weights differ from observed pre-play
+score context. It strengthened coverage so every recorded source file is linked,
+and preserved original screening pins and earlier learning/PR records. No model,
+data, runtime dependency, production code, API fixture or automation changed.
+Exact-head remote CI/publication evidence belongs in this branch's PR. Next:
+decide the bounded EP-only reference strategy, acquisition/runtime plan and
+independent parity protocol before installing/converting artifacts.
 
 ### P1.6 nfl4th source/interface and availability audit — 2026-10-22
 
@@ -978,13 +1020,14 @@ P1.5 is complete within descriptive-only scope: request/cohorts, candidate metri
 matched league context, exploratory support/intervals, independent raw audit and
 comparison/abstention/opponent policy. Do not rebuild these or unlock ranking from
 counts, differences or nominal intervals. See [DECISION_POLICY.md](DECISION_POLICY.md).
-The first bounded P1.6 [nfl4th audit](NFL4TH_AUDIT.md) is complete; runtime use is
-deferred, not validated. Next is the separate fastrmodels audit: pin source and
-record EP/WP targets/features, interfaces, terms, serialization/runtime and binary
-lineage/availability evidence. Record reuse/adapt/defer before acquiring/converting
-artifacts. No new data, model execution, API/UI or fourth-down mode in that unit.
-Do not repeat the nfl4th audit or infer that its training scripts attest release
-binaries. Preserve Scout schema v2 and the actual
+The bounded P1.6 [nfl4th](NFL4TH_AUDIT.md) and
+[fastrmodels EP/WP](FASTRMODELS_AUDIT.md) audits are complete; runtime use is
+deferred, not validated. Next: compare isolated pinned R reference execution,
+direct UBJ/Python reuse and explicit deferral for the smallest EP-only experiment.
+Record the strategy, artifact terms/acquisition/runtime plan, independent golden
+vectors and exit criteria before installing/converting models. No WP, enrichment,
+API/UI or fourth-down mode in that unit. Do not repeat these audits or infer that
+training scripts attest release binaries. Preserve Scout schema v2 and the actual
 assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
 without claiming conformance or restarting P1.4/browser CI.
 Do not add storage for this single-snapshot view or imply a public deployment.

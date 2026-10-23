@@ -7,6 +7,7 @@ contract was implemented on 2026-10-17, with matched candidate league baselines 
 Independent pinned real-cohort reconciliation followed on 2026-10-20.
 The comparison/abstention policy closed P1.5's descriptive foundation on 2026-10-21.
 A bounded nfl4th interface audit followed on 2026-10-22 with runtime use deferred.
+A separate fastrmodels EP/WP audit followed on 2026-10-23, also deferring runtime use.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -67,8 +68,10 @@ a repository-only raw-record oracle, not a second production stack. The
 Pass-minus-Run descriptive contrasts, preserves mandatory abstention, and defers
 opponent conditioning with concrete admission gates. It does not add contrast
 intervals or turn existing exploratory intervals into a ranking test. The first
-[P1.6 nfl4th audit](NFL4TH_AUDIT.md) now maps versioned interfaces, terms and
-availability gaps; next is the separate fastrmodels audit. The gates
+[P1.6 nfl4th audit](NFL4TH_AUDIT.md) and separate
+[fastrmodels EP/WP audit](FASTRMODELS_AUDIT.md) now map versioned interfaces,
+terms and availability gaps. Next is the bounded EP-only reference-strategy
+decision, not an integration claim. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -162,6 +165,15 @@ established by a historical season argument. Preserve MIT notices if reusing cod
 software licensing is not blanket permission for all data consumed by wrappers.
 
 ### fastrmodels — candidate model artifacts, not a ready decision policy
+
+**Follow-up, 2026-10-23:** the [bounded EP/WP audit](FASTRMODELS_AUDIT.md) resolves
+fastrmodels 2.1.0 and nflfastR 6.0.0 separately, records ordered features and
+artifact metadata, and maps the missing typed context. Its receipt preserves
+unknown hashes/training windows rather than claiming verification. Artifact reuse
+remains a candidate; runtime integration is deferred. Next: choose the smallest
+EP-only offline reference strategy and its acquisition/runtime/parity protocol
+before installing or converting models. The screening sources below remain
+historical evidence, not new artifact-validation results.
 
 Reviewed commit `75c7b68bc49535370236c38c9826265da075bd71`:
 [MIT license](https://github.com/nflverse/fastrmodels/blob/75c7b68bc49535370236c38c9826265da075bd71/LICENSE.md),

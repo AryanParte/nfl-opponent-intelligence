@@ -2107,3 +2107,67 @@ No acquisition/conversion, new model runtime, API/UI or enrichment in that unit.
 No production code, dataset, dependency or automation changed today. Ranking,
 opponent adjustment and fourth-down mode remain deferred. No merge or auto-merge;
 the existing 8 AM schedule is unchanged.
+
+## 2026-10-23 — fastrmodels EP/WP interface and artifact gate (P1.6)
+
+**Built / why:** synced the canonical clone after PR #28 merged at `df4cb2c`;
+all eight main CI jobs passed, with no open PRs or review feedback. Started
+`codex/fastrmodels-interface-audit` from fetched main. Completed the bounded
+fastrmodels EP/WP audit, with separate artifact/consumer source pins, typed-input
+mapping, serialization/terms/availability findings and eight offline drift checks.
+This establishes what reuse would require without presenting a model catalog as
+a ready Run/Pass decision policy. No model bytes or runtime were acquired.
+
+**Review files:** `docs/FASTRMODELS_AUDIT.md` (findings, sources, reuse/defer gate),
+`docs/evidence/fastrmodels-2.1.0-interface-audit.json` (fourteen raw inputs, ordered
+features, output semantics and three asset observations),
+`tests/test_fastrmodels_audit.py` (offline receipt/typed-contract checks), and the
+updated README, architecture, ROADMAP and STATUS.
+
+**Sports concepts:** state EP is the signed expected value of the next scoring
+event this half; it is not EPA for an unplayed call. Possession-team WP is not an
+action-specific win-probability change. A seven-point TD convention is not a new
+PAT estimate. Home/neutral, roof, timeouts and kickoff context cannot be invented
+from cohort filters. Excluding OT rows is different from excluding games decided
+in OT; the inspected recipe does not establish an OT-state model.
+
+**Software/statistical concepts / learn:** raw wrapper inputs differ from encoded
+model features. Package/consumer/runtime/model bytes need separate identities.
+Compressed R containers, raw vectors and UBJ files are not interchangeable by
+renaming. Null advertised digests are unknown, not verified hashes or mismatches.
+Training recipes and serialization dates do not certify binary training windows.
+Leave-one-season-out calibration may use later seasons; it is not forward-time
+replay. Reference parity, calibration and causal decision quality are separate
+gates. Learn to identify what a model estimates before deciding how to reuse it.
+
+**Three review questions:**
+
+1. Why can't these state EP/WP outputs select Run versus Pass, even if their
+   probabilities are calibrated, and how do EP, EPA and action WP differ?
+2. Why does the WP wrapper require twelve raw inputs while its no-spread model
+   takes eleven features, and which missing typed inputs must not be defaulted?
+3. Why don't a package tag, archive asset ID and training script establish
+   reproducible or historically available predictions, and what must be pinned
+   and independently checked before Python/R reuse?
+
+**Verification / self-review:** baseline 288 core / 24 API tests passed on Python
+3.13. All 296 core / 24 API tests passed on each Python 3.11/3.12/3.13, with API
+warnings as errors and clean dependency checks. All 672 frontend tests,
+TypeScript/build and 14 synthetic Chromium cases passed first attempt without
+relaxed settings. New tests check record consistency and actual typed fields,
+not upstream inference, binary attestation or model quality.
+
+Complete-diff review corrected the signed-score time-scaling description (negative
+scores become more negative), separated future-derived training weights from
+known pre-play score context, and required links for all fifteen recorded source
+files. It retained original screening pins and previous learning/PR evidence.
+No production code or API fixture changed. Publication SHA, attribution and
+exact-head CI are recorded in the PR rather than inferred from local tests.
+
+**Remaining / next:** choose the smallest EP-only offline reference strategy:
+isolated pinned R, direct UBJ/Python reuse or explicit deferral. Record the terms,
+acquisition/runtime plan, independent golden-vector protocol and exit criteria
+before installing/converting artifacts. Keep WP, enrichment, API/UI and fourth-down
+mode separate. Feature context, artifact lineage, parity and temporal/calibration
+evidence still block production integration; ranking remains withheld. No merge,
+auto-merge or change to the existing 8 AM automation.
