@@ -49,8 +49,11 @@ conditioning. It always withholds a preferred call, even for large samples or
 non-overlapping exploratory intervals. P1.5's descriptive foundation is complete.
 A [pinned nfl4th interface audit](docs/NFL4TH_AUDIT.md) now records input gaps,
 separate model/data dependencies and historical-availability limits. It defers
-runtime integration; fourth-down WP is not Run/Pass evidence. The separate
-fastrmodels evaluation is next, not automatic model integration.
+runtime integration; fourth-down WP is not Run/Pass evidence. A separate
+[fastrmodels EP/WP audit](docs/FASTRMODELS_AUDIT.md) now records the artifact and
+nflfastR consumer pins, feature transformations, missing context, serialization,
+terms and unverified training lineage. It also defers runtime use. Next is a
+bounded EP-only reference-strategy decision, not automatic model integration.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.

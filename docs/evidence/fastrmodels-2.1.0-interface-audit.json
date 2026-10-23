@@ -1,0 +1,301 @@
+{
+  "audit_schema_version": 1,
+  "observed_on": "2026-10-23",
+  "scope": "Static EP/WP source/interface audit. Not an acquisition manifest, adapter, parity test or model-quality validation.",
+  "sources": {
+    "nflverse/fastrmodels": {
+      "version": "2.1.0",
+      "tag": "v2.1.0",
+      "commit": "ca185baf7757c2992e57ce2bdf2f296c515465d8",
+      "tree": "75424601cec99d5cd4ecd636ac6a819efe91a2eb",
+      "release_published_at": "2026-02-07T13:19:40Z",
+      "source_blobs": {
+        "DESCRIPTION": "23816b7c488b1484e8a51bc138d18006397a09a9",
+        "LICENSE.md": "74fa99449286373a0ac870d1c25b66a1dbea20ee",
+        "README.md": "a7cf424bd0820558c187c466d514064ded92fd31",
+        "R/data.R": "b27a4ebe25a493a9024b30acaa2a32ef214de63a",
+        "NEWS.md": "150b8b5462ec7bcc17f3b4d3766a951fe0f37119",
+        "data-raw/MODELS.R": "e1d6dd8273db206fba83f4f44e35df31f9341a50",
+        "data-raw/DATASET.R": "5359a6bde44f2bceb57bfd7af0b0e6f873f632d6",
+        "tests/testthat/test-models.R": "eaf5ba5d5133f4dbfb4b62821a8c101a0e87c650"
+      }
+    },
+    "nflverse/nflfastR": {
+      "version": "6.0.0",
+      "tag": "v6.0.0",
+      "commit": "917b14e5085f352d9b00d23628759773e7d411b5",
+      "tree": "71b6133789a8a6adfb0e5960991040abd32a0979",
+      "release_published_at": "2026-09-18T14:28:43Z",
+      "source_blobs": {
+        "DESCRIPTION": "59e2d5fef1924b64e237fe9041a888941986ace7",
+        "LICENSE.md": "537935d17e9aabc1531da631282a760778adf5de",
+        "R/ep_wp_calculators.R": "cdb565c4a4311a59c4181911bd5c906b381454e6",
+        "R/helper_add_ep_wp.R": "22281124dc0a56543554293a20cf99e9341c2ddd",
+        "R/helper_add_nflscrapr_mutations.R": "619862256bfc5762c38ea9f668a22fb2a65655a1",
+        "R/utils.R": "7e0e9aba6f835a8ab4f26b8312a4e1c3b0579734",
+        "tests/testthat/test-ep_wp_calculators.R": "93a37f9d21861ace448aed7e29a048f5835c80f6"
+      }
+    }
+  },
+  "wrapper_inputs": {
+    "ep": [
+      "season",
+      "home_team",
+      "posteam",
+      "roof",
+      "half_seconds_remaining",
+      "yardline_100",
+      "down",
+      "ydstogo",
+      "posteam_timeouts_remaining",
+      "defteam_timeouts_remaining"
+    ],
+    "wp": [
+      "receive_2h_ko",
+      "score_differential",
+      "home_team",
+      "posteam",
+      "half_seconds_remaining",
+      "game_seconds_remaining",
+      "spread_line",
+      "down",
+      "ydstogo",
+      "yardline_100",
+      "posteam_timeouts_remaining",
+      "defteam_timeouts_remaining"
+    ]
+  },
+  "play_mapping": {
+    "season": {
+      "fields": [
+        "season"
+      ],
+      "state": "present"
+    },
+    "home_team": {
+      "fields": [],
+      "state": "missing"
+    },
+    "posteam": {
+      "fields": [
+        "offense"
+      ],
+      "state": "present"
+    },
+    "roof": {
+      "fields": [],
+      "state": "missing"
+    },
+    "half_seconds_remaining": {
+      "fields": [
+        "qtr",
+        "quarter_seconds_remaining"
+      ],
+      "state": "derivation_requires_validation"
+    },
+    "yardline_100": {
+      "fields": [
+        "yardline_100"
+      ],
+      "state": "nullable"
+    },
+    "down": {
+      "fields": [
+        "down"
+      ],
+      "state": "present"
+    },
+    "ydstogo": {
+      "fields": [
+        "yards_to_go"
+      ],
+      "state": "present"
+    },
+    "posteam_timeouts_remaining": {
+      "fields": [],
+      "state": "missing"
+    },
+    "defteam_timeouts_remaining": {
+      "fields": [],
+      "state": "missing"
+    },
+    "receive_2h_ko": {
+      "fields": [],
+      "state": "missing"
+    },
+    "score_differential": {
+      "fields": [
+        "score_differential"
+      ],
+      "state": "nullable"
+    },
+    "game_seconds_remaining": {
+      "fields": [
+        "qtr",
+        "quarter_seconds_remaining"
+      ],
+      "state": "derivation_requires_validation"
+    },
+    "spread_line": {
+      "fields": [],
+      "state": "missing"
+    }
+  },
+  "feature_order": {
+    "ep": [
+      "half_seconds_remaining",
+      "yardline_100",
+      "home",
+      "retractable",
+      "dome",
+      "outdoors",
+      "ydstogo",
+      "era0",
+      "era1",
+      "era2",
+      "era3",
+      "era4",
+      "down1",
+      "down2",
+      "down3",
+      "down4",
+      "posteam_timeouts_remaining",
+      "defteam_timeouts_remaining"
+    ],
+    "wp": [
+      "receive_2h_ko",
+      "home",
+      "half_seconds_remaining",
+      "game_seconds_remaining",
+      "Diff_Time_Ratio",
+      "score_differential",
+      "down",
+      "ydstogo",
+      "yardline_100",
+      "posteam_timeouts_remaining",
+      "defteam_timeouts_remaining"
+    ],
+    "wp_spread": [
+      "receive_2h_ko",
+      "spread_time",
+      "home",
+      "half_seconds_remaining",
+      "game_seconds_remaining",
+      "Diff_Time_Ratio",
+      "score_differential",
+      "down",
+      "ydstogo",
+      "yardline_100",
+      "posteam_timeouts_remaining",
+      "defteam_timeouts_remaining"
+    ]
+  },
+  "outputs": {
+    "ep": {
+      "class_order": [
+        "td_prob",
+        "opp_td_prob",
+        "fg_prob",
+        "opp_fg_prob",
+        "safety_prob",
+        "opp_safety_prob",
+        "no_score_prob"
+      ],
+      "points_weights": [
+        7,
+        -7,
+        3,
+        -3,
+        2,
+        -2,
+        0
+      ],
+      "unit": "expected_points",
+      "target": "Next scoring event in the half, from possession-team perspective; not action value or EPA."
+    },
+    "wp": {
+      "columns": [
+        "wp",
+        "vegas_wp"
+      ],
+      "unit": "probability",
+      "target": "Possession team wins; checked-in training recipe excludes tied outcomes and overtime rows."
+    }
+  },
+  "artifacts": [
+    {
+      "name": "ep_model",
+      "package_path": "data/ep_model.rda",
+      "git_blob_sha1": "f1a434b6f6f67fcb2195d0aeb6cf5d7dd88c7a09",
+      "package_bytes": 2864452,
+      "archive": {
+        "tag": "model_archive",
+        "asset_id": 253928625,
+        "name": "ep_model.ubj",
+        "bytes": 9737452,
+        "api_advertised_digest": null,
+        "created_at": "2025-05-12T12:21:43Z",
+        "updated_at": "2025-05-12T12:21:46Z"
+      },
+      "local_sha256": null,
+      "verified_training_window": null
+    },
+    {
+      "name": "wp_model",
+      "package_path": "data/wp_model.rda",
+      "git_blob_sha1": "7774a41bb502daf99ce952244fbd5402c777d0ed",
+      "package_bytes": 26776,
+      "archive": {
+        "tag": "model_archive",
+        "asset_id": 253928623,
+        "name": "wp_model.ubj",
+        "bytes": 106951,
+        "api_advertised_digest": null,
+        "created_at": "2025-05-12T12:21:43Z",
+        "updated_at": "2025-05-12T12:21:43Z"
+      },
+      "local_sha256": null,
+      "verified_training_window": null
+    },
+    {
+      "name": "wp_model_spread",
+      "package_path": "data/wp_model_spread.rda",
+      "git_blob_sha1": "331c1f193bcf92769b02f40d87e9672f4f7cc304",
+      "package_bytes": 354988,
+      "archive": {
+        "tag": "model_archive",
+        "asset_id": 253928620,
+        "name": "wp_model_spread.ubj",
+        "bytes": 1219887,
+        "api_advertised_digest": null,
+        "created_at": "2025-05-12T12:21:41Z",
+        "updated_at": "2025-05-12T12:21:43Z"
+      },
+      "local_sha256": null,
+      "verified_training_window": null
+    }
+  ],
+  "assessment": {
+    "decision": "defer_runtime_integration",
+    "reuse_candidate": "EP-only offline reference/parity experiment; no retraining by default.",
+    "artifact_bytes_acquired": false,
+    "parity_validated": false,
+    "calibration_validated": false,
+    "historical_availability_established": false,
+    "remaining_gates": [
+      "artifact_terms_and_local_hashes",
+      "exact_R_Python_runtimes_and_serialization",
+      "training_lineage_and_release_time_evidence",
+      "validated_game_state_inputs_and_transforms",
+      "independent_reference_parity_and_boundary_vectors",
+      "temporal_holdouts_baselines_and_calibration",
+      "action_transition_model_before_action_values"
+    ],
+    "deferred_catalog": [
+      "cp_model",
+      "fg_model",
+      "xpass_model",
+      "xyac_model"
+    ]
+  }
+}
