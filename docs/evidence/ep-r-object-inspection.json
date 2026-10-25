@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "image": "rocker/r-ver@sha256:fb487cf8a2029fc1dbc17621cf41ac913d49ac74a1ff9e27bf9bbc982e55d08d",
+  "platform": "linux/arm64",
+  "network": "none",
+  "root_filesystem": "read_only",
+  "cpu_limit": 1,
+  "runner_sha256": "1c19e50901087bd3e0bc4d902fd41dd279c85f64a4600f35c60d7f07fa743885",
+  "probe_driver_sha256": "982fd15d57e0a5d26822d5478ad26b895247f8b18958e3fc33854271a1b3c96d",
+  "acquisition_manifest_sha256": "c7e5e979c2486d1b786ae91bcbe66d240f8e2be268b379916d43300f6eebd77d",
+  "inspection": {
+    "status": "raw_object_inspected",
+    "r_version": "4.6.1",
+    "platform": "aarch64-unknown-linux-gnu",
+    "container_sha256": "fa45093d478fdd4534fa48860678ff99d597a67c340821db075c47fdab9102af",
+    "object_name": "ep_model",
+    "object_type": "raw",
+    "raw_bytes": 9737490,
+    "raw_sha256": "14a4b7e0c115d3f46fc9f341a024874b0dbcf44b30bb1f426d4f59b6f175335a",
+    "prefix_hex": "7b4c00000000000000076c6561726e65",
+    "installed_package_equality_verified": false,
+    "model_executed": false
+  },
+  "prediction_capture_available": false,
+  "predictive_validation": false
+}

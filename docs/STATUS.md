@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-24, the long-term direction is
+As of the daily run on 2026-10-25, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -15,20 +15,22 @@ and UI; the prior operational/case-study milestone is preserved as P1.10.
 P1.4's bounded surface is merged through PR #22; P1.5's descriptive foundation
 is merged through PR #27, including the [comparison/abstention policy](DECISION_POLICY.md).
 P1.6's [nfl4th](NFL4TH_AUDIT.md) and [fastrmodels](FASTRMODELS_AUDIT.md) audits
-are merged through PR #29. Today's [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
-selects isolated pinned R first, then independent Python reuse of the same
-extracted model bytes. A repository-only oracle, synthetic corpus and capture
-comparator implement the acceptance protocol. No model bytes, R runtime or new
-dataset were acquired; actual model predictions/parity, calibration, binary
-lineage and decision-time availability remain unverified. Production is deferred.
+are merged through PR #29; the [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
+is merged through PR #30. Today's [acquisition/object preflight](EP_ACQUISITION.md)
+verifies the pinned EP container, retains its notices and hashes, and inspects its
+single raw object in a digest-pinned, network-disabled R 4.6.1 sandbox. This closes
+the acquisition prerequisite, not the complete R reference. No inference package,
+actual predictions/parity, installed-package equality, calibration or historical
+availability is validated. Production integration remains deferred.
 
 Verification for this unit is recorded below. Scout schema v2, the API, frontend,
-briefs, downloads and all 71 API fixtures remain unchanged. No dependency, new
-dataset, model or automation change. Actual assistive-technology/cross-browser
+briefs, downloads and all 71 API fixtures remain unchanged. No production dependency,
+new NFL dataset, serving model or automation change. Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: acquire/verify only the pinned package EP artifact, provision
-and lock the isolated R reference, and capture/replay its actual outputs for the
-fixed corpus; no WP, enrichment, serving integration or new endpoint.
+certification. Next: resolve/verify the intended XGBoost source build and transitive
+terms/hashes, lock the isolated reference and capture/replay actual outputs for the
+fixed corpus. The tested package URLs returned 404 and the dated mirror offers an
+older version; no silent fallback. No WP, enrichment, serving integration or endpoint.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -42,14 +44,20 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/ep-reference-protocol`, started from updated
-  `origin/main` at `143dd4b` after observing PR #29 merged. Do not merge or enable
+- Working branch: `codex/ep-r-reference-capture`, started from updated
+  `origin/main` at `28ef5b3` after observing PR #30 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/ep-reference-protocol` for its exact published SHA, attribution and CI
+  `codex/ep-r-reference-capture` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous EP protocol review: [PR #30](https://github.com/AryanParte/nfl-opponent-intelligence/pull/30),
+  merged at `28ef5b3`; its tree matches feature head `69d26cc`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40145358187)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The previous clean checkout matched its upstream, with no unpublished
+  commits. Baseline 311 core / 24 API tests passed on Python 3.13 before changes.
 - Previous fastrmodels audit review: [PR #29](https://github.com/AryanParte/nfl-opponent-intelligence/pull/29),
   merged at `143dd4b`; its tree matches feature head `03bed10`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40021489084)
@@ -203,6 +211,40 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.6 EP artifact acquisition and isolated R preflight — 2026-10-25
+
+[Acquisition evidence](EP_ACQUISITION.md) records the pinned `.rda` Git blob and
+SHA-256, separate raw-object hash, retained terms, exact image/runner/driver identities,
+and offline replay. Only the EP container and two notice/metadata files were
+acquired; model binaries stay in the ignored canonical cache. Base R loaded exactly
+one unclassed raw object. The raw payload differs in byte length from the prior
+archive metadata, so equivalence is not assumed. No XGBoost model was executed.
+
+The R 4.6.1 ARM64 image is verified, not the full inference environment. The tested
+3.4.2.1 CRAN/mirror URLs returned 404; the dated index reports 3.2.1.1. A pinned
+upstream source release is identified for the next build/terms/hash-lock unit,
+not installed or locally attested. The original R prediction-capture item stays open.
+
+All 331 core / 24 API tests passed on Python 3.11/3.12/3.13, with API warnings as
+errors and clean dependency checks. All 672 frontend tests, typecheck/build and
+14 Chromium cases passed first attempt, unchanged settings. Twenty new offline
+tests cover byte/manifest tampering, cache preservation, partial publication,
+locks, symlinks, unsafe mount paths, probe identity and owned-container cleanup.
+Actual offline R receipt replay was byte-identical. API fixtures are unchanged;
+test-owned servers exited and ports 8000/5173 are free.
+
+Complete-diff review added a writer lock, regular-file manifest validation,
+mount-option rejection, runner/input
+drift checks and cleanup of only the uniquely named probe after Docker-client
+timeouts. It kept object inspection distinct from installed-package equality,
+export, inference and predictive validity. An early raw-to-text diagnostic failed
+on embedded NUL; the final probe records hex instead. No runtime pin, statistical
+tolerance or evidence gate was relaxed. Docker was restored to its prior stopped
+state; its image remains cached, and unrelated service configuration is unchanged.
+All three Python core/API suites and offline artifact verification were rerun
+after the final manifest-validation fix and passed.
+Publication SHA, account attribution and exact-head CI are recorded in the PR.
 
 ### P1.6 EP-only reference strategy and executable protocol — 2026-10-24
 
@@ -1065,9 +1107,12 @@ counts, differences or nominal intervals. See [DECISION_POLICY.md](DECISION_POLI
 The bounded P1.6 [nfl4th](NFL4TH_AUDIT.md) and
 [fastrmodels EP/WP](FASTRMODELS_AUDIT.md) audits and
 [EP-only reference strategy/protocol](EP_REFERENCE_PROTOCOL.md) are complete;
-runtime use is deferred, not validated. Next: acquire/verify the one pinned package
-EP artifact, provision/lock the isolated R reference, and capture actual outputs
-with offline replay. Follow the fixed corpus, manifest/notice requirements and
+runtime use is deferred, not validated. The [EP acquisition/object preflight](EP_ACQUISITION.md)
+is complete, but not the full R capture. Next: resolve/verify the pinned XGBoost
+source-build route and transitive terms/hashes, lock the isolated R reference,
+verify installed-package EP bytes and capture actual outputs with offline replay.
+Reuse the acquired artifact; do not substitute the older mirror version. Follow
+the fixed corpus, manifest/notice requirements and
 unrelaxed acceptance criteria; no Python serving integration, WP, enrichment,
 API/UI or fourth-down mode. Independent Python parity follows only after an audited
 R capture. Do not repeat these audits or infer that training scripts attest release

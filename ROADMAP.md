@@ -24,8 +24,9 @@ Pass-minus-Run differences, no preferred-call label, opponent conditioning defer
 P1.6's [nfl4th](docs/NFL4TH_AUDIT.md) and
 [fastrmodels EP/WP](docs/FASTRMODELS_AUDIT.md) interface audits are complete with
 runtime integration deferred. The [EP-only reference strategy/protocol](docs/EP_REFERENCE_PROTOCOL.md)
-is now implemented with synthetic input/capture checks. Next is acquisition and
-an isolated R reference capture, not a model endpoint or an action-ranking claim.
+is now implemented with synthetic input/capture checks. The pinned EP container
+is acquired and inspected in an offline R sandbox. Next is resolving the isolated
+inference runtime/source build and actual R capture, not a model endpoint or ranking.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -241,10 +242,20 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       capture identity, batch/single agreement, class order and absolute tolerances.
       No model/runtime acquired or executed; synthetic comparator probabilities
       are not golden predictions. Runtime targets are provisional, not a tested lock.
-- [ ] **Next unit:** acquire/verify only the pinned package EP artifact and
-      provision/lock the isolated R reference. Capture actual features/probabilities
-      for the fixed corpus and reproduce offline, or record a concrete compatibility/
-      terms blocker. No Python serving integration, WP, real-data enrichment or API/UI.
+- [x] EP acquisition/object-preflight prerequisite (2026-10-25): reuse the bounded
+      transport to acquire only the pinned EP container and its MIT notice/declaration;
+      verify Git-framed blobs/SHA-256, retain an immutable manifest and reject cache
+      corruption. A digest-pinned offline R 4.6.1 sandbox verifies exactly one raw
+      object and its distinct payload hash; [evidence/replay](docs/EP_ACQUISITION.md).
+      Twenty offline tests plus real container replay pass. No XGBoost inference,
+      installed-package equality or predictions. The full R-capture item stays open.
+- [ ] **Next unit:** reuse the verified EP snapshot; resolve/verify XGBoost 3.4.2.1's
+      source-build route and transitive runtime terms/hashes, then lock the isolated
+      R reference. The dated mirror offers 3.2.1.1 and the requested package URLs
+      returned 404; do not silently downgrade. Verify installed package EP bytes,
+      capture actual features/probabilities for the fixed corpus and reproduce
+      offline, or record a concrete build/terms failure. No Python serving
+      integration, WP, real-data enrichment or API/UI.
 - [ ] Independently test golden examples, transformations, possession/time/OT
       boundaries and runtime parity using the predeclared protocol before any EP/WP
       integration. The Python candidate must be independent of the oracle. Version models,

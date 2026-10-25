@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "nflverse/fastrmodels",
+    "version": "2.1.0",
+    "commit": "ca185baf7757c2992e57ce2bdf2f296c515465d8",
+    "release_published_at_utc": "2026-02-07T13:19:40Z",
+    "license": {
+      "identifier": "MIT",
+      "source_url": "https://raw.githubusercontent.com/nflverse/fastrmodels/ca185baf7757c2992e57ce2bdf2f296c515465d8/LICENSE.md",
+      "attribution": "Copyright (c) 2021 Sebastian Carl,Ben Baldwin",
+      "scope": "Package artifact; not a license for separate training datasets."
+    },
+    "representation": "R .rda container; raw EP payload not yet extracted or executed",
+    "verified_training_window": null
+  },
+  "retrieved_at_utc": "2026-10-25T17:05:40.432950+00:00",
+  "files": {
+    "ep_model.rda": {
+      "git_blob_sha1": "f1a434b6f6f67fcb2195d0aeb6cf5d7dd88c7a09",
+      "sha256": "fa45093d478fdd4534fa48860678ff99d597a67c340821db075c47fdab9102af",
+      "size_bytes": 2864452,
+      "url": "https://raw.githubusercontent.com/nflverse/fastrmodels/ca185baf7757c2992e57ce2bdf2f296c515465d8/data/ep_model.rda"
+    },
+    "LICENSE.md": {
+      "git_blob_sha1": "74fa99449286373a0ac870d1c25b66a1dbea20ee",
+      "sha256": "21bc3a885c00b10a2849db55256494686442c8611d89d4ef06789554ba1e4dd5",
+      "size_bytes": 1085,
+      "url": "https://raw.githubusercontent.com/nflverse/fastrmodels/ca185baf7757c2992e57ce2bdf2f296c515465d8/LICENSE.md"
+    },
+    "DESCRIPTION": {
+      "git_blob_sha1": "23816b7c488b1484e8a51bc138d18006397a09a9",
+      "sha256": "177cb16d0f864ec0bd829eee66a870af502ebf30f390fb6c962aa4be14a27878",
+      "size_bytes": 684,
+      "url": "https://raw.githubusercontent.com/nflverse/fastrmodels/ca185baf7757c2992e57ce2bdf2f296c515465d8/DESCRIPTION"
+    }
+  }
+}
