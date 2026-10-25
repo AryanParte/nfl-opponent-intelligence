@@ -23,8 +23,9 @@ Its comparison/abstention policy closes the descriptive foundation: explicit
 Pass-minus-Run differences, no preferred-call label, opponent conditioning deferred.
 P1.6's [nfl4th](docs/NFL4TH_AUDIT.md) and
 [fastrmodels EP/WP](docs/FASTRMODELS_AUDIT.md) interface audits are complete with
-runtime integration deferred. Next is the bounded EP-only reference-strategy
-decision, not a model endpoint or an action-ranking claim.
+runtime integration deferred. The [EP-only reference strategy/protocol](docs/EP_REFERENCE_PROTOCOL.md)
+is now implemented with synthetic input/capture checks. Next is acquisition and
+an isolated R reference capture, not a model endpoint or an action-ranking claim.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -232,14 +233,21 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       candidate artifacts/methodology; defer runtime integration pending context,
       acquisition/lineage, parity and temporal validation. No model bytes acquired,
       no R installed and no model inference or probability validation performed.
-- [ ] **Next unit:** compare an isolated pinned R reference, direct UBJ/Python
-      reuse and explicit deferral for the smallest EP-only offline experiment.
-      Decide and document runtime/maintenance tradeoffs, artifact terms/acquisition
-      plan, independent golden-vector protocol and exit criteria before installing
-      or converting artifacts. Keep WP, enrichment, API/UI and fourth-down mode
-      separate; lack of verified context must not trigger fabricated defaults.
+- [x] EP-only strategy/protocol (2026-10-24): select isolated pinned R first,
+      then independent Python inference with the same extracted package EP bytes;
+      document alternatives, terms/acquisition/runtime plan and exit criteria.
+      [Protocol](docs/EP_REFERENCE_PROTOCOL.md), 25 hand-specified synthetic feature
+      cases, 16 rejected states and 15 offline/mutation tests cover input encoding,
+      capture identity, batch/single agreement, class order and absolute tolerances.
+      No model/runtime acquired or executed; synthetic comparator probabilities
+      are not golden predictions. Runtime targets are provisional, not a tested lock.
+- [ ] **Next unit:** acquire/verify only the pinned package EP artifact and
+      provision/lock the isolated R reference. Capture actual features/probabilities
+      for the fixed corpus and reproduce offline, or record a concrete compatibility/
+      terms blocker. No Python serving integration, WP, real-data enrichment or API/UI.
 - [ ] Independently test golden examples, transformations, possession/time/OT
-      boundaries and runtime parity before any EP/WP integration. Version models,
+      boundaries and runtime parity using the predeclared protocol before any EP/WP
+      integration. The Python candidate must be independent of the oracle. Version models,
       features, training windows and provenance; do not infer action values from
       state values alone. Unsupported integrations remain explicitly deferred.
 

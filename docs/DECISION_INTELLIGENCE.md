@@ -8,6 +8,8 @@ Independent pinned real-cohort reconciliation followed on 2026-10-20.
 The comparison/abstention policy closed P1.5's descriptive foundation on 2026-10-21.
 A bounded nfl4th interface audit followed on 2026-10-22 with runtime use deferred.
 A separate fastrmodels EP/WP audit followed on 2026-10-23, also deferring runtime use.
+The EP-only reference strategy and synthetic capture protocol followed on 2026-10-24;
+no model predictions have been acquired or validated.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -70,8 +72,10 @@ opponent conditioning with concrete admission gates. It does not add contrast
 intervals or turn existing exploratory intervals into a ranking test. The first
 [P1.6 nfl4th audit](NFL4TH_AUDIT.md) and separate
 [fastrmodels EP/WP audit](FASTRMODELS_AUDIT.md) now map versioned interfaces,
-terms and availability gaps. Next is the bounded EP-only reference-strategy
-decision, not an integration claim. The gates
+terms and availability gaps. The [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
+selects isolated R first, then an independent Python candidate using the same
+extracted bytes; production stays deferred. Next is the pinned R capture, not an
+integration claim. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -165,6 +169,13 @@ established by a historical season argument. Preserve MIT notices if reusing cod
 software licensing is not blanket permission for all data consumed by wrappers.
 
 ### fastrmodels — candidate model artifacts, not a ready decision policy
+
+**Follow-up, 2026-10-24:** the [EP reference strategy/protocol](EP_REFERENCE_PROTOCOL.md)
+selects an isolated R reference before a native Python candidate. A repository-only
+feature oracle, synthetic corpus and capture comparator define acceptance without
+loading models or fabricating probabilities. The package EP payload is selected;
+its identity must not be conflated with the archive UBJ. Actual R capture and
+independent Python parity are still pending; neither can authorize action ranking.
 
 **Follow-up, 2026-10-23:** the [bounded EP/WP audit](FASTRMODELS_AUDIT.md) resolves
 fastrmodels 2.1.0 and nflfastR 6.0.0 separately, records ordered features and

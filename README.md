@@ -52,8 +52,11 @@ separate model/data dependencies and historical-availability limits. It defers
 runtime integration; fourth-down WP is not Run/Pass evidence. A separate
 [fastrmodels EP/WP audit](docs/FASTRMODELS_AUDIT.md) now records the artifact and
 nflfastR consumer pins, feature transformations, missing context, serialization,
-terms and unverified training lineage. It also defers runtime use. Next is a
-bounded EP-only reference-strategy decision, not automatic model integration.
+terms and unverified training lineage. It also defers runtime use. The
+[EP-only reference protocol](docs/EP_REFERENCE_PROTOCOL.md) now selects isolated R
+as the first reference, followed by Python reuse of the same verified bytes.
+Its synthetic corpus and capture checks are implemented, but no model predictions
+have been acquired. Next is a pinned, offline R reference capture, not integration.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.

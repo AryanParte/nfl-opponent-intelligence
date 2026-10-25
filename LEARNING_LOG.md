@@ -2171,3 +2171,69 @@ before installing/converting artifacts. Keep WP, enrichment, API/UI and fourth-d
 mode separate. Feature context, artifact lineage, parity and temporal/calibration
 evidence still block production integration; ranking remains withheld. No merge,
 auto-merge or change to the existing 8 AM automation.
+
+## 2026-10-24 — EP reference strategy and executable acceptance protocol (P1.6)
+
+**Built / why:** synced the canonical clone after PR #29 merged at `143dd4b`;
+all eight main CI jobs passed, with no open PRs or review feedback. Started
+`codex/ep-reference-protocol` from fetched main. Chose isolated R/nflfastR as the
+first EP reference, followed by independent Python reuse of the same extracted
+model bytes. Added a standard-library feature oracle/capture comparator, 25
+hand-specified synthetic input vectors, 16 rejection cases and 15 regression/
+mutation tests. This makes the next model experiment falsifiable without
+installing models or inventing golden predictions today.
+
+**Review files:** `docs/EP_REFERENCE_PROTOCOL.md` (strategy, alternatives,
+artifact/runtime/terms plan and exit criteria), `validation/ep_reference.py`
+(strict input oracle and capture comparator),
+`validation/fixtures/ep_reference_cases.json` (predeclared synthetic cases),
+`validation/NOTICE.md` (upstream attribution), `tests/test_ep_reference.py`,
+and the updated ROADMAP/STATUS/architecture/README.
+
+**Sports concepts:** state EP is not EPA for an unplayed call or a Run/Pass action
+value. The seven next-score classes have possession-relative signs and a fixed
+seven-point TD convention. Quarter clocks must map to the correct half; zero clock
+is a boundary probe, not automatically terminal EP=0. Neutral venues, unknown roofs,
+timeouts and OT cannot be filled with convenient defaults. The corpus's narrow
+domain is an experiment policy, not the model's proven training/applicability range.
+
+**Software/statistical concepts / learn:** independently specified expected
+features should precede model outputs. Batch/single and cross-runtime agreement
+require exact row/class identity, correct units, non-finite checks and explicit
+absolute tolerances. Distinct test outputs catch swaps that identical outputs hide.
+Package containers, extracted raw bytes, runtime locks and runner files need
+separate identities; a metadata comparator is not file attestation. Numerical
+parity still does not establish calibration, historical availability or causality.
+
+**Three review questions:**
+
+1. Why use the pinned R path before Python, and why must both consume the same
+   extracted EP payload rather than similarly named package/archive files?
+2. How do the corpus and comparator catch era, clock, class-sign and row-order
+   errors without claiming that the invented probabilities are model predictions?
+3. What additional artifact, temporal and calibration evidence is required after
+   a successful capture comparison, and why can it still not select Run/Pass?
+
+**Verification / self-review:** baseline 296 core / 24 API tests passed on Python
+3.13. All 311 core / 24 API tests passed on each Python 3.11/3.12/3.13, with API
+warnings as errors and clean dependency checks. All 672 frontend tests,
+TypeScript/build and 14 synthetic Chromium cases passed first attempt without
+relaxed settings. Zero-model preflight passed; test-owned servers stopped and
+ports 8000/5173 are free. R/Rscript were not on PATH; no runtime was installed.
+
+Full-diff review strengthened swapped-prediction detection even with unchanged
+case IDs, checked missing runtime metadata and documentation fingerprint drift,
+pinned corpus bytes before parsing to reject silent fixture replacement,
+and clarified parent-container/installed-object/raw-payload verification. The
+upstream MIT notice is retained. Real model outputs/bytes, a resolved runtime lock
+and Python/R parity remain absent; no dependency, production code, API fixture or
+data acquisition changed. Final core/API/preflight checks passed again on all
+three Python versions after review. Publication SHA, attribution and exact-head CI are
+recorded in the PR, not inferred from local tests.
+
+**Remaining / next:** acquire/verify only the pinned package EP artifact,
+provision/lock the isolated R reference and capture actual features/probabilities
+for the fixed corpus with offline replay, or report a concrete compatibility/terms
+blocker. The independent Python candidate comes afterward. No WP, serving
+integration, enrichment, API/UI or ranking; production models remain deferred.
+No merge, auto-merge or change to the existing 8 AM automation.
