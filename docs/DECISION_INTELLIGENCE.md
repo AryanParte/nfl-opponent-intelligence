@@ -10,6 +10,8 @@ A bounded nfl4th interface audit followed on 2026-10-22 with runtime use deferre
 A separate fastrmodels EP/WP audit followed on 2026-10-23, also deferring runtime use.
 The EP-only reference strategy and synthetic capture protocol followed on 2026-10-24;
 no model predictions have been acquired or validated.
+The EP artifact acquisition and isolated R object preflight followed on 2026-10-25;
+this verifies bytes/representation, not inference or football decisions.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -74,8 +76,9 @@ intervals or turn existing exploratory intervals into a ranking test. The first
 [fastrmodels EP/WP audit](FASTRMODELS_AUDIT.md) now map versioned interfaces,
 terms and availability gaps. The [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
 selects isolated R first, then an independent Python candidate using the same
-extracted bytes; production stays deferred. Next is the pinned R capture, not an
-integration claim. The gates
+extracted bytes; production stays deferred. [Acquisition/preflight](EP_ACQUISITION.md)
+now verifies the EP container and raw object. Runtime source-build resolution and
+the actual pinned R capture remain next, not an integration claim. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -169,6 +172,12 @@ established by a historical season argument. Preserve MIT notices if reusing cod
 software licensing is not blanket permission for all data consumed by wrappers.
 
 ### fastrmodels — candidate model artifacts, not a ready decision policy
+
+**Follow-up, 2026-10-25:** [EP acquisition/preflight](EP_ACQUISITION.md) verifies
+the pinned package container, retained notices and raw-object identity using
+isolated base R. The planned inference dependency is not available at the tested
+CRAN/mirror version URLs; its upstream source-build route is identified but not
+installed/locked. No prediction capture or installed-package equality is claimed.
 
 **Follow-up, 2026-10-24:** the [EP reference strategy/protocol](EP_REFERENCE_PROTOCOL.md)
 selects an isolated R reference before a native Python candidate. A repository-only

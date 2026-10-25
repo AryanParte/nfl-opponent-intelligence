@@ -7,6 +7,13 @@ integration remains deferred. No model bytes, R environment or XGBoost dependenc
 were acquired, installed or executed in this unit; no golden model predictions
 exist yet. Scout, its EPA calculations and the descriptive Run/Pass layer are unchanged.
 
+Follow-up, 2026-10-25: [artifact acquisition and object preflight](EP_ACQUISITION.md)
+now verify the EP container and raw object in digest-pinned base R. The paragraphs
+above describe the original protocol unit; acquisition receipts now exist
+separately. The full inference environment and actual prediction capture remain
+unfinished. The dated mirror supplies XGBoost 3.2.1.1, not the proposed 3.4.2.1;
+resolve the pinned upstream source-build route without silently changing versions.
+
 The [fastrmodels audit](FASTRMODELS_AUDIT.md) and [nfl4th audit](NFL4TH_AUDIT.md)
 already establish source/interface limits. Do not repeat those audits or rebuild
 their models. Today adds an executable, repository-only acceptance protocol in
@@ -171,8 +178,9 @@ The feature encoding's upstream notice is retained in [validation/NOTICE](../val
 
 ## Exit criteria and precise next unit
 
-**Next:** acquire/verify the one pinned package EP artifact, provision/lock the
-isolated R reference and capture its actual features/probabilities for this fixed
+**Next:** reuse the verified EP acquisition, resolve/verify the intended XGBoost
+source build and transitive dependency terms/hashes, provision/lock the isolated
+R reference and capture its actual features/probabilities for this fixed
 corpus, with a reproducible offline rerun. Stop that unit at an audited R capture
 or a concrete compatibility/terms blocker; no Python serving integration, WP,
 new real data, enrichment or API/UI. Do not use these synthetic cases to tune models.

@@ -55,8 +55,11 @@ nflfastR consumer pins, feature transformations, missing context, serialization,
 terms and unverified training lineage. It also defers runtime use. The
 [EP-only reference protocol](docs/EP_REFERENCE_PROTOCOL.md) now selects isolated R
 as the first reference, followed by Python reuse of the same verified bytes.
-Its synthetic corpus and capture checks are implemented, but no model predictions
-have been acquired. Next is a pinned, offline R reference capture, not integration.
+Its synthetic corpus and capture checks are implemented. The
+[EP acquisition/preflight](docs/EP_ACQUISITION.md) now verifies the package container
+and inspects its raw object in a pinned, offline R sandbox. No model predictions
+exist yet: the intended XGBoost version needs a separate source build/lock before
+the R reference capture. No production model integration is implied.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.

@@ -2237,3 +2237,71 @@ for the fixed corpus with offline replay, or report a concrete compatibility/ter
 blocker. The independent Python candidate comes afterward. No WP, serving
 integration, enrichment, API/UI or ranking; production models remain deferred.
 No merge, auto-merge or change to the existing 8 AM automation.
+
+## 2026-10-25 — Verified EP acquisition and isolated R object preflight (P1.6)
+
+**Built / why:** after PR #30 merged at `28ef5b3`, verified all eight main CI jobs,
+the clean canonical clone and absence of open PR/review work. Started
+`codex/ep-r-reference-capture` from fetched main. Implemented explicit acquisition
+of the one pinned EP container plus its MIT notice/declaration, reusing the
+existing bounded transport. Git-framed blob verification, SHA-256, an immutable
+manifest, writer lock and corruption rejection now protect the experiment inputs.
+A digest-pinned, unprivileged, network-disabled R 4.6.1 probe inspects the raw
+object and records separate container/payload/runner identities. This completes
+the acquisition prerequisite, not the originally planned full R prediction capture.
+
+**Review files:** `validation/ep_acquire.py`, `validation/ep_probe.py`,
+`validation/ep_inspect.R`, `tests/test_ep_acquire.py`, `docs/EP_ACQUISITION.md`,
+`docs/evidence/ep-package-acquisition.json` and `ep-r-object-inspection.json`.
+ROADMAP/STATUS/README/protocol/architecture now distinguish this result from inference.
+
+**Sports concepts:** identical model names do not establish identical football
+evidence. The package's raw EP object is 9,737,490 bytes, unlike the prior archive
+metadata's 9,737,452; no equivalence is assumed. Artifact identity does not reveal
+training seasons, historical availability, calibration or action-specific value.
+No EP probability or Run/Pass ranking was generated, and Scout's EPA is unchanged.
+
+**Software/statistical concepts / learn:** Git hashes include blob framing;
+SHA-256 of the `.rda` container differs from its contained raw payload. Package
+objects, source distributions, interpreters and inference dependencies need separate
+identities. Offline verification must reject corruption rather than quietly repair
+it. A Docker client timeout can leave its container alive; uniquely scoped cleanup
+and read-only mounts matter. Byte equality is an engineering prerequisite, not a
+statistical validation result.
+
+**Three review questions:**
+
+1. Which identities bind the acquired container, raw object, R runner and image,
+   and why are the container and raw payload hashes different?
+2. Why is this R inspection not a prediction capture, and what still needs to be
+   checked against the installed fastrmodels package before inference?
+3. Why must the mirror's XGBoost 3.2.1.1 not silently replace the proposed 3.4.2.1,
+   and what must a reproducible source-build alternative record?
+
+**Verification / self-review:** baseline 311 core / 24 API checks passed on Python
+3.13. Final 331 core / 24 API tests passed on each Python 3.11/3.12/3.13, with API
+warnings as errors and no broken dependencies. All 672 frontend tests,
+typecheck/build and 14 Chromium cases passed first attempt without relaxed settings.
+Twenty new offline tests use invented bytes/mocked R output; actual R inspection
+was separately run and its receipt reproduced byte-for-byte offline. Core CI needs
+no Docker/R/network. Test-owned servers exited; ports 8000/5173 are free.
+
+Review added writer serialization, regular-file manifest validation,
+symlink/mount-option rejection, input/runner drift checks and uniquely named
+timeout cleanup with explicit cleanup failure. All three Python core/API suites
+and offline artifact verification passed again after the final manifest guard.
+An exploratory raw-to-text print hit embedded NUL bytes; the final probe uses hex.
+Model bytes remain ignored; only text receipts are committed. Docker startup also
+started its configured unrelated services; none were edited, and Docker was restored
+to its prior stopped state. The pinned base image remains cached. No global R,
+production dependencies, statistical formulas, API fixtures or automation changed.
+Publication SHA, GitHub attribution and exact-head CI are recorded in the PR.
+
+**Remaining / next:** the tested CRAN/mirror 3.4.2.1 package URLs returned 404;
+the dated index lists 3.2.1.1. A v3.4.2 upstream source release/commit and advertised
+digest were found, not downloaded or locally verified. This is unresolved source
+build/lock work, not proof the version cannot run. Next resolve/verify that build
+and transitive terms/hashes, lock the isolated inference environment, verify installed
+EP bytes and produce/replay the actual fixed-corpus R capture. Preserve all pins
+and gates; independent Python parity, calibration, API/UI and ranking remain later.
+No merge, auto-merge or change to the existing 8 AM automation.
