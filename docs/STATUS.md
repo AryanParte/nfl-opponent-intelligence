@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-25, the long-term direction is
+As of the daily run on 2026-10-26, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -16,21 +16,25 @@ P1.4's bounded surface is merged through PR #22; P1.5's descriptive foundation
 is merged through PR #27, including the [comparison/abstention policy](DECISION_POLICY.md).
 P1.6's [nfl4th](NFL4TH_AUDIT.md) and [fastrmodels](FASTRMODELS_AUDIT.md) audits
 are merged through PR #29; the [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
-is merged through PR #30. Today's [acquisition/object preflight](EP_ACQUISITION.md)
-verifies the pinned EP container, retains its notices and hashes, and inspects its
-single raw object in a digest-pinned, network-disabled R 4.6.1 sandbox. This closes
-the acquisition prerequisite, not the complete R reference. No inference package,
-actual predictions/parity, installed-package equality, calibration or historical
-availability is validated. Production integration remains deferred.
+is merged through PR #30 and the [acquisition/object preflight](EP_ACQUISITION.md)
+through PR #31. Today's [native runtime prerequisite](EP_RUNTIME.md) verifies
+R XGBoost 3.4.2.1's offline source build in pinned R 4.6.1 ARM64 and locks 43 R
+source distributions with retained terms/hashes. The full reference build stopped
+at missing libcurl development headers; pkg-config is absent too. This verifies
+native library loadability, not a complete reference environment. Actual model
+predictions/parity, installed EP equality, calibration and historical availability
+remain unverified. Production integration remains deferred.
 
 Verification for this unit is recorded below. Scout schema v2, the API, frontend,
 briefs, downloads and all 71 API fixtures remain unchanged. No production dependency,
-new NFL dataset, serving model or automation change. Actual assistive-technology/cross-browser
+serving model or automation change. Additional models and data-like fixtures bundled
+with complete upstream package sources were inventoried, not executed or analyzed.
+Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: resolve/verify the intended XGBoost source build and transitive
-terms/hashes, lock the isolated reference and capture/replay actual outputs for the
-fixed corpus. The tested package URLs returned 404 and the dated mirror offers an
-older version; no silent fallback. No WP, enrichment, serving integration or endpoint.
+certification. Next: lock the missing native development dependencies, complete
+the isolated reference installation and capture/replay actual outputs for the
+fixed corpus. Reuse the verified source/build cache without changing pins or
+silently upgrading the base. No WP, enrichment, serving integration or endpoint.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -44,14 +48,20 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/ep-r-reference-capture`, started from updated
-  `origin/main` at `28ef5b3` after observing PR #30 merged. Do not merge or enable
+- Working branch: `codex/ep-r-runtime-lock`, started from updated
+  `origin/main` at `142e38d` after observing PR #31 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/ep-r-reference-capture` for its exact published SHA, attribution and CI
+  `codex/ep-r-runtime-lock` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous EP acquisition review: [PR #31](https://github.com/AryanParte/nfl-opponent-intelligence/pull/31),
+  merged at `142e38d`; its tree matches feature head `c22d7bc`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40246493599)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The previous clean checkout matched its upstream, with no unpublished
+  commits. Baseline 331 core / 24 API tests passed on Python 3.13 before changes.
 - Previous EP protocol review: [PR #30](https://github.com/AryanParte/nfl-opponent-intelligence/pull/30),
   merged at `28ef5b3`; its tree matches feature head `69d26cc`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40145358187)
@@ -211,6 +221,47 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.6 Verified native XGBoost build and pinned R sources — 2026-10-26
+
+The [runtime note](EP_RUNTIME.md) records the source/build boundary and exact replay.
+The upstream v3.4.2 source archive's bytes match its published digest; its R package
+3.4.2.1 builds and loads in the pinned R 4.6.1 ARM64 image. No older mirror version,
+patched model or global R installation was substituted. Forty required CRAN
+dependencies plus XGBoost/nflfastR/fastrmodels now have a source-resolution lock,
+notice hashes and offline install order. This is not yet a full native environment
+lock. The setup helper verifies archives before atomic no-clobber publication,
+rejects corrupt caches and unsafe archive members, and prepares a verified context.
+Pinned Git archives recovered both nflverse commits after bounded codeload failure;
+fresh acquisition through the finished helper reproduced both hashes.
+
+The native check ran unprivileged/read-only/network-disabled with one CPU and
+XGBoost thread, reproducing identical JSON twice. It records 34 installed R
+packages, compiler/glibc and 20 linked native-library hashes. The full offline
+install verified all sources, installed `cli`, then failed building `curl` 8.1.0
+because `curl/curl.h` is absent. The log excerpt/identity are retained. This is
+missing native setup, not an EP compatibility failure or a request for user access.
+Installed fastrmodels EP equality and model outputs remain unavailable.
+
+Bundled-asset metadata covers seven fastrmodels models, 19 nflfastR data-like files
+and 27 nflreadr files, including internal/game/expected-output fixtures. Those
+assets were not used for inference, training, analysis or golden predictions;
+package terms do not establish separate data rights or training lineage.
+
+Verification: 347 core / 24 API tests on each Python 3.11/3.12/3.13, API warnings
+as errors and clean dependency checks; 672 frontend tests, TypeScript/build and
+14 Chromium cases passed without relaxed settings. Sixteen new offline tests
+cover source/setup contracts and receipt consistency, not binary attestation.
+All 43 cached sources verify offline. Review fixed normalized duplicate archive
+paths and added exact-commit Git acquisition/reuse coverage. Context IDs bind both
+lock and installer; the R check emits JSON only. No statistical formula, API
+fixture, production dependency or automation changed. Test-owned servers exited;
+Docker was restored to its prior stopped state, retaining caches/images/logs.
+Publication SHA, attribution and exact-head CI are recorded in this branch's PR.
+
+Next: lock native development dependencies (libcurl headers/pkg-config first),
+finish offline installation, record the full environment, verify installed EP
+bytes and capture/replay the unchanged corpus. No model/parity/ranking claim yet.
 
 ### P1.6 EP artifact acquisition and isolated R preflight — 2026-10-25
 
@@ -1108,10 +1159,11 @@ The bounded P1.6 [nfl4th](NFL4TH_AUDIT.md) and
 [fastrmodels EP/WP](FASTRMODELS_AUDIT.md) audits and
 [EP-only reference strategy/protocol](EP_REFERENCE_PROTOCOL.md) are complete;
 runtime use is deferred, not validated. The [EP acquisition/object preflight](EP_ACQUISITION.md)
-is complete, but not the full R capture. Next: resolve/verify the pinned XGBoost
-source-build route and transitive terms/hashes, lock the isolated R reference,
+is complete, and the [native build/source lock](EP_RUNTIME.md) verifies XGBoost
+3.4.2.1, but not the full R capture. Next: lock missing native development packages,
+starting with libcurl headers/pkg-config, then complete the isolated installation,
 verify installed-package EP bytes and capture actual outputs with offline replay.
-Reuse the acquired artifact; do not substitute the older mirror version. Follow
+Reuse the acquired artifact and sources; do not substitute the older mirror version. Follow
 the fixed corpus, manifest/notice requirements and
 unrelaxed acceptance criteria; no Python serving integration, WP, enrichment,
 API/UI or fourth-down mode. Independent Python parity follows only after an audited

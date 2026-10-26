@@ -1,0 +1,978 @@
+{
+  "schema_version": 1,
+  "purpose": "Isolated EP reference only; no production model approval",
+  "base_image": "rocker/r-ver@sha256:fb487cf8a2029fc1dbc17621cf41ac913d49ac74a1ff9e27bf9bbc982e55d08d",
+  "platform": "linux/arm64",
+  "r_version": "4.6.1",
+  "index": {
+    "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/PACKAGES.gz",
+    "sha256": "a72bdefe17e3545379cb77c368a1b2a601f783d800b0e2548889a4cad1eca89a",
+    "observed_at_utc": "2026-10-26T16:58:35.013543+00:00"
+  },
+  "source_observed_at_utc": "2026-10-26T18:03:56.470157+00:00",
+  "install_order": [
+    "cli",
+    "curl",
+    "data.table",
+    "generics",
+    "glue",
+    "rlang",
+    "lifecycle",
+    "magrittr",
+    "utf8",
+    "vctrs",
+    "pillar",
+    "R6",
+    "pkgconfig",
+    "tibble",
+    "withr",
+    "tidyselect",
+    "dplyr",
+    "jsonlite",
+    "xgboost",
+    "fastrmodels",
+    "globals",
+    "purrr",
+    "digest",
+    "listenv",
+    "parallelly",
+    "future",
+    "furrr",
+    "hms",
+    "cpp11",
+    "timechange",
+    "lubridate",
+    "stringi",
+    "stringr",
+    "snakecase",
+    "tidyr",
+    "janitor",
+    "fastmap",
+    "cachem",
+    "memoise",
+    "rappdirs",
+    "nflreadr",
+    "progressr",
+    "nflfastR"
+  ],
+  "packages": [
+    {
+      "package": "cli",
+      "version": "3.6.6",
+      "filename": "cli_3.6.6.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/cli_3.6.6.tar.gz",
+      "size_bytes": 641802,
+      "sha256": "27b5e74a6b2a8264457ce8412ded40aa7b660e01894bea4bfde956bbc4b5b294",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "cli/LICENSE.note": "7825aeb4ed127c195bb420481021ed7865790d31342850371e668b269b0f84e0",
+        "cli/LICENSE": "7ca9da25537a5e7e628150a0e6e60de2eaad6c4d5f2d64e4cc63e75aa053e591",
+        "cli/DESCRIPTION": "0aeb4e37ad0ae4507e065301e67b45dc502bca4c3b5298e63db0c81ed2fcc21a"
+      },
+      "dependencies": {
+        "Imports": "utils",
+        "Depends": "R (>= 3.4)"
+      },
+      "uncompressed_bytes": 3154723,
+      "acquisition": "https",
+      "archive_root": "cli"
+    },
+    {
+      "package": "curl",
+      "version": "8.1.0",
+      "filename": "curl_8.1.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/curl_8.1.0.tar.gz",
+      "size_bytes": 727115,
+      "sha256": "8ffe47d334555162b8a5b5e988e705c09f5da85cccc3e96993992edfa0f08fcd",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "curl/LICENSE": "46e348eb9a9e95358770c3b0df03a464e89019d6242875fc7adee7a2d1490690",
+        "curl/DESCRIPTION": "395b00f753815094b1ea89aab2b3cc2ae6ebd3d82bdde5a79d3c382f19e1a225"
+      },
+      "dependencies": {
+        "Depends": "R (>= 3.0.0)"
+      },
+      "uncompressed_bytes": 2386808,
+      "acquisition": "https",
+      "archive_root": "curl"
+    },
+    {
+      "package": "data.table",
+      "version": "1.18.6.1",
+      "filename": "data.table_1.18.6.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/data.table_1.18.6.1.tar.gz",
+      "size_bytes": 5959088,
+      "sha256": "a6fd2ab26667e3be013417e5d3d89b99d6775b6a799114c1064ffdc70f842d93",
+      "declared_license": "MPL-2.0 | file LICENSE",
+      "terms_files": {
+        "data.table/LICENSE": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85",
+        "data.table/DESCRIPTION": "7d92d766bb837f4cf11251c73db131b5b1f2d1b27d7cb042267ba6620d0b7304"
+      },
+      "dependencies": {
+        "Imports": "methods",
+        "Depends": "R (>= 3.4.0)"
+      },
+      "uncompressed_bytes": 17352021,
+      "acquisition": "https",
+      "archive_root": "data.table"
+    },
+    {
+      "package": "generics",
+      "version": "0.1.4",
+      "filename": "generics_0.1.4.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/generics_0.1.4.tar.gz",
+      "size_bytes": 47194,
+      "sha256": "ef76e2bd0721831bc0d4c9af41efcc367489d5cab13a3a91194baa04876e2110",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "generics/LICENSE": "ff0eda985f01ac9a3863994da579f47ede323b80108ccedd6dd263418639baaa",
+        "generics/DESCRIPTION": "cb0f12fff3d6563fc987bcdc0c0b548ce182280987c4e40f142e4180d376a320"
+      },
+      "dependencies": {
+        "Imports": "methods",
+        "Depends": "R (>= 3.6)"
+      },
+      "uncompressed_bytes": 93936,
+      "acquisition": "https",
+      "archive_root": "generics"
+    },
+    {
+      "package": "glue",
+      "version": "1.8.1",
+      "filename": "glue_1.8.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/glue_1.8.1.tar.gz",
+      "size_bytes": 129406,
+      "sha256": "99321aee09ffda849202c0b363e8b4975ef69057f2cdb93c526c270542c952e5",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "glue/LICENSE": "df91fc6693975392fe1d13934181f520bda494e6fc1ddaa34a267b43859ab1ac",
+        "glue/DESCRIPTION": "5c65be778881f52fff26cdc0397eef287a05f4b7fb5084ea23f88ed1d89993fe"
+      },
+      "dependencies": {
+        "Imports": "methods",
+        "Depends": "R (>= 4.1)"
+      },
+      "uncompressed_bytes": 347472,
+      "acquisition": "https",
+      "archive_root": "glue"
+    },
+    {
+      "package": "rlang",
+      "version": "1.3.0",
+      "filename": "rlang_1.3.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/rlang_1.3.0.tar.gz",
+      "size_bytes": 783226,
+      "sha256": "459f92e11b8a5a51fa4d13de6906621078bae163ade7d595e1962dd26306f5ff",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "rlang/LICENSE.note": "2a1b6c5f8414f4cab2e8c828e41efe33d925fc38dcd360f6690803e184285770",
+        "rlang/LICENSE": "007646ca628dcb18cf6568a0edb41c28157b9d1a715a4ea3d5865a98e8113626",
+        "rlang/DESCRIPTION": "33fc3aa47a925242114baafd09c35f699d666ce09b61e24552609661c491bb58"
+      },
+      "dependencies": {
+        "Imports": "utils",
+        "Depends": "R (>= 4.0.0)"
+      },
+      "uncompressed_bytes": 2924265,
+      "acquisition": "https",
+      "archive_root": "rlang"
+    },
+    {
+      "package": "lifecycle",
+      "version": "1.0.5",
+      "filename": "lifecycle_1.0.5.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/lifecycle_1.0.5.tar.gz",
+      "size_bytes": 107156,
+      "sha256": "3ca2451dc1a4957832cb8d8dc9823b23378b5a1d9bb0c9cbc212d14849d83ab7",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "lifecycle/LICENSE": "950f917f975ec43d52acf4f97f913e0eeac12c18ffa8e6fb609d43641feac74b",
+        "lifecycle/DESCRIPTION": "4e0052382d3b81915b88f608ce50ba4c69b091fbbfd7fe1f007dcd65cb20d5da"
+      },
+      "dependencies": {
+        "Imports": "cli (>= 3.4.0), rlang (>= 1.1.0)",
+        "Depends": "R (>= 3.6)"
+      },
+      "uncompressed_bytes": 374402,
+      "acquisition": "https",
+      "archive_root": "lifecycle"
+    },
+    {
+      "package": "magrittr",
+      "version": "2.0.5",
+      "filename": "magrittr_2.0.5.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/magrittr_2.0.5.tar.gz",
+      "size_bytes": 282644,
+      "sha256": "9d8ecca2e4be9f32a1813e9e54c70480c00d3df610ff23fe44dfdca7b13f12cd",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "magrittr/LICENSE": "a0fc38a7d1f39765687d621dab45ab50f706ee6aa00289f90af5366079699542",
+        "magrittr/DESCRIPTION": "e05d95067c6129cc54f439e361ea12840b966ef1079278ceec25b8326565361c"
+      },
+      "dependencies": {
+        "Depends": "R (>= 3.4.0)"
+      },
+      "uncompressed_bytes": 478040,
+      "acquisition": "https",
+      "archive_root": "magrittr"
+    },
+    {
+      "package": "utf8",
+      "version": "1.2.6",
+      "filename": "utf8_1.2.6.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/utf8_1.2.6.tar.gz",
+      "size_bytes": 243469,
+      "sha256": "564a322d61db9dcd1fa7ee13434297f971665ab5177f716bcac34405aa55037c",
+      "declared_license": "Apache License (== 2.0) | file LICENSE",
+      "terms_files": {
+        "utf8/src/utf8lite/tests/wcwidth9/LICENSE": "d42d9681ea132ba8de47cdd0b00472baaf6bb0f915704f43bdbb3c730428bda7",
+        "utf8/src/utf8lite/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "utf8/src/utf8lite/LICENSE.Unicode": "6c244bfa7c7bf84afcd11f9901da8d89af07d2ba4ac6502054ce936caea9cb1a",
+        "utf8/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "utf8/DESCRIPTION": "d66065ddc45fc6cfdc564f418993ace25b52b6f0cfb51cdacde330bbfe733022"
+      },
+      "dependencies": {
+        "Depends": "R (>= 2.10)"
+      },
+      "uncompressed_bytes": 1770009,
+      "acquisition": "https",
+      "archive_root": "utf8"
+    },
+    {
+      "package": "vctrs",
+      "version": "0.7.3",
+      "filename": "vctrs_0.7.3.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/vctrs_0.7.3.tar.gz",
+      "size_bytes": 1082526,
+      "sha256": "2d18439f768b57c8c09e47ed9ee7b51ceb0ebca44bbd294878ba9a4a8764c4ae",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "vctrs/LICENSE.note": "a0263825217b5bc910b3b1d89a0167323676cb6bd4f1e083a687821b25cea35d",
+        "vctrs/LICENSE": "cf3ca4dadcd87073140dade7a0fac48fe9bfc249fd5152415fd44dad263c3447",
+        "vctrs/DESCRIPTION": "ea7f450efa5c586117a1e1f12cb178c95926b20cb20acc72ca2e748f11b01abe"
+      },
+      "dependencies": {
+        "Imports": "cli (>= 3.4.0), glue, lifecycle (>= 1.0.3), rlang (>= 1.1.7)",
+        "Depends": "R (>= 4.0.0)"
+      },
+      "uncompressed_bytes": 4481031,
+      "acquisition": "https",
+      "archive_root": "vctrs"
+    },
+    {
+      "package": "pillar",
+      "version": "1.11.1",
+      "filename": "pillar_1.11.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/pillar_1.11.1.tar.gz",
+      "size_bytes": 409134,
+      "sha256": "d67a3746698206b56c2f8e5457e48343ade87e86cbbf77d564931aa4f9cc0e4e",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "pillar/LICENSE": "f2f750126100f2772e0f428b1d97e2f5b175e39254a3db729a1ffc15aa1bb13b",
+        "pillar/DESCRIPTION": "bf9fee492cba3d212fa528dd6fefa574a4bb0e9087d9410ab7b5dfb80b3bcae2"
+      },
+      "dependencies": {
+        "Imports": "cli (>= 2.3.0), glue, lifecycle, rlang (>= 1.0.2), utf8 (>= 1.1.0), utils, vctrs (>= 0.5.0)"
+      },
+      "uncompressed_bytes": 1626509,
+      "acquisition": "https",
+      "archive_root": "pillar"
+    },
+    {
+      "package": "R6",
+      "version": "2.6.1",
+      "filename": "R6_2.6.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/R6_2.6.1.tar.gz",
+      "size_bytes": 64414,
+      "sha256": "586ac3b49cf53294a57935a150793a994db5229509feab7c51c7d1b2073df910",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "R6/LICENSE": "4a241a4eb733aa770ae6b578cb43b8b16f0fc203c92ef3cd00e4189e0302dcf3",
+        "R6/DESCRIPTION": "801ff6b0495da2c5060af477309f71ffc1cd404b9dc496b8b50d8f30bde19fef"
+      },
+      "dependencies": {
+        "Depends": "R (>= 3.6)"
+      },
+      "uncompressed_bytes": 205270,
+      "acquisition": "https",
+      "archive_root": "R6"
+    },
+    {
+      "package": "pkgconfig",
+      "version": "2.0.3",
+      "filename": "pkgconfig_2.0.3.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/pkgconfig_2.0.3.tar.gz",
+      "size_bytes": 6102,
+      "sha256": "fffe5625fb6912f3c4bb068561ec3025b15645fc0e4007b8e43ab78f87e4f8af",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "pkgconfig/LICENSE": "375d96241b4a2ead695a70ac4f52909d35b164fe1b68dd67e935a7d8f6a47bf7",
+        "pkgconfig/DESCRIPTION": "1a51b9fba4fee02b2a07167db629a6724852ae5bbe4327f97b3a331bc177764f"
+      },
+      "dependencies": {
+        "Imports": "utils"
+      },
+      "uncompressed_bytes": 21051,
+      "acquisition": "https",
+      "archive_root": "pkgconfig"
+    },
+    {
+      "package": "tibble",
+      "version": "3.3.1",
+      "filename": "tibble_3.3.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/tibble_3.3.1.tar.gz",
+      "size_bytes": 553525,
+      "sha256": "ec7db482744b3f37ec31d4533417173a43a37d2da15f3c72b6aa286d27d97164",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "tibble/LICENSE": "30024b268600650b7f18647c65d34b86c81f36d08e850ca2840d53dabdeede56",
+        "tibble/DESCRIPTION": "0389e25eed4f3e23641411029553315ce4fa4742ec0862860f2107a98bb5ca1d"
+      },
+      "dependencies": {
+        "Imports": "cli, lifecycle (>= 1.0.0), magrittr, methods, pillar (>= 1.8.1), pkgconfig, rlang (>= 1.0.2), utils, vctrs (>= 0.5.0)",
+        "Depends": "R (>= 3.4.0)"
+      },
+      "uncompressed_bytes": 1968082,
+      "acquisition": "https",
+      "archive_root": "tibble"
+    },
+    {
+      "package": "withr",
+      "version": "3.0.3",
+      "filename": "withr_3.0.3.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/withr_3.0.3.tar.gz",
+      "size_bytes": 103361,
+      "sha256": "9796258d140e3bd9a351c407eb705238ef0cbc3176f0498de9159f19b900d656",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "withr/LICENSE": "f977839320e6333860f1d7541afb87508bdf303bd91eea546d84fb2f10aad004",
+        "withr/DESCRIPTION": "f5ca8996cb85447a0f22cf6329bd71837802f1e4c40aa630566f117372e41899"
+      },
+      "dependencies": {
+        "Imports": "graphics, grDevices",
+        "Depends": "R (>= 3.6.0)"
+      },
+      "uncompressed_bytes": 306811,
+      "acquisition": "https",
+      "archive_root": "withr"
+    },
+    {
+      "package": "tidyselect",
+      "version": "1.2.1",
+      "filename": "tidyselect_1.2.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/tidyselect_1.2.1.tar.gz",
+      "size_bytes": 103282,
+      "sha256": "9f58032a71c50d329d9c51397e8579acbcaf57241550c98beec9bda5a9497c63",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "tidyselect/LICENSE": "584331bfefd34b51bffb5ecfd4f154eca37c642b98b34fe0bd5e80c077ba823e",
+        "tidyselect/DESCRIPTION": "ac14de7078f90245328c585b48cf464a8aff2eba21c1741c5dbedc619015a13d"
+      },
+      "dependencies": {
+        "Imports": "cli (>= 3.3.0), glue (>= 1.3.0), lifecycle (>= 1.0.3), rlang (>= 1.0.4), vctrs (>= 0.5.2), withr",
+        "Depends": "R (>= 3.4)"
+      },
+      "uncompressed_bytes": 438406,
+      "acquisition": "https",
+      "archive_root": "tidyselect"
+    },
+    {
+      "package": "dplyr",
+      "version": "1.2.1",
+      "filename": "dplyr_1.2.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/dplyr_1.2.1.tar.gz",
+      "size_bytes": 921588,
+      "sha256": "fbaccd3d0bbe7c29410581afd2aad0d57183c5867958b4678a69f959d0d2af43",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "dplyr/LICENSE": "add53f944f3d6baea3005489ec794341760114890b8d72665c912f09c703cde4",
+        "dplyr/DESCRIPTION": "ba519dfe90925495d8dc821da77fdcb54db4dc72167fbb2a05ddab3f8e06e971"
+      },
+      "dependencies": {
+        "Imports": "cli (>= 3.6.2), generics, glue (>= 1.3.2), lifecycle (>= 1.0.5), magrittr (>= 1.5), methods, pillar (>= 1.9.0), R6, rlang (>= 1.1.7), tibble (>= 3.2.0), tidyselect (>= 1.2.0), utils, vctrs (>= 0.7.1)",
+        "Depends": "R (>= 4.1.0)"
+      },
+      "uncompressed_bytes": 3028456,
+      "acquisition": "https",
+      "archive_root": "dplyr"
+    },
+    {
+      "package": "jsonlite",
+      "version": "2.0.0",
+      "filename": "jsonlite_2.0.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/jsonlite_2.0.0.tar.gz",
+      "size_bytes": 1051719,
+      "sha256": "887344a4c87300b3756614a2c403f6e00b0ad95ddd3b671dcbe0e8e9a1103841",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "jsonlite/LICENSE": "008725198f645358cbb93366529f71300cdc33586bbd0f071e5879a16bacbdb1",
+        "jsonlite/DESCRIPTION": "f16ee865f97ce4cfeddc771f3bf48a406ab061aa7a4955a67a22ed2e54a6e179"
+      },
+      "dependencies": {
+        "Depends": "methods"
+      },
+      "uncompressed_bytes": 2629289,
+      "acquisition": "https",
+      "archive_root": "jsonlite"
+    },
+    {
+      "package": "xgboost",
+      "version": "3.4.2.1",
+      "filename": "xgboost-src-3.4.2.tar.gz",
+      "source_repository": "https://github.com/dmlc/xgboost.git",
+      "commit": "fdf0888bedddbd444d72994d845c59b3ca182c5b",
+      "tag": "v3.4.2",
+      "sha256": "d7de76bdaf48e9e0bc84b27c0c42f15f3d831e624d102d6c019bab7027b3cabd",
+      "size_bytes": 2749031,
+      "archive_root": "xgboost",
+      "acquisition": "https",
+      "declared_license": "Apache License (== 2.0) | file LICENSE",
+      "terms_files": {
+        "xgboost/LICENSE": "b96f9cead5f4ea4c0a217bd9d879427443a353598fb72694f2d8c4428b53a6af",
+        "xgboost/R-package/DESCRIPTION": "f0720390f988de0cf1ebfc059a039941a9b07d16018cbd965f7cb862b2402031",
+        "xgboost/dmlc-core/LICENSE": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+        "xgboost/jvm-packages/xgboost4j/LICENSE": "5502ea71d43656e1835a12674a10b51223aa8f9b52da466522829f38e8ecf169",
+        "xgboost/jvm-packages/xgboost4j-example/LICENSE": "5502ea71d43656e1835a12674a10b51223aa8f9b52da466522829f38e8ecf169",
+        "xgboost/python-package/LICENSE": "b96f9cead5f4ea4c0a217bd9d879427443a353598fb72694f2d8c4428b53a6af"
+      },
+      "uncompressed_bytes": 11984785,
+      "bundled_data": [],
+      "url": "https://github.com/dmlc/xgboost/releases/download/v3.4.2/xgboost-src-3.4.2.tar.gz"
+    },
+    {
+      "package": "fastrmodels",
+      "version": "2.1.0",
+      "filename": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8.git.tar.gz",
+      "source_repository": "https://github.com/nflverse/fastrmodels.git",
+      "commit": "ca185baf7757c2992e57ce2bdf2f296c515465d8",
+      "tag": "v2.1.0",
+      "sha256": "5ca72cc3846ec15fecf68115bce6259ed045703c0f9a75589de422cfd34c3249",
+      "size_bytes": 16892643,
+      "archive_root": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8",
+      "acquisition": "git_archive",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/DESCRIPTION": "177cb16d0f864ec0bd829eee66a870af502ebf30f390fb6c962aa4be14a27878",
+        "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/LICENSE": "60975260144a10763bcaf235796cdb2e6a5d26a84a345cac4b9baaecb71dadc1",
+        "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/LICENSE.md": "21bc3a885c00b10a2849db55256494686442c8611d89d4ef06789554ba1e4dd5"
+      },
+      "uncompressed_bytes": 16908496,
+      "bundled_data": [
+        {
+          "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/cp_model.rda",
+          "size_bytes": 226864,
+          "sha256": "83e2e4103af509546bc86fcb382779631b935b69f833548d036de8cb4eea2fef",
+          "git_blob_sha1": "af689b30124964271f331275e5a28fcce226973f"
+        },
+        {
+          "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/ep_model.rda",
+          "size_bytes": 2864452,
+          "sha256": "fa45093d478fdd4534fa48860678ff99d597a67c340821db075c47fdab9102af",
+          "git_blob_sha1": "f1a434b6f6f67fcb2195d0aeb6cf5d7dd88c7a09"
+        },
+        {
+          "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/fg_model.rda",
+          "size_bytes": 351660,
+          "sha256": "5a6a4d82f438e43433851071e35ea9eb5f2aca93b2ffec6c06c933edb274386a",
+          "git_blob_sha1": "9d6e41ebd8abf3239b7cc1810b0fcf61dc7b4a00"
+        },
+        {
+          "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/wp_model.rda",
+          "size_bytes": 26776,
+          "sha256": "a073049d2e5362d386ce479b5b64b6e2abd58795c723f574eb5e092be20e5ea1",
+          "git_blob_sha1": "7774a41bb502daf99ce952244fbd5402c777d0ed"
+        },
+        {
+          "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/wp_model_spread.rda",
+          "size_bytes": 354988,
+          "sha256": "5b89562edb2e6fd9dd12fd686a51f05d76222db9eb625995ed93a693ae5e44cb",
+          "git_blob_sha1": "331c1f193bcf92769b02f40d87e9672f4f7cc304"
+        },
+        {
+          "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/xpass_model.rda",
+          "size_bytes": 3143952,
+          "sha256": "4dac05a3a6252fc00ba9237e91ba876c7f2d93264fe1c829c34f68bbe8f2764e",
+          "git_blob_sha1": "3218ddaed3911ca5176299ea6db2ff8aca52d883"
+        },
+        {
+          "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/xyac_model.rda",
+          "size_bytes": 9905024,
+          "sha256": "38530ea97de0675b2bbfdf385cf05e6fd159266c8ccfdd2b644d2210b3f3a97f",
+          "git_blob_sha1": "f844ef2bdc4e92e50335517882040fbd6d434d7a"
+        }
+      ]
+    },
+    {
+      "package": "globals",
+      "version": "0.20.0",
+      "filename": "globals_0.20.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/globals_0.20.0.tar.gz",
+      "size_bytes": 62972,
+      "sha256": "005af32b45990da5dc9d5b84770f47b3aa1ff94d07e793aab5721f47f7295b0b",
+      "declared_license": "LGPL (>= 2.1)",
+      "terms_files": {
+        "globals/DESCRIPTION": "b41595bae820db6ae95f0731eb734c324563a343b4c1768ad56aef3b3ae0e666"
+      },
+      "dependencies": {
+        "Imports": "codetools",
+        "Depends": "R (>= 3.1.2)"
+      },
+      "uncompressed_bytes": 260688,
+      "acquisition": "https",
+      "archive_root": "globals"
+    },
+    {
+      "package": "purrr",
+      "version": "1.2.2",
+      "filename": "purrr_1.2.2.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/purrr_1.2.2.tar.gz",
+      "size_bytes": 276877,
+      "sha256": "c350405bfe83815417206b1e23e7167a7bf596146ca2b0d492ab4f1a0ed496f4",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "purrr/LICENSE": "52814ff0b77d495ff6e4cea3e90a85bd235bc557f2cff2edf5070ecd7da680b7",
+        "purrr/DESCRIPTION": "57a1a1a1086572c8df4a7c3f356933290c2c751d0964729d04997416a1e72190"
+      },
+      "dependencies": {
+        "Imports": "cli (>= 3.6.1), lifecycle (>= 1.0.3), magrittr (>= 1.5.0), rlang (>= 1.1.1), vctrs (>= 0.6.3)",
+        "Depends": "R (>= 4.1)",
+        "LinkingTo": "cli"
+      },
+      "uncompressed_bytes": 857406,
+      "acquisition": "https",
+      "archive_root": "purrr"
+    },
+    {
+      "package": "digest",
+      "version": "0.6.39",
+      "filename": "digest_0.6.39.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/digest_0.6.39.tar.gz",
+      "size_bytes": 236391,
+      "sha256": "9376a3a438097e11048c37c71a14b633ac6c0a286bca068f32c86769f434d5ab",
+      "declared_license": "GPL (>= 2)",
+      "terms_files": {
+        "digest/DESCRIPTION": "5b2c0b4151f37ff37dd26f035e8de7a05368e00eab7dffdfcf1d00a8b0744a52"
+      },
+      "dependencies": {
+        "Imports": "utils",
+        "Depends": "R (>= 3.3.0)"
+      },
+      "uncompressed_bytes": 889245,
+      "acquisition": "https",
+      "archive_root": "digest"
+    },
+    {
+      "package": "listenv",
+      "version": "1.1.0",
+      "filename": "listenv_1.1.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/listenv_1.1.0.tar.gz",
+      "size_bytes": 56184,
+      "sha256": "7543e4b0a7c87cf7c01b98b740dc155df7f49851eb57cd20127d071d4c975d90",
+      "declared_license": "Apache License (>= 2)",
+      "terms_files": {
+        "listenv/DESCRIPTION": "4c0550ababdbb6daea3e729046339625191032f1b7c8b53d24a8e6d42165e1ef"
+      },
+      "dependencies": {
+        "Depends": "R (>= 3.1.2)"
+      },
+      "uncompressed_bytes": 250269,
+      "acquisition": "https",
+      "archive_root": "listenv"
+    },
+    {
+      "package": "parallelly",
+      "version": "1.48.0",
+      "filename": "parallelly_1.48.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/parallelly_1.48.0.tar.gz",
+      "size_bytes": 353597,
+      "sha256": "94c11033854e7cb26391ec214cfd58d4a0b83234589b6f48b40f9fedbdbcd2c0",
+      "declared_license": "LGPL (>= 2.1)",
+      "terms_files": {
+        "parallelly/DESCRIPTION": "1a4779e592c723268fbae83e5d6cbca2402a338d65c923414fa565111395e50f"
+      },
+      "dependencies": {
+        "Imports": "parallel, tools, utils"
+      },
+      "uncompressed_bytes": 970542,
+      "acquisition": "https",
+      "archive_root": "parallelly"
+    },
+    {
+      "package": "future",
+      "version": "1.80.0",
+      "filename": "future_1.80.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/future_1.80.0.tar.gz",
+      "size_bytes": 488800,
+      "sha256": "40e3236edc4ae57098919e9819bc32a33b64eb226a8f5d366f0cbe5bb5ac5637",
+      "declared_license": "Apache License (>= 2)",
+      "terms_files": {
+        "future/DESCRIPTION": "8deedeaea78fc02cf3cb280e4008a7db53c803ec5461bd110e8cf071d7ad3952"
+      },
+      "dependencies": {
+        "Imports": "digest, globals (>= 0.18.0), listenv (>= 0.8.0), parallel, parallelly (>= 1.44.0), tools, utils",
+        "Depends": "R (>= 3.2.0)"
+      },
+      "uncompressed_bytes": 1783198,
+      "acquisition": "https",
+      "archive_root": "future"
+    },
+    {
+      "package": "furrr",
+      "version": "0.4.0",
+      "filename": "furrr_0.4.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/furrr_0.4.0.tar.gz",
+      "size_bytes": 917082,
+      "sha256": "755e1b4c01156e638c5352ccac7a69f912cb2ff94812b49e7ff0f62cc8aac994",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "furrr/LICENSE": "877e1ce027105d7cdd4dba72d1a0c9d983f258ded412cb1108de3d345bb2388f",
+        "furrr/DESCRIPTION": "35cf70b379d93f40511b183546181a30bad4518b7c78ef4f0cdb1569e7be1c8c"
+      },
+      "dependencies": {
+        "Imports": "globals (>= 0.19.1), purrr (>= 1.2.1), rlang (>= 1.1.7), vctrs (>= 0.7.0)",
+        "Depends": "future (>= 1.70.0), R (>= 4.1.0)"
+      },
+      "uncompressed_bytes": 1115064,
+      "acquisition": "https",
+      "archive_root": "furrr"
+    },
+    {
+      "package": "hms",
+      "version": "1.1.4",
+      "filename": "hms_1.1.4.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/hms_1.1.4.tar.gz",
+      "size_bytes": 44918,
+      "sha256": "e0d8b18ee33c44ddbb918ff9e6d78ea851d9deed485e93fa9caa1d2a4878eca4",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "hms/LICENSE": "e13223dfdbc752320e1e29fbeecd4fbc010092fbec13842898d23c508ff94089",
+        "hms/DESCRIPTION": "120c2f1b87c8dfcd79663dbb27f95b5d47a68a3ef04f4a6c6b9664484be7ad4a"
+      },
+      "dependencies": {
+        "Imports": "cli, lifecycle, methods, pkgconfig, rlang (>= 1.0.2), vctrs (>= 0.3.8)"
+      },
+      "uncompressed_bytes": 96999,
+      "acquisition": "https",
+      "archive_root": "hms"
+    },
+    {
+      "package": "cpp11",
+      "version": "0.5.5",
+      "filename": "cpp11_0.5.5.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/cpp11_0.5.5.tar.gz",
+      "size_bytes": 305142,
+      "sha256": "34bd9f6a132b8d661f610a060fde090043463035239ad5ddaa01172797422030",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "cpp11/LICENSE": "84119b56da00767ba3cd75a7a0b37dd9bf974b8760fb425cb36bd72dcf004612",
+        "cpp11/DESCRIPTION": "8e5cf0610c18ad4ef9b99b81b4ea636530aab5a930a618312b3def5723edbdf9"
+      },
+      "dependencies": {
+        "Depends": "R (>= 4.0.0)"
+      },
+      "uncompressed_bytes": 1177955,
+      "acquisition": "https",
+      "archive_root": "cpp11"
+    },
+    {
+      "package": "timechange",
+      "version": "0.4.0",
+      "filename": "timechange_0.4.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/timechange_0.4.0.tar.gz",
+      "size_bytes": 104248,
+      "sha256": "dac57fe040aa56797c1242988f7ec0a979ffecd6a4d005dd44d75a0c7635795d",
+      "declared_license": "GPL (>= 3)",
+      "terms_files": {
+        "timechange/DESCRIPTION": "a1c990d71a5b0d4bb53d5f8f93d453f10c6ce7cde9471dd58afcda215713657d"
+      },
+      "dependencies": {
+        "Depends": "R (>= 3.3)",
+        "LinkingTo": "cpp11 (>= 0.2.7)"
+      },
+      "uncompressed_bytes": 458271,
+      "acquisition": "https",
+      "archive_root": "timechange"
+    },
+    {
+      "package": "lubridate",
+      "version": "1.9.5",
+      "filename": "lubridate_1.9.5.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/lubridate_1.9.5.tar.gz",
+      "size_bytes": 430138,
+      "sha256": "86f062164b0168cef5c8cab373969cf9ec82c6c23bfe11fd9295ae13f0d9ecdc",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "lubridate/LICENSE": "5b8fb47d16e59114dc3dfba7c37a2d82c03c3750796e15408b86431855bf37d9",
+        "lubridate/DESCRIPTION": "f2c79be47b38628d5ba7b3fdf987e15a32f355006f77e627b6ff944622816b43"
+      },
+      "dependencies": {
+        "Imports": "generics, timechange (>= 0.4.0)",
+        "Depends": "methods, R (>= 3.2)"
+      },
+      "uncompressed_bytes": 1357884,
+      "acquisition": "https",
+      "archive_root": "lubridate"
+    },
+    {
+      "package": "stringi",
+      "version": "1.8.9",
+      "filename": "stringi_1.8.9.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/stringi_1.8.9.tar.gz",
+      "size_bytes": 11910288,
+      "sha256": "d620eeaa1fe369fdd185e20db3137955e33f9b4c4ce05917dc1e89f106299f0a",
+      "declared_license": "file LICENSE",
+      "terms_files": {
+        "stringi/src/icu74/data/LICENSE": "17510cf7a58b4879b887ec05a45d72cf1b73544dd9ec7e72f20110ed104229ee",
+        "stringi/src/icu74/LICENSE": "c3953ee82357df6a4a6a67868175708c0ae9d6e7091490f8e3e72b22c41a91a6",
+        "stringi/LICENSE": "aa2208c8b3d4366266e15f9e7796282175b5fdc3b926808e655e6e60a267f19e",
+        "stringi/DESCRIPTION": "ebe77e48c2d9c9f8dbd0431d3900c0437fca34692436ba7094ec44345222f2e3"
+      },
+      "dependencies": {
+        "Imports": "tools, utils, stats",
+        "Depends": "R (>= 3.4)"
+      },
+      "uncompressed_bytes": 28672656,
+      "acquisition": "https",
+      "archive_root": "stringi"
+    },
+    {
+      "package": "stringr",
+      "version": "1.6.0",
+      "filename": "stringr_1.6.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/stringr_1.6.0.tar.gz",
+      "size_bytes": 195406,
+      "sha256": "c66051b1f2a81ec733c301ff7d3ff7b57c97f73d2b86e329b037b863f4c2010d",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "stringr/LICENSE": "cb49286564f685f984dfeded0641aacf3708e19f19615abd4f61782d1dac848a",
+        "stringr/DESCRIPTION": "31aef4d92798a6deebaf769cc3ec47d6399e50e9ee77587daf49b356fa2287fe"
+      },
+      "dependencies": {
+        "Imports": "cli, glue (>= 1.6.1), lifecycle (>= 1.0.3), magrittr, rlang (>= 1.0.0), stringi (>= 1.5.3), vctrs (>= 0.4.0)",
+        "Depends": "R (>= 4.1.0)"
+      },
+      "uncompressed_bytes": 638250,
+      "acquisition": "https",
+      "archive_root": "stringr"
+    },
+    {
+      "package": "snakecase",
+      "version": "0.11.1",
+      "filename": "snakecase_0.11.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/snakecase_0.11.1.tar.gz",
+      "size_bytes": 461764,
+      "sha256": "985e19231609af871fa45d09c299e31c50406917cccf71a0e8752b42f55b9c21",
+      "declared_license": "GPL-3",
+      "terms_files": {
+        "snakecase/DESCRIPTION": "a9ebe2beaa263d83e984154424d0ee3772cc64a40f3c5b7e4833b7e14950c1a3"
+      },
+      "dependencies": {
+        "Imports": "stringr, stringi",
+        "Depends": "R (>= 3.2)"
+      },
+      "uncompressed_bytes": 715479,
+      "acquisition": "https",
+      "archive_root": "snakecase"
+    },
+    {
+      "package": "tidyr",
+      "version": "1.3.2",
+      "filename": "tidyr_1.3.2.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/tidyr_1.3.2.tar.gz",
+      "size_bytes": 806700,
+      "sha256": "98d9f0ad269651df90403773169f6ff64de40c6c17444551a33e765a66f398e6",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "tidyr/LICENSE": "691e3cedf43e97386f568d4f6d14b6525d2c6954c248e06d12b911609e8fa5c4",
+        "tidyr/DESCRIPTION": "1ce97a9b784b2579527a160768a1f7d1a2c6dfbff615990c57fdada89cefea39"
+      },
+      "dependencies": {
+        "Imports": "cli (>= 3.4.1), dplyr (>= 1.1.0), glue, lifecycle (>= 1.0.3), magrittr, purrr (>= 1.0.1), rlang (>= 1.1.1), stringr (>= 1.5.0), tibble (>= 2.1.1), tidyselect (>= 1.2.1), utils, vctrs (>= 0.5.2)",
+        "Depends": "R (>= 4.1.0)",
+        "LinkingTo": "cpp11 (>= 0.4.0)"
+      },
+      "uncompressed_bytes": 2136184,
+      "acquisition": "https",
+      "archive_root": "tidyr"
+    },
+    {
+      "package": "janitor",
+      "version": "2.2.1",
+      "filename": "janitor_2.2.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/janitor_2.2.1.tar.gz",
+      "size_bytes": 233713,
+      "sha256": "ba6703b680ae8d51aaaa470341c5cd6f1c8bbfb7740d62cc2470f7aa55b74dab",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "janitor/LICENSE": "34cf60f015000f355bb246ccf1e8fe564be70de057290ce6e5c39d16d192d81e",
+        "janitor/DESCRIPTION": "82c608d3bb45f8cba8bf1adbeeb2dd669ca0945f4ed21fb49d519c8fd0e0560c"
+      },
+      "dependencies": {
+        "Imports": "dplyr (>= 1.0.0), hms, lifecycle, lubridate, magrittr, purrr, rlang, stringi, stringr, snakecase (>= 0.9.2), tidyselect (>= 1.0.0), tidyr (>= 0.7.0)",
+        "Depends": "R (>= 3.1.2)"
+      },
+      "uncompressed_bytes": 662480,
+      "acquisition": "https",
+      "archive_root": "janitor"
+    },
+    {
+      "package": "fastmap",
+      "version": "1.2.0",
+      "filename": "fastmap_1.2.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/fastmap_1.2.0.tar.gz",
+      "size_bytes": 47093,
+      "sha256": "460e2a3c423df89851f98f43de95827fd7c6b767366fb6cc23492834cf7171a2",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "fastmap/LICENSE.note": "c2d3373acba6107468ee36447b901e620f7c8744e35b3a3d9ee53018b830ac87",
+        "fastmap/LICENSE": "88cb13bc72ae6e9422255d9923b9666f0aedbaaf8d0462f55bd09282d4d7fd28",
+        "fastmap/DESCRIPTION": "fa3f76ca65cc6dbbaba3f90247f4fbbabb4c9929eda906d1bef87dd90e9ed400"
+      },
+      "dependencies": {},
+      "uncompressed_bytes": 206958,
+      "acquisition": "https",
+      "archive_root": "fastmap"
+    },
+    {
+      "package": "cachem",
+      "version": "1.1.0",
+      "filename": "cachem_1.1.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/cachem_1.1.0.tar.gz",
+      "size_bytes": 26841,
+      "sha256": "b6aad32383658fb598616355d512c89527aa21512fc7fb53e586d134b06a17b6",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "cachem/LICENSE": "8841acac0442c5454cd9e9dbde2ccf355c16aaa542c728e634fe67cf351c98e3",
+        "cachem/DESCRIPTION": "83dc6086fa8306e1cb38c98e7721d73ba1de887e24736a6d674d31959000e5e4"
+      },
+      "dependencies": {
+        "Imports": "rlang, fastmap (>= 1.2.0)"
+      },
+      "uncompressed_bytes": 103633,
+      "acquisition": "https",
+      "archive_root": "cachem"
+    },
+    {
+      "package": "memoise",
+      "version": "2.0.1",
+      "filename": "memoise_2.0.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/memoise_2.0.1.tar.gz",
+      "size_bytes": 17879,
+      "sha256": "d2c1018e70a8548bbf959cf82e5f054588c9cb63a9ecfb21028931cf0061a48b",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "memoise/LICENSE": "728149b1a13e7dce2e5ebf88bf86cce3c98db357a4cf60fc06fb1ae7d5d341b8",
+        "memoise/DESCRIPTION": "cab0d70d25739b74fa8c6b256ed74929b971074ddd9a56ce8d619ceedb9f4045"
+      },
+      "dependencies": {
+        "Imports": "rlang (>= 0.4.10), cachem"
+      },
+      "uncompressed_bytes": 57802,
+      "acquisition": "https",
+      "archive_root": "memoise"
+    },
+    {
+      "package": "rappdirs",
+      "version": "0.3.4",
+      "filename": "rappdirs_0.3.4.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/rappdirs_0.3.4.tar.gz",
+      "size_bytes": 11806,
+      "sha256": "4bce5bc6793efc13668c91908c47b90f58e6851a1b06b0bf490f0c401a76526f",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "rappdirs/LICENSE": "a7555719326cdc416539732b467e320d588ed4b31c42be0916e4ec95d75a2df3",
+        "rappdirs/DESCRIPTION": "633444dd70306ccaead107002b004727dee2c56276c7d4706a650b1b5fa5c6c8"
+      },
+      "dependencies": {
+        "Depends": "R (>= 4.1)"
+      },
+      "uncompressed_bytes": 44485,
+      "acquisition": "https",
+      "archive_root": "rappdirs"
+    },
+    {
+      "package": "nflreadr",
+      "version": "1.5.1",
+      "filename": "nflreadr_1.5.1.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/nflreadr_1.5.1.tar.gz",
+      "size_bytes": 176798,
+      "sha256": "780e7561d6a86890e546baa84c6e837ef9c0abd6e695291240dc7e522738a6e2",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "nflreadr/LICENSE": "4ce0fefc658b28afcfcd9e59d9b0a4c92e47ff7c2dfeda89e43102c33d116642",
+        "nflreadr/DESCRIPTION": "fb07d140a3bd5e8746df5bfbee14e8c6715dfe815c447724e460ce7538501f1c"
+      },
+      "dependencies": {
+        "Imports": "cachem (>= 1.0.0), cli (>= 3.0.0), curl (>= 4.3.0), data.table (>= 1.14.0), glue (>= 1.4.0), lifecycle, memoise (>= 2.0.0), methods, rappdirs (>= 0.3.0), rlang (>= 0.4.10), tools, utils",
+        "Depends": "R (>= 4.1.0)"
+      },
+      "uncompressed_bytes": 745951,
+      "acquisition": "https",
+      "archive_root": "nflreadr"
+    },
+    {
+      "package": "progressr",
+      "version": "1.1.0",
+      "filename": "progressr_1.1.0.tar.gz",
+      "url": "https://packagemanager.posit.co/cran/2026-10-24/src/contrib/progressr_1.1.0.tar.gz",
+      "size_bytes": 664996,
+      "sha256": "341e3e8c116cda94f712b98fcfe84fb2d47f663558ed59a6da9f956b5ab36a0e",
+      "declared_license": "Apache License (>= 2)",
+      "terms_files": {
+        "progressr/DESCRIPTION": "279770cafcdba1fb60528c067f9b573c1f90b01701a3e8df1c0c531a4b1953aa"
+      },
+      "dependencies": {
+        "Imports": "tools, utils",
+        "Depends": "R (>= 3.5.0)"
+      },
+      "uncompressed_bytes": 4383553,
+      "acquisition": "https",
+      "archive_root": "progressr"
+    },
+    {
+      "package": "nflfastR",
+      "version": "6.0.0",
+      "filename": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5.git.tar.gz",
+      "source_repository": "https://github.com/nflverse/nflfastR.git",
+      "commit": "917b14e5085f352d9b00d23628759773e7d411b5",
+      "tag": "v6.0.0",
+      "sha256": "bcbffa24e4bf24adc679d224a38725bb00104c3a29775ed475faac931e51944a",
+      "size_bytes": 5313366,
+      "archive_root": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5",
+      "acquisition": "git_archive",
+      "declared_license": "MIT + file LICENSE",
+      "terms_files": {
+        "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/DESCRIPTION": "4b3650e115424d8ad6492036f31e24b0608b2b8fa17d9a4ce95992e56ab25133",
+        "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/LICENSE": "1506b032c00cbfa475208432f82e2c1d3ee8528f2d2a3c3385fa3d30f170bd61",
+        "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/LICENSE.md": "c4c1517a557e81d9bebb5ab316fafe92c39b54531edce402a13e832e8c0b6db4"
+      },
+      "uncompressed_bytes": 6491121,
+      "bundled_data": [
+        {
+          "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/field_descriptions.rda",
+          "size_bytes": 7578,
+          "sha256": "be3116dcbcc02ab98190618ae1f6e143f1dcf30447a6fdcc2460f62b9f01d374",
+          "git_blob_sha1": "e89a517896c0e70129edcb68446f62a23fe270df"
+        },
+        {
+          "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/nfl_stats_variables.rda",
+          "size_bytes": 3610,
+          "sha256": "9d8936cf01abe258c19d6a3ce64505607bad6fe9fbaca9d078f6de1cfe85d306",
+          "git_blob_sha1": "0985355ca6f650eb93a6a984a1c47e5f729f0da5"
+        },
+        {
+          "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/stat_ids.rda",
+          "size_bytes": 4679,
+          "sha256": "fae9f4f5ea765be9529fa91a56b9575e332eb1b58a98acebd0af66efaf7e3bad",
+          "git_blob_sha1": "ed941c89a48b3d7f090738c033945134b7335a27"
+        },
+        {
+          "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/teams_colors_logos.rda",
+          "size_bytes": 2891,
+          "sha256": "4540d5b839eecfe68ab9896b9796122f80871d114d3776adfcf53ccb877870d1",
+          "git_blob_sha1": "9b0170e4e775e3e6713a8312e6d054c8c953e6ac"
+        }
+      ]
+    }
+  ]
+}

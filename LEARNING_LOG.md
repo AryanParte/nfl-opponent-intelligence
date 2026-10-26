@@ -2305,3 +2305,74 @@ and transitive terms/hashes, lock the isolated inference environment, verify ins
 EP bytes and produce/replay the actual fixed-corpus R capture. Preserve all pins
 and gates; independent Python parity, calibration, API/UI and ranking remain later.
 No merge, auto-merge or change to the existing 8 AM automation.
+
+## 2026-10-26 — Native XGBoost build and pinned R reference sources (P1.6)
+
+**Built / why:** after PR #31 merged at `142e38d`, verified the clean canonical
+clone, all eight main CI jobs and no open PR/review work. Started
+`codex/ep-r-runtime-lock` from fetched main. Verified and compiled upstream R
+XGBoost 3.4.2.1 in the pinned R 4.6.1 ARM64 image, without using the mirror's older
+version. Locked 43 R source distributions, notices/hashes and install order;
+added bounded explicit acquisition, no-clobber cache publication and verified
+offline build-context preparation. This resolves the XGBoost source-build
+prerequisite, not the entire R reference. The full install was attempted and
+stopped at R `curl` 8.1.0: missing `curl/curl.h`; pkg-config is also absent.
+
+**Review files:** `validation/ep_sources.py`, `ep_runtime.lock.json`,
+`ep_runtime.Dockerfile`, `ep_install.R`, `ep_runtime_check.R`,
+`tests/test_ep_sources.py`, `docs/EP_RUNTIME.md`, and the native-runtime,
+bundled-source-assets and build-failure receipts under `docs/evidence/`.
+ROADMAP/STATUS/README/protocol/architecture preserve the exact unfinished boundary.
+
+**Sports concepts:** loading an inference library does not validate an EP model,
+its seven-class probabilities, historical availability or football quality. State
+EP is still not a Run/Pass action value. Complete upstream packages bundle other
+models and game/expected-output fixtures; these were inventoried, not used as
+observations or golden predictions. No new football analysis or ranking occurred.
+
+**Software/statistical concepts / learn:** source locks and native environment
+locks solve different problems. Matching declared R package versions is not
+enough: retain archive, compiler, shared-library and model identities separately.
+Git commit pins plus archive hashes detect moved tags or changed archive output.
+Offline failure is useful evidence: missing headers are not model incompatibility.
+Package terms do not establish separate dataset rights or training lineage.
+
+**Three review questions:**
+
+1. Why can XGBoost load successfully while the full nflfastR reference still fails,
+   and what must the next native-dependency lock record?
+2. How do source hashes, exact Git commits, no-clobber publication and verified
+   build contexts prevent partial or changed downloads from becoming trusted inputs?
+3. Why do native loadability and bundled expected-output fixtures establish neither
+   our model-parity result nor a defensible Run/Pass recommendation?
+
+**Verification / self-review:** baseline 331 core / 24 API tests passed on Python
+3.13. Final 347 core / 24 API tests passed on each Python 3.11/3.12/3.13, API
+warnings as errors and no broken dependencies. All 672 frontend tests,
+TypeScript/build and 14 Chromium cases passed first attempt without relaxed settings.
+Sixteen new tests run offline without Docker/R/network. All 43 cached archives
+verify; fresh Git acquisition through the finished helper reproduced both nflverse
+archive hashes. The unprivileged/read-only/network-disabled native check reproduced
+identical JSON twice with one CPU/thread, recording 34 installed R packages and
+20 linked native-library hashes. This is replay evidence, not proof of independent
+bit-for-bit rebuild reproducibility. The full reference failure/log identity is
+retained; no model prediction, installed EP equality or Python parity is claimed.
+
+Review fixed normalized duplicate archive paths, bound context identity to both
+lock and installer, added successful exact-commit Git/reuse coverage and preserved
+corrupt/stale cache state. The R config setter's visible return was suppressed so
+the final check emits valid JSON only. Reviewed retained dependency notices and
+inventoried seven fastrmodels models, 19 nflfastR and 27 nflreadr data-like assets.
+No binaries/data contents are committed. Test-owned servers exited; Docker was
+restored to its prior stopped state with images/caches/logs retained. No global R,
+system developer setting, production dependency, API fixture or automation changed.
+Published SHA, attribution and exact-head CI are recorded in the PR.
+
+**Remaining / next:** lock missing native development dependencies, starting with
+libcurl headers/pkg-config and auditing remaining system requirements. Record exact
+package/source snapshots, terms/hashes and any base-library changes; no floating
+upgrade or silent pin change. Reuse the verified sources/native layer, finish the
+offline reference install, verify installed EP bytes and capture/replay actual
+features/probabilities for the unchanged corpus. This is autonomous setup work,
+not an access request. Independent Python parity, calibration and model/API/UI
+integration remain later. No merge, auto-merge or change to the 8 AM automation.

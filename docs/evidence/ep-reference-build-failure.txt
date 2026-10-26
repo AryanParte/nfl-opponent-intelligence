@@ -1,0 +1,18 @@
+Observed 2026-10-26. Offline full-reference source installation attempt.
+Source lock SHA-256: 8cf79dc35c2b433acd4a0c67b8392faacd035bbc023e1bafe3f1f215e7fdd194
+Full local log: .cache/ep-reference/runtime-build-2026-10-26.log
+Log digest is retained in ep-native-runtime.json. Excerpt (not a complete log):
+
+#12 7.532 * DONE (cli)
+#12 7.797 * installing *source* package ‘curl’ ...
+#12 7.797 ** this is package ‘curl’ version ‘8.1.0’
+#12 7.961 Configuration failed because libcurl was not found. Try installing:
+#12 7.961  * deb: libcurl4-openssl-dev (Debian, Ubuntu, etc)
+#12 7.962 <stdin>:1:10: fatal error: curl/curl.h: No such file or directory
+#12 7.962 compilation terminated.
+#12 7.962 ERROR: configuration failed for package ‘curl’
+#12 7.967 Error: status == 0L is not TRUE
+#12 7.967 Execution halted
+
+This is a missing native build dependency, not an EP prediction/parity failure.
+No model inference occurred. The source lock and failed cache/log are preserved.

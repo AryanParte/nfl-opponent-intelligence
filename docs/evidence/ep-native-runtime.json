@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "local_image_id": "sha256:75a9832d4d43162a054d65b6a455724cd6b2ebb662a51e1c9020ca15c04a2793",
+  "base_image": "rocker/r-ver@sha256:fb487cf8a2029fc1dbc17621cf41ac913d49ac74a1ff9e27bf9bbc982e55d08d",
+  "source_lock_sha256": "8cf79dc35c2b433acd4a0c67b8392faacd035bbc023e1bafe3f1f215e7fdd194",
+  "dockerfile_sha256": "00502d7a099bf05743d14d909175eb943d47d93310c3b856ca222907109658ca",
+  "runner_sha256": "d7b1c6899698d1aa0b97fddfda60d0f6d0d49aeeb3c43013e5647a83fa99e77d",
+  "native_receipt": {
+    "status": "xgboost_native_stage_verified_reference_incomplete",
+    "r_version": "4.6.1",
+    "platform": "aarch64-unknown-linux-gnu",
+    "compiler": "13.3.0",
+    "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+    "installed_packages": [
+      {
+        "Package": "base",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "boot",
+        "Version": "1.3-32",
+        "License": "Unlimited"
+      },
+      {
+        "Package": "class",
+        "Version": "7.3-23",
+        "License": "GPL-2 | GPL-3"
+      },
+      {
+        "Package": "cluster",
+        "Version": "2.1.8.2",
+        "License": "GPL (>= 2)"
+      },
+      {
+        "Package": "codetools",
+        "Version": "0.2-20",
+        "License": "GPL"
+      },
+      {
+        "Package": "compiler",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "data.table",
+        "Version": "1.18.6.1",
+        "License": "MPL-2.0 | file LICENSE"
+      },
+      {
+        "Package": "datasets",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "docopt",
+        "Version": "0.7.2",
+        "License": "MIT + file LICENSE"
+      },
+      {
+        "Package": "foreign",
+        "Version": "0.8-91",
+        "License": "GPL (>= 2)"
+      },
+      {
+        "Package": "graphics",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "grDevices",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "grid",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "jsonlite",
+        "Version": "2.0.0",
+        "License": "MIT + file LICENSE"
+      },
+      {
+        "Package": "KernSmooth",
+        "Version": "2.23-26",
+        "License": "Unlimited"
+      },
+      {
+        "Package": "lattice",
+        "Version": "0.22-9",
+        "License": "GPL (>= 2)"
+      },
+      {
+        "Package": "littler",
+        "Version": "0.3.23",
+        "License": "GPL (>= 2)"
+      },
+      {
+        "Package": "MASS",
+        "Version": "7.3-65",
+        "License": "GPL-2 | GPL-3"
+      },
+      {
+        "Package": "Matrix",
+        "Version": "1.7-5",
+        "License": "GPL (>= 2) | file LICENCE"
+      },
+      {
+        "Package": "methods",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "mgcv",
+        "Version": "1.9-4",
+        "License": "GPL (>= 2)"
+      },
+      {
+        "Package": "nlme",
+        "Version": "3.1-169",
+        "License": "GPL (>= 2)"
+      },
+      {
+        "Package": "nnet",
+        "Version": "7.3-20",
+        "License": "GPL-2 | GPL-3"
+      },
+      {
+        "Package": "parallel",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "rpart",
+        "Version": "4.1.27",
+        "License": "GPL-2 | GPL-3"
+      },
+      {
+        "Package": "spatial",
+        "Version": "7.3-18",
+        "License": "GPL-2 | GPL-3"
+      },
+      {
+        "Package": "splines",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "stats",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "stats4",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "survival",
+        "Version": "3.8-6",
+        "License": "LGPL (>= 2)"
+      },
+      {
+        "Package": "tcltk",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "tools",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "utils",
+        "Version": "4.6.1",
+        "License": "Part of R 4.6.1"
+      },
+      {
+        "Package": "xgboost",
+        "Version": "3.4.2.1",
+        "License": "Apache License (== 2.0) | file LICENSE"
+      }
+    ],
+    "xgboost_library_sha256": "fa44998f3e77911399a18dcfa7c818b6f997ac6cdaafb2d7aa30e8f1eb899ab0",
+    "linked_native_libraries": [
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libblas.so.3",
+        "sha256": "d1067c9951f399d9f073027a4f550b7ac4e2642de36cf8fef9aa0c1728dd7e6f"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libbz2.so.1.0",
+        "sha256": "ac19913f44443f68f2e3ca29d79caaa785cd257bb424b028234bb4a2e8745c07"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libc.so.6",
+        "sha256": "0f1905dc27dbc6715875c70527bc8da846a10084c9c483e9d8ff76dce8d69d0e"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libdeflate.so.0",
+        "sha256": "fc8c2ebe21ec4eebfccabcd6618b216a1bcf9a55dfc38c5af26e3b0ab835f4eb"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libgcc_s.so.1",
+        "sha256": "f2d3ad2bf0b61f6bc944cc37d7b6ab7f88d2582b41ff989ca164803f56cc5f20"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libgfortran.so.5",
+        "sha256": "91ee38590e45e4702ee8d275c13e556384cf3ba3b1ac0a163921c5dd036a462a"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libgomp.so.1",
+        "sha256": "33c8bcb7d33228fe5101bfeb201bcaff4563d4ecf09497229b9deba522ebaf3d"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libicudata.so.74",
+        "sha256": "96b1154b9ab94cfc908c0fe745edc128ee3f67e444c66e2d7a9cf06664df9255"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libicui18n.so.74",
+        "sha256": "7bd69f1141097e7d127cdf3436fa7448dc7925bf2e3da0fdf028e94ec2e69243"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libicuuc.so.74",
+        "sha256": "9d58137df08c36a03417445cc39576b0a95b538bdf0733f5455d2255deb9b799"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/liblzma.so.5",
+        "sha256": "47ea0f43683ef829cda43bfe1862c1b06f085fbd813bb58d2d142477f5380139"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libm.so.6",
+        "sha256": "5e0391562de36de323fb9cb0f2c1b6bd6d034c840b1dac018499f5fe4ded1b4a"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libopenblas.so.0",
+        "sha256": "4f04c974ceb53b9bad6b6dc5d606881450e3a8835837ad07c4636d10c8acfe81"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libpcre2-8.so.0",
+        "sha256": "aa4e91ff910dbb8e40472ed4fcaaeebfef19ad13fe925d9ed8e22e87d45ce13b"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libreadline.so.8",
+        "sha256": "926b1d5d4793773021fb3383d797241323a1b68fb2eb4863e67cdf006dddf603"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libstdc++.so.6",
+        "sha256": "6e3112d35cfc86db7ee85b27e1746f67408e2837ff8628b46386c3eabd5682a4"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libtinfo.so.6",
+        "sha256": "2d2f2bb5a2dd09a3f54dfe7847a7f601203a0e3fed210cb58df740d07989f554"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libz.so.1",
+        "sha256": "e3bc90ee8cce46778c2f46c2a3e580d3b930f7b455910f25ea400a0b797fb9dc"
+      },
+      {
+        "path": "/usr/lib/aarch64-linux-gnu/libzstd.so.1",
+        "sha256": "fe726238b170b83aa83bf1f8a79109b8b61b9eb45234304511d093bbe5f5fb20"
+      },
+      {
+        "path": "/usr/local/lib/R/lib/libR.so",
+        "sha256": "7d384c31819a7c68ad9397f0ae026e297ac23e60588abe5718f940c2bf7b60e3"
+      }
+    ],
+    "xgboost_config": {
+      "nthread": 1,
+      "use_cuda_async_pool": false,
+      "use_rmm": false,
+      "verbosity": 1
+    },
+    "curl_headers_present": false,
+    "pkg_config_present": false,
+    "nflfastr_installed": false,
+    "full_reference_ready": false,
+    "model_executed": false,
+    "predictive_validation": false
+  },
+  "offline_repeat_identical": true,
+  "full_reference_build": {
+    "status": "failed",
+    "package": "curl",
+    "version": "8.1.0",
+    "reason": "curl/curl.h not found; libcurl development headers absent",
+    "log_sha256": "b9d901e373cf423c42c8cb97f23f28c15871c8ec67276bb3d1275f8a2f2c43a9"
+  },
+  "model_predictions_available": false
+}

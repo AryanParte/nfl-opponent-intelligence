@@ -57,9 +57,12 @@ terms and unverified training lineage. It also defers runtime use. The
 as the first reference, followed by Python reuse of the same verified bytes.
 Its synthetic corpus and capture checks are implemented. The
 [EP acquisition/preflight](docs/EP_ACQUISITION.md) now verifies the package container
-and inspects its raw object in a pinned, offline R sandbox. No model predictions
-exist yet: the intended XGBoost version needs a separate source build/lock before
-the R reference capture. No production model integration is implied.
+and inspects its raw object in a pinned, offline R sandbox. The
+[native runtime prerequisite](docs/EP_RUNTIME.md) now verifies an offline source
+build of R XGBoost 3.4.2.1 and pins 43 R source distributions. The full reference
+install stopped at missing libcurl development headers; native dependencies and
+the actual R capture remain unfinished. No model predictions or production model
+integration are claimed.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.

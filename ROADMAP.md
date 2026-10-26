@@ -25,8 +25,11 @@ P1.6's [nfl4th](docs/NFL4TH_AUDIT.md) and
 [fastrmodels EP/WP](docs/FASTRMODELS_AUDIT.md) interface audits are complete with
 runtime integration deferred. The [EP-only reference strategy/protocol](docs/EP_REFERENCE_PROTOCOL.md)
 is now implemented with synthetic input/capture checks. The pinned EP container
-is acquired and inspected in an offline R sandbox. Next is resolving the isolated
-inference runtime/source build and actual R capture, not a model endpoint or ranking.
+is acquired and inspected in an offline R sandbox. The
+[native runtime prerequisite](docs/EP_RUNTIME.md) verifies XGBoost's source build
+and pins R sources; the full reference is blocked at missing libcurl headers.
+Next is the native dependency lock/full installation and actual R capture, not a
+model endpoint or ranking.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -249,13 +252,22 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       object and its distinct payload hash; [evidence/replay](docs/EP_ACQUISITION.md).
       Twenty offline tests plus real container replay pass. No XGBoost inference,
       installed-package equality or predictions. The full R-capture item stays open.
-- [ ] **Next unit:** reuse the verified EP snapshot; resolve/verify XGBoost 3.4.2.1's
-      source-build route and transitive runtime terms/hashes, then lock the isolated
-      R reference. The dated mirror offers 3.2.1.1 and the requested package URLs
-      returned 404; do not silently downgrade. Verify installed package EP bytes,
-      capture actual features/probabilities for the fixed corpus and reproduce
-      offline, or record a concrete build/terms failure. No Python serving
-      integration, WP, real-data enrichment or API/UI.
+- [x] Native runtime/source-lock prerequisite (2026-10-26): verify/build upstream
+      R XGBoost 3.4.2.1 in pinned R 4.6.1 ARM64, without a downgrade. Pin 43 R source
+      distributions, retained terms/hashes and ordered offline installation; add
+      bounded no-clobber setup and 16 offline regression tests. Inventory bundled
+      models/data-like fixtures without using them as predictions or observations.
+      Native-stage receipts reproduce identically offline; full reference install
+      stops at `curl/curl.h` missing. [Evidence/replay](docs/EP_RUNTIME.md).
+      This source lock is not a complete native lock or a prediction capture.
+- [ ] **Next unit:** reuse the verified EP/source cache and native build layer;
+      resolve/verify libcurl development headers, pkg-config and remaining native
+      requirements with exact package/source snapshot, terms and hashes. Finish
+      the offline reference installation and record its full environment. Verify
+      installed package EP bytes, capture actual features/probabilities for the
+      unchanged fixed corpus and replay offline, or record a concrete build/terms
+      failure. No floating upgrades, silent pin changes, Python serving integration,
+      WP, real-data enrichment or API/UI. The full R-capture gate remains open.
 - [ ] Independently test golden examples, transformations, possession/time/OT
       boundaries and runtime parity using the predeclared protocol before any EP/WP
       integration. The Python candidate must be independent of the oracle. Version models,
