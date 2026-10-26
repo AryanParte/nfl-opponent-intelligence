@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "scope": "Data-like files bundled with pinned nflverse source packages; filenames/hashes only, not loaded, analyzed or independently data-licensed by this run",
+  "package_source_lock": "validation/ep_runtime.lock.json",
+  "packages": {
+    "fastrmodels": [
+      {
+        "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/cp_model.rda",
+        "size_bytes": 226864,
+        "sha256": "83e2e4103af509546bc86fcb382779631b935b69f833548d036de8cb4eea2fef",
+        "git_blob_sha1": "af689b30124964271f331275e5a28fcce226973f"
+      },
+      {
+        "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/ep_model.rda",
+        "size_bytes": 2864452,
+        "sha256": "fa45093d478fdd4534fa48860678ff99d597a67c340821db075c47fdab9102af",
+        "git_blob_sha1": "f1a434b6f6f67fcb2195d0aeb6cf5d7dd88c7a09"
+      },
+      {
+        "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/fg_model.rda",
+        "size_bytes": 351660,
+        "sha256": "5a6a4d82f438e43433851071e35ea9eb5f2aca93b2ffec6c06c933edb274386a",
+        "git_blob_sha1": "9d6e41ebd8abf3239b7cc1810b0fcf61dc7b4a00"
+      },
+      {
+        "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/wp_model.rda",
+        "size_bytes": 26776,
+        "sha256": "a073049d2e5362d386ce479b5b64b6e2abd58795c723f574eb5e092be20e5ea1",
+        "git_blob_sha1": "7774a41bb502daf99ce952244fbd5402c777d0ed"
+      },
+      {
+        "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/wp_model_spread.rda",
+        "size_bytes": 354988,
+        "sha256": "5b89562edb2e6fd9dd12fd686a51f05d76222db9eb625995ed93a693ae5e44cb",
+        "git_blob_sha1": "331c1f193bcf92769b02f40d87e9672f4f7cc304"
+      },
+      {
+        "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/xpass_model.rda",
+        "size_bytes": 3143952,
+        "sha256": "4dac05a3a6252fc00ba9237e91ba876c7f2d93264fe1c829c34f68bbe8f2764e",
+        "git_blob_sha1": "3218ddaed3911ca5176299ea6db2ff8aca52d883"
+      },
+      {
+        "path": "fastrmodels-ca185baf7757c2992e57ce2bdf2f296c515465d8/data/xyac_model.rda",
+        "size_bytes": 9905024,
+        "sha256": "38530ea97de0675b2bbfdf385cf05e6fd159266c8ccfdd2b644d2210b3f3a97f",
+        "git_blob_sha1": "f844ef2bdc4e92e50335517882040fbd6d434d7a"
+      }
+    ],
+    "nflreadr": [
+      {
+        "path": "nflreadr/data/dictionary_ff_playerids.rda",
+        "size_bytes": 1487,
+        "sha256": "6140d68b27b3f60e168d96481e8190356a664b1a1a60a6f9266afd584ed35ce2",
+        "git_blob_sha1": "52ca16d23bf383f38f6966d44d73467af889d535"
+      },
+      {
+        "path": "nflreadr/data/player_name_mapping.rda",
+        "size_bytes": 2252,
+        "sha256": "a81df30cf4c4fe5d2a901fb6a4b5af47dfc2e5a493cf16244063b649d6dd6326",
+        "git_blob_sha1": "1cd7010bfc88753ebc491f4b62d8c7d4a059255e"
+      },
+      {
+        "path": "nflreadr/data/team_abbr_mapping_norelocate.rda",
+        "size_bytes": 1115,
+        "sha256": "1a0c85db7518825e66a4cf92e93213baaec56c1cef2e5a214d3277ce7ef4f332",
+        "git_blob_sha1": "9c1f1afcc0770b378c97a40f1d7af9c2ecc412b7"
+      },
+      {
+        "path": "nflreadr/data/dictionary_ftn_charting.rda",
+        "size_bytes": 1271,
+        "sha256": "5a2675d32122dd86150c3bf30781a3e7ab4f28aae7bd6b9c012dbf76b36c9efc",
+        "git_blob_sha1": "f6ffd3bafd073b551a0dfc3b94acab9de93f2bb0"
+      },
+      {
+        "path": "nflreadr/data/dictionary_roster_status.rda",
+        "size_bytes": 732,
+        "sha256": "bd3c6e1a1d12ce888ed07b4aa9811a2508c5311fb2c4923228d3003e98fecbb4",
+        "git_blob_sha1": "ecf79d9efd8131eeca1b15cca6e5bd1a9017c0b9"
+      },
+      {
+        "path": "nflreadr/data/dictionary_team_stats.rda",
+        "size_bytes": 2375,
+        "sha256": "265460269aebdf756cef4952eef446a672153fea8e3a1247bab852304cb19fc7",
+        "git_blob_sha1": "838511859935bd60b7d4cbb1e12bfb1102369153"
+      },
+      {
+        "path": "nflreadr/data/dictionary_espn_qbr.rda",
+        "size_bytes": 952,
+        "sha256": "19743a560935c9933db94999e83a1c0b608efb9fccae5aa614243bd2e3a09bfa",
+        "git_blob_sha1": "59ee48a7c9238c075894bff550c117b04089ec68"
+      },
+      {
+        "path": "nflreadr/data/dictionary_combine.rda",
+        "size_bytes": 651,
+        "sha256": "73efe6f7f3596a23ee86cc40602da71be79dba0393047df76f8773cb2fc8223b",
+        "git_blob_sha1": "ea6b26465f560fb70a325339fac5aaed615e4a25"
+      },
+      {
+        "path": "nflreadr/data/dictionary_trades.rda",
+        "size_bytes": 512,
+        "sha256": "6751b1db6b00027a134e887e8798da9cf14e92293efd563e53418b0209522127",
+        "git_blob_sha1": "2457824253c0618c8fe14649df5fd9383328cae1"
+      },
+      {
+        "path": "nflreadr/data/dictionary_depth_charts.rda",
+        "size_bytes": 630,
+        "sha256": "392bda47d6e402fe0cb61ef890ebd8d8e7437303f3d037fcbf05d4d9e28a7c1a",
+        "git_blob_sha1": "84f251b1f58f5682817e2c15905e06bfddb32056"
+      },
+      {
+        "path": "nflreadr/data/dictionary_ff_opportunity.rda",
+        "size_bytes": 4274,
+        "sha256": "88865cfe99c72f28b4b795552180cb6cba4b47b52f9417feced9d19249d028fa",
+        "git_blob_sha1": "60712b64a26d352d8c2a8b8097a42fe99c6fb791"
+      },
+      {
+        "path": "nflreadr/data/dictionary_draft_picks.rda",
+        "size_bytes": 965,
+        "sha256": "ed15c536b53f7ce2b0086cd61cffaf06800c7e3e0a5d3156cccdd61b67982f69",
+        "git_blob_sha1": "457558516c7a5859073f2177c588481e16ece0f5"
+      },
+      {
+        "path": "nflreadr/data/dictionary_pfr_passing.rda",
+        "size_bytes": 641,
+        "sha256": "3a6768b16679b013a8419e423f0604bd07545d022112e7d5b77c97033e96b062",
+        "git_blob_sha1": "0b99b67922101e9dcaf64cce828cba771ace729d"
+      },
+      {
+        "path": "nflreadr/data/dictionary_participation.rda",
+        "size_bytes": 1362,
+        "sha256": "eae4f3c94e320661be139be7b590e64948b03c1895954b4f7fbad25935bf6689",
+        "git_blob_sha1": "23e725efc73ff88385ac77eb771adce1ad32e724"
+      },
+      {
+        "path": "nflreadr/data/dictionary_injuries.rda",
+        "size_bytes": 662,
+        "sha256": "9eda23c76befde17ced3ca0f34298f11b259e5b0402ccb2fd3749901a01a0a2c",
+        "git_blob_sha1": "b97fb2ce8f82c6955444856657f281982ca87fde"
+      },
+      {
+        "path": "nflreadr/data/team_abbr_mapping.rda",
+        "size_bytes": 1071,
+        "sha256": "17f333f5d60b08c66a1ef8b4a8e52b2b63c504d49ccf447c8413f4a30cdd2a1c",
+        "git_blob_sha1": "718b0ab7c64383a4b3f322b84810a1941a1e9072"
+      },
+      {
+        "path": "nflreadr/data/dictionary_players.rda",
+        "size_bytes": 1165,
+        "sha256": "013c94a471a10bedb03a6888d2d3d886ec2f613637300e9918b06921d24e049e",
+        "git_blob_sha1": "52b47aff55de72e6ffc99c66159d414fdc7062b1"
+      },
+      {
+        "path": "nflreadr/data/nflverse_data_timezone.rda",
+        "size_bytes": 117,
+        "sha256": "fa01f573ada7cd07cea413078119d313de4bdec65716ad930568b1a1b00d3c59",
+        "git_blob_sha1": "d3ae5568b5d968ce1fae138f3c5ca9c4da61eb0b"
+      },
+      {
+        "path": "nflreadr/data/dictionary_nextgen_stats.rda",
+        "size_bytes": 2346,
+        "sha256": "389e3210b2771c13f83f0c1c9cc970aae6fd186341e85102028414d52e24051f",
+        "git_blob_sha1": "86b254c9ad1e4bba41577a5157fb30c55be598b9"
+      },
+      {
+        "path": "nflreadr/data/dictionary_ff_rankings.rda",
+        "size_bytes": 1126,
+        "sha256": "a4443860fcc641ef8097d05ab1d15e1987baffb4bd705827feab8fdc5d95a4be",
+        "git_blob_sha1": "ae50d9c89e8fac87768fec235e6752034bec5b43"
+      },
+      {
+        "path": "nflreadr/data/dictionary_schedules.rda",
+        "size_bytes": 1954,
+        "sha256": "981328b450d8dbfd66c218635a68917754f40b0f41e7399fe4142bce2db3e299",
+        "git_blob_sha1": "d28672acff5c49c8827099da608a4857389b97f9"
+      },
+      {
+        "path": "nflreadr/data/dictionary_snap_counts.rda",
+        "size_bytes": 506,
+        "sha256": "14d2c6d5563783fdd4d76f3534827acf8e93e947594d6097c172b4498b0f9e54",
+        "git_blob_sha1": "876314c031698608d5580ac4e6a7839619900e3c"
+      },
+      {
+        "path": "nflreadr/data/dictionary_contracts.rda",
+        "size_bytes": 558,
+        "sha256": "fb1b6a56fa0cdbc411fb246d1fc1efa3b17cda37356cd45248ed934c3ae95c88",
+        "git_blob_sha1": "009b8c1f88e5df7db5105944d2f878f2b38eee42"
+      },
+      {
+        "path": "nflreadr/data/dictionary_pbp.rda",
+        "size_bytes": 7779,
+        "sha256": "4fb18e1e29f0e6f0f9ca8953463423f3347bca5212c2e84bd530875f1198a557",
+        "git_blob_sha1": "a4bdb917177b378de0b6ace26c3d16e119f6257e"
+      },
+      {
+        "path": "nflreadr/data/dictionary_player_stats.rda",
+        "size_bytes": 2776,
+        "sha256": "e826f8f2ec25aa27e01b44a1452f84467a7d8e26f78a2fd69dfa1a03d110690d",
+        "git_blob_sha1": "05419dd4d437c64e145cf8e1d9e9dba5cbab0d7d"
+      },
+      {
+        "path": "nflreadr/data/dictionary_rosters.rda",
+        "size_bytes": 1343,
+        "sha256": "57cf100dfb38d381366ea0957f9b6b579ed0d3c312c1d9dcc4d376d62c1baeb1",
+        "git_blob_sha1": "0bceef92a2fbced5c68f85b11b4163b3ec2268ce"
+      },
+      {
+        "path": "nflreadr/build/vignette.rds",
+        "size_bytes": 834,
+        "sha256": "e85c19d12d38bcf56c9a070e54941ac6c542dcc1f4ac4d87a0c6c0ea2b512790",
+        "git_blob_sha1": "aef5da72fe025f3f1a3748575da092207fca1282"
+      }
+    ],
+    "nflfastR": [
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/.vscode/extensions.json",
+        "size_bytes": 62,
+        "sha256": "bda326cbd95d4c69f091b36f09d17e697bf78ec4ad0f60be442960cb4f8e235e",
+        "git_blob_sha1": "344f76eba38f4f60dc078c69773c2cfdb8135f36"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/.vscode/settings.json",
+        "size_bytes": 227,
+        "sha256": "671be3285d30c1a0ecf1106d92bc0d7d5e7b5de7633e558e76a498a3a4a6ceaf",
+        "git_blob_sha1": "a9f69fe419b9c46365ad08cfb5b3ded3ae4af2bc"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/R/sysdata.rda",
+        "size_bytes": 29113,
+        "sha256": "1474e15c233595fccbfcea0cfcc9d54b887d293ab4aed5c47232b9560aea2a9e",
+        "git_blob_sha1": "b1f02a7ddcae24c6f58cd2ca8ddfffed2a1870f2"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data-raw/nfl_stats_variables.json",
+        "size_bytes": 19629,
+        "sha256": "6e272bfd95e161b1b3f1f4a1abb4a95f429c07e51f0b1bf8b784c0c8194a1987",
+        "git_blob_sha1": "dfdf6b3b388734021544ee1b253b2a44bd857601"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data-raw/pbp_datatypes.csv",
+        "size_bytes": 45156,
+        "sha256": "5a7b93fc74287530c98958a6d8c667029268f1be31b6e9ca42886afb21b748e3",
+        "git_blob_sha1": "503ce39dd3a9b0fe66e4ea66696d9d9151336787"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data-raw/pbp_defaultplay.rds",
+        "size_bytes": 4288,
+        "sha256": "1b38315e21284252f1f83b6b12f93a9623122ea6c2635ffc677e27ad8eab75fb",
+        "git_blob_sha1": "52bd2002b424f9df1e166e08564f69290e33d5cd"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data-raw/scramble_fix.rds",
+        "size_bytes": 30224,
+        "sha256": "e8476fac7b16793274144a88630de92072e23e94ff96259f97a3db56f3f3b5ea",
+        "git_blob_sha1": "16de275a3192d9f1d8513af18697018f95c8d766"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/field_descriptions.rda",
+        "size_bytes": 7578,
+        "sha256": "be3116dcbcc02ab98190618ae1f6e143f1dcf30447a6fdcc2460f62b9f01d374",
+        "git_blob_sha1": "e89a517896c0e70129edcb68446f62a23fe270df"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/nfl_stats_variables.rda",
+        "size_bytes": 3610,
+        "sha256": "9d8936cf01abe258c19d6a3ce64505607bad6fe9fbaca9d078f6de1cfe85d306",
+        "git_blob_sha1": "0985355ca6f650eb93a6a984a1c47e5f729f0da5"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/stat_ids.rda",
+        "size_bytes": 4679,
+        "sha256": "fae9f4f5ea765be9529fa91a56b9575e332eb1b58a98acebd0af66efaf7e3bad",
+        "git_blob_sha1": "ed941c89a48b3d7f090738c033945134b7335a27"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/data/teams_colors_logos.rda",
+        "size_bytes": 2891,
+        "sha256": "4540d5b839eecfe68ab9896b9796122f80871d114d3776adfcf53ccb877870d1",
+        "git_blob_sha1": "9b0170e4e775e3e6713a8312e6d054c8c953e6ac"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/2019/2019_01_GB_CHI.rds",
+        "size_bytes": 37645,
+        "sha256": "1f6f413bc21720d65b5acf79b565e9d56dfb7ce850e5a00c73463d4b98ce0b0a",
+        "git_blob_sha1": "a3033658dba83874e5dfff0aa50771e063b04fa0"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/2025/2025_01_KC_LAC.rds",
+        "size_bytes": 39502,
+        "sha256": "51fa7fde09a561c4a00734c6e907b014108c3e7171687c2cea21a62458156fd6",
+        "git_blob_sha1": "bcbc32b4a2c1d87b81518822528c04b5b0ec4aab"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/expected_ep.rds",
+        "size_bytes": 443,
+        "sha256": "b84bdb7786096f2c2cfbd97b8394d627086ec01c2939a8e35cce5989d757ae4f",
+        "git_blob_sha1": "63b55b4e487aefd437ba1773d3f4f6e19ef16ebe"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/expected_pbp.rds",
+        "size_bytes": 102900,
+        "sha256": "7e5de5d1c0c3f5da9e75bb14333db92da2041ca6c7bfb5475ad4dc4c8acde209",
+        "git_blob_sha1": "1535634dda265021f26e6136c2fad0bfc5020212"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/expected_sc.rds",
+        "size_bytes": 571,
+        "sha256": "d31f264840fd69a45bbbcefdae0fc8df6576506aec549a196986af8de5a1d452",
+        "git_blob_sha1": "891c593b27f796efe509c53e7465f6377ee0dc60"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/expected_sc_weekly.rds",
+        "size_bytes": 581,
+        "sha256": "cff7ddd1fadb44f21bdc80aa111694bc5f789f23d8ebc1b42219441fd07b692e",
+        "git_blob_sha1": "1d0e202ee4708c2aa560805a9ada461e8028b966"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/expected_wp.rds",
+        "size_bytes": 403,
+        "sha256": "57d7f4e50bb81fc74c58b0f7d93209254dc194c5c83d41d77f3e6751e19ece6c",
+        "git_blob_sha1": "28e33015a528a5eb8c22d0eb4cf58d2a2cd76d9c"
+      },
+      {
+        "path": "nflfastR-917b14e5085f352d9b00d23628759773e7d411b5/tests/testthat/games.rds",
+        "size_bytes": 1005,
+        "sha256": "0b689df3cf961f2609b742c0d980487ec963eaedae67309eef1570899ff0f14d",
+        "git_blob_sha1": "9283b2eacc01231de2bb68b7894934eb401890b1"
+      }
+    ]
+  },
+  "other_package_fixture_notice": "Other runtime source distributions also retain their original examples/tests. No package test datasets were executed or used as NFL evidence."
+}

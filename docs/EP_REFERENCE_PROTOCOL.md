@@ -14,6 +14,13 @@ separately. The full inference environment and actual prediction capture remain
 unfinished. The dated mirror supplies XGBoost 3.2.1.1, not the proposed 3.4.2.1;
 resolve the pinned upstream source-build route without silently changing versions.
 
+Follow-up, 2026-10-26: the [native runtime prerequisite](EP_RUNTIME.md) now verifies
+the upstream R XGBoost 3.4.2.1 build and locks 43 R source distributions. The full
+offline reference install failed at missing libcurl development headers, not
+model inference. Native dependency locking, installed EP equality and the actual
+capture remain open. This supersedes the source-build next step above, not the
+original protocol's historical observations or acceptance criteria.
+
 The [fastrmodels audit](FASTRMODELS_AUDIT.md) and [nfl4th audit](NFL4TH_AUDIT.md)
 already establish source/interface limits. Do not repeat those audits or rebuild
 their models. Today adds an executable, repository-only acceptance protocol in
@@ -178,9 +185,11 @@ The feature encoding's upstream notice is retained in [validation/NOTICE](../val
 
 ## Exit criteria and precise next unit
 
-**Next:** reuse the verified EP acquisition, resolve/verify the intended XGBoost
-source build and transitive dependency terms/hashes, provision/lock the isolated
-R reference and capture its actual features/probabilities for this fixed
+**Next:** reuse the verified EP acquisition, R source lock and native XGBoost layer.
+Resolve/lock missing native development dependencies (libcurl headers/pkg-config
+first) with exact source snapshot, terms and hashes. Finish offline installation,
+record the full environment, verify installed EP equality and capture actual
+upstream features/probabilities for this fixed
 corpus, with a reproducible offline rerun. Stop that unit at an audited R capture
 or a concrete compatibility/terms blocker; no Python serving integration, WP,
 new real data, enrichment or API/UI. Do not use these synthetic cases to tune models.

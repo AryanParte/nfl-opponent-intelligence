@@ -116,9 +116,15 @@ and owned-container cleanup. Receipt tests check consistency, not binary
 attestation. Core CI never downloads a model, starts Docker or installs R.
 Actual local container inspection and offline replay are recorded separately.
 
-**Next unit:** resolve and verify the pinned XGBoost source-build route and its
-transitive R/native dependencies, retain their terms/hashes and lock the isolated
-reference environment. Then install the pinned nflfastR/fastrmodels sources,
+**Follow-up, 2026-10-26:** [native runtime/source-lock evidence](EP_RUNTIME.md)
+verifies the intended XGBoost source build and pins 43 R source distributions.
+The complete reference install stopped at missing libcurl headers; native
+dependency locking remains incomplete. This does not change the observations
+from the acquisition-only run above.
+
+**Next unit:** reuse those sources/build layers, resolve the missing native
+development packages with exact terms/hashes and complete the offline isolated
+reference environment. Then finish the pinned nflfastR/fastrmodels installation,
 verify installed EP bytes against this acquired container, and capture actual
 features/probabilities for the unchanged 25-case corpus with an offline rerun.
 Any unavoidable bundled package assets must be inventoried explicitly; do not

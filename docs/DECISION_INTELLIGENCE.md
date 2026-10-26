@@ -12,6 +12,8 @@ The EP-only reference strategy and synthetic capture protocol followed on 2026-1
 no model predictions have been acquired or validated.
 The EP artifact acquisition and isolated R object preflight followed on 2026-10-25;
 this verifies bytes/representation, not inference or football decisions.
+The native XGBoost build and R source lock followed on 2026-10-26; the full
+reference install still needs native development dependencies. No predictions.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -77,8 +79,10 @@ intervals or turn existing exploratory intervals into a ranking test. The first
 terms and availability gaps. The [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
 selects isolated R first, then an independent Python candidate using the same
 extracted bytes; production stays deferred. [Acquisition/preflight](EP_ACQUISITION.md)
-now verifies the EP container and raw object. Runtime source-build resolution and
-the actual pinned R capture remain next, not an integration claim. The gates
+now verifies the EP container and raw object. The [native build/source lock](EP_RUNTIME.md)
+verifies XGBoost's loadability; missing system headers still prevent the full
+reference install. Native dependency locking and actual R capture remain next,
+not an integration claim. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -172,6 +176,13 @@ established by a historical season argument. Preserve MIT notices if reusing cod
 software licensing is not blanket permission for all data consumed by wrappers.
 
 ### fastrmodels — candidate model artifacts, not a ready decision policy
+
+**Follow-up, 2026-10-26:** [native runtime evidence](EP_RUNTIME.md) verifies R
+XGBoost 3.4.2.1 from source in pinned R 4.6.1 ARM64 and locks 43 R distributions.
+The full reference stopped at `curl/curl.h` missing; native dependencies/full
+installation remain next. Bundled model/data-like assets are inventoried, not
+used for predictions or historical analysis. No EP equality, capture, temporal
+validity or model integration is claimed.
 
 **Follow-up, 2026-10-25:** [EP acquisition/preflight](EP_ACQUISITION.md) verifies
 the pinned package container, retained notices and raw-object identity using
