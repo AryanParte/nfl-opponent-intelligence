@@ -1,0 +1,16 @@
+{
+  "status": "upstream_reference_captured",
+  "traced_predictions": 26,
+  "verified_raw_loads": 26,
+  "untraced_batch_identical": true,
+  "input_sha256": "c1a55f9b786f17134468892a62d4be7da18e7112031c3a7a7f448b64d5de496a",
+  "model_sha256": "14a4b7e0c115d3f46fc9f341a024874b0dbcf44b30bb1f426d4f59b6f175335a",
+  "model_bytes": 9737490,
+  "installed_package_equality_verified": true,
+  "xgboost_config": {
+    "nthread": 1,
+    "use_cuda_async_pool": false,
+    "use_rmm": false,
+    "verbosity": 1
+  }
+}

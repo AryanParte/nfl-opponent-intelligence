@@ -28,6 +28,13 @@ booster construction or predictions occurred. The only next reference slice is
 immutable raw export and actual fixed-corpus feature/probability capture. Earlier
 missing-header/source-resolution boundaries are resolved, not current blockers.
 
+Follow-up, 2026-10-28: [actual R capture/export](EP_R_CAPTURE.md) now passes the
+unchanged 25-case corpus and predeclared tolerances. Observed prediction-boundary
+features match the independent expectations; singles/batch/untraced replay agree.
+Raw export and capture replay byte-for-byte in separate offline containers. The
+R-reference gate is complete; independent Python parity and football validation
+remain open. Earlier no-prediction statements describe their dated units only.
+
 The [fastrmodels audit](FASTRMODELS_AUDIT.md) and [nfl4th audit](NFL4TH_AUDIT.md)
 already establish source/interface limits. Do not repeat those audits or rebuild
 their models. Today adds an executable, repository-only acceptance protocol in

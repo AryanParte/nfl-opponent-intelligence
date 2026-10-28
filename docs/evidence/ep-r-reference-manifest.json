@@ -1,0 +1,59 @@
+{
+  "captured_at_utc": "2026-10-28T12:14:19.318683+00:00",
+  "files": {
+    "DESCRIPTION": {
+      "sha256": "177cb16d0f864ec0bd829eee66a870af502ebf30f390fb6c962aa4be14a27878",
+      "size_bytes": 684
+    },
+    "LICENSE.md": {
+      "sha256": "21bc3a885c00b10a2849db55256494686442c8611d89d4ef06789554ba1e4dd5",
+      "size_bytes": 1085
+    },
+    "capture.json": {
+      "sha256": "2b880780cec39288ab63d7c6f96f7ce979ff013af17228803eae48340dcbd562",
+      "size_bytes": 16720
+    },
+    "capture.log": {
+      "sha256": "d365208999c02b2aebfe676ca27e40dc6b5d5efc32a84067d56b1474b744f4df",
+      "size_bytes": 270
+    },
+    "ep_model.ubj": {
+      "sha256": "14a4b7e0c115d3f46fc9f341a024874b0dbcf44b30bb1f426d4f59b6f175335a",
+      "size_bytes": 9737490
+    },
+    "input.json": {
+      "sha256": "c1a55f9b786f17134468892a62d4be7da18e7112031c3a7a7f448b64d5de496a",
+      "size_bytes": 11583
+    },
+    "observation.json": {
+      "sha256": "c8d147409f152a20fa8adce4f4af2d7e78fddba0ee5e6962e64b06880b298fd0",
+      "size_bytes": 503
+    },
+    "runtime-check.json": {
+      "sha256": "c2fb753b9bcde682c95cb8dc4390f19869b9ce86e65acc6563026cd7b251af64",
+      "size_bytes": 62386
+    },
+    "runtime.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  },
+  "identity": {
+    "driver_sha256": "cbd045661e31ae10916b5a6686a3d81d39a428e4faf4faa37ee81baf8277d068",
+    "environment_sha256": "ae8d852228bed7365e7cd7f4e78a0c8d458323b807862ebb3deae282beb404fd",
+    "image_id": "sha256:47039639b7368c88714e61f85abf719bf508668d20a639f8a051115622c63552",
+    "input_sha256": "c1a55f9b786f17134468892a62d4be7da18e7112031c3a7a7f448b64d5de496a",
+    "protocol_sha256": "611c455dbe0f93141a65168b5ffd830e8156057f8113013dc4ec2b452b4460cd",
+    "runner_sha256": "9de3873057166eecd32e4c5daf0056f61f5079aec35970652a46124e74daa529"
+  },
+  "schema_version": 1,
+  "validation": {
+    "artifact_bytes_attested": false,
+    "cases": 25,
+    "fixture_sha256": "5d2a4282a838e2757a0ebf948587919a28799ab5fc05ebb4b4e70bee10ac2bc9",
+    "predictive_validation": false,
+    "probability_origin": "model_capture",
+    "python_parity": false,
+    "status": "reference_capture_protocol_pass"
+  }
+}

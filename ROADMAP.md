@@ -26,10 +26,11 @@ P1.6's [nfl4th](docs/NFL4TH_AUDIT.md) and
 runtime integration deferred. The [EP-only reference strategy/protocol](docs/EP_REFERENCE_PROTOCOL.md)
 is now implemented with synthetic input/capture checks. The pinned EP container
 is acquired and inspected in an offline R sandbox. The
-[native runtime prerequisite](docs/EP_RUNTIME.md) verifies XGBoost's source build
-and pins R sources; the full reference is blocked at missing libcurl headers.
-Next is the native dependency lock/full installation and actual R capture, not a
-model endpoint or ranking.
+[full reference runtime](docs/EP_RUNTIME.md) now installs offline with separately
+locked native dependencies and verifies installed EP byte equality. The
+[actual R capture](docs/EP_R_CAPTURE.md) now passes the unchanged synthetic corpus,
+single/batch checks and exact offline replay. Next is an independent isolated
+Python candidate/parity experiment, not a model endpoint or action ranking.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -268,13 +269,21 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       the read-only runtime check reproduces identical JSON twice. Eighteen new
       offline regression tests; [evidence/replay](docs/EP_RUNTIME.md). The unused
       base Tcl/Tk GUI limitation is explicit. No model inference or capture.
-- [ ] **Next unit:** reuse the installed reference and verified caches; add the
-      bounded offline R runner and immutable raw EP export. Capture actual upstream
-      features/probabilities for the unchanged 25-case corpus, verify single/batch
-      behavior and replay offline with bound artifact/runner/environment identities.
-      Do not substitute expected fixtures for model outputs. No pin/tolerance
-      changes, Python serving integration, WP, new real data or API/UI. The R-capture
-      gate remains open; environment setup and EP equality are complete.
+- [x] Actual upstream R capture/raw export (2026-10-28): bounded offline runner
+      reuses the complete installed reference and caches, exports the exact raw
+      object with retained notices and verifies actual prediction-boundary features
+      for all 25 unchanged synthetic cases. Seven-class probabilities/EP pass
+      predeclared checks; singles, batch and untraced batch agree exactly. Separate
+      offline replay is byte-identical. Bound artifact/driver/runner/protocol/runtime
+      identities, no-clobber publication and failure logs; 21 new offline tests.
+      [Evidence/replay](docs/EP_R_CAPTURE.md). No Python parity or football validation.
+- [ ] **Next unit:** independent isolated Python 3.13.2/native XGBoost EP candidate
+      and fixed-corpus parity experiment. Verify exact binding/dependency artifact
+      versions, hashes and terms; reuse the same raw export and actual R capture.
+      Compute features independently (do not import the oracle), run singles/batch,
+      then apply unchanged feature/class/probability/EP tolerances. Record actual
+      environment/runner identities and failures. No silent version/model substitution,
+      serving dependency, WP, real data, ranking or API/UI. R reference is complete.
 - [ ] Independently test golden examples, transformations, possession/time/OT
       boundaries and runtime parity using the predeclared protocol before any EP/WP
       integration. The Python candidate must be independent of the oracle. Version models,

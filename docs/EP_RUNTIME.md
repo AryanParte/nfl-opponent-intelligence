@@ -202,13 +202,13 @@ Core/API/frontend environments and the daily automation are unchanged.
 
 ## Precise next unit
 
-Reuse the now-installed full reference and verified EP/source/native caches.
-Implement a bounded offline runner that exports the verified raw object as its
-own immutable artifact, obtains actual upstream features/probabilities for the
-unchanged 25-case synthetic corpus, checks single/batch behavior and replays the
-capture. Bind actual runner/environment/artifact identities; do not copy expected
-features/probabilities or reinterpret fixture examples as model evidence. Preserve
-pins, class order and tolerances. The independent Python candidate comes afterward.
-Package installation/equality alone does not establish EP inference compatibility,
-numerical parity, temporal validity or football decision quality. No Run/Pass
-ranking, API/UI, WP or new dataset is unlocked by this setup work.
+The 2026-10-28 [actual R capture/export](EP_R_CAPTURE.md) completes the next boundary
+using this exact image: 25 synthetic cases, actual upstream matrices/probabilities,
+single/batch and untraced replay checks, immutable raw export and exact offline
+reproduction. Do not repeat this setup or change its pins to proceed.
+
+Next is the independent isolated Python candidate/parity experiment with the same
+raw bytes and fixed corpus, separately recorded Python dependency terms/hashes,
+its own feature encoding and the unchanged comparison tolerances. The R capture
+does not establish cross-runtime parity, calibration, temporal validity or football
+decision quality. No Run/Pass ranking, API/UI, WP or new dataset is unlocked.

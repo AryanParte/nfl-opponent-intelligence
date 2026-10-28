@@ -246,5 +246,5 @@ class EPReferenceTests(unittest.TestCase):
         receipt = json.loads(result.stdout)
         self.assertEqual(receipt["status"], "synthetic_input_protocol_pass")
         self.assertEqual(receipt["fixture_sha256"], self.fingerprint)
-        self.assertEqual(receipt["model_predictions"], "not_acquired_or_executed")
+        self.assertEqual(receipt["model_predictions"], "not_executed_by_this_preflight")
         self.assertEqual((receipt["accepted_cases"], receipt["rejected_cases"]), (25, 16))

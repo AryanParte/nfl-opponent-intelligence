@@ -2446,3 +2446,71 @@ upstream features/probabilities for the unchanged 25-case synthetic corpus, veri
 single/batch behavior and replay with bound identities. Do not substitute fixture
 expectations or relax tolerances. Independent Python parity, temporal/calibration
 work and model/API/UI integration follow later. No merge or auto-merge.
+
+## 2026-10-28 — Capture actual upstream EP outputs and preserve the raw export
+
+**Built / why:** after verifying PR #33 merged, its eight green main-CI jobs,
+clean upstream-matched checkout and no pending reviews/PRs, started
+`codex/ep-upstream-capture` from fetched main `5ab95ef`. Added a bounded offline
+R reference runner using the existing verified image/artifact. It exports the
+exact EP raw bytes with retained notices, observes actual prediction input matrices
+and model-loader bytes, and records real R outputs for the 25 artificial protocol
+situations. These reusable reference outputs make an independent Python comparison
+possible without inventing golden probabilities or duplicating production analytics.
+
+**Review files:** `validation/ep_r_capture.py`, `ep_r_capture.R`, `ep_reference.py`,
+`tests/test_ep_r_capture.py`, `tests/test_ep_reference.py`, `docs/EP_R_CAPTURE.md`
+and the three `docs/evidence/ep-r-reference-*.json` records. ROADMAP/STATUS and
+architecture/runtime/protocol notes now point to independent Python parity.
+
+**Sports concepts:** EP is a signed expected value of the next scoring event this
+half, not a Run/Pass action value. Half-clock, offense/home, roof, era, down, field
+position and timeout encoding must agree before comparing model outputs. Zero-clock
+cases are encoding probes, not automatically terminal EP=0. Artificial situations
+do not establish historical availability, calibration or football decision quality.
+
+**Software/statistical concepts / learn:** observe the matrix actually passed to
+inference, rather than trusting a separately computed feature table. Hashes bind
+raw payload, source, runner, input and runtime; they do not prove training lineage
+or independent authenticity. Check singles, batch and uninstrumented replay.
+Repeated execution and cross-runtime parity are different from predictive validation.
+Failures retain staging/logs without publishing a success manifest; cache reuse
+verifies bytes without silently rerunning or repairing them.
+
+**Three review questions:**
+
+1. How does tracing the actual prediction argument avoid circular validation against
+   expected vectors, and what does the untraced replay establish?
+2. Why preserve and hash the raw EP vector separately from its parent `.rda`, and
+   which source/runtime/notice identities must accompany that export?
+3. Why do perfect batch/single agreement and repeated capture still not establish
+   Python parity, calibrated forecasts or a preferred Run/Pass decision?
+
+**Verification / self-review:** baseline 365 core / 24 API on Python 3.13. Final
+386 core / 24 API tests pass on each Python 3.11/3.12/3.13, API warnings as errors,
+and no broken dependencies. All 672 frontend tests, TypeScript/build and 14 Chromium
+cases pass with unchanged settings. Twenty-one new tests are offline and need no
+R/Docker/network; mock probabilities are explicitly separate from real R captures.
+The actual 25-case capture passes exact feature and predeclared numerical checks.
+All 26 observed model loads match the exported bytes; singles/batch/untraced batch
+agree exactly. Separate fresh-container replay yields identical capture, raw export,
+runtime and instrumentation bytes. No Python inference was executed.
+
+Complete-diff review checked model input/row/class identity, timeout cleanup,
+no-clobber publication, retained notices, source drift, weak evidence claims and
+production isolation. Fixed repeated trace cleanup (first attempt's unpublished
+logs retained), strengthened protocol identity/timestamp checks and corrected stale
+top-level roadmap/no-prediction wording. The old preflight output assertion initially
+failed after that intentional wording change; it now matches the narrower truthful
+claim, and the full matrix was rerun. No source/model pins or tolerances changed.
+
+Test servers exited; ports 5173/8000 have no listeners. Docker is restored to its
+initial stopped state, with all sources/images/exports/logs retained. No binary,
+new dataset, host R/global setting, production dependency, API fixture or automation
+change. Exact published SHA, GitHub attribution and remote CI belong in the PR.
+
+**Remaining / next:** prepare the independently implemented, isolated Python EP
+candidate with verified binding/dependency terms and hashes; use the same raw
+payload/corpus and compare features/probabilities/EP with unchanged tolerances.
+Do not import the oracle or copy R outputs. Temporal lineage/calibration, action
+values and serving integration stay deferred. No merge or auto-merge.

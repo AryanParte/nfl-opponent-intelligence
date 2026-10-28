@@ -61,8 +61,11 @@ and inspects its raw object in a pinned, offline R sandbox. The
 [reference runtime](docs/EP_RUNTIME.md) now installs fully offline using 43 pinned
 R sources and seven separately locked native packages, with no base-package upgrades.
 Installed fastrmodels EP bytes match the acquired artifact and the environment
-receipt replays identically. Actual R predictions, independent Python parity and
-football validation remain unfinished; no production model integration is claimed.
+receipt replays identically. The [actual R reference capture](docs/EP_R_CAPTURE.md)
+now verifies the 25 fixed synthetic cases, actual upstream features, single/batch
+agreement and exact offline replay, with a separately hashed raw EP export.
+Independent Python parity and football validation remain unfinished; no production
+model integration or Run/Pass action ranking is claimed.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
