@@ -260,14 +260,21 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       Native-stage receipts reproduce identically offline; full reference install
       stops at `curl/curl.h` missing. [Evidence/replay](docs/EP_RUNTIME.md).
       This source lock is not a complete native lock or a prediction capture.
-- [ ] **Next unit:** reuse the verified EP/source cache and native build layer;
-      resolve/verify libcurl development headers, pkg-config and remaining native
-      requirements with exact package/source snapshot, terms and hashes. Finish
-      the offline reference installation and record its full environment. Verify
-      installed package EP bytes, capture actual features/probabilities for the
-      unchanged fixed corpus and replay offline, or record a concrete build/terms
-      failure. No floating upgrades, silent pin changes, Python serving integration,
-      WP, real-data enrichment or API/UI. The full R-capture gate remains open.
+- [x] Full reference installation/native lock (2026-10-27): resolve seven ARM64
+      packages from a signed fixed Ubuntu snapshot, record archive/notice hashes,
+      and install offline with zero upgrades/removals. Reuse the verified native
+      layer and all 43 pinned R sources; verify installed fastrmodels EP equality.
+      Record 74 R packages, 277 system packages and shared-library identities;
+      the read-only runtime check reproduces identical JSON twice. Eighteen new
+      offline regression tests; [evidence/replay](docs/EP_RUNTIME.md). The unused
+      base Tcl/Tk GUI limitation is explicit. No model inference or capture.
+- [ ] **Next unit:** reuse the installed reference and verified caches; add the
+      bounded offline R runner and immutable raw EP export. Capture actual upstream
+      features/probabilities for the unchanged 25-case corpus, verify single/batch
+      behavior and replay offline with bound artifact/runner/environment identities.
+      Do not substitute expected fixtures for model outputs. No pin/tolerance
+      changes, Python serving integration, WP, new real data or API/UI. The R-capture
+      gate remains open; environment setup and EP equality are complete.
 - [ ] Independently test golden examples, transformations, possession/time/OT
       boundaries and runtime parity using the predeclared protocol before any EP/WP
       integration. The Python candidate must be independent of the oracle. Version models,

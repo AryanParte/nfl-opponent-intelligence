@@ -12,8 +12,9 @@ The EP-only reference strategy and synthetic capture protocol followed on 2026-1
 no model predictions have been acquired or validated.
 The EP artifact acquisition and isolated R object preflight followed on 2026-10-25;
 this verifies bytes/representation, not inference or football decisions.
-The native XGBoost build and R source lock followed on 2026-10-26; the full
-reference install still needs native development dependencies. No predictions.
+The native XGBoost build and R source lock followed on 2026-10-26; the complete
+offline reference installation, native lock and installed EP byte equality followed
+on 2026-10-27. Actual prediction capture remains next; no predictions yet.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -79,10 +80,9 @@ intervals or turn existing exploratory intervals into a ranking test. The first
 terms and availability gaps. The [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
 selects isolated R first, then an independent Python candidate using the same
 extracted bytes; production stays deferred. [Acquisition/preflight](EP_ACQUISITION.md)
-now verifies the EP container and raw object. The [native build/source lock](EP_RUNTIME.md)
-verifies XGBoost's loadability; missing system headers still prevent the full
-reference install. Native dependency locking and actual R capture remain next,
-not an integration claim. The gates
+now verifies the EP container and raw object. The [full reference runtime](EP_RUNTIME.md)
+now installs offline with separately locked native packages and verifies installed
+EP equality. Actual fixed-corpus R capture remains next, not an integration claim. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -176,6 +176,14 @@ established by a historical season argument. Preserve MIT notices if reusing cod
 software licensing is not blanket permission for all data consumed by wrappers.
 
 ### fastrmodels — candidate model artifacts, not a ready decision policy
+
+**Follow-up, 2026-10-27:** [full runtime evidence](EP_RUNTIME.md) closes the
+missing-native-package installation boundary without upgrades or pin changes.
+The environment receipt reproduces identically and installed EP bytes match the
+acquisition. Complete package installation processes bundled objects into lazy-load
+databases; no other-model inference or historical analysis occurs. Byte equality
+is not compatibility, prediction parity, temporal validity or action-value evidence.
+Next: bounded actual R capture/export, then independent Python comparison.
 
 **Follow-up, 2026-10-26:** [native runtime evidence](EP_RUNTIME.md) verifies R
 XGBoost 3.4.2.1 from source in pinned R 4.6.1 ARM64 and locks 43 R distributions.

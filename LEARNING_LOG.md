@@ -2376,3 +2376,73 @@ offline reference install, verify installed EP bytes and capture/replay actual
 features/probabilities for the unchanged corpus. This is autonomous setup work,
 not an access request. Independent Python parity, calibration and model/API/UI
 integration remain later. No merge, auto-merge or change to the 8 AM automation.
+
+## 2026-10-27 — Full offline R reference and installed EP equality (P1.6)
+
+**Built / why:** after PR #32 merged at `3ae5033`, verified the clean canonical
+clone, all eight main CI jobs and no open PR/review work; branched
+`codex/ep-r-native-dependencies` from fetched main. Resolved seven ARM64 native
+packages from a fixed signed Ubuntu snapshot, reviewed retained notices and
+locked archive/control/notice identities. Added bounded no-clobber acquisition,
+verified full-context preparation and an offline installer that proves zero
+upgrades/removals. Reused the native XGBoost layer and unchanged 43-source R lock;
+the full nflfastR reference now installs. Installed EP bytes exactly match the
+acquired raw payload. This resolves setup, not model prediction/parity validation.
+
+**Review files:** `validation/ep_native.py`, `ep_native.lock.json`,
+`ep_native.sources`, `ep_native.Dockerfile`, `ep_native_install.R`,
+`ep_native_audit.R`, `ep_full_runtime_check.R`, `tests/test_ep_native.py`,
+`docs/EP_RUNTIME.md`, and `docs/evidence/ep-full-runtime.json`. The roadmap,
+status, README, architecture and protocol now point to capture/export, not more setup.
+
+**Sports concepts:** an identical EP model payload does not prove correct feature
+encoding, class order, output probabilities, temporal validity or football quality.
+State EP is not a causal Run/Pass action value. No new observations or predictions
+were produced; bundled package datasets are not our validation corpus or data rights.
+
+**Software/statistical concepts / learn:** a source lock and a complete execution
+environment are different. Signed repository metadata authenticates resolution;
+archive and notice hashes bind the selected files. Verify the actual before/after
+package inventory instead of assuming an install avoided upgrades. Byte equality,
+environment replay, numerical parity and predictive validation are separate gates.
+R lazy-load package installation can process bundled data even without inference.
+
+**Three review questions:**
+
+1. How do the fixed snapshot, signed metadata, archive hashes and before/after
+   inventory jointly make this native installation auditable?
+2. Why is equality between acquired and installed EP bytes necessary but
+   insufficient for a correct fixed-corpus prediction capture?
+3. Why is the missing Tcl/Tk GUI runtime recorded as an explicit unused limitation,
+   and what evidence would make a missing library a reference blocker instead?
+
+**Verification / self-review:** baseline 347 core / 24 API tests passed on Python
+3.13. Final 365 core / 24 API tests passed on each Python 3.11/3.12/3.13, API
+warnings as errors and no broken dependencies. All 672 frontend tests,
+TypeScript/build and 14 Chromium cases passed without relaxed settings. Eighteen
+new tests need no R/Docker/network. Real archive/notice/signature audit and context
+replay passed. The offline build installed all locked R packages; two unprivileged,
+read-only checks produced identical JSON, recording 74 R packages, 277 system
+packages, 46 R libraries and 86 resolved native libraries. Wrong container/raw
+hashes fail without success output. No prediction or Python parity was tested.
+
+Review tightened exact signed-release/copyright checks and notice types. The
+initial full library audit found absent base Tcl/Tk GUI runtimes; dependency
+inspection confirmed they are outside the required nflfastR closure. The final
+check records precisely this limitation and rejects other missing libraries;
+no unrelated GUI install or silent warning suppression. Git archive pax-header
+warnings during R installation are documented without changing source bytes.
+Repeated inspection is not proof of independent bit-for-bit compilation.
+
+Test-owned servers exited and Docker was restored to its prior stopped state;
+images, sources and logs are retained. Only code/text metadata are committed,
+not binaries, model payloads or datasets. No host R/developer setting, production
+dependency, statistical formula, API fixture or automation changed. Publication
+SHA, GitHub attribution and exact-head CI are recorded in the PR.
+
+**Remaining / next:** the environment/equality boundary is complete. Implement
+the bounded offline R capture runner and immutable raw export, obtain actual
+upstream features/probabilities for the unchanged 25-case synthetic corpus, verify
+single/batch behavior and replay with bound identities. Do not substitute fixture
+expectations or relax tolerances. Independent Python parity, temporal/calibration
+work and model/API/UI integration follow later. No merge or auto-merge.

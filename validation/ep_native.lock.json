@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "purpose": "Optional offline R reference; not a production dependency",
+  "snapshot": "20261026T000000Z",
+  "base_image": "rocker/r-ver@sha256:fb487cf8a2029fc1dbc17621cf41ac913d49ac74a1ff9e27bf9bbc982e55d08d",
+  "platform": "linux/arm64",
+  "ubuntu_keyring_sha256": "80a36b0a6de2f69f49d2df75ef473ccde121e9e190b9ea01d20a4f63778d5c31",
+  "resolution": {
+    "requested": [
+      "libcurl4-openssl-dev",
+      "libicu-dev",
+      "pkg-config"
+    ],
+    "upgraded": 0,
+    "newly_installed": 7,
+    "removed": 0
+  },
+  "packages": [
+    {
+      "package": "icu-devtools",
+      "version": "74.2-1ubuntu3.1",
+      "architecture": "arm64",
+      "filename": "icu-devtools_74.2-1ubuntu3.1_arm64.deb",
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/pool/main/i/icu/icu-devtools_74.2-1ubuntu3.1_arm64.deb",
+      "size_bytes": 208902,
+      "sha256": "a356d95c5a0576c876123c42730ae696ebd852a0e4fbb93c9b7149845ed16afc",
+      "source_package": "icu",
+      "depends": "libc6 (>= 2.38), libgcc-s1 (>= 3.3.1), libicu74 (>= 74.1-1~), libstdc++6 (>= 13.1)",
+      "copyright_sha256": "5bbff5f646ce750ac0a347e7f91793279b7422a1119820b5f75d98879c201c68",
+      "copyright_path": "/usr/share/doc/icu-devtools/copyright",
+      "notice_licenses": [
+        "MIT",
+        "GPL-3"
+      ]
+    },
+    {
+      "package": "libcurl4-openssl-dev",
+      "version": "8.5.0-2ubuntu10.16",
+      "architecture": "arm64",
+      "filename": "libcurl4-openssl-dev_8.5.0-2ubuntu10.16_arm64.deb",
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/pool/main/c/curl/libcurl4-openssl-dev_8.5.0-2ubuntu10.16_arm64.deb",
+      "size_bytes": 456042,
+      "sha256": "c8a1a6966fda3071b24abadeb56439ce8b7620fdca1be917afa9429659a95e61",
+      "source_package": "curl",
+      "depends": "libcurl4t64 (= 8.5.0-2ubuntu10.16)",
+      "copyright_sha256": "a7c131b21e6e73b3b085a7d9f1637b68f5f92b832cc6f462e0c978fbe7841ccb",
+      "copyright_path": "/usr/share/doc/libcurl4-openssl-dev/copyright",
+      "notice_licenses": [
+        "curl",
+        "OLDAP-2.8",
+        "ISC",
+        "GPL-2+ with Autoconf-data exception",
+        "GPL-3+ with Autoconf-data exception",
+        "GPL-2+ with Libtool exception",
+        "BSD-3-clause",
+        "BSD-4-Clause-UC",
+        "FSFULLR",
+        "X11",
+        "BSD-3-Clause"
+      ]
+    },
+    {
+      "package": "libicu-dev",
+      "version": "74.2-1ubuntu3.1",
+      "architecture": "arm64",
+      "filename": "libicu-dev_74.2-1ubuntu3.1_arm64.deb",
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/pool/main/i/icu/libicu-dev_74.2-1ubuntu3.1_arm64.deb",
+      "size_bytes": 11881468,
+      "sha256": "65a1c1196beddbeed78562be34821be82974e322bb48fbf76c62805ec16f232b",
+      "source_package": "icu",
+      "depends": "libicu74 (= 74.2-1ubuntu3.1), icu-devtools (>= 74.2-1ubuntu3.1), libc6-dev | libc-dev",
+      "copyright_sha256": "5bbff5f646ce750ac0a347e7f91793279b7422a1119820b5f75d98879c201c68",
+      "copyright_path": "/usr/share/doc/libicu-dev/copyright",
+      "notice_licenses": [
+        "MIT",
+        "GPL-3"
+      ]
+    },
+    {
+      "package": "libpkgconf3",
+      "version": "1.8.1-2build1",
+      "architecture": "arm64",
+      "filename": "libpkgconf3_1.8.1-2build1_arm64.deb",
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/pool/main/p/pkgconf/libpkgconf3_1.8.1-2build1_arm64.deb",
+      "size_bytes": 31226,
+      "sha256": "f476cb81e1ecec6bf974f21181469cf5edcc749c4ead621469cdbf584dfd3be8",
+      "source_package": "pkgconf",
+      "depends": "libc6 (>= 2.38)",
+      "copyright_sha256": "676c75e54ff7e3b9892940fbf1b31763cb6f2a6527a5607a3640ac59a2441fba",
+      "copyright_path": "/usr/share/doc/libpkgconf3/copyright",
+      "notice_licenses": [
+        "ISC",
+        "BSD-4",
+        "BSD-2",
+        "X11",
+        "GPL-2+"
+      ]
+    },
+    {
+      "package": "pkgconf-bin",
+      "version": "1.8.1-2build1",
+      "architecture": "arm64",
+      "filename": "pkgconf-bin_1.8.1-2build1_arm64.deb",
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/pool/main/p/pkgconf/pkgconf-bin_1.8.1-2build1_arm64.deb",
+      "size_bytes": 20458,
+      "sha256": "bcd0d24c48b8b73ed7ba20ffc21a3575d5d9bdd53c3cee5a8051b7bde5fbf638",
+      "source_package": "pkgconf",
+      "depends": "libc6 (>= 2.34), libpkgconf3 (>= 1.8.0)",
+      "copyright_sha256": "676c75e54ff7e3b9892940fbf1b31763cb6f2a6527a5607a3640ac59a2441fba",
+      "copyright_path": "/usr/share/doc/pkgconf-bin/copyright",
+      "notice_licenses": [
+        "ISC",
+        "BSD-4",
+        "BSD-2",
+        "X11",
+        "GPL-2+"
+      ]
+    },
+    {
+      "package": "pkgconf",
+      "version": "1.8.1-2build1",
+      "architecture": "arm64",
+      "filename": "pkgconf_1.8.1-2build1_arm64.deb",
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/pool/main/p/pkgconf/pkgconf_1.8.1-2build1_arm64.deb",
+      "size_bytes": 16768,
+      "sha256": "818ac3b4ae09f3747098872c7d5a9e387118798155b0107bb1625c2ab675664b",
+      "source_package": "pkgconf",
+      "depends": "pkgconf-bin",
+      "copyright_sha256": "676c75e54ff7e3b9892940fbf1b31763cb6f2a6527a5607a3640ac59a2441fba",
+      "copyright_path": "/usr/share/doc/pkgconf/copyright",
+      "notice_licenses": [
+        "ISC",
+        "BSD-4",
+        "BSD-2",
+        "X11",
+        "GPL-2+"
+      ]
+    },
+    {
+      "package": "pkg-config",
+      "version": "1.8.1-2build1",
+      "architecture": "arm64",
+      "filename": "pkg-config_1.8.1-2build1_arm64.deb",
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/pool/main/p/pkgconf/pkg-config_1.8.1-2build1_arm64.deb",
+      "size_bytes": 7264,
+      "sha256": "460d166c529651438347548fc1b2731440ce52c2643f678ec993a29dce5a3647",
+      "source_package": "pkgconf",
+      "depends": "pkgconf (>= 1.8.0-7~)",
+      "copyright_sha256": "676c75e54ff7e3b9892940fbf1b31763cb6f2a6527a5607a3640ac59a2441fba",
+      "copyright_path": "/usr/share/doc/pkg-config/copyright",
+      "notice_licenses": [
+        "ISC",
+        "BSD-4",
+        "BSD-2",
+        "X11",
+        "GPL-2+"
+      ]
+    }
+  ],
+  "signed_releases": [
+    {
+      "file": "snapshot.ubuntu.com_ubuntu_20261026T000000Z_dists_noble_InRelease",
+      "sha256": "cdb2f31d809f589719a53c6ad15f255b27569c4059542ada282aaa21b8e164b0",
+      "valid_signature": "[GNUPG:] VALIDSIG F6ECB3762474EDA9D21B7022871920D1991BC93C 2024-04-25 1714057881 0 4 0 1 10 01 F6ECB3762474EDA9D21B7022871920D1991BC93C"
+    },
+    {
+      "file": "snapshot.ubuntu.com_ubuntu_20261026T000000Z_dists_noble-security_InRelease",
+      "sha256": "c89d897d060d6efa9ffd64fe0a227c6b16e6d143113e04baca2407966821d6fd",
+      "valid_signature": "[GNUPG:] VALIDSIG F6ECB3762474EDA9D21B7022871920D1991BC93C 2026-10-25 1792934963 0 4 0 1 10 01 F6ECB3762474EDA9D21B7022871920D1991BC93C"
+    },
+    {
+      "file": "snapshot.ubuntu.com_ubuntu_20261026T000000Z_dists_noble-updates_InRelease",
+      "sha256": "8b76b47c712524f0804b44527cb73dcb215aec823ec6fdae2799805986340480",
+      "valid_signature": "[GNUPG:] VALIDSIG F6ECB3762474EDA9D21B7022871920D1991BC93C 2026-10-25 1792953392 0 4 0 1 10 01 F6ECB3762474EDA9D21B7022871920D1991BC93C"
+    }
+  ],
+  "observed_at_utc": "2026-10-28 00:17:41 UTC"
+}

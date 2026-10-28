@@ -1,0 +1,10 @@
+# Isolated experiment resolution only. Never install these sources on the host.
+Types: deb
+URIs: https://snapshot.ubuntu.com/ubuntu/20261026T000000Z/
+Suites: noble noble-updates noble-security
+Components: main universe
+Architectures: arm64
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+# A fixed historical snapshot must stay usable after Release metadata expires.
+# Signature and package-hash verification remain mandatory.
+Check-Valid-Until: no
