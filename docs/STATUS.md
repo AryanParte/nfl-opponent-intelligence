@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-27, the long-term direction is
+As of the daily run on 2026-10-28, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -17,24 +17,25 @@ is merged through PR #27, including the [comparison/abstention policy](DECISION_
 P1.6's [nfl4th](NFL4TH_AUDIT.md) and [fastrmodels](FASTRMODELS_AUDIT.md) audits
 are merged through PR #29; the [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
 is merged through PR #30 and the [acquisition/object preflight](EP_ACQUISITION.md)
-through PR #31; the native XGBoost build/R source lock is merged through PR #32.
-Today's [full reference runtime](EP_RUNTIME.md) closes the missing-native-package
-boundary: seven signed-snapshot Ubuntu packages, zero upgrades/removals, complete
-offline R installation and installed fastrmodels EP byte equality. The environment
-check replays identically. Actual predictions/parity, calibration and historical
-availability remain unverified. Production integration remains deferred.
+through PR #31; the native XGBoost build/R source lock is merged through PR #32,
+and the full runtime/native lock/equality check through PR #33. Today's
+[actual R capture/export](EP_R_CAPTURE.md) closes the reference gate for all 25
+unchanged synthetic cases. Actual prediction inputs match the expected features;
+probabilities/EP pass the fixed protocol, singles/batch/untraced replay agree,
+and separate offline execution reproduces the capture and raw export byte-for-byte.
+Independent Python parity, calibration and historical availability remain unverified.
+Production integration remains deferred.
 
 Verification for this unit is recorded below. Scout schema v2, the API, frontend,
 briefs, downloads and all 71 API fixtures remain unchanged. No production dependency,
-serving model or automation change. Complete package installation processes bundled
-objects into lazy-load databases; only EP is explicitly deserialized for equality.
-No model prediction, training or historical analysis was performed.
+serving model or automation change. Only the pinned EP model is executed on
+artificial protocol inputs; no training, real-data prediction or historical analysis.
 Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: a bounded offline R capture runner, separate immutable raw
-EP export and actual upstream features/probabilities for the fixed 25-case corpus,
-with single/batch checks and offline replay. Reuse the installed runtime/caches
-without changing pins or tolerances. No WP, enrichment, serving integration or endpoint.
+certification. Next: the independent isolated Python candidate/parity experiment,
+with separately verified dependency versions/hashes/terms and its own feature
+encoding on the same corpus/raw payload. No oracle imports, pin/tolerance changes,
+WP, enrichment, serving integration, action ranking or endpoint.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -48,14 +49,20 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/ep-r-native-dependencies`, started from updated
-  `origin/main` at `3ae5033` after observing PR #32 merged. Do not merge or enable
+- Working branch: `codex/ep-upstream-capture`, started from updated
+  `origin/main` at `5ab95ef` after observing PR #33 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/ep-r-native-dependencies` for its exact published SHA, attribution and CI
+  `codex/ep-upstream-capture` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous full runtime review: [PR #33](https://github.com/AryanParte/nfl-opponent-intelligence/pull/33),
+  merged at `5ab95ef`; its tree matches feature head `06766af`.
+  [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40610740808)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The clean previous checkout matched its upstream with no unpublished
+  commits. Baseline 365 core / 24 API tests passed on Python 3.13 before changes.
 - Previous native source/build review: [PR #32](https://github.com/AryanParte/nfl-opponent-intelligence/pull/32),
   merged at `3ae5033`; its tree matches feature head `9639b9d`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40402965896)
@@ -227,6 +234,42 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.6 Actual upstream EP capture and immutable raw export — 2026-10-28
+
+The bounded offline driver re-verifies the acquired artifact, fixed corpus and
+complete installed environment, then executes the actual pinned nflfastR standalone
+EP path. R receives only full accepted states, independently builds half-time,
+and uses upstream features. Instrumentation records the actual XGBoost matrix and
+verifies all 26 loader calls use the exact exported raw bytes. No expected vectors
+or probabilities are passed into R. An additional untraced batch is strictly identical.
+
+All 25 cases pass exact 18-feature checks and the unchanged seven-probability/EP
+criteria. Maximum normalization error is approximately `5.75e-8`; maximum EP
+arithmetic error is approximately `5.8e-15`. Singles and batch agree exactly.
+A separate fresh-container replay has identical capture/raw/runtime/observation
+bytes (manifest timestamps differ). [Method, text evidence and replay](EP_R_CAPTURE.md).
+The 9,737,490-byte raw payload and notices stay in ignored immutable cache entries;
+Git contains only code/text evidence. These are synthetic-situation model outputs,
+not real observations, cross-runtime parity, calibrated forecasts or action values.
+
+Baseline: 365 core / 24 API on Python 3.13. Twenty-one new offline tests cover
+state-only inputs, byte/runtime/feature/output mutations, bounded Docker arguments,
+timeouts, no-clobber publication, preserved failed logs, locks, source drift and
+committed evidence integrity. CI does not execute R or establish receipt authenticity.
+Final local verification and complete-diff findings are recorded in the daily
+learning entry; exact-head publication, attribution and remote CI belong in the PR.
+
+The first development capture failed during repeated trace cleanup after generating
+outputs; its unpublished staging/logs are retained. Guarded cleanup fixes the
+harness without changing source/model pins or relaxing tolerances. The preflight
+CLI now says it does not execute predictions itself, rather than making a stale
+repository-wide no-predictions claim. Its regression assertion was updated accordingly.
+
+Next: independent isolated Python EP candidate with verified binding/dependency
+terms/hashes, independent feature encoding and unchanged single/batch/cross-runtime
+criteria on the same corpus/raw export. No serving integration, WP, new data,
+training, preferred call, API/UI or automation change. Do not merge or enable auto-merge.
 
 ### P1.6 Full offline reference installation and EP byte equality — 2026-10-27
 
@@ -1200,14 +1243,13 @@ The bounded P1.6 [nfl4th](NFL4TH_AUDIT.md) and
 [EP-only reference strategy/protocol](EP_REFERENCE_PROTOCOL.md) are complete;
 runtime use is deferred, not validated. The [EP acquisition/object preflight](EP_ACQUISITION.md)
 is complete, and the [full runtime/native lock](EP_RUNTIME.md) now verifies offline
-installation and installed-package EP equality, but not the actual R capture.
-Next: bounded offline capture runner, immutable raw EP export and actual upstream
-features/probabilities, with single/batch checks and exact replay. Reuse the acquired
-artifact, installed environment and sources; do not redo setup or change pins. Follow
-the fixed corpus, manifest/notice requirements and
-unrelaxed acceptance criteria; no Python serving integration, WP, enrichment,
-API/UI or fourth-down mode. Independent Python parity follows only after an audited
-R capture. Do not repeat these audits or infer that training scripts attest release
+installation and installed-package EP equality. The [actual R capture](EP_R_CAPTURE.md)
+now passes the fixed corpus, actual matrix/loader checks and exact offline replay.
+Next: independent isolated Python candidate/parity experiment, including verified
+dependency artifacts/terms and its own feature implementation. Reuse the existing
+R capture/raw export; do not redo setup or change pins, corpus or tolerances.
+No oracle imports, Python serving integration, WP, enrichment, API/UI or fourth-down
+mode. Do not repeat these audits or infer that training scripts attest release
 binaries. Preserve Scout schema v2 and the actual
 assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
 without claiming conformance or restarting P1.4/browser CI.

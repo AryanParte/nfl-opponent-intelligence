@@ -207,8 +207,19 @@ def compare_captures(reference, candidate, fixture_path=FIXTURE):
             "artifact_bytes_attested": False, "predictive_validation": False}
 
 
+def validate_reference(capture, fixture_path=FIXTURE):
+    """Validate one R capture, without claiming Python parity or byte attestation."""
+    fixture, fixture_hash = load_fixture(fixture_path)
+    _capture(capture, fixture, fixture_hash, "R")
+    return {"status": "reference_capture_protocol_pass",
+            "probability_origin": capture["probability_origin"],
+            "cases": len(fixture["accepted"]), "fixture_sha256": fixture_hash,
+            "artifact_bytes_attested": False, "python_parity": False,
+            "predictive_validation": False}
+
+
 if __name__ == "__main__":
     corpus, fingerprint = load_fixture()
     print(json.dumps({"status": "synthetic_input_protocol_pass", "fixture_sha256": fingerprint,
                       "accepted_cases": len(corpus["accepted"]), "rejected_cases": len(corpus["rejected"]),
-                      "model_predictions": "not_acquired_or_executed"}, indent=2))
+                      "model_predictions": "not_executed_by_this_preflight"}, indent=2))

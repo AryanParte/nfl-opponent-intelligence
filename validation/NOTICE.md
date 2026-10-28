@@ -7,6 +7,11 @@ The synthetic input domain and capture validator are project-specific. Retain
 the upstream notice below with reuse of this adaptation. No model binaries or
 training data are included; this notice is not a license for separate datasets.
 
+`ep_r_capture.R` calls this pinned upstream standalone EP path and records its
+actual inputs/outputs; it does not reimplement or replace its model. The raw export
+retains the separately acquired fastrmodels MIT notice and DESCRIPTION alongside
+the payload. See `docs/EP_R_CAPTURE.md` for the observation/replay method and limits.
+
 Source: https://github.com/nflverse/nflfastR/blob/917b14e5085f352d9b00d23628759773e7d411b5/LICENSE.md
 
 ## MIT License
