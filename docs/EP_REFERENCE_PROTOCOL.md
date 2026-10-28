@@ -21,6 +21,13 @@ model inference. Native dependency locking, installed EP equality and the actual
 capture remain open. This supersedes the source-build next step above, not the
 original protocol's historical observations or acceptance criteria.
 
+Follow-up, 2026-10-27: [full runtime evidence](EP_RUNTIME.md) now verifies the
+complete offline installation, separately locked native dependencies and installed
+fastrmodels EP byte equality. The environment check replays identically; no
+booster construction or predictions occurred. The only next reference slice is
+immutable raw export and actual fixed-corpus feature/probability capture. Earlier
+missing-header/source-resolution boundaries are resolved, not current blockers.
+
 The [fastrmodels audit](FASTRMODELS_AUDIT.md) and [nfl4th audit](NFL4TH_AUDIT.md)
 already establish source/interface limits. Do not repeat those audits or rebuild
 their models. Today adds an executable, repository-only acceptance protocol in
@@ -185,12 +192,11 @@ The feature encoding's upstream notice is retained in [validation/NOTICE](../val
 
 ## Exit criteria and precise next unit
 
-**Next:** reuse the verified EP acquisition, R source lock and native XGBoost layer.
-Resolve/lock missing native development dependencies (libcurl headers/pkg-config
-first) with exact source snapshot, terms and hashes. Finish offline installation,
-record the full environment, verify installed EP equality and capture actual
-upstream features/probabilities for this fixed
-corpus, with a reproducible offline rerun. Stop that unit at an audited R capture
+**Next:** reuse the installed full reference, locked R/native sources and verified
+EP equality. Add a bounded offline runner and separate immutable raw EP export;
+capture actual upstream features/probabilities for this fixed corpus, with
+single/batch checks and a reproducible offline rerun. Bind the actual runner,
+environment and artifact identities. Stop that unit at an audited R capture
 or a concrete compatibility/terms blocker; no Python serving integration, WP,
 new real data, enrichment or API/UI. Do not use these synthetic cases to tune models.
 
