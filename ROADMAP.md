@@ -29,8 +29,11 @@ is acquired and inspected in an offline R sandbox. The
 [full reference runtime](docs/EP_RUNTIME.md) now installs offline with separately
 locked native dependencies and verifies installed EP byte equality. The
 [actual R capture](docs/EP_R_CAPTURE.md) now passes the unchanged synthetic corpus,
-single/batch checks and exact offline replay. Next is an independent isolated
-Python candidate/parity experiment, not a model endpoint or action ranking.
+single/batch checks and exact offline replay. The
+[independent Python candidate](docs/EP_PYTHON_PARITY.md) now passes the unchanged
+parity protocol with its own feature encoding and verified isolated runtime.
+P1.6's bounded evaluation is complete; production models remain explicitly deferred.
+Next is one P1.7 FTN charting artifact/contract audit, not a model endpoint or ranking.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -277,21 +280,27 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       offline replay is byte-identical. Bound artifact/driver/runner/protocol/runtime
       identities, no-clobber publication and failure logs; 21 new offline tests.
       [Evidence/replay](docs/EP_R_CAPTURE.md). No Python parity or football validation.
-- [ ] **Next unit:** independent isolated Python 3.13.2/native XGBoost EP candidate
-      and fixed-corpus parity experiment. Verify exact binding/dependency artifact
-      versions, hashes and terms; reuse the same raw export and actual R capture.
-      Compute features independently (do not import the oracle), run singles/batch,
-      then apply unchanged feature/class/probability/EP tolerances. Record actual
-      environment/runner identities and failures. No silent version/model substitution,
-      serving dependency, WP, real data, ranking or API/UI. R reference is complete.
-- [ ] Independently test golden examples, transformations, possession/time/OT
-      boundaries and runtime parity using the predeclared protocol before any EP/WP
-      integration. The Python candidate must be independent of the oracle. Version models,
-      features, training windows and provenance; do not infer action values from
-      state values alone. Unsupported integrations remain explicitly deferred.
+- [x] Independent Python EP candidate/parity (2026-10-29): Python 3.13.2 and a native
+      source-built XGBoost 3.4.2, seven reviewed hash/notice-pinned wheels, no production
+      dependency. Its own encoder matches all 25 unchanged feature cases and rejects
+      all 16 unsupported states; actual DMatrix features, singles/batch and separate
+      offline replay pass. Maximum cross-runtime errors: probability `4.66e-10`,
+      EP `3.26e-9`, below unchanged `1e-6` / `1e-5` tolerances. Twenty-two new offline
+      tests; [evidence, retained SDK failure and replay](docs/EP_PYTHON_PARITY.md).
+- [x] Bounded golden-case/encoding/runtime gate: possession, eras, regulation clocks,
+      field/timeouts, unsupported OT/missing-context rejection and native R/Python
+      parity verified on the predeclared synthetic corpus. **Production admission
+      deferred:** training lineage/release availability, typed context, expanded-state
+      policy, temporal holdouts, baselines and calibration remain unverified. No
+      action values can be inferred from state EP. This closes evaluation, not these
+      unresolved scientific/serving gates; do not repeat setup or silently admit a model.
 
 ### P1.7 — Richer football data audit
 
+- **Next unit:** extend the existing FTN review for one 2024 charting artifact:
+  refresh primary-source terms/release metadata, acquire only reviewed bytes into a
+  separate immutable manifest, and audit join-key/schema availability. No serving
+  integration, play-family exposure or assumed historical in-season availability.
 - [ ] Extend the existing participation/FTN audit, not a second ingestion stack:
       separate immutable manifests/hashes, attribution/terms and release-time evidence.
 - [ ] Validate joins/cardinality against PBP and audit unmatched/unknown/invalid

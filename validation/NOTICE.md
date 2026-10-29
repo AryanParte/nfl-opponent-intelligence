@@ -7,6 +7,11 @@ The synthetic input domain and capture validator are project-specific. Retain
 the upstream notice below with reuse of this adaptation. No model binaries or
 training data are included; this notice is not a license for separate datasets.
 
+`ep_python_candidate.py` is a separate implementation of these pinned feature
+semantics for an isolated parity experiment. It does not import the oracle or
+reference predictions. Its dependency notices/hashes and local build/runtime
+record are documented in `docs/EP_PYTHON_PARITY.md`; it is not a serving adapter.
+
 `ep_r_capture.R` calls this pinned upstream standalone EP path and records its
 actual inputs/outputs; it does not reimplement or replace its model. The raw export
 retains the separately acquired fastrmodels MIT notice and DESCRIPTION alongside

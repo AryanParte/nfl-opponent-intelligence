@@ -64,8 +64,10 @@ Installed fastrmodels EP bytes match the acquired artifact and the environment
 receipt replays identically. The [actual R reference capture](docs/EP_R_CAPTURE.md)
 now verifies the 25 fixed synthetic cases, actual upstream features, single/batch
 agreement and exact offline replay, with a separately hashed raw EP export.
-Independent Python parity and football validation remain unfinished; no production
-model integration or Run/Pass action ranking is claimed.
+The [independent Python candidate](docs/EP_PYTHON_PARITY.md) now passes the same
+fixed-corpus feature/probability/EP checks and exact offline replay in its separately
+locked environment. This completes bounded engineering parity, not football
+validation. Production EP/WP and Run/Pass action ranking remain deferred.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
