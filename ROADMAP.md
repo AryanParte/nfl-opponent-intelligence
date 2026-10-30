@@ -33,7 +33,8 @@ single/batch checks and exact offline replay. The
 [independent Python candidate](docs/EP_PYTHON_PARITY.md) now passes the unchanged
 parity protocol with its own feature encoding and verified isolated runtime.
 P1.6's bounded evaluation is complete; production models remain explicitly deferred.
-Next is one P1.7 FTN charting artifact/contract audit, not a model endpoint or ranking.
+P1.7's [first FTN artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) is complete.
+Next is one offline PBP join/coverage audit, not serving enrichment or ranking.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -297,12 +298,20 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
 
 ### P1.7 — Richer football data audit
 
-- **Next unit:** extend the existing FTN review for one 2024 charting artifact:
-  refresh primary-source terms/release metadata, acquire only reviewed bytes into a
-  separate immutable manifest, and audit join-key/schema availability. No serving
-  integration, play-family exposure or assumed historical in-season availability.
-- [ ] Extend the existing participation/FTN audit, not a second ingestion stack:
-      separate immutable manifests/hashes, attribution/terms and release-time evidence.
+- [x] First FTN artifact/contract audit (2026-10-30): refreshed primary-source
+      terms/metadata; bounded, pinned 2024 CSV acquisition through the shared HTTP
+      transport; separate immutable manifest, retained notices and offline replay.
+      [Evidence](docs/FTN_CHARTING_AUDIT.md): 48,031 rows, 29 documented columns,
+      285 games, unique NFLverse composite keys; no blank/NA tokens, but 11,605
+      undocumented QB-location codes. Twenty-three synthetic/offline tests.
+      Raw logical encodings are not applicability validation. No join, serving
+      enrichment, play-family approval or historical in-season availability claim.
+- **Next unit:** one offline left-join/coverage audit of this FTN artifact against
+  the existing verified PBP snapshot. Enforce cardinality, preserve eligible PBP
+  rows, separate unmatched/unknown/invalid observations by team/week/candidate,
+  investigate placeholder/applicability semantics and independently reconcile counts.
+  Participation remains unacquired; reuse source-specific notices/manifests, not
+  a second production ingestion stack or assumed historical feature availability.
 - [ ] Validate joins/cardinality against PBP and audit unmatched/unknown/invalid
       observations by team, week and candidate; no imputation of absent charting.
 - [ ] Approve only directly defensible play families with adequate samples and

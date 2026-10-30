@@ -65,11 +65,13 @@ def _copy_and_hash(source, destination, limit: int) -> tuple[int, str]:
     return size, digest.hexdigest()
 
 
-def _download(url: str, target: Path, limit: int, timeout: float, attempts: int) -> None:
+def _download(url: str, target: Path, limit: int, timeout: float, attempts: int,
+              *, accept: str | None = None) -> None:
     """Bound individual socket operations, body size, attempts, and retry backoff."""
     request = Request(url, headers={
         "User-Agent": "nfl-opponent-intelligence/0.1",
-        "Accept": "application/vnd.github+json" if url == RELEASE_API else "application/octet-stream",
+        "Accept": accept or (
+            "application/vnd.github+json" if url == RELEASE_API else "application/octet-stream"),
     })
     for attempt in range(attempts):
         try:

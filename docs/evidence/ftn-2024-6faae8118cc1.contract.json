@@ -1,0 +1,473 @@
+{
+  "schema_version": 1,
+  "scope": "raw FTN 2024 schema and key reconnaissance only",
+  "source_manifest": {
+    "schema_version": 1,
+    "source": {
+      "dataset": "FTN charting via nflverse",
+      "season": 2024,
+      "reviewed_on": "2026-10-30",
+      "release": {
+        "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/ftn_charting",
+        "release_id": 119740650,
+        "release_tag": "ftn_charting",
+        "release_published_at_utc": "2023-09-03T16:14:36Z",
+        "asset_id": 288253517,
+        "asset_name": "ftn_charting_2024.csv",
+        "download_url": "https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_2024.csv",
+        "asset_created_at_utc": "2025-09-01T01:29:36Z",
+        "asset_updated_at_utc": "2025-09-01T01:29:37Z",
+        "size_bytes": 8254908,
+        "sha256": "6faae8118cc13ce62589210d553733128ed35e558671009b4a7a8fc5c674c2cb"
+      },
+      "documentation_commit": "23f915a5be30415aeaa0c5c80cd23b2c69cda122",
+      "license": {
+        "identifier": "CC-BY-SA-4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "legalcode_url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.en",
+        "source_url": "https://raw.githubusercontent.com/nflverse/nflreadr/23f915a5be30415aeaa0c5c80cd23b2c69cda122/R/load_ftn_charting.R",
+        "attribution": "FTN Data via nflverse",
+        "modifications": "Source CSV retained byte-for-byte; no transformations."
+      },
+      "documentation_license": {
+        "identifier": "MIT",
+        "attribution": "Copyright (c) 2021 nflreadr authors",
+        "source_url": "https://raw.githubusercontent.com/nflverse/nflreadr/23f915a5be30415aeaa0c5c80cd23b2c69cda122/LICENSE.md"
+      },
+      "historical_row_availability_verified": false,
+      "joined_to_pbp": false
+    },
+    "retrieved_at_utc": "2026-10-30T17:56:04.882310+00:00",
+    "files": {
+      "ftn_charting_2024.csv": {
+        "sha256": "6faae8118cc13ce62589210d553733128ed35e558671009b4a7a8fc5c674c2cb",
+        "size_bytes": 8254908,
+        "url": "https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_2024.csv"
+      },
+      "load_ftn_charting.R": {
+        "sha256": "9e89e80cc034eb952ddbf05bfe3c58975f111a3abe65e393b086e2f56184e175",
+        "size_bytes": 2220,
+        "git_blob_sha1": "07bf9f63c4f6028699d220d455ab364396cbee25",
+        "url": "https://raw.githubusercontent.com/nflverse/nflreadr/23f915a5be30415aeaa0c5c80cd23b2c69cda122/R/load_ftn_charting.R"
+      },
+      "dictionary_ftn_charting.csv": {
+        "sha256": "561f76818200cd6bb88a1fa3a74a4640c80e5e0fcf59ade9d01dac18c312e1f4",
+        "size_bytes": 2551,
+        "git_blob_sha1": "ca2278443124d0db2644ba74e13f90a43b599907",
+        "url": "https://raw.githubusercontent.com/nflverse/nflreadr/23f915a5be30415aeaa0c5c80cd23b2c69cda122/data-raw/dictionary_ftn_charting.csv"
+      },
+      "nflreadr-LICENSE.md": {
+        "sha256": "7ea91fb135ea11fe49ea83044fd8add1252f16c05eefd17bfe9488f30db77fca",
+        "size_bytes": 1075,
+        "git_blob_sha1": "e7c93e8e5d9b2f8f5863b58ed1bb3325e7862ee4",
+        "url": "https://raw.githubusercontent.com/nflverse/nflreadr/23f915a5be30415aeaa0c5c80cd23b2c69cda122/LICENSE.md"
+      }
+    }
+  },
+  "parsed_csv_sha256": "6faae8118cc13ce62589210d553733128ed35e558671009b4a7a8fc5c674c2cb",
+  "inventory": {
+    "raw_rows": 48031,
+    "header": [
+      "ftn_game_id",
+      "nflverse_game_id",
+      "season",
+      "week",
+      "ftn_play_id",
+      "nflverse_play_id",
+      "starting_hash",
+      "qb_location",
+      "n_offense_backfield",
+      "n_defense_box",
+      "is_no_huddle",
+      "is_motion",
+      "is_play_action",
+      "is_screen_pass",
+      "is_rpo",
+      "is_trick_play",
+      "is_qb_out_of_pocket",
+      "is_interception_worthy",
+      "is_throw_away",
+      "read_thrown",
+      "is_catchable_ball",
+      "is_contested_ball",
+      "is_created_reception",
+      "is_drop",
+      "is_qb_sneak",
+      "n_blitzers",
+      "n_pass_rushers",
+      "is_qb_fault_sack",
+      "date_pulled"
+    ],
+    "missing_documented_columns": [],
+    "undocumented_columns": [],
+    "columns": {
+      "ftn_game_id": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "nflverse_game_id": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "season": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "week": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "ftn_play_id": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "nflverse_play_id": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "starting_hash": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "qb_location": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "n_offense_backfield": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "n_defense_box": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_no_huddle": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_motion": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_play_action": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_screen_pass": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_rpo": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_trick_play": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_qb_out_of_pocket": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_interception_worthy": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_throw_away": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "read_thrown": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_catchable_ball": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_contested_ball": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_created_reception": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_drop": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_qb_sneak": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "n_blitzers": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "n_pass_rushers": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "is_qb_fault_sack": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      },
+      "date_pulled": {
+        "column_present": true,
+        "counts": {
+          "missing_rows": 0,
+          "nonmissing_rows": 48031
+        }
+      }
+    },
+    "logical_encodings": {
+      "is_no_huddle": {
+        "true_rows": 4747,
+        "false_rows": 43284,
+        "unrecognized_rows": 0
+      },
+      "is_motion": {
+        "true_rows": 18148,
+        "false_rows": 29883,
+        "unrecognized_rows": 0
+      },
+      "is_play_action": {
+        "true_rows": 5109,
+        "false_rows": 42922,
+        "unrecognized_rows": 0
+      },
+      "is_screen_pass": {
+        "true_rows": 1983,
+        "false_rows": 46048,
+        "unrecognized_rows": 0
+      },
+      "is_rpo": {
+        "true_rows": 1297,
+        "false_rows": 46734,
+        "unrecognized_rows": 0
+      },
+      "is_trick_play": {
+        "true_rows": 273,
+        "false_rows": 47758,
+        "unrecognized_rows": 0
+      },
+      "is_qb_out_of_pocket": {
+        "true_rows": 4313,
+        "false_rows": 43718,
+        "unrecognized_rows": 0
+      },
+      "is_interception_worthy": {
+        "true_rows": 659,
+        "false_rows": 47372,
+        "unrecognized_rows": 0
+      },
+      "is_throw_away": {
+        "true_rows": 770,
+        "false_rows": 47261,
+        "unrecognized_rows": 0
+      },
+      "is_catchable_ball": {
+        "true_rows": 13805,
+        "false_rows": 34226,
+        "unrecognized_rows": 0
+      },
+      "is_contested_ball": {
+        "true_rows": 2989,
+        "false_rows": 45042,
+        "unrecognized_rows": 0
+      },
+      "is_created_reception": {
+        "true_rows": 571,
+        "false_rows": 47460,
+        "unrecognized_rows": 0
+      },
+      "is_drop": {
+        "true_rows": 616,
+        "false_rows": 47415,
+        "unrecognized_rows": 0
+      },
+      "is_qb_sneak": {
+        "true_rows": 327,
+        "false_rows": 47704,
+        "unrecognized_rows": 0
+      },
+      "is_qb_fault_sack": {
+        "true_rows": 541,
+        "false_rows": 47490,
+        "unrecognized_rows": 0
+      }
+    },
+    "documented_codes": {
+      "starting_hash": {
+        "L": 16751,
+        "M": 3726,
+        "R": 15953,
+        "outside_documented_codes": 11601
+      },
+      "qb_location": {
+        "P": 3387,
+        "S": 22651,
+        "U": 10388,
+        "outside_documented_codes": 11605
+      },
+      "read_thrown": {
+        "0": 28534,
+        "1": 10758,
+        "2": 1679,
+        "CHK": 2737,
+        "DES": 2213,
+        "SD": 2110,
+        "outside_documented_codes": 0
+      }
+    },
+    "keys": {
+      "nflverse": {
+        "columns": [
+          "nflverse_game_id",
+          "nflverse_play_id"
+        ],
+        "columns_present": true,
+        "counts": {
+          "missing_key_rows": 0,
+          "invalid_key_rows": 0,
+          "valid_key_rows": 48031,
+          "distinct_keys": 48031,
+          "distinct_games": 285,
+          "duplicate_key_groups": 0,
+          "rows_in_duplicate_groups": 0,
+          "duplicate_excess_rows": 0
+        }
+      },
+      "ftn": {
+        "columns": [
+          "ftn_game_id",
+          "ftn_play_id"
+        ],
+        "columns_present": true,
+        "counts": {
+          "missing_key_rows": 0,
+          "invalid_key_rows": 0,
+          "valid_key_rows": 48031,
+          "distinct_keys": 48031,
+          "distinct_games": 285,
+          "duplicate_key_groups": 0,
+          "rows_in_duplicate_groups": 0,
+          "duplicate_excess_rows": 0
+        }
+      }
+    },
+    "game_season_week_consistency": {
+      "matching_rows": 48031,
+      "missing_rows": 0,
+      "inconsistent_or_invalid_rows": 0
+    },
+    "source_extraction_time": {
+      "valid_rows": 48031,
+      "invalid_rows": 0,
+      "minimum_utc": "2024-11-13T12:29:59.804047+00:00",
+      "maximum_utc": "2025-09-01T01:29:30.123782+00:00"
+    }
+  },
+  "join_to_pbp_performed": false,
+  "charting_accuracy_validated": false,
+  "historical_row_availability_verified": false,
+  "play_families_approved": [],
+  "receipt_license": {
+    "identifier": "CC-BY-SA-4.0",
+    "attribution": "FTN Data via nflverse",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "modifications": "Aggregate schema/key/encoding inventory; no row-level data redistributed."
+  },
+  "limitations": [
+    "Raw rows are not filtered by the PBP analytical eligibility policy; no rates computed.",
+    "FALSE is a literal CSV value, not proof that a charted feature is applicable or observed.",
+    "Nonmissing fields and valid key syntax do not establish charting accuracy or PBP coverage.",
+    "Date pulled records FTN API extraction by nflverse, not first public or pregame availability.",
+    "Unknown codes and duplicate/missing keys are not silently repaired or mapped to proxies."
+  ]
+}

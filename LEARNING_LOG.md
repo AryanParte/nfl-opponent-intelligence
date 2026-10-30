@@ -2585,3 +2585,72 @@ calibration. Begin only the narrow P1.7 FTN 2024 source/contract audit: refreshe
 terms/metadata, one reviewed immutable artifact and join-key/schema inventory.
 Do not redo runtimes, expose unvalidated play families or assume retrospective
 charting was available in-season. No merge or auto-merge.
+
+## 2026-10-30 — FTN 2024 immutable artifact and raw contract audit
+
+**Built / why:** confirmed PR #35 merged, eight green main-CI jobs, a clean
+upstream-matched checkout and no open PRs/review feedback. Started
+`codex/ftn-charting-contract` from fetched main `691a18a`. Extended the existing
+source review into one pinned FTN CSV acquisition, separate manifest/notices and
+offline schema/key/encoding auditor. Reused the bounded HTTP transport; no second
+production ingestion stack. This establishes inspectable enrichment evidence
+before any join or feature can distort existing football measurements.
+
+**Review files:** `validation/ftn_snapshot.py`, `validation/ftn_contract.py`,
+`tests/test_ftn_contract.py`, `docs/FTN_CHARTING_AUDIT.md`,
+`docs/evidence/ftn-2024-6faae8118cc1.contract.json` and the small optional Accept
+header change in `src/opponent_intelligence/snapshots.py`. Roadmap/status and
+architecture/source notices record the next join/coverage boundary.
+
+**Sports concepts:** charting is a separate observational source, not PBP or
+tracking. NFLverse and FTN IDs are different namespaces. Run/dropback eligibility
+does not equal all charted rows. Motion-before-or-at-snap is not a motion path;
+backfield counts are not personnel composition. A literal false or nonmissing
+location value need not be an applicable, valid observation. The 48,031 raw rows
+have unique NFLverse keys, but 11,605 QB-location and 11,601 hash values use an
+undocumented zero code. Do not publish rates or infer play families from this.
+
+**Software/statistical concepts / learn:** content-addressed immutable sources,
+bounded shared transport, no-clobber staging, pinned metadata/notice identity,
+exact numeric keys, duplicate groups versus excess/affected rows, absent versus
+missing versus unknown, and offline repeatability. Distinguish CSV serialization
+from measurement validity and source extraction from first public availability.
+FTN's CC BY-SA attribution is separate from PBP's CC BY and nflreadr's MIT notice.
+Integrity/reproducibility are necessary evidence, not coverage or causal validation.
+
+**Three review questions:**
+
+1. Why must an FTN-to-PBP join use the NFLverse composite key and retain unmatched
+   eligible PBP rows, even though the FTN keys in this snapshot are unique?
+2. How can a dataset with no blank/NA values still contain unavailable or
+   non-applicable football evidence, and why must zero/FALSE not be imputed blindly?
+3. What do the CSV hash, asset update, `date_pulled` and acquisition time each prove,
+   and which evidence is still missing for a leakage-safe historical replay?
+
+**Verification / self-review:** baseline 408 core / 24 API on Python 3.13. Final
+431 core / 24 API pass on each Python 3.11/3.12/3.13, API warnings as errors and
+no broken dependencies; 672 frontend tests, TypeScript/build and all 14 Chromium
+cases pass. Twenty-three new offline tests require neither raw FTN data nor network.
+Real 8,254,908-byte CSV matches published SHA-256. Separate raw CSV/Decimal/Counter
+checks reconcile 29 fields, 48,031 keys, 285 games, context, all logical/code
+partitions and timestamp bounds. Full receipt replays exactly with network blocked
+on all three Python versions; only aggregate evidence is committed.
+
+The first network attempt returned HTTP 415 because the reused transport selected
+a binary media type for the new metadata URL. An explicit optional JSON Accept
+header fixes this; old defaults and limits remain intact. Complete-diff review
+tightened JSON identity against boolean/numeric coercions, confirmed parse-time
+hash checking, no-clobber output and unknown-code handling, and separated literal
+flags from applicability claims. Final review also avoided assigning row-level
+PBP eligibility before the planned join audit. No tests/pins were weakened and no statistical
+formula, schema, API/UI dependency, global identity or automation changed.
+Raw CSV/notices remain in the ignored immutable cache; test servers are stopped.
+Publication SHA, GitHub attribution and exact-head CI are recorded in the PR.
+
+**Remaining / next:** one offline left-join/coverage audit against the existing
+verified PBP snapshot, preserving eligible rows and counting unmatched/unknown/
+invalid observations by team/week/candidate. Investigate placeholder/applicability
+semantics and independently reconcile counts before any field admission. No
+serving enrichment, new play family, historical availability, charting accuracy,
+model validation or ranking claim. Participation/tracking remain deferred. Do not
+repeat completed acquisition/parity work. No merge, auto-merge or automation change.

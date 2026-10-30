@@ -19,6 +19,9 @@ the fixed synthetic corpus, single/batch checks and exact offline replay pass.
 The independent Python candidate passed the unchanged feature/probability/EP
 protocol and exact offline replay on 2026-10-29. Bounded engineering parity is
 complete; football validation and production model admission remain deferred.
+The first FTN 2024 [artifact/contract audit](FTN_CHARTING_AUDIT.md) followed on
+2026-10-30: separate immutable bytes, terms and raw key/schema evidence, not a
+serving integration. PBP joins, applicability/coverage and field admission remain next.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -134,7 +137,7 @@ does not prove that the source revision or model existed before that week.
 | Layer | Purpose | Admission gate |
 | --- | --- | --- |
 | PBP (implemented) | Broad situations, observed run/dropback, EPA/success and pre-play context | Existing immutable manifest, schema/eligibility validation and source audit |
-| Charting / participation (deferred) | Directly observed personnel, formation, play-action/RPO/motion when available | Source-specific license, immutable hashes, verified play-ID joins, duplication/missingness/coverage and release-time audit |
+| Charting / participation (integration deferred; one FTN snapshot audited) | Directly observed personnel, formation, play-action/RPO/motion when available | Source-specific license, immutable hashes, verified play-ID joins, duplication/missingness/coverage and release-time audit |
 | Tracking (deferred) | Player movement, spacing and route/coverage research | Competition-specific rights, coordinate/time semantics, identity joins, validated labels and temporal splits |
 | Decision models (deferred) | EP/WP, fourth-down action values, eventually richer ranking | Versioned artifacts/features, task/assumptions, independent parity/error/calibration checks and historically valid inputs |
 
@@ -190,7 +193,8 @@ single/batch agreement and untraced replay. Independent fresh-container capture
 reproduces exactly. The 2026-10-29 [Python follow-up](EP_PYTHON_PARITY.md) also
 passes the fixed-corpus parity gate. Neither establishes temporal availability,
 calibrated performance or action values. Model integration stays deferred;
-next is the narrow P1.7 FTN artifact/contract audit, not another model runtime.
+the first P1.7 FTN artifact/contract audit is now complete. Next is its offline
+PBP join/coverage audit, not another model runtime.
 
 **Follow-up, 2026-10-27:** [full runtime evidence](EP_RUNTIME.md) closes the
 missing-native-package installation boundary without upgrades or pin changes.
@@ -252,6 +256,12 @@ protocol. Preserve upstream methodology context without claiming its historical
 calibration validates a new decision policy, a newer artifact or Python conversion.
 
 ### Participation, FTN and tracking — no premature play-family claims
+
+**Follow-up, 2026-10-30:** [FTN artifact evidence](FTN_CHARTING_AUDIT.md) pins one
+2024 CSV, retains source-specific CC BY-SA notices, and verifies unique raw keys
+and the documented schema. Undocumented location codes and literal false values
+are not silently interpreted as valid observations. No joins/field admission yet;
+the next bounded unit audits coverage and applicability against pinned PBP.
 
 Reuse the completed [personnel/motion audit](PERSONNEL_MOTION.md), including pinned
 dictionary evidence and source-specific CC-BY-SA-4.0 terms; do not repeat it as a
