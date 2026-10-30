@@ -35,6 +35,12 @@ Raw export and capture replay byte-for-byte in separate offline containers. The
 R-reference gate is complete; independent Python parity and football validation
 remain open. Earlier no-prediction statements describe their dated units only.
 
+Follow-up, 2026-10-29: the [independent Python candidate](EP_PYTHON_PARITY.md) now
+passes the same corpus and tolerances with separately computed actual features,
+single/batch agreement and byte-identical offline replay. Both runtime captures
+exist; football calibration/temporal validation and production admission remain
+deferred. The original synthetic test vectors still are not model evidence.
+
 The [fastrmodels audit](FASTRMODELS_AUDIT.md) and [nfl4th audit](NFL4TH_AUDIT.md)
 already establish source/interface limits. Do not repeat those audits or rebuild
 their models. Today adds an executable, repository-only acceptance protocol in
@@ -199,18 +205,13 @@ The feature encoding's upstream notice is retained in [validation/NOTICE](../val
 
 ## Exit criteria and precise next unit
 
-**Next:** reuse the installed full reference, locked R/native sources and verified
-EP equality. Add a bounded offline runner and separate immutable raw EP export;
-capture actual upstream features/probabilities for this fixed corpus, with
-single/batch checks and a reproducible offline rerun. Bind the actual runner,
-environment and artifact identities. Stop that unit at an audited R capture
-or a concrete compatibility/terms blocker; no Python serving integration, WP,
-new real data, enrichment or API/UI. Do not use these synthetic cases to tune models.
+The R capture/export and independent Python parity gates are now complete within
+this corpus. Their source/model identities and tolerances are unchanged; separate
+runtime/runner records and maximum errors are linked above. Do not repeat setup
+or use these synthetic cases to tune models.
 
-Only afterward compare the independent Python candidate and record maximum errors,
-batch/single checks and unchanged source/model/environment identities. A numeric
-parity pass still leaves training lineage, temporal holdouts, baselines, modern-era
+The pass still leaves training lineage, temporal holdouts, baselines, modern-era
 calibration/error analysis, historically available features and model releases
-unresolved. If those cannot be evidenced, production use remains deferred and
-P1.7/P1.8 may proceed descriptively without a model. No action ranking, winner
-label or fourth-down mode is unlocked by this protocol.
+unresolved. Production use remains explicitly deferred. Next is the first narrow
+P1.7 FTN artifact/contract audit; P1.8 may later proceed descriptively without a
+model. No action ranking, winner label or fourth-down mode is unlocked by parity.

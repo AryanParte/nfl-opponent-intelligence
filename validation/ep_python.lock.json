@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "purpose": "Optional offline EP parity experiment only; no production dependency",
+  "python_version": "3.13.2",
+  "platform": "macos-arm64",
+  "xgboost_version": "3.4.2",
+  "source_archive": "xgboost-src-3.4.2.tar.gz",
+  "source_sha256": "d7de76bdaf48e9e0bc84b27c0c42f15f3d831e624d102d6c019bab7027b3cabd",
+  "source_commit": "fdf0888bedddbd444d72994d845c59b3ca182c5b",
+  "wheels": [
+    {
+      "name": "numpy",
+      "version": "2.3.4",
+      "metadata_url": "https://pypi.org/pypi/numpy/2.3.4/json",
+      "requires_python": ">=3.11",
+      "requires_dist": [],
+      "filename": "numpy-2.3.4-cp313-cp313-macosx_14_0_arm64.whl",
+      "url": "https://files.pythonhosted.org/packages/ac/01/5a67cb785bda60f45415d09c2bc245433f1c68dd82eef9c9002c508b5a65/numpy-2.3.4-cp313-cp313-macosx_14_0_arm64.whl",
+      "sha256": "3634093d0b428e6c32c3a69b78e554f0cd20ee420dcad5a9f3b2a63762ce4197",
+      "size_bytes": 5108673,
+      "uploaded_at_utc": "2025-10-15T16:16:14.877570Z",
+      "license_review": "BSD-3-Clause with bundled notices retained",
+      "notice_hashes": {
+        "numpy-2.3.4.dist-info/LICENSE.txt": "d84715000c6b3fd8719b2027238b6f6457cb853b2eb7023821a585949387f7bf",
+        "numpy/ma/LICENSE": "05f3b88351988ecfad10abe92c0c50e5875c6452d5009a0084cc291551ffcca6",
+        "numpy/_core/include/numpy/random/LICENSE.txt": "fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec",
+        "numpy/random/LICENSE.md": "103166b62b80443afb9eb3488e052ea06be0cff566b908f199e561fde49af19f"
+      }
+    },
+    {
+      "name": "scipy",
+      "version": "1.16.3",
+      "metadata_url": "https://pypi.org/pypi/scipy/1.16.3/json",
+      "requires_python": ">=3.11",
+      "requires_dist": [
+        "numpy<2.6,>=1.25.2"
+      ],
+      "filename": "scipy-1.16.3-cp313-cp313-macosx_14_0_arm64.whl",
+      "url": "https://files.pythonhosted.org/packages/15/65/3a9400efd0228a176e6ec3454b1fa998fbbb5a8defa1672c3f65706987db/scipy-1.16.3-cp313-cp313-macosx_14_0_arm64.whl",
+      "sha256": "5803c5fadd29de0cf27fa08ccbfe7a9e5d741bf63e4ab1085437266f12460ff9",
+      "size_bytes": 20865371,
+      "uploaded_at_utc": "2025-10-28T17:33:42.094823Z",
+      "license_review": "BSD-3-Clause with bundled third-party notices retained",
+      "notice_hashes": {
+        "scipy-1.16.3.dist-info/LICENSE.txt": "60a7d05d729ed5c763852a324a1cb4223d665d4ad3f4b8a0c130ae5c60c93e49",
+        "scipy/_lib/_uarray/LICENSE": "c80c39b5fce06ba4897e14e0b0a88b54458334d951eb1361402ffad2cfb863b4",
+        "scipy/fft/_pocketfft/LICENSE.md": "c254b2b5fd30ae3c89d36ba061730563b9760fca04f1b746a1b2c3157da2c789",
+        "scipy/sparse/linalg/_eigen/arpack/COPYING": "0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe",
+        "scipy/spatial/qhull_src/COPYING_QHULL.txt": "106d55c931fd6a84822e5345d900273d059f1c27310d02567ccb313c5d18c55d"
+      }
+    },
+    {
+      "name": "scikit-build-core",
+      "version": "0.11.6",
+      "metadata_url": "https://pypi.org/pypi/scikit-build-core/0.11.6/json",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "exceptiongroup>=1.0; python_version < \"3.11\"",
+        "importlib-resources>=1.3; python_version < \"3.9\"",
+        "packaging>=23.2",
+        "pathspec>=0.10.1",
+        "tomli>=1.2.2; python_version < \"3.11\"",
+        "typing-extensions>=3.10.0; python_version < \"3.9\""
+      ],
+      "filename": "scikit_build_core-0.11.6-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/43/49/ec16b3db6893db788ae35f98506ff5a9c25dca7eb18cc38ada8a4c1dc944/scikit_build_core-0.11.6-py3-none-any.whl",
+      "sha256": "ce6d8fe64e6b4c759ea0fb95d2f8a68f60d2df31c2989838633b8ec930736360",
+      "size_bytes": 185764,
+      "uploaded_at_utc": "2025-08-22T22:11:52.438766Z",
+      "license_review": "Apache-2.0 with vendored BSD notices retained",
+      "notice_hashes": {
+        "scikit_build_core/_vendor/pyproject_metadata/LICENSE": "aaf9a29ca5907971ccf07de025375db34539a8d5eeebce20b46099805722106f",
+        "scikit_build_core/resources/find_python/Copyright.txt": "4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756",
+        "scikit_build_core-0.11.6.dist-info/licenses/LICENSE": "203fb4d261f202242333928424e101de19abf5bf166620124418fb6dd6b279b5"
+      }
+    },
+    {
+      "name": "packaging",
+      "version": "25.0",
+      "metadata_url": "https://pypi.org/pypi/packaging/25.0/json",
+      "requires_python": ">=3.8",
+      "requires_dist": [],
+      "filename": "packaging-25.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/20/12/38679034af332785aac8774540895e234f4d07f7545804097de4b666afd8/packaging-25.0-py3-none-any.whl",
+      "sha256": "29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484",
+      "size_bytes": 66469,
+      "uploaded_at_utc": "2025-04-19T11:48:57.875608Z",
+      "license_review": "Apache-2.0 OR BSD-2-Clause",
+      "notice_hashes": {
+        "packaging-25.0.dist-info/licenses/LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+        "packaging-25.0.dist-info/licenses/LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "packaging-25.0.dist-info/licenses/LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+      }
+    },
+    {
+      "name": "pathspec",
+      "version": "0.12.1",
+      "metadata_url": "https://pypi.org/pypi/pathspec/0.12.1/json",
+      "requires_python": ">=3.8",
+      "requires_dist": [],
+      "filename": "pathspec-0.12.1-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/cc/20/ff623b09d963f88bfde16306a54e12ee5ea43e9b597108672ff3a408aad6/pathspec-0.12.1-py3-none-any.whl",
+      "sha256": "a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08",
+      "size_bytes": 31191,
+      "uploaded_at_utc": "2023-12-10T22:30:43.140207Z",
+      "license_review": "MPL-2.0; unmodified optional build dependency",
+      "notice_hashes": {
+        "pathspec-0.12.1.dist-info/LICENSE": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85"
+      }
+    },
+    {
+      "name": "cmake",
+      "version": "3.31.10",
+      "metadata_url": "https://pypi.org/pypi/cmake/3.31.10/json",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "importlib_metadata>=1.4; python_version < \"3.8\""
+      ],
+      "filename": "cmake-3.31.10-py3-none-macosx_10_10_universal2.whl",
+      "url": "https://files.pythonhosted.org/packages/99/3b/6ed408a99709808df4014bead522e075f0e8d1100e6d886eb5bc30fee04e/cmake-3.31.10-py3-none-macosx_10_10_universal2.whl",
+      "sha256": "ad697643a00d9ba85179590a383c4f7401169b55ebf4b8b2938daf28c6bdeb6d",
+      "size_bytes": 48001731,
+      "uploaded_at_utc": "2025-11-20T17:06:57.473253Z",
+      "license_review": "Python packaging Apache-2.0/BSD-3-Clause; CMake BSD-3-Clause and bundled component notices retained",
+      "notice_hashes": {
+        "cmake/data/doc/cmake/Copyright.txt": "0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8",
+        "cmake/data/doc/cmake/cmliblzma/COPYING": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c",
+        "cmake/data/doc/cmake/cmlibuv/LICENSE": "95b8b163c60d17cfce3cef61a2d8a9cf70137502c8fb5f3d93cd2fc529fa98c8",
+        "cmake/data/doc/cmake/cmlibrhash/COPYING": "953e55838353335148c90b5a38a4894292680b1d4c37228ffddddbf18ce54bf5",
+        "cmake/data/doc/cmake/cmsys/Copyright.txt": "7aa92ae0b86f73f81947d177639556fe7f8ea42a74762ecdf563e3daf7106a40",
+        "cmake/data/doc/cmake/cmlibarchive/COPYING": "b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba",
+        "cmake/data/doc/cmake/cmzstd/LICENSE": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+        "cmake/data/share/cmake-3.31/Licenses/LGPLv3.txt": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+        "cmake-3.31.10.dist-info/licenses/LICENSE_BSD_3": "a39f63ec8a8e9d63ee8fd85eac9eda615995216eff43c500f68c08d4c922bf3f",
+        "cmake-3.31.10.dist-info/licenses/AUTHORS.rst": "9cbfc78a28479dd1ef553021f5841c295d89669f3be2e60d1824bdddd997a1b1",
+        "cmake-3.31.10.dist-info/licenses/LICENSE_Apache_20": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68"
+      }
+    },
+    {
+      "name": "ninja",
+      "version": "1.13.0",
+      "metadata_url": "https://pypi.org/pypi/ninja/1.13.0/json",
+      "requires_python": ">=3.8",
+      "requires_dist": [],
+      "filename": "ninja-1.13.0-py3-none-macosx_10_9_universal2.whl",
+      "url": "https://files.pythonhosted.org/packages/3c/74/d02409ed2aa865e051b7edda22ad416a39d81a84980f544f8de717cab133/ninja-1.13.0-py3-none-macosx_10_9_universal2.whl",
+      "sha256": "fa2a8bfc62e31b08f83127d1613d10821775a0eb334197154c4d6067b7068ff1",
+      "size_bytes": 310125,
+      "uploaded_at_utc": "2025-08-11T15:09:50.971151Z",
+      "license_review": "Apache-2.0; wheel author and license notices retained",
+      "notice_hashes": {
+        "ninja-1.13.0.dist-info/licenses/AUTHORS.rst": "6c6135b7f2e19b68abf12ee7fe36cb0e884ff387e9279b0d0aec6f0d5b0a3508",
+        "ninja-1.13.0.dist-info/licenses/LICENSE_Apache_20": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68"
+      }
+    }
+  ]
+}

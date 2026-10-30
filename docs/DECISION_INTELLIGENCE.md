@@ -16,7 +16,9 @@ The native XGBoost build and R source lock followed on 2026-10-26; the complete
 offline reference installation, native lock and installed EP byte equality followed
 on 2026-10-27. Actual upstream R capture/raw export followed on 2026-10-28;
 the fixed synthetic corpus, single/batch checks and exact offline replay pass.
-Independent Python parity and football validation remain open.
+The independent Python candidate passed the unchanged feature/probability/EP
+protocol and exact offline replay on 2026-10-29. Bounded engineering parity is
+complete; football validation and production model admission remain deferred.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -85,7 +87,8 @@ extracted bytes; production stays deferred. [Acquisition/preflight](EP_ACQUISITI
 now verifies the EP container and raw object. The [full reference runtime](EP_RUNTIME.md)
 now installs offline with separately locked native packages and verifies installed
 EP equality. The [actual R capture](EP_R_CAPTURE.md) now passes the unchanged
-fixed-corpus checks and replay; independent Python comparison remains next. The gates
+fixed-corpus checks and replay; the [independent Python comparison](EP_PYTHON_PARITY.md)
+now passes with a separately locked source-built runtime. The gates
 below continue to apply; they are not claims that all decision capabilities are implemented.
 
 - Define exact down and inclusive distance bounds (and whether any bucketing is
@@ -184,9 +187,10 @@ software licensing is not blanket permission for all data consumed by wrappers.
 the offline R capture and raw export. It observes the actual prediction input
 matrix, binds exact loader bytes and checks all 25 predeclared synthetic states,
 single/batch agreement and untraced replay. Independent fresh-container capture
-reproduces exactly. This is reference execution evidence, not Python parity,
-temporal availability, calibrated performance or action values. Next is the
-independent isolated Python candidate using the same bytes; integration is deferred.
+reproduces exactly. The 2026-10-29 [Python follow-up](EP_PYTHON_PARITY.md) also
+passes the fixed-corpus parity gate. Neither establishes temporal availability,
+calibrated performance or action values. Model integration stays deferred;
+next is the narrow P1.7 FTN artifact/contract audit, not another model runtime.
 
 **Follow-up, 2026-10-27:** [full runtime evidence](EP_RUNTIME.md) closes the
 missing-native-package installation boundary without upgrades or pin changes.

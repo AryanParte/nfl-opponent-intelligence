@@ -2514,3 +2514,74 @@ candidate with verified binding/dependency terms and hashes; use the same raw
 payload/corpus and compare features/probabilities/EP with unchanged tolerances.
 Do not import the oracle or copy R outputs. Temporal lineage/calibration, action
 values and serving integration stay deferred. No merge or auto-merge.
+
+## 2026-10-29 — Independent Python EP candidate and fixed-corpus parity
+
+**Built / why:** after verifying PR #34 merged, its eight green main-CI jobs,
+clean upstream-matched checkout and no open PRs/review feedback, started
+`codex/ep-python-parity` from fetched main `fd2ff46`. Built the exact XGBoost 3.4.2
+Python/native release in an isolated Python 3.13.2 environment, with seven
+hash/notice-pinned wheels. Added an independent feature encoder and bounded
+offline runner using yesterday's raw model/state inputs. All 25 cases pass the
+unchanged R/Python comparison; this establishes a viable reuse path without
+putting an unvalidated model in the application or retraining one.
+
+**Review files:** `validation/ep_python_candidate.py`, `ep_python_capture.py`,
+`ep_python_environment.py`, `ep_python_setup.py`, `ep_python.lock.json`,
+`tests/test_ep_python.py`, `docs/EP_PYTHON_PARITY.md` and the three
+`docs/evidence/ep-python-*.json` records. ROADMAP/STATUS and architecture/protocol
+notes close the bounded P1.6 evaluation and point to P1.7's first FTN artifact audit.
+
+**Sports concepts:** signed next-score EP is a possession-relative state value,
+not EPA, win probability or a value for choosing Run/Pass. Home/away, half-clock,
+roof, era, down/distance and timeouts must retain their actual semantics. All 16
+unsupported protocol states, including OT/unknown venue/context, reject rather
+than borrowing weak proxies. Synthetic states do not demonstrate real-game accuracy.
+
+**Software/statistical concepts / learn:** build from verified source when the
+required binding is not published; do not silently downgrade. Record interpreter,
+native libraries, packages, source and runner identities, then inspect features
+at the model boundary. Compare singles/batch and independent replay separately
+from cross-runtime numerical error. A parity pass is necessary engineering
+evidence, not sufficient temporal/calibration/causal validation. Keep optional
+experiments outside production and distinguish local integrity from attestation.
+
+**Three review questions:**
+
+1. How does the Python runner construct and observe features independently of
+   both the test oracle and R predictions, and why check singles and batch?
+2. What do a matching raw-model hash, installed-file inventory and repeatable
+   capture establish, and why do they not establish historical model availability?
+3. Why can tiny R/Python numerical differences coexist with an invalid Run/Pass
+   recommendation, and which evidence gates still block production model use?
+
+**Verification / self-review:** baseline 386 core / 24 API on Python 3.13. Final
+408 core / 24 API pass on each Python 3.11/3.12/3.13, API warnings as errors, with
+no broken dependencies; 672 frontend tests, TypeScript/build and 14 Chromium
+cases pass. Twenty-two new offline tests require no optional native packages.
+The actual native comparison passes all 25 accepted cases, with max probability
+error `4.656612890424627e-10` and EP error `3.259629019827792e-9`; Python singles/batch
+are identical. Two separate offline executions reproduce capture/environment
+bytes exactly and leave empty logs. The original corpus/tolerances are unchanged.
+
+The first source build failed because automatic SDK 27 selection exceeded the
+installed linker's format support. A fresh build explicitly using installed SDK
+26.5 succeeds; both builds/logs are preserved and no system settings changed.
+Review tightened manifest/runtime checks, removed license-helper code from notice
+classification, added the actual Python framework fingerprint and preserved
+full-precision readable outputs. One concurrent matrix attempt correctly rejected
+the stale receipt during that fingerprint update; fresh bound captures/receipts
+and a full final matrix resolve it. No tests or numerical tolerances were weakened.
+
+No Docker daemon was started. Browser test servers exited; ports 5173/8000 have
+no listeners. No model/wheel/data binaries, mandatory dependency, schema/API/UI,
+global identity or automation changes. Commit attribution, remote SHA and exact
+GitHub CI verification are recorded in the PR, not inferred from local tests.
+
+**Remaining / next:** P1.6's bounded artifact/encoding/runtime evaluation is
+complete; production EP/WP/action values remain deferred for training lineage,
+release timing, typed context/unsupported states, temporal holdouts/baselines and
+calibration. Begin only the narrow P1.7 FTN 2024 source/contract audit: refreshed
+terms/metadata, one reviewed immutable artifact and join-key/schema inventory.
+Do not redo runtimes, expose unvalidated play families or assume retrospective
+charting was available in-season. No merge or auto-merge.

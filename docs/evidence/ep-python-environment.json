@@ -1,0 +1,106 @@
+{
+  "build": {
+    "cmake_cache_sha256": "09a38d28b307e0a8d1f536525c47a7a48a9856fdba4cf0d63c378074716f0a6e",
+    "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+    "compiler_sha256": "f30550eab15fdf5ab8c0dc54c52679711241e5d4b636b027e18c09fef531775d",
+    "cuda": false,
+    "deployment_target": "15.0",
+    "jobs": 2,
+    "linker_sha256": "28d85b9af18c923db12e0b4ce70b80ee217f2b7cade0e872baa9e8ddc396c08d",
+    "log_sha256": "a3c10cf802b1015cb7bcdce573ebb99b86a4e6335f9fb8cb6574f0ba6eed4f9c",
+    "nccl": false,
+    "network": "denied by sandbox-exec",
+    "openmp": false,
+    "sdk": "MacOSX26.5.sdk",
+    "sdk_settings_sha256": "f8d005f09381389167f9e0aeaa169bc9e7dff162ef22ca2fd8e98df7ff1acafe"
+  },
+  "built_wheel": {
+    "filename": "xgboost-3.4.2-py3-none-macosx_15_0_arm64.whl",
+    "notice_hashes": {
+      "xgboost-3.4.2.dist-info/licenses/LICENSE": "b96f9cead5f4ea4c0a217bd9d879427443a353598fb72694f2d8c4428b53a6af"
+    },
+    "sha256": "c507c0fcbe42cd903d251c1f34214ebbed960c56cc95e612f5c87fb37aa342b0",
+    "size_bytes": 2130448
+  },
+  "dependency_lock_sha256": "bdc873d44d085a4af9236c10fc6a10696fdfd58ecea994201b68854ced617127",
+  "inventory_script_sha256": "a3488e9e4ed95f9d3f5a71a05b9067084240d4f67147ef59a098e506fa142b39",
+  "native_library_sha256": "3f39fef4307b30ea5c8a41fd238be9e0cca6b3051997f03e61d5fb5d1ec37fee",
+  "native_linkage": [
+    "\t@rpath/libxgboost.3.dylib (compatibility version 3.0.0, current version 3.4.2)",
+    "\t/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 2100.43.0)",
+    "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+  ],
+  "os_version": "26.6.2",
+  "packages": {
+    "cmake": {
+      "files": 3816,
+      "installed_files_sha256": "fc1be43cb423fa0042f9cfcd650f925f6ce5a00db96ca8c697a758b84e7481c3",
+      "version": "3.31.10"
+    },
+    "ninja": {
+      "files": 14,
+      "installed_files_sha256": "8525d17c192f95f2573ccfd49e6ea7feed7ad2fb4004f3762fb76e1480d1cbcc",
+      "version": "1.13.0"
+    },
+    "numpy": {
+      "files": 900,
+      "installed_files_sha256": "5f7a6e767ee7d8306170f2c3390fa9c8254d8fd68bd3e0e00c27f752a0a9aeae",
+      "version": "2.3.4"
+    },
+    "packaging": {
+      "files": 24,
+      "installed_files_sha256": "b66e27bb73f05082b44701277d7dbd4960e0ef83866cd0055c5311518e053dec",
+      "version": "25.0"
+    },
+    "pathspec": {
+      "files": 14,
+      "installed_files_sha256": "0fa4334c2cd5a22af738d5f9eb43690f5fc83e04f7a38340c181e9a71221e29d",
+      "version": "0.12.1"
+    },
+    "pip": {
+      "files": 442,
+      "installed_files_sha256": "06d90816abb3d36d8e85e18c1243960d50681f64751af678c494ca1625883765",
+      "version": "25.0"
+    },
+    "scikit-build-core": {
+      "files": 102,
+      "installed_files_sha256": "4f221200b3a8c82f5bcbc41da3851083ad621018e45d94126eaa85a41c802a60",
+      "version": "0.11.6"
+    },
+    "scipy": {
+      "files": 1417,
+      "installed_files_sha256": "1caa5b2a28ce75a8337e012878569e281cdfba874baecdd351089a4a23a7594d",
+      "version": "1.16.3"
+    },
+    "xgboost": {
+      "files": 62,
+      "installed_files_sha256": "48cc32c683e5360dbc409ae4bf29b01d883c3c537b58f4cb5f284c1821b79d17",
+      "version": "3.4.2"
+    }
+  },
+  "platform": "macos-arm64",
+  "python_executable_sha256": "42f792544842512d02eb8a95a6009062591476558f09f07553c138661a0bca8e",
+  "python_framework_sha256": "0836c5c0b7568e42b39517c8eb6a8244a25389ec46aebaf1d1ea7392a897b1a1",
+  "python_version": "3.13.2",
+  "runner_sha256": "e3afe1545f7bef1626a14c4e003406b0e5c7fad07ee3330684ab2e7929c6b77b",
+  "schema_version": 1,
+  "source_archive_sha256": "d7de76bdaf48e9e0bc84b27c0c42f15f3d831e624d102d6c019bab7027b3cabd",
+  "source_commit": "fdf0888bedddbd444d72994d845c59b3ca182c5b",
+  "xgboost_build_info": {
+    "BUILTIN_PREFETCH_PRESENT": true,
+    "CLANG_VERSION": [
+      21,
+      0,
+      0
+    ],
+    "DEBUG": false,
+    "MM_PREFETCH_PRESENT": false,
+    "USE_CUDA": false,
+    "USE_DLOPEN_NCCL": false,
+    "USE_FEDERATED": false,
+    "USE_NCCL": false,
+    "USE_OPENMP": false,
+    "USE_RMM": false,
+    "libxgboost": "/Users/aryanparte/Documents/nfl-opponent-intelligence/.venv/ep-python/lib/python3.13/site-packages/xgboost/lib/libxgboost.dylib"
+  }
+}

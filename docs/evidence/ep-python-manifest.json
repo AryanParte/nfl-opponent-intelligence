@@ -1,0 +1,39 @@
+{
+  "captured_at_utc": "2026-10-29T19:54:22.985662+00:00",
+  "comparison": {
+    "artifact_bytes_attested": false,
+    "cases": 25,
+    "fixture_sha256": "5d2a4282a838e2757a0ebf948587919a28799ab5fc05ebb4b4e70bee10ac2bc9",
+    "predictive_validation": false,
+    "probability_origin": "model_capture",
+    "status": "capture_comparison_pass"
+  },
+  "driver_sha256": "86655da5ebeb0a48fe2f0a15c9980b85a7c0c08d6c4db3894fe28a6b919b3fec",
+  "execution": {
+    "cpu_seconds_limit": 45,
+    "network": "denied",
+    "output_bytes_limit": 1048576,
+    "wall_seconds_limit": 60,
+    "writes": "capture directory only"
+  },
+  "files": {
+    "capture.json": {
+      "sha256": "4427d81e45418f5c3fa8adade72dc55f34fe22ca1a4fa0b03a19c491297fc2de",
+      "size_bytes": 17726
+    },
+    "environment.json": {
+      "sha256": "6689d53532e1c20d83aa686c833a8022d3b4be6a8802ac6e0ef2c37bf4ca3b6a",
+      "size_bytes": 4333
+    },
+    "stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "stdout.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  },
+  "reference_manifest_sha256": "414091b6d25aa6ec61634edb2667bb54e303dedfd66e82be85017215bc842edb",
+  "schema_version": 1
+}
