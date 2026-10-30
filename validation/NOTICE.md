@@ -1,4 +1,22 @@
-# Upstream attribution for the EP feature oracle
+# Validation-source attribution
+
+## FTN charting audit
+
+`ftn_snapshot.py` / `ftn_contract.py` implement a repository-only source/contract
+audit using the existing bounded transport, not an adapted FTN analytics model.
+Source: FTN Data via nflverse, with field definitions and data terms documented by
+[nflreadr at the pinned commit](https://github.com/nflverse/nflreadr/blob/23f915a5be30415aeaa0c5c80cd23b2c69cda122/R/load_ftn_charting.R).
+The data and derived aggregate `docs/evidence/ftn-2024-6faae8118cc1.contract.json`
+are attributed to **FTN Data via nflverse** under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+The receipt is a modified aggregate schema/key/encoding inventory; it redistributes
+no row-level data and implies no endorsement or warranty. Source CSV and pinned
+documentation copies remain in the ignored local cache with retained MIT
+documentation notice. This data notice does not change the project's software
+license or authorize future combined exports without a separate scope review.
+See `docs/FTN_CHARTING_AUDIT.md` for acquisition, rights and admission limits.
+
+## EP feature oracle
 
 `ep_reference.py` independently encodes the EP feature semantics documented by
 nflfastR at commit `917b14e5085f352d9b00d23628759773e7d411b5` (particularly

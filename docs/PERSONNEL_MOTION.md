@@ -5,6 +5,11 @@ historical brief works; personnel packages and motion rates are explicitly
 deferred enrichment, not implemented features. No supplementary data was acquired
 or joined, no paid source was accessed, and existing reports are unchanged.
 
+**Follow-up, 2026-10-30:** the [P1.7 FTN artifact/contract audit](FTN_CHARTING_AUDIT.md)
+now acquires one separately verified 2024 charting CSV with its own terms/manifest
+and inventories raw schema/keys. This supersedes the acquisition status, not the
+historical findings below. No PBP join, enrichment or motion/personnel rate is enabled.
+
 ## What the pinned artifact actually contains
 
 The [replayable field inventory](evidence/pbp-2024-23370d5d10f8.availability.json)

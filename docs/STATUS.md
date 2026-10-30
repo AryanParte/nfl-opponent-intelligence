@@ -1,11 +1,12 @@
 # Engineering status
 
-As of the daily run on 2026-10-29, the long-term direction is
+As of the daily run on 2026-10-30, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
 candidate-level game support/exploratory intervals;
-no ranking/model, new dataset or mode switch is claimed. The
+no ranking/model or mode switch is claimed. A separate FTN charting snapshot is
+now audit-only, not a source consumed by these reports. The
 [architecture decision](DECISION_INTELLIGENCE.md)
 records shared pipeline boundaries, Run/Pass interpretation gates, an initial
 primary-source model/data review, AI policy and the justified no-database decision.
@@ -23,21 +24,24 @@ and the full runtime/native lock/equality check through PR #33. The
 unchanged synthetic cases. Actual prediction inputs match the expected features;
 probabilities/EP pass the fixed protocol, singles/batch/untraced replay agree,
 and separate offline execution reproduces the capture and raw export byte-for-byte.
-Today's [independent Python candidate](EP_PYTHON_PARITY.md) passes the same fixed
-corpus with its own encoder, source-built runtime and exact offline replay.
+The [independent Python candidate](EP_PYTHON_PARITY.md), merged through PR #35,
+passes the same fixed corpus with its own encoder, source-built runtime and exact
+offline replay.
 P1.6's bounded engineering evaluation is complete. Calibration, training lineage,
 historical availability and production model admission remain unverified/deferred.
 
-Verification for this unit is recorded below. Scout schema v2, the API, frontend,
-briefs, downloads and all 71 API fixtures remain unchanged. No production dependency,
-serving model or automation change. Only the pinned EP model is executed on
-artificial protocol inputs in separate R/Python environments; no training,
-real-data prediction or historical analysis.
+Today's [FTN 2024 artifact/contract audit](FTN_CHARTING_AUDIT.md) completes P1.7's
+first bounded acquisition slice. Separate immutable CSV/notices/manifest, verified
+source pins and raw schema/key/encoding inventory; no PBP join or serving enrichment.
+Verification is below. Scout schema v2, the API, frontend, briefs, downloads and
+all 71 API fixtures remain unchanged. No production dependency, model execution,
+training, ranking or automation change. The only production-code adjustment is
+an optional Accept header on the shared bounded transport; existing defaults remain.
 Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: one P1.7 FTN 2024 charting artifact/contract audit extending
-the existing source review: refreshed terms/release metadata, bounded acquisition,
-separate immutable manifest/hashes/attribution and join-key/schema inventory.
+certification. Next: one offline FTN-to-PBP left-join/coverage audit, preserving
+eligible rows and separating unmatched/unknown/invalid values by team/week/candidate.
+Investigate placeholder/applicability semantics before approving any field.
 No production exposure until joins/missingness are audited; no assumed historical
 in-season availability, serving model, action ranking or endpoint.
 The 8 AM automation is unchanged.
@@ -53,14 +57,19 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/ep-python-parity`, started from updated
-  `origin/main` at `fd2ff46` after observing PR #34 merged. Do not merge or enable
+- Working branch: `codex/ftn-charting-contract`, started from updated
+  `origin/main` at `691a18a` after observing PR #35 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/ep-python-parity` for its exact published SHA, attribution and CI
+  `codex/ftn-charting-contract` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous Python parity review: [PR #35](https://github.com/AryanParte/nfl-opponent-intelligence/pull/35),
+  merged at `691a18a`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40985169226)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main was on
+  the remote. The clean prior checkout matched its upstream, with no unpublished
+  commits. Baseline 408 core / 24 API tests passed on Python 3.13 before edits.
 - Previous R capture review: [PR #34](https://github.com/AryanParte/nfl-opponent-intelligence/pull/34),
   merged at `fd2ff46`; its tree matches feature head `ca8ebe9`.
   [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40783340205)
@@ -244,6 +253,38 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.7 FTN artifact and raw contract audit — 2026-10-30
+
+[Evidence/replay](FTN_CHARTING_AUDIT.md) and the [aggregate receipt](evidence/ftn-2024-6faae8118cc1.contract.json)
+record one 8,254,908-byte CSV matching the reviewed SHA-256, plus pinned loader,
+dictionary and MIT documentation notice. FTN data retains its own CC BY-SA 4.0
+attribution; it never inherits PBP's CC BY 4.0 record. Changed release metadata,
+bytes or notice identity fail closed, while existing cache files are preserved.
+
+48,031 raw rows / 29 documented columns / 285 games; both composite key domains
+are complete, valid-format and unique. No blank/NA tokens, but literal zero falls
+outside documented QB-location codes on 11,605 rows and hash codes on 11,601.
+All 15 logical columns use TRUE/FALSE; that is encoding, not applicability or
+charting-accuracy validation. Extraction timestamps span November 2024 to September
+2025, not proof of pregame/public availability. No PBP joins or rates were computed.
+
+Twenty-three new offline tests cover acquisition/media-type/identity failures,
+cache/notice preservation, exact IDs and duplicate accounting, missing/absent/
+unknown states, date/context errors, bounded malformed CSV, parse-time mutation,
+determinism and no-clobber CLI output. An independent raw-CSV/Decimal/Counter check
+reconciles schema, keys/games, context, all field/logical/code counts and timestamp
+bounds. The committed receipt replays byte-for-byte with network blocked on
+Python 3.11/3.12/3.13. CI needs no real FTN dataset or extra dependency.
+
+Final local checks: 431 core / 24 API on each supported Python, API warnings as
+errors, no broken dependencies; 672 frontend tests, TypeScript/build and 14
+Chromium cases pass. Full-diff review fixed the transport's FTN metadata Accept
+header after an initial HTTP 415, tightened JSON type identity (False is not 0),
+and preserved unknown code/applicability distinctions instead of claiming all
+nonmissing data valid. No pins, statistical formulas or serving schema changed.
+Exact-head remote CI, SHA and attribution belong in the PR. Next: the bounded
+PBP join/coverage audit, not another acquisition or premature play-family exposure.
 
 ### P1.6 Independent Python EP candidate and parity — 2026-10-29
 
@@ -1299,10 +1340,13 @@ now passes the fixed corpus, actual matrix/loader checks and exact offline repla
 The [independent Python candidate](EP_PYTHON_PARITY.md) also passes the unchanged
 parity protocol. P1.6's bounded evaluation is complete; production EP/WP/action
 values remain deferred. Do not redo setup, change pins/corpus/tolerances or infer
-that training scripts attest release binaries. Next: refresh the existing FTN
-review for one 2024 charting artifact, separately recording terms, release metadata,
-immutable bytes/manifest and join-key/schema availability before analytical joins.
-No play-family exposure or historical-availability assumptions. Preserve Scout schema v2 and the actual
+that training scripts attest release binaries. The first [FTN source/contract
+audit](FTN_CHARTING_AUDIT.md) is now complete: separate immutable bytes, notices,
+manifest and raw key/encoding evidence. Next: an offline left-join/cardinality and
+coverage audit against existing pinned PBP, with eligible-row retention, explicit
+unmatched/unknown/invalid counts by team/week/candidate and placeholder/applicability
+investigation. No play-family exposure or historical-availability assumptions.
+Preserve Scout schema v2 and the actual
 assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
 without claiming conformance or restarting P1.4/browser CI.
 Do not add storage for this single-snapshot view or imply a public deployment.
