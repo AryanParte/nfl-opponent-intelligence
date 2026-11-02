@@ -59,8 +59,18 @@ def _timestamp(value):
         return None
 
 
-def inventory(raw):
-    """Audit bounded CSV bytes without interpreting flags as eligibility or truth."""
+def _records(reader, header):
+    try:
+        for position, values in enumerate(reader, start=1):
+            if position > MAX_ROWS or len(values) != len(header):
+                raise SnapshotError(f"row limit or ragged CSV at record {position}")
+            yield dict(zip(header, values))
+    except csv.Error as exc:
+        raise SnapshotError("invalid UTF-8 or malformed FTN CSV") from exc
+
+
+def read_csv(raw):
+    """Read bounded FTN bytes; stream literal records without materializing a table."""
     if not raw or len(raw) > MAX_BYTES:
         raise SnapshotError("empty or oversized FTN audit input")
     try:
@@ -69,6 +79,15 @@ def inventory(raw):
         if (not header or len(header) > 128 or any(not x or x != x.strip() for x in header)
                 or len(header) != len(set(header))):
             raise SnapshotError("empty, duplicate or malformed CSV header")
+        return header, _records(reader, header)
+    except (UnicodeError, csv.Error) as exc:
+        raise SnapshotError("invalid UTF-8 or malformed FTN CSV") from exc
+
+
+def inventory(raw):
+    """Audit bounded CSV bytes without interpreting flags as eligibility or truth."""
+    try:
+        header, records = read_csv(raw)
         columns = {name: {"missing_rows": 0, "nonmissing_rows": 0} for name in header}
         flags = {name: {"true_rows": 0, "false_rows": 0, "unrecognized_rows": 0}
                  for name in FIELDS if name.startswith("is_") and name in columns}
@@ -89,11 +108,8 @@ def inventory(raw):
         context_columns = all(f in columns for f in ("nflverse_game_id", "season", "week"))
         context = {"matching_rows": 0, "missing_rows": 0, "inconsistent_or_invalid_rows": 0}
         rows = 0
-        for values in reader:
+        for row in records:
             rows += 1
-            if rows > MAX_ROWS or len(values) != len(header):
-                raise SnapshotError(f"row limit or ragged CSV at record {rows}")
-            row = dict(zip(header, values))
             for name, value in row.items():
                 columns[name]["missing_rows" if value in MISSING else "nonmissing_rows"] += 1
                 if value in MISSING:
