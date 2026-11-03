@@ -33,8 +33,10 @@ single/batch checks and exact offline replay. The
 [independent Python candidate](docs/EP_PYTHON_PARITY.md) now passes the unchanged
 parity protocol with its own feature encoding and verified isolated runtime.
 P1.6's bounded evaluation is complete; production models remain explicitly deferred.
-P1.7's [first FTN artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) is complete.
-Next is one offline PBP join/coverage audit, not serving enrichment or ranking.
+P1.7's [FTN artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) and
+[offline PBP join/coverage audit](docs/FTN_COVERAGE.md) are complete.
+Next is the bounded field admission/defer decision; unresolved charting must not
+block P1.8's PBP-only decision API or silently become serving evidence.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -306,14 +308,19 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       undocumented QB-location codes. Twenty-three synthetic/offline tests.
       Raw logical encodings are not applicability validation. No join, serving
       enrichment, play-family approval or historical in-season availability claim.
-- **Next unit:** one offline left-join/coverage audit of this FTN artifact against
-  the existing verified PBP snapshot. Enforce cardinality, preserve eligible PBP
-  rows, separate unmatched/unknown/invalid observations by team/week/candidate,
-  investigate placeholder/applicability semantics and independently reconcile counts.
-  Participation remains unacquired; reuse source-specific notices/manifests, not
-  a second production ingestion stack or assumed historical feature availability.
-- [ ] Validate joins/cardinality against PBP and audit unmatched/unknown/invalid
-      observations by team, week and candidate; no imputation of absent charting.
+- [x] Offline FTN/PBP left-join/coverage audit (2026-11-02): all 34,902 eligible
+      plays retained and uniquely matched; 13,129 FTN rows match excluded PBP,
+      no orphan FTN rows. Separate encoding states and 2,280 offense/defense,
+      team/week/candidate strata reconcile independently. [Evidence](docs/FTN_COVERAGE.md):
+      268 unknown QB locations, 264 unknown hashes and one invalid pass-rusher
+      count on eligible plays. Producer inspection does not resolve applicability.
+      Eighteen offline regression tests; no imputation or serving enrichment.
+- **Next unit:** field-by-field admission/defer decisions for the first proposed
+  FTN enrichment fields, with applicability, null states, candidate denominators
+  and meaningful tests. Defer semantics that cannot be justified and proceed to
+  P1.8's PBP-only decision endpoint. Do not repeat acquisition/join work or force
+  unsupported fields into production. Participation remains unacquired; no
+  historical feature-availability assumption or second production ingestion stack.
 - [ ] Approve only directly defensible play families with adequate samples and
       reproducible semantics/tests. Defer weak proxies and unvalidated concepts.
 - [ ] Scope a future Big Data Bowl tracking source/research reference only after

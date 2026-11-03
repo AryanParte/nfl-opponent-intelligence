@@ -69,8 +69,10 @@ fixed-corpus feature/probability/EP checks and exact offline replay in its separ
 locked environment. This completes bounded engineering parity, not football
 validation. Production EP/WP and Run/Pass action ranking remain deferred. A
 [separate FTN 2024 artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) now verifies
-one immutable charting snapshot and its schema/keys/terms. It is not joined or
-served; undocumented location codes and historical-availability limits stay explicit.
+one immutable charting snapshot and its schema/keys/terms. An [offline PBP coverage
+audit](docs/FTN_COVERAGE.md) matches all 34,902 eligible plays while retaining field
+issues and separate source terms. Charting is not served; applicability and
+historical-availability limits stay explicit.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
@@ -226,8 +228,9 @@ fields, unsuitable proxies, separately documented sources, and a replayable
 offline inventory. It also explains why data published after a season cannot be
 assumed available during that season. No personnel or motion rate is exposed by
 the current reports. A separate [FTN snapshot audit](docs/FTN_CHARTING_AUDIT.md) has
-now acquired one reviewed 2024 artifact; PBP joins, coverage and semantic admission
-remain unfinished. No supplementary source is consumed by the existing reports.
+now acquired one reviewed 2024 artifact. Its [PBP join and coverage audit](docs/FTN_COVERAGE.md)
+is complete, with explicit unknown/invalid field counts; semantic admission remains
+unfinished. No supplementary source is consumed by the existing reports.
 
 ## Acquire a reproducible raw snapshot
 
@@ -487,6 +490,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Historical brief format and examples](docs/BRIEFS.md)
 - [Personnel/motion availability and scope decision](docs/PERSONNEL_MOTION.md)
 - [FTN charting artifact, key inventory and admission limits](docs/FTN_CHARTING_AUDIT.md)
+- [FTN/PBP join coverage, field issues and source applicability limits](docs/FTN_COVERAGE.md)
 - [Optional local API contract and setup](docs/API.md)
 - [Local browser viewer and verification](docs/WEB.md)
 - [Bounded accessibility review and remaining coverage](docs/ACCESSIBILITY.md)

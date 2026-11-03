@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-10-30, the long-term direction is
+As of the daily run on 2026-11-02, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
 Run/Pass evidence contract includes matched candidate baselines and opt-in
@@ -30,19 +30,21 @@ offline replay.
 P1.6's bounded engineering evaluation is complete. Calibration, training lineage,
 historical availability and production model admission remain unverified/deferred.
 
-Today's [FTN 2024 artifact/contract audit](FTN_CHARTING_AUDIT.md) completes P1.7's
-first bounded acquisition slice. Separate immutable CSV/notices/manifest, verified
-source pins and raw schema/key/encoding inventory; no PBP join or serving enrichment.
+The [FTN 2024 artifact/contract audit](FTN_CHARTING_AUDIT.md), merged through PR #36,
+retains separate immutable CSV/notices/manifest and raw key/schema evidence.
+Today's [offline PBP coverage audit](FTN_COVERAGE.md) completes P1.7's join slice:
+all 34,902 eligible PBP plays retained and uniquely matched, with explicit field
+issues across 2,280 offense/defense, team/week/candidate strata. Source inspection
+does not resolve field applicability; no serving enrichment is approved.
 Verification is below. Scout schema v2, the API, frontend, briefs, downloads and
 all 71 API fixtures remain unchanged. No production dependency, model execution,
-training, ranking or automation change. The only production-code adjustment is
-an optional Accept header on the shared bounded transport; existing defaults remain.
+training, ranking or automation change. No production code changed in this unit.
 Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: one offline FTN-to-PBP left-join/coverage audit, preserving
-eligible rows and separating unmatched/unknown/invalid values by team/week/candidate.
-Investigate placeholder/applicability semantics before approving any field.
-No production exposure until joins/missingness are audited; no assumed historical
+certification. Next: bounded FTN field admission/defer decisions with applicability,
+null states, candidate denominators and tests. If semantics cannot be justified,
+defer enrichment and proceed to P1.8's PBP-only decision endpoint.
+No production exposure before semantic admission; no assumed historical
 in-season availability, serving model, action ranking or endpoint.
 The 8 AM automation is unchanged.
 
@@ -57,14 +59,19 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/ftn-charting-contract`, started from updated
-  `origin/main` at `691a18a` after observing PR #35 merged. Do not merge or enable
+- Working branch: `codex/ftn-pbp-coverage`, started from updated
+  `origin/main` at `6983898` after observing PR #36 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/ftn-charting-contract` for its exact published SHA, attribution and CI
+  `codex/ftn-pbp-coverage` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous FTN artifact review: [PR #36](https://github.com/AryanParte/nfl-opponent-intelligence/pull/36),
+  merged at `6983898`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/41105491146)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The previous clean checkout matched its upstream, with no
+  unpublished commits. Baseline 431 core / 24 API passed on Python 3.13 before edits.
 - Previous Python parity review: [PR #35](https://github.com/AryanParte/nfl-opponent-intelligence/pull/35),
   merged at `691a18a`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/40985169226)
   passed all eight jobs. No open PRs/reviews/comments remained; only main was on
@@ -253,6 +260,51 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.7 FTN/PBP join and field coverage audit — 2026-11-02
+
+[Evidence/replay](FTN_COVERAGE.md) and the [aggregate receipt](evidence/ftn-2024-6faae8118cc1-pbp-23370d5d10f8.coverage.json)
+bind both existing immutable snapshots. The audit reuses production PBP eligibility
+and the bounded FTN parser, rejects ambiguous keys/context and keeps unmatched
+eligible rows in denominators. Raw PBP exclusions are distinct from absent source
+rows. Original source manifests, their separate CC BY / CC BY-SA terms, and all
+acquisition times remain unchanged. The joined aggregate receipt retains CC BY-SA
+terms and attribution to FTN Data via nflverse plus nflverse PBP.
+
+34,902 eligible PBP plays / 285 games all match uniquely. Run has 13,872 plays;
+Pass has 21,030, including 1,133 raw run/dropback rows. FTN has 13,129 additional
+rows matching excluded PBP and zero raw-PBP orphans. There are 268 unknown QB
+locations, 264 unknown hashes and one invalid pass-rusher value (`45`) on eligible
+plays. No blank/NA or unrecognized logical encodings; this is not proof of
+applicable negative observations. All 2,280 offense/defense, team/week/candidate
+groups preserve play/game support and sparse field issues. No feature rate or
+charting accuracy, historical availability or model-quality claim is made.
+
+Pinned producer inspection finds empty-to-NA, direct hash/QB code passthrough and
+integer/logical flag conversion, not blanket NA-to-false filling. It supplies no
+applicability mask or meaning for undocumented zero codes. This is source review,
+not proof that the inspected revision built the acquired asset.
+
+Eighteen new offline tests cover hand-counted joins/exclusions, key collisions and
+context failures, missing EPA, all evidence states, dropback/defensive semantics,
+empty/postseason groups, bounds, source separation and no-clobber CLI. The committed
+receipt's partitions/strata reconcile without requiring real data in CI. An
+independent raw CSV/Decimal calculation checks joins, candidate totals, every
+stratum's plays/games and all issue counts without audit/production selectors.
+Network-blocked replay matches both the new coverage and prior raw-contract
+receipt, preserving source manifests. Final local checks: 449 core / 24 API on
+Python 3.11/3.12/3.13, API warnings as errors, dependency consistency; 672 frontend
+tests, TypeScript/build and 14 Chromium cases pass.
+
+Complete-diff review separated field validity from match coverage, retained
+missing-EPA/unmatched denominators, kept defense as opponent offense, and changed
+the issue name to `invalid_value` so a syntactically valid but impossible-looking
+count is not mislabeled a parsing error. No coercion/repair, source refresh,
+production formula/schema/API/UI, dependency or automation changes. Final review
+also preserved streaming in the shared CSV reader, avoiding an unnecessary
+materialized table for the existing raw inventory. Exact-head
+remote SHA, attribution and CI belong in the PR. Next: field admission/defer
+decisions, then P1.8's PBP-only API; do not repeat this join or admit charting by default.
 
 ### P1.7 FTN artifact and raw contract audit — 2026-10-30
 
@@ -1342,10 +1394,12 @@ parity protocol. P1.6's bounded evaluation is complete; production EP/WP/action
 values remain deferred. Do not redo setup, change pins/corpus/tolerances or infer
 that training scripts attest release binaries. The first [FTN source/contract
 audit](FTN_CHARTING_AUDIT.md) is now complete: separate immutable bytes, notices,
-manifest and raw key/encoding evidence. Next: an offline left-join/cardinality and
-coverage audit against existing pinned PBP, with eligible-row retention, explicit
-unmatched/unknown/invalid counts by team/week/candidate and placeholder/applicability
-investigation. No play-family exposure or historical-availability assumptions.
+manifest and raw key/encoding evidence. Its [offline join/coverage audit](FTN_COVERAGE.md)
+is complete: eligible-row retention, explicit unmatched/unknown/invalid states by
+role/team/week/candidate, independent reconciliation and pinned producer inspection.
+Next: bounded field admission/defer decisions with applicability/null/denominator
+tests. If semantics remain unsupported, defer and continue the PBP-only decision
+API. No play-family exposure or historical-availability assumptions.
 Preserve Scout schema v2 and the actual
 assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
 without claiming conformance or restarting P1.4/browser CI.

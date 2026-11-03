@@ -16,6 +16,16 @@ documentation notice. This data notice does not change the project's software
 license or authorize future combined exports without a separate scope review.
 See `docs/FTN_CHARTING_AUDIT.md` for acquisition, rights and admission limits.
 
+`ftn_coverage.py` adds a separate offline left-join audit. The aggregate
+`docs/evidence/ftn-2024-6faae8118cc1-pbp-23370d5d10f8.coverage.json` and its FTN-derived
+counts in `docs/FTN_COVERAGE.md` retain FTN Data via nflverse attribution and
+CC BY-SA 4.0 terms. The PBP contribution is nflverse play-by-play data under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Modification: aggregate
+join/coverage/encoding counts; no row-level redistribution or endorsement.
+The original source manifests/notices are retained separately. The pinned producer
+source was inspected, not copied or executed; its MIT notice and source links are
+documented in `docs/FTN_COVERAGE.md`. No field or model is admitted to production.
+
 ## EP feature oracle
 
 `ep_reference.py` independently encodes the EP feature semantics documented by

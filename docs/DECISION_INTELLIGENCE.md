@@ -21,7 +21,9 @@ protocol and exact offline replay on 2026-10-29. Bounded engineering parity is
 complete; football validation and production model admission remain deferred.
 The first FTN 2024 [artifact/contract audit](FTN_CHARTING_AUDIT.md) followed on
 2026-10-30: separate immutable bytes, terms and raw key/schema evidence, not a
-serving integration. PBP joins, applicability/coverage and field admission remain next.
+serving integration. The [offline PBP coverage audit](FTN_COVERAGE.md) followed on
+2026-11-02: all eligible PBP rows match uniquely, while field issues remain explicit.
+Applicability and field admission/defer decisions remain next.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -193,8 +195,9 @@ single/batch agreement and untraced replay. Independent fresh-container capture
 reproduces exactly. The 2026-10-29 [Python follow-up](EP_PYTHON_PARITY.md) also
 passes the fixed-corpus parity gate. Neither establishes temporal availability,
 calibrated performance or action values. Model integration stays deferred;
-the first P1.7 FTN artifact/contract audit is now complete. Next is its offline
-PBP join/coverage audit, not another model runtime.
+the P1.7 FTN artifact and offline PBP join/coverage audits are now complete.
+Next is field admission/defer policy, followed by the PBP-only decision API;
+no additional model runtime is needed.
 
 **Follow-up, 2026-10-27:** [full runtime evidence](EP_RUNTIME.md) closes the
 missing-native-package installation boundary without upgrades or pin changes.
@@ -256,6 +259,13 @@ protocol. Preserve upstream methodology context without claiming its historical
 calibration validates a new decision policy, a newer artifact or Python conversion.
 
 ### Participation, FTN and tracking — no premature play-family claims
+
+**Follow-up, 2026-11-02:** [coverage evidence](FTN_COVERAGE.md) retains and uniquely
+matches all 34,902 eligible PBP rows, independently reconciles 2,280 role/team/week/
+candidate strata, and keeps unknown/invalid fields visible. The inspected producer
+does not resolve field applicability or first-publication timing. Next: bounded
+field admission/defer decisions with null/denominator tests. A justified defer
+decision must not block P1.8's PBP-only endpoint. No charting is served yet.
 
 **Follow-up, 2026-10-30:** [FTN artifact evidence](FTN_CHARTING_AUDIT.md) pins one
 2024 CSV, retains source-specific CC BY-SA notices, and verifies unique raw keys

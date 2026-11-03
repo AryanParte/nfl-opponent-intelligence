@@ -2654,3 +2654,71 @@ semantics and independently reconcile counts before any field admission. No
 serving enrichment, new play family, historical availability, charting accuracy,
 model validation or ranking claim. Participation/tracking remain deferred. Do not
 repeat completed acquisition/parity work. No merge, auto-merge or automation change.
+
+## 2026-11-02 — Preserve PBP denominators in the FTN coverage audit
+
+**Built / why it matters:** verified PR #36 merged, all eight main CI jobs green,
+no open PRs/review feedback and a clean upstream-matched clone. Started
+`codex/ftn-pbp-coverage` from fetched main `6983898`. Added an offline, strict
+one-to-zero-or-one FTN/PBP join audit that reuses production eligibility and the
+bounded FTN parser. Both immutable sources and original manifests are preserved.
+All 34,902 eligible plays match, but field issues remain visible instead of being
+hidden by a successful join. No charting enters the reports yet.
+
+**Review files:** `validation/ftn_coverage.py`, the shared reader in
+`validation/ftn_contract.py`, `tests/test_ftn_coverage.py`, `docs/FTN_COVERAGE.md`
+and `docs/evidence/ftn-2024-6faae8118cc1-pbp-23370d5d10f8.coverage.json`.
+Roadmap/status/architecture and source notices record the next admission boundary.
+
+**Sports concepts:** Pass includes sacks and scrambles; 1,133 raw run rows are
+dropbacks, giving 21,030 Pass versus 13,872 Run plays. Defense groups describe the
+opposing offense's choices. A matched FTN row is not necessarily an applicable
+observation: 268 eligible QB locations and 264 hashes have undocumented zero codes;
+one pass-rusher count is `45`. Literal FALSE and numeric zero need field-specific
+semantics. No motion/RPO/play-action rate, play-family or coaching claim is enabled.
+
+**Software/statistical concepts / learn:** composite-key namespaces, strict
+cardinality, left joins, distinct raw-source/excluded/eligible populations, game
+support, sparse issue counts, absent/missing/unknown/invalid states and audit-only
+plausibility bounds. All eligible rows, including missing EPA or unmatched charting,
+remain in coverage denominators. Coverage, encoding, applicability and accuracy
+are separate claims. FTN's CC BY-SA and PBP's CC BY manifests remain separate;
+the derived aggregate has both attributions. Source hashes/timestamps do not
+establish pregame availability. The pinned producer code does not supply an
+applicability mask, and inspecting it is not attesting how the release was built.
+
+**Three review questions:**
+
+1. Why can all eligible PBP plays match FTN while a motion or play-action rate
+   still have an unjustified denominator?
+2. How do the raw PBP, eligible PBP, excluded-but-charted and FTN-orphan populations
+   differ, and why must a scramble stay in Pass for both offensive and defensive views?
+3. What separates an absent column, missing value, unknown code, invalid count and
+   literal FALSE, and which evidence would justify admitting one field next?
+
+**Verification / self-review:** baseline 431 core / 24 API on Python 3.13. Final
+449 core / 24 API pass on each Python 3.11/3.12/3.13 with API warnings as errors
+and no broken dependencies; 672 frontend tests, TypeScript/build and 14 Chromium
+cases pass. Eighteen new offline tests cover hand-counted joins, all evidence
+states, exclusions, role/candidate semantics, bounds, snapshot failures, receipt
+partitions and no-clobber CLI output. A separate raw CSV/Decimal check reconciles
+all joins, candidate counts, 2,280 strata's play/game support and every field issue.
+With network blocked, new coverage and original raw-contract receipts replay
+exactly; both source manifests remain unchanged. No real dataset is required in CI.
+
+Complete-diff review retained excluded-source distinctions and missing-EPA rows,
+kept unknown codes out of valid measurements, and used `invalid_value` rather than
+calling a syntactically numeric `45` an encoding error. The 0–11 numeric check is
+documented as an audit plausibility rule, not upstream semantic validation.
+Final review preserved streaming in the shared reader instead of materializing
+the whole FTN table for the existing raw inventory; affected tests/replay passed
+again. No tests/pins were loosened. No production code, statistical formula, schema,
+dependency, API/UI, global identity or automation changed. Test servers stopped.
+Publication SHA, GitHub attribution and exact-head CI are recorded in the PR.
+
+**Remaining / next:** bounded field-by-field admission/defer decisions, with
+applicability, null states, candidate denominators and tests. If semantics cannot
+be justified, retain the defer decision and advance to P1.8's PBP-only decision
+endpoint. Do not repeat acquisition/join/parity work. Participation/tracking,
+enriched downloads, historical availability, production models and ranking remain
+deferred. This branch must be reviewed; no merge or auto-merge.

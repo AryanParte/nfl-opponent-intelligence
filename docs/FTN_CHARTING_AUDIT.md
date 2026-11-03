@@ -6,6 +6,11 @@ verified independently of PBP. It is **not joined or served**; no play families,
 rates, coaching recommendations or historical-availability claims are enabled.
 Scout and the offline decision contract are unchanged.
 
+**Follow-up, 2026-11-02:** the separate [offline PBP join/coverage audit](FTN_COVERAGE.md)
+is now complete, retaining all eligible PBP rows and auditing field issues by
+team/week/candidate. This document/receipt remains the original raw artifact audit;
+its acquisition manifest is unchanged. Field applicability/admission remains open.
+
 ## Source and rights boundary
 
 Rechecked the [release metadata][release], [nflreadr loader][loader] and
