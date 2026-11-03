@@ -35,8 +35,9 @@ parity protocol with its own feature encoding and verified isolated runtime.
 P1.6's bounded evaluation is complete; production models remain explicitly deferred.
 P1.7's [FTN artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) and
 [offline PBP join/coverage audit](docs/FTN_COVERAGE.md) are complete.
-Next is the bounded field admission/defer decision; unresolved charting must not
-block P1.8's PBP-only decision API or silently become serving evidence.
+The [bounded field admission review](docs/FTN_FIELD_POLICY.md) is complete with
+all 22 contextual fields deferred from serving. Next is P1.8's PBP-only decision
+API; unresolved charting does not block it or silently become serving evidence.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -315,19 +316,27 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
       268 unknown QB locations, 264 unknown hashes and one invalid pass-rusher
       count on eligible plays. Producer inspection does not resolve applicability.
       Eighteen offline regression tests; no imputation or serving enrichment.
-- **Next unit:** field-by-field admission/defer decisions for the first proposed
-  FTN enrichment fields, with applicability, null states, candidate denominators
-  and meaningful tests. Defer semantics that cannot be justified and proceed to
-  P1.8's PBP-only decision endpoint. Do not repeat acquisition/join work or force
-  unsupported fields into production. Participation remains unacquired; no
-  historical feature-availability assumption or second production ingestion stack.
-- [ ] Approve only directly defensible play families with adequate samples and
-      reproducible semantics/tests. Defer weak proxies and unvalidated concepts.
-- [ ] Scope a future Big Data Bowl tracking source/research reference only after
-      checking its specific terms, coverage and identity/coordinate semantics.
+- [x] Field-by-field admission/defer decision (2026-11-03): [policy](docs/FTN_FIELD_POLICY.md)
+      retains all 22 contextual fields as audit-only. Explicit applicability,
+      null/observation states, candidate-versus-feature denominators and reopening
+      evidence. No additional play family or model feature approved. Three core
+      metamorphic tests preserve Scout/Decision evidence under added charting/proxy
+      columns; one API test rejects unadmitted filters even when columns are present.
+- [x] Bounded first-artifact review closed with a justified defer decision for
+      serving enrichment/play families. Counts and dictionary codes cannot supply
+      applicability or temporal availability. No second production ingestion stack.
+- **Deferred follow-up, not a P1.8 prerequisite:** participation acquisition/joins
+  and selection of a specific Big Data Bowl tracking source require their own
+  terms, coverage, identity/coordinate and release-time review. Do not treat the
+  completed FTN audit as approval of those sources or repeat acquisition/join work.
 
 ### P1.8 — Decision API
 
+- **Next unit:** first narrow optional FastAPI endpoint for the existing
+  `build_decision_evidence` contract v1 over the operator-configured immutable PBP
+  snapshot. Reuse shared serving/validation patterns, bound bootstrap cost, preserve
+  Scout schema v2 and test requests/responses/errors/concurrency. No charting/model
+  admission, database, frontend, deployment or new download path in this slice.
 - [ ] Narrow optional FastAPI endpoint reusing the tested decision layer and an
       explicitly configured immutable snapshot; no request paths or downloads.
 - [ ] Return candidates, evidence, denominators, league context, warnings,

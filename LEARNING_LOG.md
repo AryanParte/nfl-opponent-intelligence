@@ -2722,3 +2722,71 @@ be justified, retain the defer decision and advance to P1.8's PBP-only decision
 endpoint. Do not repeat acquisition/join/parity work. Participation/tracking,
 enriched downloads, historical availability, production models and ranking remain
 deferred. This branch must be reviewed; no merge or auto-merge.
+
+## 2026-11-03 — Close the first charting admission review without inventing evidence
+
+**Built / why it matters:** verified PR #37 merged, all eight main CI jobs green,
+no open PRs/review feedback and a clean upstream-matched canonical clone. Started
+`codex/ftn-field-admission-policy` from fetched main `00dfe07`. Documented explicit
+admission/defer decisions for all 22 contextual FTN fields and added three core
+plus one API regression tests protecting the current PBP-only boundary. The
+bounded review is complete with charting still audit-only; next is the Decision
+API. This avoids making unvalidated charting a permanent dependency or quietly
+turning raw encodings into product evidence. No production behavior changed.
+
+**Review files:** `docs/FTN_FIELD_POLICY.md`, `tests/test_enrichment_boundary.py`,
+the new charting-filter case in `tests_api/test_api.py`, and updated roadmap,
+status, architecture, coverage follow-up and source notices.
+
+**Sports concepts:** RPO labels occur in both observed Run and Pass; they are not
+an exclusive third call. A recognized throw-read code on a Run does not prove a
+pass progression occurred. Motion before-or-at-snap is not a trajectory; QB
+alignment is not full formation; backfield counts are not personnel. Sacks and
+scrambles stay in Pass. Each proposed field needs its own applicable opportunities
+and observed-negative interpretation before feature rates can be justified.
+
+**Software/statistical concepts / learn:** metamorphic tests change only supplemental
+inputs while requiring every analytical output to stay equal. The source hash
+must change with changed bytes; preserving it would break provenance. Missing
+EPA/field context, cutoff exclusions, league baselines and exploratory intervals
+must stay independent of unadmitted columns. Null/deferred is not zero; literal
+FALSE is not a validated negative; unknown applicability is not `not_applicable`.
+Candidate frequency and feature-observation frequency have different denominators.
+HTTP rejection must happen before analytics, even if a named source column exists.
+Keep policy design requirements distinct from fields actually returned by the API.
+
+**Three review questions:**
+
+1. Why can complete FTN joins and recognized TRUE/FALSE codes still be insufficient
+   to publish a motion or play-action rate?
+2. In the new metamorphic tests, why must the source hash change while candidate
+   counts, baselines, uncertainty and missing-data behavior remain unchanged?
+3. How would an admitted feature's applicable-observation denominator differ from
+   Run/Pass call frequency, and why should RPO not become an exclusive third call?
+
+**Verification / self-review:** baseline 449 core / 24 API on Python 3.13. Final
+452 core / 25 API pass on each Python 3.11/3.12/3.13, API warnings as errors and no
+broken dependencies; 672 frontend tests, TypeScript/build and 14 Chromium cases
+pass. Tests use invented rows, five-game support, deliberately conflicting
+charting/proxy values, hand-counted results, future-week exclusions and missing/
+empty states. The API case verifies 422 rejection before the builder is called.
+The first API test incorrectly expected an unknown field name to be echoed;
+inspection of the existing documented sanitizer showed those names are deliberately
+hidden. Corrected the expectation and verified both rejection and no echo; runtime
+code was already correct. No verification or error policy was weakened.
+
+Full-diff review checked denominator/null semantics, temporal claims, source terms,
+RPO overlap, source hash handling and isolation of all supplemental inputs. Counts
+in the policy come from the unchanged aggregate receipt; no raw download, new
+pipeline, source mutation, runtime policy engine, model or UI was introduced.
+The producer-linked Google document was inaccessible in this run and supplies no
+evidence for admission. Test servers stopped. Publication SHA, GitHub attribution
+and exact-head CI are recorded in the PR; the 8 AM automation is unchanged.
+
+**Remaining / next:** implement the first narrow optional FastAPI decision endpoint
+over the existing immutable PBP snapshot, reusing `build_decision_evidence` contract
+v1 and shared serving patterns. Preserve Scout schema v2, bound bootstrap cost,
+and test requests/responses/errors/concurrency. No charting/model integration,
+database, frontend, deployment or per-request downloads. Participation/tracking
+reviews remain later gated work. Do not repeat the completed field review or merge
+this PR automatically.

@@ -23,7 +23,10 @@ The first FTN 2024 [artifact/contract audit](FTN_CHARTING_AUDIT.md) followed on
 2026-10-30: separate immutable bytes, terms and raw key/schema evidence, not a
 serving integration. The [offline PBP coverage audit](FTN_COVERAGE.md) followed on
 2026-11-02: all eligible PBP rows match uniquely, while field issues remain explicit.
-Applicability and field admission/defer decisions remain next.
+The [field admission review](FTN_FIELD_POLICY.md) followed on 2026-11-03 with an
+explicit defer decision for all 22 contextual fields and tested isolation from
+Scout/Run-Pass evidence. Next is the PBP-only Decision API; charting applicability
+and historical feature availability remain unverified.
 Decision API/UI and new models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
@@ -196,8 +199,8 @@ reproduces exactly. The 2026-10-29 [Python follow-up](EP_PYTHON_PARITY.md) also
 passes the fixed-corpus parity gate. Neither establishes temporal availability,
 calibrated performance or action values. Model integration stays deferred;
 the P1.7 FTN artifact and offline PBP join/coverage audits are now complete.
-Next is field admission/defer policy, followed by the PBP-only decision API;
-no additional model runtime is needed.
+The field admission/defer policy is complete; next is the PBP-only decision API.
+No additional model runtime or charting integration is needed for that slice.
 
 **Follow-up, 2026-10-27:** [full runtime evidence](EP_RUNTIME.md) closes the
 missing-native-package installation boundary without upgrades or pin changes.
@@ -259,6 +262,15 @@ protocol. Preserve upstream methodology context without claiming its historical
 calibration validates a new decision policy, a newer artifact or Python conversion.
 
 ### Participation, FTN and tracking — no premature play-family claims
+
+**Follow-up, 2026-11-03:** the [field policy](FTN_FIELD_POLICY.md) closes the bounded
+first-artifact admission review with explicit defer decisions for all 22 contextual
+fields. Raw encodings remain useful audit evidence; feature denominators, validity
+and historical availability are not established by complete joins. Core/API
+regressions preserve the PBP-only boundary, including baselines, uncertainty,
+missingness, temporal cutoffs and rejection of unsupported charting filters.
+Continue to P1.8's narrow Decision API. Participation/tracking audits remain later
+gated work, not mandatory dependencies or implied admissions.
 
 **Follow-up, 2026-11-02:** [coverage evidence](FTN_COVERAGE.md) retains and uniquely
 matches all 34,902 eligible PBP rows, independently reconciles 2,280 role/team/week/

@@ -71,8 +71,10 @@ validation. Production EP/WP and Run/Pass action ranking remain deferred. A
 [separate FTN 2024 artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) now verifies
 one immutable charting snapshot and its schema/keys/terms. An [offline PBP coverage
 audit](docs/FTN_COVERAGE.md) matches all 34,902 eligible plays while retaining field
-issues and separate source terms. Charting is not served; applicability and
-historical-availability limits stay explicit.
+issues and separate source terms. The [field admission review](docs/FTN_FIELD_POLICY.md)
+retains all 22 contextual charting fields as audit-only, with explicit defer reasons
+and regression tests against accidental use. The next Decision API slice uses
+validated PBP; charting applicability and historical availability remain unverified.
 Decision Lab's API/UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
@@ -229,8 +231,9 @@ offline inventory. It also explains why data published after a season cannot be
 assumed available during that season. No personnel or motion rate is exposed by
 the current reports. A separate [FTN snapshot audit](docs/FTN_CHARTING_AUDIT.md) has
 now acquired one reviewed 2024 artifact. Its [PBP join and coverage audit](docs/FTN_COVERAGE.md)
-is complete, with explicit unknown/invalid field counts; semantic admission remains
-unfinished. No supplementary source is consumed by the existing reports.
+is complete, with explicit unknown/invalid field counts. The [admission decision](docs/FTN_FIELD_POLICY.md)
+defers charting rates, filters and play families until measurement/denominator rules
+are validated. No supplementary source is consumed by the existing reports.
 
 ## Acquire a reproducible raw snapshot
 
@@ -491,6 +494,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [Personnel/motion availability and scope decision](docs/PERSONNEL_MOTION.md)
 - [FTN charting artifact, key inventory and admission limits](docs/FTN_CHARTING_AUDIT.md)
 - [FTN/PBP join coverage, field issues and source applicability limits](docs/FTN_COVERAGE.md)
+- [FTN field admission/defer decisions and tested PBP isolation](docs/FTN_FIELD_POLICY.md)
 - [Optional local API contract and setup](docs/API.md)
 - [Local browser viewer and verification](docs/WEB.md)
 - [Bounded accessibility review and remaining coverage](docs/ACCESSIBILITY.md)
