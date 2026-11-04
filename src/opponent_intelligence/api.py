@@ -1,6 +1,6 @@
 """Optional, read-only HTTP reports from one operator-configured local snapshot."""
 
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, contextmanager
 import os
 from pathlib import Path
 from threading import Lock
@@ -11,7 +11,10 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
 
-from .api_models import ErrorResponse, ReportQuery, ReportResponse
+from .api_models import (
+    DecisionQuery, DecisionResponse, ErrorResponse, EvidenceQuery, ReportQuery, ReportResponse,
+)
+from .decision import DecisionRequest, build_decision_evidence
 from .ingestion import load_snapshot
 from .report import build_report
 
@@ -44,7 +47,8 @@ def create_app(*, snapshot: Path, source_label: str) -> FastAPI:
     if not isinstance(source_label, str) or not source_label.strip() or len(source_label) > 300:
         raise ValueError("API source label must be nonempty and at most 300 characters")
     dataset = None
-    active_report = Lock()
+    active_builder = Lock()
+    query_models = {"/v1/report": ReportQuery, "/v1/decision": DecisionQuery}
 
     @asynccontextmanager
     async def lifespan(app):
@@ -60,8 +64,8 @@ def create_app(*, snapshot: Path, source_label: str) -> FastAPI:
             dataset = None
 
     app = FastAPI(
-        title="NFL Opponent Intelligence", version="1.0.0", lifespan=lifespan,
-        description="Read-only retrospective reports; response schema v2. Local use only.",
+        title="NFL Decision Intelligence", version="1.0.0", lifespan=lifespan,
+        description="Read-only Scout schema v2 and Run/Pass contract v1. Local use only.",
         docs_url=None, redoc_url=None, redirect_slashes=False,
     )
 
@@ -70,7 +74,7 @@ def create_app(*, snapshot: Path, source_label: str) -> FastAPI:
         # Inspect bounded raw query bytes before FastAPI decodes/validates them.
         if len(request.scope.get("query_string", b"")) > MAX_QUERY_BYTES:
             return _error(414, "query_too_long", "Query string exceeds 2048 bytes.")
-        if request.url.path == "/v1/report":
+        if request.url.path in query_models:
             keys = list(request.query_params.keys())
             if any(len(request.query_params.getlist(key)) > 1 for key in keys):
                 return _error(422, "duplicate_parameter", "Each query parameter may appear only once.")
@@ -81,9 +85,11 @@ def create_app(*, snapshot: Path, source_label: str) -> FastAPI:
     @app.exception_handler(RequestValidationError)
     async def invalid_query(request, exc):
         # Do not expose rejected values, unknown keys, parser internals or paths.
+        model = query_models[request.url.path]
         fields = sorted({str(part) for error in exc.errors() for part in error["loc"]
-                         if part in ReportQuery.model_fields})
-        return _error(422, "invalid_query", "Invalid report query; see the request contract.", fields)
+                         if part in model.model_fields})
+        kind = "decision" if model is DecisionQuery else "report"
+        return _error(422, "invalid_query", f"Invalid {kind} query; see the request contract.", fields)
 
     @app.exception_handler(APIError)
     async def api_error(request, exc):
@@ -101,14 +107,11 @@ def create_app(*, snapshot: Path, source_label: str) -> FastAPI:
     async def internal_error(request, exc):
         return _error(500, "internal_error", "Report generation failed.")
 
-    @app.get(
-        "/v1/report", response_model=ReportResponse, response_model_exclude_unset=True,
-        responses={status: {"model": ErrorResponse} for status in (400, 422, 500, 503, 414)},
-    )
-    def get_report(query: Annotated[ReportQuery, Query()]):
+    @contextmanager
+    def evidence_dataset(query: EvidenceQuery):
         # Synchronous routes run in FastAPI's worker pool, not on the event loop.
-        # Reject overlap instead of accumulating a queue of CPU-heavy reports.
-        if not active_report.acquire(blocking=False):
+        # Both routes share one slot; a separate gate would double permitted work.
+        if not active_builder.acquire(blocking=False):
             raise APIError(503, "report_busy", "One report is already running; retry later.")
         try:
             current = dataset
@@ -126,9 +129,27 @@ def create_app(*, snapshot: Path, source_label: str) -> FastAPI:
                              if required and name not in current.optional_columns)
             if missing:
                 raise APIError(422, "context_unavailable", "Snapshot lacks requested context columns.", missing)
-            return build_report(current, source_label=source_label, **query.builder_options())
+            yield current
         finally:
-            active_report.release()
+            active_builder.release()
+
+    @app.get(
+        "/v1/report", response_model=ReportResponse, response_model_exclude_unset=True,
+        responses={status: {"model": ErrorResponse} for status in (400, 422, 500, 503, 414)},
+    )
+    def get_report(query: Annotated[ReportQuery, Query()]):
+        with evidence_dataset(query) as current:
+            return build_report(current, source_label=source_label, **query.builder_options())
+
+    @app.get(
+        "/v1/decision", response_model=DecisionResponse, response_model_exclude_unset=True,
+        responses={status: {"model": ErrorResponse} for status in (400, 422, 500, 503, 414)},
+    )
+    def get_decision(query: Annotated[DecisionQuery, Query()]):
+        with evidence_dataset(query) as current:
+            return build_decision_evidence(
+                current, DecisionRequest(**query.builder_options()), source_label=source_label,
+            )
 
     return app
 

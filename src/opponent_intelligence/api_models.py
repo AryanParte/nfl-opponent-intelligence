@@ -1,17 +1,18 @@
-"""Optional HTTP boundary models; analytical definitions remain in report.py."""
+"""Optional HTTP boundary models; analytical definitions remain in core builders."""
 
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, model_validator
 
 
-class ReportQuery(BaseModel):
+class EvidenceQuery(BaseModel):
+    """Shared HTTP parsing and cost bounds for the two evidence contracts."""
+
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     team: str = Field(pattern=r"^[A-Z]{2,3}$", min_length=2, max_length=3)
     season: int = Field(ge=1999, le=9999)
     before_week: int = Field(ge=1, le=23, description="Exclusive week cutoff.")
-    side: Literal["offense", "defense"] = "offense"
     season_type: Literal["REG", "POST"] = "REG"
     minimum_plays: int = Field(default=30, ge=1, le=100000)
     yardline_min: float | None = Field(default=None, ge=0, le=100)
@@ -39,6 +40,22 @@ class ReportQuery(BaseModel):
 
     def builder_options(self) -> dict:
         return {**self.model_dump(), "compare_league": self.compare_league == "true"}
+
+
+class ReportQuery(EvidenceQuery):
+    side: Literal["offense", "defense"] = "offense"
+
+
+class DecisionQuery(EvidenceQuery):
+    down: int = Field(ge=1, le=4)
+    distance_min: int = Field(ge=0, le=100)
+    distance_max: int = Field(ge=0, le=100)
+
+    @model_validator(mode="after")
+    def ordered_distance(self):
+        if self.distance_min > self.distance_max:
+            raise ValueError("distance_min must not exceed distance_max")
+        return self
 
 
 class OutputModel(BaseModel):
@@ -87,6 +104,89 @@ class ReportResponse(OutputModel):
     warnings: list[str]
     league_comparison: dict[str, JsonValue] | None = None
     uncertainty: dict[str, JsonValue] | None = None
+
+
+class CandidateAvailability(OutputModel):
+    frequency: Literal["available", "empty_cohort"]
+    outcomes: Literal["available", "empty_cohort", "unobserved_candidate", "missing_epa"]
+
+
+class CandidateEvidence(OutputModel):
+    candidate: Literal["run", "pass"]
+    label: str
+    mapping: dict[str, JsonValue]
+    plays: int = Field(ge=0)
+    games: int = Field(ge=0)
+    epa_observations: int = Field(ge=0)
+    missing_epa: int = Field(ge=0)
+    epa_per_play: float | None
+    success_rate: float | None = Field(ge=0, le=1)
+    small_sample: bool
+    small_epa_sample: bool
+    frequency: float | None = Field(ge=0, le=1)
+    frequency_denominator: int = Field(ge=0)
+    availability: CandidateAvailability
+
+
+class BaselineCandidate(CandidateEvidence):
+    coverage: dict[str, JsonValue]
+    difference: dict[str, float | None]
+
+
+class CandidateLeagueComparison(OutputModel):
+    population: dict[str, JsonValue]
+    cohort: dict[str, JsonValue]
+    difference_convention: Literal["selected_minus_baseline"]
+    difference_units: dict[str, str]
+    data_quality: dict[str, JsonValue]
+    candidates: list[BaselineCandidate] = Field(min_length=2, max_length=2)
+    warnings: list[str]
+
+
+class DecisionComparison(OutputModel):
+    status: Literal["insufficient_evidence"]
+    preferred_candidate: None
+    reason: Literal["candidate_comparison_not_validated"]
+    policy_version: Literal["descriptive_only_v1"]
+    descriptive_contrast: dict[str, JsonValue]
+    opponent_evidence: dict[str, JsonValue]
+
+
+class DecisionPopulation(OutputModel):
+    plays: int = Field(ge=0)
+    games: int = Field(ge=0)
+
+
+class DecisionResponse(OutputModel):
+    """Contract-v1 transport shape, without recomputing statistical identities.
+
+    Counts/rates, availability and mandatory abstention are typed. Variable
+    context/method blocks retain the core contract, just as in Scout responses.
+    """
+
+    contract_version: Literal[1]
+    evidence_kind: Literal["descriptive_observed_calls"]
+    source: Source
+    cohort: dict[str, JsonValue]
+    metric_context: dict[str, JsonValue]
+    estimation_policy: dict[str, JsonValue]
+    population: DecisionPopulation
+    data_quality: dict[str, JsonValue]
+    candidates: list[CandidateEvidence] = Field(min_length=2, max_length=2)
+    comparison: DecisionComparison
+    warnings: list[str]
+    league_comparison: CandidateLeagueComparison | None = None
+    uncertainty: dict[str, JsonValue] | None = None
+
+    @model_validator(mode="after")
+    def candidate_order(self):
+        populations = [self.candidates]
+        if self.league_comparison is not None:
+            populations.append(self.league_comparison.candidates)
+        for candidates in populations:
+            if [candidate.candidate for candidate in candidates] != ["run", "pass"]:
+                raise ValueError("candidates must be Run then Pass")
+        return self
 
 
 class ErrorDetail(OutputModel):

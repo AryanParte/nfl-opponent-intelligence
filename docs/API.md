@@ -1,7 +1,9 @@
-# Local snapshot report API
+# Local snapshot evidence API
 
-P1.4's first HTTP slice exposes **GET `/v1/report`**, using the existing report
-builder and JSON report schema v2. It is an optional, read-only local service,
+The optional HTTP service exposes **GET `/v1/report`** (Scout schema v2) and
+**GET `/v1/decision`** (Run/Pass contract v1, added 2026-11-04). Both reuse the
+existing core builders and the same verified resident PBP snapshot. It is a
+read-only local service,
 not a deployment or a new statistical model. There is no database,
 authentication, CORS policy, remote data selector, or HTTP ingestion command.
 Only the operator chooses a snapshot, before startup. The offline CLI still
@@ -43,7 +45,7 @@ are not authentication, rate limiting, transport security or a deployment review
 The service makes no network acquisition calls. `/openapi.json` documents its
 transport schema; interactive `/docs` and `/redoc` pages are disabled.
 
-## Request contract
+## Scout request contract
 
 ```sh
 curl --get 'http://127.0.0.1:8000/v1/report' \
@@ -81,15 +83,74 @@ duplicate parameters (including encoded duplicate names), request bodies and
 non-GET methods are rejected. The raw query string is limited to 2,048 bytes,
 before URL decoding. Trailing slashes are not redirected.
 
+## Decision request contract
+
+```sh
+curl --get 'http://127.0.0.1:8000/v1/decision' \
+  --data-urlencode 'team=CAR' --data-urlencode 'season=2024' \
+  --data-urlencode 'before_week=19' --data-urlencode 'down=3' \
+  --data-urlencode 'distance_min=4' --data-urlencode 'distance_max=4' \
+  --data-urlencode 'compare_league=true'
+```
+
+Decision requests use the same required `team`, `season`, `before_week`, optional
+context bounds, season type, count-warning threshold, comparison and bootstrap
+options as Scout, **except `side` is not accepted**. Decision evidence is offense-only;
+defense remains a Scout report. Three additional parameters are required:
+
+| Query parameter | Contract |
+| --- | --- |
+| `down` | Integer 1–4; exact recorded down. |
+| `distance_min` / `distance_max` | Integers 0–100, inclusive and ordered; equal bounds select exact yards to go. |
+
+There is no inferred distance bucket, automatic cohort widening or sparse-data
+fallback. Field position and score remain offense-relative; period/clock select
+historical observations, not a rules-valid future game state. Fourth down still
+means evidence **conditional on eligible Run/Pass plays**, not go/punt/field-goal
+values. See the [decision contract](DECISION_CONTRACT.md) for candidate mapping,
+ordered exclusion ledgers and denominator semantics.
+
+This is HTTP text parsing into the core `DecisionRequest`, not a change to its
+strict Python argument types. Cost bounds match Scout: at most 1,000 resamples,
+seed 0 by default when repetitions are supplied, 2,048 raw query bytes, no duplicate
+keys or bodies. `side` (even `offense`), opponent, candidate/play-family, charting,
+model, path, URL, source-label and refresh options are rejected before analytics.
+A valid-looking charting column in the snapshot does not admit a new filter.
+
 ## Response and errors
 
-Successful JSON is the builder's report, with source fingerprints/manifest,
+Successful Scout JSON is the builder's report, with source fingerprints/manifest,
 cohort, metric context, data quality, overall counts/rates, situations and warnings.
 Optional comparison/uncertainty blocks remain absent unless requested; measured
 nulls are retained. The HTTP model validates the exact top-level v2 envelope,
 source shape and typed overall/situation metrics. Variable context, provenance
 and method dictionaries remain JSON objects governed by the existing core
 contracts, not independently reimplemented statistical validation in OpenAPI.
+
+Successful Decision JSON is exactly the builder's contract v1: `evidence_kind`,
+source/manifest, cohort, metric context, estimation policy, population, data quality,
+Run then Pass candidates, comparison policy and warnings. Optional matched league
+and uncertainty blocks remain absent unless requested. No model is executed or
+model version invented: the response identifies descriptive observed calls and
+`descriptive_only_v1`; source/model admission remains separately gated.
+
+The Decision response model validates the envelope, source, nonnegative counts,
+finite outcome/rate values, availability labels, two ordered candidates in selected
+and baseline evidence, and the existing mandatory abstention fields. Variable
+context, method and contrast dictionaries stay governed by core tests; the HTTP
+layer does not repeat statistical calculations. Invalid output fails with a
+sanitized 500, including any non-null preferred candidate. In particular:
+
+- Empty cohorts return 200 with zero plays, null frequencies/outcomes and explicit
+  reasons. A candidate absent from a nonempty cohort has frequency zero but null
+  outcomes. All-missing candidate EPA preserves frequency and withholds outcomes.
+- Candidate frequency uses all eligible cohort plays; candidate EPA and success
+  use only that candidate's observed EPA. Games may overlap across candidates.
+- `comparison.status` stays `insufficient_evidence`, with a null preferred call,
+  regardless of count flags, mean differences, baselines or exploratory intervals.
+  Descriptive contrasts are not causal, predictive or coaching recommendations.
+- A Decision result is not Scout schema v2 and must not be sent to the Scout
+  brief renderer. The existing React viewer continues to consume Scout only.
 
 Empty cohorts return **200**, zero counts, null rates and the builder's warnings,
 not 404. A syntactically valid but absent team such as `ZZZ` also gives an empty
@@ -110,12 +171,12 @@ the application are not covered):
 | 414 | `query_too_long` | Raw query exceeds 2,048 bytes. |
 | 422 | `invalid_query`, `duplicate_parameter` | Invalid/missing/extra options or repeated keys. |
 | 422 | `season_unavailable`, `context_unavailable` | Snapshot season differs or required context columns are absent. |
-| 503 | `report_busy` | Another report builder is active; `Retry-After: 1` suggests a retry, not a completion guarantee. |
+| 503 | `report_busy` | Either a Scout or Decision builder is active; `Retry-After: 1` suggests a retry, not a completion guarantee. The code is retained for existing Scout clients. |
 | 503 | `snapshot_not_ready` | Application lifespan has not loaded the snapshot. |
 | 404 / 405 | `not_found` / `method_not_allowed` | Unknown route or method; 405 retains the `Allow` header. |
 | 500 | `internal_error` | Unexpected builder/response-validation failure; no partial report. |
 
-`fields` lists recognized query names, or missing source columns for
+`fields` lists query names recognized **by the requested route**, or missing source columns for
 `context_unavailable`; cross-field/unknown-option errors may have an empty list.
 Rejected values, unknown keys, file paths, exception text and tracebacks are not
 echoed. Operator-side server logs may contain diagnostic exceptions.
@@ -128,11 +189,12 @@ checked **after parsing**, not a streaming memory cap. The existing snapshot
 loader separately bounds archive/decoded byte sizes. Larger-than-memory loading
 is still unimplemented. Resampling is opt-in and capped at 1,000 repetitions.
 
-The synchronous route runs in the framework's worker pool. A nonblocking lock
-allows one report builder per application instance and rejects overlapping
+The synchronous routes run in the framework's worker pool. One shared nonblocking lock
+allows one builder across **both** routes per application instance and rejects overlapping
 builders instead of queueing them; cleanup releases the slot after errors. It is
 not a cross-process lock, a cap on all HTTP connections, a hard CPU deadline or a
 measured throughput promise. Adding workers multiplies memory and concurrency.
+Snapshot season/context validation and builder exceptions release that same slot.
 Response serialization is outside the builder gate. No database, background
 queue, result cache, deployment or general-purpose report service was added.
 
@@ -181,3 +243,52 @@ Primary framework references reviewed 2026-10-08:
 [error handlers](https://fastapi.tiangolo.com/tutorial/handling-errors/),
 [response models](https://fastapi.tiangolo.com/tutorial/response-model/), and
 [Starlette TestClient/lifespan and httpx2](https://starlette.dev/testclient/).
+
+### Decision transport verification — 2026-11-04
+
+Nineteen new offline API tests cover full core-result equivalence, hand-counted
+Run/Pass outcomes, missing/empty states, cutoffs, context filters, league evidence,
+seeded uncertainty (withheld and supported intervals), request bounds, unsupported
+inputs, shared snapshot stability, cross-route contention in both directions,
+capacity recovery and sanitized response errors. A core subprocess additionally
+builds decision evidence with `python -S`, keeping web dependencies optional.
+Existing Scout API/browser fixtures remain unchanged.
+
+The eight requests in the unchanged [pinned decision-audit receipt](evidence/pbp-2024-23370d5d10f8.decision-audit.json)
+also passed through this endpoint with network access blocked. Sorted JSON matched
+the direct core builder exactly, including numeric types; counts, candidate means,
+baselines and uncertainty summaries matched the frozen independent audit within
+its existing absolute tolerance. This is transport verification on retrospective
+data, not another model/calibration audit, performance benchmark or availability claim.
+The same already acquired snapshot, hashes and license records were reused.
+
+To reproduce the eight HTTP/core comparisons in-process with the optional API/test
+dependencies installed, run from the repository root (no local server required):
+
+```sh
+PYTHONPATH=src .venv/api/bin/python - <<'PY'
+import json
+from pathlib import Path
+from fastapi.testclient import TestClient
+from opponent_intelligence.api import create_app
+from opponent_intelligence.decision import DecisionRequest, build_decision_evidence
+from opponent_intelligence.ingestion import load_snapshot
+snapshot = Path('data/raw/nflverse/pbp/2024/23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06').resolve()
+cases = json.loads(Path('docs/evidence/pbp-2024-23370d5d10f8.decision-audit.json').read_text())['cases']
+dataset = load_snapshot(snapshot)
+label = 'nflverse 2024 retrospective snapshot; local transport replay'
+with TestClient(create_app(snapshot=snapshot, source_label=label)) as client:
+    for case in cases:
+        request = case['request']
+        params = {k: str(v).lower() if isinstance(v, bool) else v for k, v in request.items()}
+        response = client.get('/v1/decision', params=params)
+        assert response.status_code == 200, response.text
+        expected = build_decision_evidence(dataset, DecisionRequest(**request), source_label=label)
+        assert json.dumps(response.json(), sort_keys=True, allow_nan=False) == json.dumps(expected, sort_keys=True, allow_nan=False)
+        print(case['id'], 'matches core JSON')
+PY
+```
+
+Framework query/response references above were rechecked on 2026-11-04, alongside
+[Pydantic after-model validation](https://docs.pydantic.dev/latest/concepts/validators/).
+Pinned dependencies were reused; no package upgrade was needed.

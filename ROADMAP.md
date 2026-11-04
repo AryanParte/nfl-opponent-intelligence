@@ -16,7 +16,8 @@ the validated pipeline, metrics, baselines, uncertainty, API and React UI. No ne
 repository, duplicated analytics or LLM branding layer. The differentiator is
 explainable football evidence, not a play-calling game or a clone of another site.
 See [direction, evidence layers and initial source review](docs/DECISION_INTELLIGENCE.md).
-Decision Lab's API/UI remain planned. P1.4's bounded local surface is complete;
+Decision Lab's UI remains planned; its narrow local API is implemented.
+P1.4's bounded local surface is complete;
 P1.5's offline contract, matched candidate baselines and exploratory uncertainty
 are implemented and independently reconciled on pinned retrospective cohorts.
 Its comparison/abstention policy closes the descriptive foundation: explicit
@@ -36,8 +37,9 @@ P1.6's bounded evaluation is complete; production models remain explicitly defer
 P1.7's [FTN artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) and
 [offline PBP join/coverage audit](docs/FTN_COVERAGE.md) are complete.
 The [bounded field admission review](docs/FTN_FIELD_POLICY.md) is complete with
-all 22 contextual fields deferred from serving. Next is P1.8's PBP-only decision
-API; unresolved charting does not block it or silently become serving evidence.
+all 22 contextual fields deferred from serving. P1.8's PBP-only decision API is
+implemented; unresolved charting does not block it or silently become serving
+evidence. Next is P1.9's first browser contract/client slice.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -330,23 +332,32 @@ Inspect this unit's PR/CI before continuing; do not duplicate unmerged work.
   terms, coverage, identity/coordinate and release-time review. Do not treat the
   completed FTN audit as approval of those sources or repeat acquisition/join work.
 
-### P1.8 — Decision API
+### P1.8 — Decision API (complete within local PBP-only scope, 2026-11-04)
 
-- **Next unit:** first narrow optional FastAPI endpoint for the existing
-  `build_decision_evidence` contract v1 over the operator-configured immutable PBP
-  snapshot. Reuse shared serving/validation patterns, bound bootstrap cost, preserve
-  Scout schema v2 and test requests/responses/errors/concurrency. No charting/model
-  admission, database, frontend, deployment or new download path in this slice.
-- [ ] Narrow optional FastAPI endpoint reusing the tested decision layer and an
-      explicitly configured immutable snapshot; no request paths or downloads.
-- [ ] Return candidates, evidence, denominators, league context, warnings,
-      uncertainty, source/model versions and explicit insufficient-evidence states.
-- [ ] Bound computation and test request/response/errors/concurrency. No unexplained
-      AI score or EP/WP claim without the model-validation gate above. A documented
-      defer decision in P1.6/P1.7 must not force models/enrichment into the PBP-only API.
+- [x] Narrow optional `GET /v1/decision` reuses `build_decision_evidence` contract v1
+      and Scout's explicitly configured immutable snapshot; no request paths or downloads.
+- [x] Return candidates, denominators, league context, warnings, optional uncertainty,
+      source/contract/policy versions and explicit insufficient-evidence states.
+      No model is run or model version invented; admission remains deferred.
+- [x] Share bounded query parsing, season/context checks and one nonblocking builder
+      slot with Scout. Cap resampling at 1,000; preserve Scout schema v2/fixtures.
+      Nineteen new API tests cover requests, responses, errors and contention in both
+      directions; core isolation test keeps optional dependencies out of the builder.
+- [x] Verify eight existing pinned real cohorts through HTTP against direct core JSON
+      and frozen audit summaries, with network blocked. This tests transport, not
+      predictive validity, calibration, historical availability or throughput.
+
+See [HTTP contract and replay](docs/API.md#decision-request-contract). No charting/
+model integration, new dependency, database, frontend, deployment or automation change.
+One local worker remains the supported scope; no cross-process capacity guarantee.
 
 ### P1.9 — Play Caller / Decision Lab UI
 
+- **Next unit:** typed browser contract/parser and request client for Decision v1,
+  with fixtures produced by the actual API over invented snapshots. Test candidate
+  denominators, null/withheld states, provenance, optional blocks and mandatory
+  abstention before adding navigation/form rendering. Preserve Scout fixtures and
+  compute no football statistics in the browser.
 - [ ] Scout and Play Caller navigation in the existing React app; keep Scout intact.
 - [ ] Situation definition, supported-call selection and comparison against
       alternatives, with clear historical versus model evidence labels.

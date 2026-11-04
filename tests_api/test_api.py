@@ -318,7 +318,7 @@ class ReportAPITests(unittest.TestCase):
         with TestClient(self.app) as client:
             schema = client.get("/openapi.json").json()
         operation = schema["paths"]["/v1/report"]["get"]
-        self.assertEqual(set(schema["paths"]), {"/v1/report"})
+        self.assertEqual(set(schema["paths"]), {"/v1/report", "/v1/decision"})
         fields = {p["name"] for p in operation["parameters"]}
         self.assertEqual(fields, set(api.ReportQuery.model_fields))
         self.assertNotIn("snapshot", fields)

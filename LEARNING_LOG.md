@@ -2790,3 +2790,69 @@ and test requests/responses/errors/concurrency. No charting/model integration,
 database, frontend, deployment or per-request downloads. Participation/tracking
 reviews remain later gated work. Do not repeat the completed field review or merge
 this PR automatically.
+
+## 2026-11-04 — Serve Run/Pass evidence through the shared local API (P1.8)
+
+**Built / why it matters:** verified PR #38 merged, all eight main CI jobs passed,
+no open PRs/review feedback and a clean upstream-matched canonical checkout.
+Started `codex/decision-api` from fetched main `16d2ac4`. Added `GET /v1/decision`
+over the existing immutable PBP snapshot, reusing `build_decision_evidence` contract
+v1. It requires exact down/inclusive distance, preserves candidate and baseline
+evidence, optional uncertainty, provenance and mandatory abstention. This makes the
+tested decision core available to the future browser mode without new analytics.
+
+**Review files:** `src/opponent_intelligence/api.py`, `api_models.py`,
+`tests_api/test_decision_api.py`, `tests/test_optional_api.py`, `docs/API.md`, and
+updated roadmap/status/decision architecture and contract documentation.
+
+**Sports concepts:** Pass includes eligible sacks/scrambles, not just raw pass rows.
+Call frequency uses all eligible cohort plays; EPA/success use observed candidate
+EPA. An absent call in a nonempty cohort has zero frequency and unavailable
+outcomes. An empty cohort has null frequencies. Exact situation matching never
+widens silently, fourth-down evidence omits punts/kicks, and retrospective source
+EPA is not the predicted value of an unplayed action. Defense stays in Scout.
+
+**Software/statistical concepts / learn:** a transport adapter should reuse the
+same snapshot and builder, preserve opt-in absence versus measured null, reject
+unsupported input before computing, and validate output without duplicating
+formulas. Separate Scout/Decision response versions prevent accidental mixing.
+One shared nonblocking slot prevents two endpoints from doubling simultaneous
+CPU work; it is not cross-process admission control or a hard execution deadline.
+The fixed comparison policy remains insufficient even when estimates and nominal
+intervals are available. Core logic still runs with all site packages disabled.
+
+**Three review questions:**
+
+1. Why must Run/Pass frequency, EPA and success retain different denominators,
+   and how do an empty cohort, an absent call and missing EPA differ in HTTP JSON?
+2. Why do both endpoints share one verified dataset and builder slot, and what
+   resource guarantees does that design still not provide?
+3. Why can valid candidate intervals and league differences coexist with
+   `preferred_candidate: null`, and how is that policy protected at the API boundary?
+
+**Verification / self-review:** baseline 452 core / 25 API on Python 3.13; final
+453 core / 44 API pass on Python 3.11/3.12/3.13, API warnings as errors and no broken
+dependencies. All 672 frontend tests, TypeScript/build and 14 Chromium cases pass.
+The initial sandbox frontend run had worker-startup timeouts; the process-enabled
+rerun passed without dependency/configuration changes. Local test servers stopped.
+Nineteen new API tests cover requests, full core-result equivalence, hand-counted
+outcomes, uncertainty, output mutation, shared snapshot stability, cross-route
+contention in both directions and capacity recovery. One new core subprocess
+proves decision evidence needs no web dependencies.
+
+Eight previously audited real cohorts also passed through HTTP with networking
+blocked: sorted JSON exactly matched the core builder, and points/baselines/retained
+uncertainty summaries matched the frozen independent receipt at its original
+tolerance. Corrected test/harness assumptions about the `score_differential` ledger
+name and the receipt's summarized uncertainty shape. No statistics or acceptance
+policy was weakened. Full-diff review checked input/output bounds, lock cleanup,
+missingness, cutoffs, optional-dependency isolation, source terms and documentation.
+No new data, model, formula, schema change to Scout or browser analytics. Publication
+SHA, attribution and CI are recorded in the PR; the 8 AM automation is unchanged.
+
+**Remaining / next:** P1.8 is complete within local PBP-only scope. Begin only the
+first P1.9 browser contract/parser and request-client slice, using fixtures generated
+from the actual API over invented snapshots. Test null/withheld evidence, denominators,
+provenance, optional blocks and abstention before adding mode navigation/form views.
+Keep Scout intact. Charting/model admission, opponent adjustment, calibration,
+historical availability and deployment remain deferred; no merge or auto-merge.

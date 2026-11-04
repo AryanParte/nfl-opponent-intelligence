@@ -1,9 +1,9 @@
 # Engineering status
 
-As of the daily run on 2026-11-03, the long-term direction is
+As of the daily run on 2026-11-04, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
-Analysis** and a planned **Play Caller / Decision Lab** UI/API. The first offline
-Run/Pass evidence contract includes matched candidate baselines and opt-in
+Analysis** and a planned **Play Caller / Decision Lab** UI. The offline Run/Pass
+builder and its local API include matched candidate baselines and opt-in
 candidate-level game support/exploratory intervals;
 no ranking/model or mode switch is claimed. A separate FTN charting snapshot is
 now audit-only, not a source consumed by these reports. The
@@ -35,23 +35,29 @@ retains separate immutable CSV/notices/manifest and raw key/schema evidence.
 The [offline PBP coverage audit](FTN_COVERAGE.md), merged through PR #37, completes P1.7's join slice:
 all 34,902 eligible PBP plays retained and uniquely matched, with explicit field
 issues across 2,280 offense/defense, team/week/candidate strata. Source inspection
-does not resolve field applicability. Today's [field admission policy](FTN_FIELD_POLICY.md)
+does not resolve field applicability. The [field admission policy](FTN_FIELD_POLICY.md), merged through PR #38,
 closes the bounded first-artifact review with explicit defer decisions for all 22
 contextual fields and regression coverage against accidental use. No serving
-enrichment or new play family is approved. This unit changes documentation and
-tests; it adds no production parser, runtime policy layer or API/UI feature.
-Verification is below. Scout schema v2, the API, frontend, briefs, downloads and
-all 71 API fixtures remain unchanged. No production dependency, model execution,
-training, ranking or automation change. No production code changed in this unit.
+enrichment or new play family is approved.
+
+Today's P1.8 unit adds the optional **GET `/v1/decision`** endpoint over the same
+verified immutable PBP snapshot as Scout. It reuses `build_decision_evidence` and
+contract v1, requires exact down/inclusive distance bounds, preserves provenance,
+candidate denominators, baselines, null/withheld states and mandatory abstention.
+Shared query limits, season/context checks and one nonblocking builder slot bound
+work across both routes. The strict response envelope rejects invalid candidate
+rates/shapes and any non-null preferred call. No formulas move into the HTTP layer.
+Verification is below. Scout schema v2, frontend, briefs, downloads and all 71
+browser API fixtures remain unchanged. No new dependency, model execution,
+training, ranking, charting admission, database, deployment or automation change.
 Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. Next: P1.8's narrow optional decision endpoint over the existing
-immutable PBP snapshot and `build_decision_evidence` contract v1. Reuse serving
-patterns, bound bootstrap cost and test requests/responses/errors/concurrency;
-preserve Scout schema v2. Charting/model integration, database, UI and deployment
-are not prerequisites for that unit.
-No production exposure before semantic admission; no assumed historical
-in-season availability, serving model, action ranking or endpoint.
+certification. P1.8 is complete within its single-worker, local PBP-only scope.
+Next: P1.9's small typed browser contract/parser and request-client slice, backed
+by actual synthetic API fixtures and tests for nulls, denominators, optional blocks,
+provenance and mandatory abstention. Navigation/form rendering follows later;
+keep calculations in the core and preserve Scout. No assumed historical
+in-season availability, serving model or action ranking.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -65,14 +71,19 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/ftn-field-admission-policy`, started from updated
-  `origin/main` at `00dfe07` after observing PR #37 merged. Do not merge or enable
+- Working branch: `codex/decision-api`, started from updated
+  `origin/main` at `16d2ac4` after observing PR #38 merged. Do not merge or enable
   auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
   was clean and matched its upstream, with no unpublished commits. Only `main`
   remained on the remote; no open PRs or review feedback remained. History is preserved.
 - Publication/remote verification for this unit: consult the PR for
-  `codex/ftn-field-admission-policy` for its exact published SHA, attribution and CI
+  `codex/decision-api` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
+- Previous FTN policy review: [PR #38](https://github.com/AryanParte/nfl-opponent-intelligence/pull/38),
+  merged at `16d2ac4`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/41743526803)
+  passed all eight jobs. No open PRs/reviews/comments remained; only main remained
+  on the remote. The prior clean checkout matched its upstream with no unpublished
+  commits. Baseline 452 core / 25 API passed on Python 3.13 before edits.
 - Previous FTN coverage review: [PR #37](https://github.com/AryanParte/nfl-opponent-intelligence/pull/37),
   merged at `00dfe07`. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/41552805692)
   passed all eight jobs. No open PRs/reviews/comments remained; only main remained
@@ -271,6 +282,43 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.8 PBP-only Decision endpoint — 2026-11-04
+
+[API contract and replay](API.md#decision-request-contract) document the new route,
+required down/distance bounds, shared options/cost limits and separate response v1.
+Nineteen new API tests exercise full-result equivalence plus independently counted
+candidate values, missing/empty outcomes, temporal and context selection, leave-team-out
+baselines, supported/withheld seeded intervals, rejected inputs, shared immutable
+snapshot use, actual cross-route contention in both directions and error recovery.
+Response mutations test wrong versions, candidate ordering, nonfinite/out-of-range
+values, extra fields and attempted preferred calls. The core builder also executes
+under `python -S`; API extras remain optional.
+
+Final local checks: **453 core / 44 API** on each Python 3.11/3.12/3.13, API warnings
+as errors and no broken dependencies. **672 frontend tests**, TypeScript/build and
+**14 Chromium integration cases** pass. The first sandbox frontend run reported
+worker-startup timeouts and was not counted as passing; rerunning with local process
+access passed all tests without changing settings or dependencies. Test servers stopped.
+
+With network blocked, all eight existing real decision-audit requests returned 200
+and matched sorted core JSON exactly, including numeric types. Candidate counts,
+means, baselines and retained uncertainty summaries matched the frozen independent
+receipt within its unchanged tolerance. Original source bytes, manifests, receipt
+and terms were not modified or reacquired. This is transport integration evidence,
+not new statistical/model validation, historical availability or a load benchmark.
+
+Full-diff review checked optional dependency boundaries, route-specific sanitization,
+lock release/overlap, response nulls, strict abstention, missing-EPA denominators,
+no cohort widening and unchanged Scout fixtures. Corrected two verification-harness
+assumptions: the existing ledger key is `score_differential`, and the audit receipt
+stores uncertainty summaries rather than the entire response block. Production
+statistics and validation policies were not relaxed. Exact published SHA, GitHub
+attribution and remote CI belong in this branch's PR.
+
+Next: P1.9 browser contract/parser and client tests using genuine synthetic endpoint
+fixtures. Do not repeat the completed model parity/charting audits, add unadmitted
+features or infer a preferred call from displayed differences.
 
 ### P1.7 Field admission/defer policy and consumer boundary — 2026-11-03
 
@@ -1446,8 +1494,10 @@ is complete: eligible-row retention, explicit unmatched/unknown/invalid states b
 role/team/week/candidate, independent reconciliation and pinned producer inspection.
 The [field admission/defer policy](FTN_FIELD_POLICY.md) is now complete, retaining
 all 22 contextual fields as audit-only and testing the PBP-only consumer boundary.
-Next: the narrow optional P1.8 decision endpoint using contract v1, shared immutable
-snapshot serving, bounded computation and request/response/error/concurrency tests.
+P1.8's narrow optional decision endpoint is now implemented using contract v1,
+shared immutable snapshot serving, bounded computation and request/response/error/
+concurrency tests. Next: P1.9's first browser contract/client slice with actual
+synthetic endpoint fixtures, explicit null/withheld evidence and no browser analytics.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual

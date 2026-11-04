@@ -6,8 +6,8 @@ metric definitions, source fingerprints, and a cutoff that excludes the week bei
 prepared for. The existing Opponent Intelligence functionality is the **Scout /
 Analysis** mode. This same repository will evolve toward an evidence-first
 **Play Caller / Decision Lab**, starting with defensible Run vs Pass comparisons.
-Decision Lab's UI is planned; its first offline Run/Pass evidence contract is
-implemented. Repository/package/CLI names stay intact.
+Decision Lab's UI is planned; its Run/Pass evidence builder and narrow local API
+are implemented. Repository/package/CLI names stay intact.
 See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
 
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
@@ -73,9 +73,11 @@ one immutable charting snapshot and its schema/keys/terms. An [offline PBP cover
 audit](docs/FTN_COVERAGE.md) matches all 34,902 eligible plays while retaining field
 issues and separate source terms. The [field admission review](docs/FTN_FIELD_POLICY.md)
 retains all 22 contextual charting fields as audit-only, with explicit defer reasons
-and regression tests against accidental use. The next Decision API slice uses
-validated PBP; charting applicability and historical availability remain unverified.
-Decision Lab's API/UI, adjustment and deployment remain on the
+and regression tests against accidental use. The optional `GET /v1/decision`
+endpoint now serves that PBP-only contract v1 from the same verified snapshot as
+Scout, with bounded requests, shared concurrency and explicit abstention.
+Charting applicability and historical availability remain unverified.
+Decision Lab's UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 
@@ -345,7 +347,7 @@ has no time columns; clock tests generate explicitly synthetic inputs. See
 [clock semantics](docs/METRICS.md#pre-play-period-and-clock) and
 [pinned-snapshot evidence](docs/REAL_DATA_AUDIT.md#clock-extension-2026-10-04).
 
-## Serve the same report locally (optional)
+## Serve Scout and Decision evidence locally (optional)
 
 The first product endpoint is `GET /v1/report`. It loads one explicitly configured
 immutable snapshot at startup and reuses the analytical builder; requests cannot
@@ -360,6 +362,19 @@ curl 'http://127.0.0.1:8000/v1/report?team=CAR&season=2024&before_week=19'
 Responses retain schema v2, provenance, warnings, nulls, and opt-in comparison and
 uncertainty. This is a local integration slice, not a public deployment. The core
 CLI and synthetic demo above still need no web packages.
+
+`GET /v1/decision` additionally requires exact down and inclusive distance bounds:
+
+```sh
+curl 'http://127.0.0.1:8000/v1/decision?team=CAR&season=2024&before_week=19&down=3&distance_min=4&distance_max=4&compare_league=true'
+```
+
+It returns Run/Pass contract v1, including candidate denominators, league context,
+warnings and mandatory abstention from choosing a call. It is offense-only; `side`,
+opponent, play-family and model options are unsupported. Optional bootstrap work
+is capped at 1,000 repetitions and both routes share one active builder slot.
+See the [Decision HTTP contract](docs/API.md#decision-request-contract). This
+response is separate from Scout schema v2 and its brief/download workflow.
 
 ### Open the local report viewer
 
@@ -453,9 +468,11 @@ inclusion policy and why the current output is descriptive rather than a forecas
    separating schema absence from missing observations and zero-valued indicators.
    `tests/test_availability.py` verifies counts, provenance and safe failure states.
 10. Optional `api.py` loads a configured snapshot once and adapts bounded HTTP
-    queries to `build_report`; `api_models.py` defines its transport contract.
+    queries to `build_report` and `build_decision_evidence` using a shared work slot;
+    `api_models.py` defines the separate transport contracts.
     `tests_api/test_api.py` exercises synthetic HTTP contracts without network;
-    `tests/test_optional_api.py` checks dependency-free core CLI isolation.
+    `tests_api/test_decision_api.py` covers candidate evidence and cross-route safety;
+    `tests/test_optional_api.py` checks dependency-free CLI/decision-core isolation.
 11. `web/src/App.tsx` presents the local cohort view; `web/src/report.ts` validates
     the consumed API contract and formats values without changing measurements.
     Frontend tests cover states/races/errors; `tests_api/test_frontend_contract.py`
