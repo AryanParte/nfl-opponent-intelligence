@@ -26,6 +26,12 @@ The original source manifests/notices are retained separately. The pinned produc
 source was inspected, not copied or executed; its MIT notice and source links are
 documented in `docs/FTN_COVERAGE.md`. No field or model is admitted to production.
 
+`docs/FTN_FIELD_POLICY.md` selects aggregate encoding counts from that same receipt
+to explain admission/defer decisions. Those counts retain the same FTN Data via
+nflverse CC BY-SA 4.0 attribution and nflverse PBP CC BY 4.0 attribution. No new
+dataset, row-level redistribution, source modification or software adaptation is
+introduced by the policy or its entirely invented consumer-boundary fixtures.
+
 ## EP feature oracle
 
 `ep_reference.py` independently encodes the EP feature semantics documented by

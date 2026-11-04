@@ -6,6 +6,10 @@ All 34,902 eligible 2024 REG+POST PBP plays match exactly one FTN row. Matching 
 not establish charting accuracy, field applicability or pregame availability.
 No field, play family or feature rate is admitted to Scout or Decision Lab.
 
+**Follow-up, 2026-11-03:** the [field admission policy](FTN_FIELD_POLICY.md) now
+records explicit defer decisions and tests the PBP-only consumer boundary. The
+next unit is P1.8's Decision API; the evidence in this coverage receipt is unchanged.
+
 ## Reproducible sources
 
 The [aggregate receipt][receipt] embeds the two original manifests, separately
@@ -163,14 +167,14 @@ calculation, importing no audit/production selectors, reconciled joins, candidat
 counts, every stratum's plays/games and all issue counts. See [STATUS](STATUS.md)
 and the [learning log](../LEARNING_LOG.md) for final project checks/self-review.
 
-## Next bounded unit
+## Admission follow-up
 
-Make field-by-field **admit/defer decisions** for the proposed first FTN enrichment
-fields, with explicit applicability, null states, candidate denominators and tests.
-If those semantics cannot be justified, retain a documented defer decision and
-advance to P1.8's **PBP-only decision endpoint**. Do not repeat acquisition or infer
-play families from proxies. No production charting, model/ranking, extra dataset,
-database, deployment, or UI work is implied by this completed coverage gate.
+The [2026-11-03 field policy](FTN_FIELD_POLICY.md) completes the planned
+field-by-field admission/defer review, with explicit applicability, null states,
+candidate denominators and regression tests. All 22 contextual fields remain
+audit-only. Advance to P1.8's **PBP-only decision endpoint**; do not repeat this
+acquisition/join audit or infer play families from proxies. No production charting,
+model/ranking or new source is implied by this completed coverage gate.
 
 [receipt]: evidence/ftn-2024-6faae8118cc1-pbp-23370d5d10f8.coverage.json
 [sa]: https://creativecommons.org/licenses/by-sa/4.0/

@@ -194,6 +194,23 @@ class ReportAPITests(unittest.TestCase):
             for path in ("/v1/report/", "/private/secret", "/docs", "/redoc"):
                 self.assert_error(client.get(path), 404, "not_found")
 
+    def test_unadmitted_charting_filters_fail_even_when_snapshot_has_named_columns(self):
+        # A present/valid-looking source column is not permission to filter by it.
+        fields = {"is_motion": "TRUE", "is_play_action": "TRUE", "is_rpo": "TRUE",
+                  "is_screen_pass": "TRUE", "qb_location": "S", "n_defense_box": "7",
+                  "shotgun": "1", "offense_personnel": "1 RB, 1 TE, 3 WR", "play_family": "screen"}
+        directory = self.snapshot([row | fields for row in self.rows])
+        app = api.create_app(snapshot=directory, source_label=LABEL)
+        with TestClient(app) as client, patch.object(api, "build_report") as builder:
+            for name, value in fields.items():
+                with self.subTest(field=name):
+                    response = client.get("/v1/report", params=QUERY | {name: value})
+                    error = self.assert_error(response, 422, "invalid_query")
+                    # Existing API policy exposes recognized query names only.
+                    self.assertEqual(error["fields"], [])
+                    self.assertNotIn(name, response.text)
+            builder.assert_not_called()
+
     def test_query_limit_is_checked_before_parsing(self):
         with TestClient(self.app) as client, patch.object(api, "build_report") as builder:
             self.assert_error(client.get("/v1/report?" + "x" * 2049), 414, "query_too_long")
