@@ -1,5 +1,6 @@
 /** Validate only this view's consumed contract; do not recompute analytics. */
 import { validUncertainty, type Uncertainty } from './uncertainty';
+import { object, count, finite, rate, validSource, type EvidenceSource } from './contract';
 export const PERIODS = ['Q1', 'Q2', 'Q3', 'Q4', 'OT'] as const;
 export type Query = {
   team: string; season: number; before_week: number;
@@ -25,8 +26,8 @@ export type ClockContext = { field: 'quarter_seconds_remaining'; minimum_inclusi
   unit: 'seconds'; timing: 'pre_play'; missing_policy: 'exclude' };
 type PeriodCounts = { plays_before_filter: number; missing_qtr: number; outside_period: number; plays_after_filter: number };
 type ClockCounts = { plays_before_filter: number; missing_quarter_seconds_remaining: number; outside_range: number; plays_after_filter: number };
-type Contexts = { field_position?: FieldPosition; score_differential?: ScoreContext; period?: PeriodContext; clock?: ClockContext };
-const contextKeys = ['field_position', 'score_differential', 'period', 'clock'] as const;
+export type Contexts = { field_position?: FieldPosition; score_differential?: ScoreContext; period?: PeriodContext; clock?: ClockContext };
+export const contextKeys = ['field_position', 'score_differential', 'period', 'clock'] as const;
 const contextCount = (contexts: Contexts) => contextKeys.filter(key => contexts[key] !== undefined).length;
 type SelectedQuality = { input_rows: number; eligible_rows_all_teams: number; eligible_rows_outside_cohort: number;
   excluded_rows_by_reason: Record<string, number>; field_position_filter?: FieldPositionCounts;
@@ -42,11 +43,7 @@ export type Report = {
   cohort: { team: string; season: number; before_week_exclusive: number;
     side: Query['side']; season_type: Query['season_type']; minimum_plays_warning: number } & Contexts;
   data_quality: SelectedQuality;
-  source: { label: string; sha256: string; snapshot: {
-    retrieved_at_utc: string; archive: { sha256: string };
-    source: { asset_updated_at_utc: string };
-    license: { attribution: string; identifier: string };
-  } };
+  source: EvidenceSource;
   overall: Metrics;
   situations: (Metrics & { down: number; distance: 'short' | 'medium' | 'long' })[];
   warnings: string[];
@@ -143,19 +140,6 @@ export function parseQuery(draft: Draft): Query {
     side: draft.side as Query['side'], season_type: draft.season_type as Query['season_type'], compare_league: draft.compare_league };
 }
 
-const object = (v: unknown): v is Record<string, unknown> =>
-  typeof v === 'object' && v !== null && !Array.isArray(v);
-const count = (v: unknown): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0;
-const finite = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
-const rate = (v: unknown) => v === null || (finite(v) && v >= 0 && v <= 1);
-const hash = (v: unknown) => typeof v === 'string' && /^[0-9a-f]{64}$/.test(v);
-const timestamp = (v: unknown) => {
-  if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|\+00:00)$/.test(v)) return false;
-  const parsed = Date.parse(v);
-  // Date.parse can normalize impossible dates (e.g. February 30); reject those.
-  return Number.isFinite(parsed) && new Date(parsed).toISOString().slice(0, 19) === v.slice(0, 19);
-};
-
 function metrics(v: unknown): v is Metrics {
   if (!object(v) || !['plays', 'games', 'dropbacks', 'designed_runs', 'epa_observations', 'missing_epa']
     .every((key) => count(v[key]))) return false;
@@ -191,7 +175,7 @@ function requestedScore(query: Query): ScoreContext | undefined {
     maximum_inclusive: query.score_max ?? null, perspective: 'offense', missing_policy: 'exclude' };
 }
 
-function requestedContexts(query: Query): Contexts {
+export function requestedContexts(query: Query): Contexts {
   const period = query.period;
   return { field_position: requestedField(query), score_differential: requestedScore(query),
     period: period === undefined ? undefined : { field: 'qtr', label: period,
@@ -202,7 +186,7 @@ function requestedContexts(query: Query): Contexts {
         unit: 'seconds', timing: 'pre_play', missing_policy: 'exclude' } };
 }
 
-function sameContext(value: unknown, expected: Contexts[keyof Contexts]): boolean {
+export function sameContext(value: unknown, expected: Contexts[keyof Contexts]): boolean {
   return expected === undefined ? value === undefined : object(value) && Object.keys(value).length === Object.keys(expected).length
     && Object.entries(expected).every(([key, v]) => value[key] === v);
 }
@@ -210,7 +194,7 @@ function sameContext(value: unknown, expected: Contexts[keyof Contexts]): boolea
 /** Return the pre-context count only when each active stage reconciles in order.
  * Field-only selected reports omit filter_order in schema v2; baselines always include it.
  */
-function contextBefore(q: Record<string, unknown>, plays: number, contexts: Contexts, requireOrder: boolean): number | undefined {
+export function contextBefore(q: Record<string, unknown>, plays: number, contexts: Contexts, requireOrder: boolean): number | undefined {
   const stages = [
     { name: 'field_position', missing: 'missing_yardline_100', outside: 'outside_range' },
     { name: 'score_differential', missing: 'missing_score_differential', outside: 'outside_range' },
@@ -318,15 +302,7 @@ export function parseReport(value: unknown, query: Query): Report {
       || contextKeys.some(key => !sameContext(cohort[key], contexts[key]))
       || context.interpretation !== (query.side === 'defense' ? 'allowed' : 'produced')
       || context.perspective !== 'offense' || context.success_condition !== 'epa > 0') return fail();
-  const snapshot = source.snapshot;
-  if (typeof source.label !== 'string' || !source.label.trim() || !hash(source.sha256)
-      || !object(snapshot) || !timestamp(snapshot.retrieved_at_utc) || !object(snapshot.archive)
-      || !hash(snapshot.archive.sha256) || !object(snapshot.source) || snapshot.season !== query.season
-      || !object(snapshot.decoded_csv) || snapshot.decoded_csv.sha256 !== source.sha256
-      || snapshot.source.sha256 !== snapshot.archive.sha256
-      || !object(snapshot.license) || typeof snapshot.license.attribution !== 'string'
-      || typeof snapshot.license.identifier !== 'string'
-      || !timestamp(snapshot.source.asset_updated_at_utc)) return fail();
+  if (!validSource(source, query.season)) return fail();
   if (!metrics(value.overall) || !Array.isArray(value.situations)
       || !value.situations.every(situation)
       || !Array.isArray(value.warnings) || !value.warnings.every((w) => typeof w === 'string')) return fail();
