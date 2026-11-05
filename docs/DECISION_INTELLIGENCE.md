@@ -25,9 +25,10 @@ serving integration. The [offline PBP coverage audit](FTN_COVERAGE.md) followed 
 2026-11-02: all eligible PBP rows match uniquely, while field issues remain explicit.
 The [field admission review](FTN_FIELD_POLICY.md) followed on 2026-11-03 with an
 explicit defer decision for all 22 contextual fields and tested isolation from
-Scout/Run-Pass evidence. Next is the PBP-only Decision API; charting applicability
-and historical feature availability remain unverified.
-Decision API/UI and new models remain planned.
+Scout/Run-Pass evidence. The PBP-only [Decision API](API.md#decision-request-contract)
+followed on 2026-11-04, reusing contract v1 with bounded work, shared serving and
+mandatory abstention. Charting applicability and historical feature availability
+remain unverified. Decision UI and production models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 
@@ -54,13 +55,13 @@ Verified immutable PBP → typed Play/Dataset → situational cohort selection
                                                       ↓
                                       shared metrics/baselines/uncertainty
                                          ↙                         ↘
-                             schema-v2 Scout report       future decision comparison
+                             schema-v2 Scout report       contract-v1 decision evidence
                                          ↓                         ↑
                                  API / CLI / briefs       validated optional layers/models
                                          ↓
                                     React Scout
 
-future decision comparison → future decision API → React Decision Lab
+contract-v1 decision evidence → local Decision API → future React Decision Lab
 ```
 
 `snapshots.py`/`ingestion.py` retain acquisition and hash verification; `pbp.py`
@@ -80,7 +81,11 @@ the request, exact filters, source audit, denominators and availability states.
 It always abstains from ranking. Opt-in exact-matched candidate league baselines
 now reuse the same selector, candidate summaries and null-preserving differences.
 Candidate support and exploratory intervals now reuse the shared resampler with
-parent-frequency and candidate-EPA denominators. No endpoint/UI/model was added.
+parent-frequency and candidate-EPA denominators. P1.8's optional HTTP adapter
+now shares Scout's immutable dataset, query limits and nonblocking builder slot.
+It accepts exact down/distance and offense-only contexts, validates contract v1,
+preserves absent opt-ins/nulls and rejects unadmitted source/model options.
+No endpoint-specific analytics, second data loader or frontend calculation exists.
 The [pinned real-cohort audit](DECISION_AUDIT.md) verifies these calculations using
 a repository-only raw-record oracle, not a second production stack. The
 [comparison policy](DECISION_POLICY.md) now adds explicit selected-offense
@@ -199,8 +204,8 @@ reproduces exactly. The 2026-10-29 [Python follow-up](EP_PYTHON_PARITY.md) also
 passes the fixed-corpus parity gate. Neither establishes temporal availability,
 calibrated performance or action values. Model integration stays deferred;
 the P1.7 FTN artifact and offline PBP join/coverage audits are now complete.
-The field admission/defer policy is complete; next is the PBP-only decision API.
-No additional model runtime or charting integration is needed for that slice.
+The field admission/defer policy and PBP-only decision API are complete.
+No additional model runtime or charting integration is needed for the first UI slice.
 
 **Follow-up, 2026-10-27:** [full runtime evidence](EP_RUNTIME.md) closes the
 missing-native-package installation boundary without upgrades or pin changes.
