@@ -9,6 +9,15 @@ button, summary, select { cursor: pointer; }
 .monogram { display: grid; place-items: center; width: 36px; height: 36px; background: #163743; color: white; border-radius: 8px; font-size: 13px; letter-spacing: .06em; }
 .local-tag, .cohort-tag { border: 1px solid #c6d7da; border-radius: 5px; padding: 6px 10px; font-size: 12px; font-weight: 650; }
 main { max-width: 1240px; margin: auto; padding: 36px 40px 64px; }
+.mode-tabs { display: flex; gap: 8px; margin-bottom: 28px; border-bottom: 1px solid #c6d7da; padding-bottom: 12px; }
+.mode-tabs button { background: transparent; color: #254551; border: 1px solid #728892; }
+.mode-tabs button[aria-selected="true"] { background: #163743; color: white; border-color: #163743; }
+.mode-tabs button:hover:not(:disabled) { background: #e4ecee; color: #172d37; }
+.controls.decision-controls { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.decision-situation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.decision-table th:first-child { min-width: 170px; max-width: 220px; white-space: normal; }
+.decision-table td:last-child { min-width: 220px; max-width: 270px; }
+.decision-table small { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: #506a75; }
 .intro { max-width: 770px; margin: 8px 0 32px; }
 .eyebrow { text-transform: uppercase; letter-spacing: .13em; font-size: 11px; font-weight: 750; color: #41616e; }
 h1 { font-size: clamp(32px, 4.2vw, 48px); line-height: 1.12; font-weight: 730; letter-spacing: -.045em; margin: 16px 0; }
@@ -100,8 +109,11 @@ footer { max-width: 1240px; margin: auto; border-top: 1px solid #d4dddd; padding
   main { padding: 24px 20px 40px; }
   .local-tag { display: none; }
   .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .controls.decision-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .decision-situation { grid-template-columns: 1fr; }
   .field-inputs { grid-template-columns: 1fr; }
   .controls label:last-child { grid-column: 1 / -1; }
+  .decision-controls label:last-child { grid-column: auto; }
   .table-hint { display: block; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .form-footer { align-items: stretch; flex-direction: column; gap: 12px; }

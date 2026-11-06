@@ -7192,6 +7192,222 @@
       "team": "CAR"
     }
   },
+  "empty_plain": {
+    "decision": {
+      "candidates": [
+        {
+          "availability": {
+            "frequency": "empty_cohort",
+            "outcomes": "empty_cohort"
+          },
+          "candidate": "run",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "label": "Run (non-dropback)",
+          "mapping": {
+            "equals": 0,
+            "source_field": "qb_dropback"
+          },
+          "missing_epa": 0,
+          "plays": 0,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "availability": {
+            "frequency": "empty_cohort",
+            "outcomes": "empty_cohort"
+          },
+          "candidate": "pass",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": null,
+          "frequency_denominator": 0,
+          "games": 0,
+          "label": "Pass (dropback, including sacks/scrambles)",
+          "mapping": {
+            "equals": 1,
+            "source_field": "qb_dropback"
+          },
+          "missing_epa": 0,
+          "plays": 0,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        }
+      ],
+      "cohort": {
+        "before_week_exclusive": 1,
+        "distance": {
+          "field": "yards_to_go",
+          "maximum_inclusive": 10,
+          "minimum_inclusive": 10,
+          "missing_policy": "reject_at_ingestion"
+        },
+        "down": {
+          "field": "down",
+          "maximum_inclusive": 1,
+          "minimum_inclusive": 1,
+          "missing_policy": "reject_at_ingestion"
+        },
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "comparison": {
+        "descriptive_contrast": {
+          "direction": "pass_minus_run",
+          "metrics": {
+            "epa_per_play": {
+              "status": "unavailable",
+              "unavailable_candidates": {
+                "pass": "empty_cohort",
+                "run": "empty_cohort"
+              },
+              "unit": "expected_points_per_observed_play",
+              "value": null
+            },
+            "frequency_pp": {
+              "status": "unavailable",
+              "unavailable_candidates": {
+                "pass": "empty_cohort",
+                "run": "empty_cohort"
+              },
+              "unit": "percentage_points",
+              "value": null
+            },
+            "success_rate_pp": {
+              "status": "unavailable",
+              "unavailable_candidates": {
+                "pass": "empty_cohort",
+                "run": "empty_cohort"
+              },
+              "unit": "percentage_points",
+              "value": null
+            }
+          },
+          "population": "selected_offense",
+          "uncertainty": {
+            "interval": null,
+            "status": "not_implemented"
+          }
+        },
+        "opponent_evidence": {
+          "reason": "opponent_conditioning_not_validated",
+          "status": "deferred"
+        },
+        "policy_version": "descriptive_only_v1",
+        "preferred_candidate": null,
+        "reason": "candidate_comparison_not_validated",
+        "status": "insufficient_evidence"
+      },
+      "contract_version": 1,
+      "data_quality": {
+        "distance_filter": {
+          "missing_yards_to_go": 0,
+          "outside_range": 0,
+          "plays_after_filter": 0,
+          "plays_before_filter": 0
+        },
+        "down_filter": {
+          "missing_down": 0,
+          "outside_range": 0,
+          "plays_after_filter": 0,
+          "plays_before_filter": 0
+        },
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 9,
+        "eligible_rows_same_season_type_before_week": 0,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "filter_order": [
+          "down",
+          "distance"
+        ],
+        "input_rows": 13,
+        "team_plays_before_context_filters": 0
+      },
+      "estimation_policy": {
+        "frequency_minimum_parent_plays": 1,
+        "minimum_plays_warning": 30,
+        "outcome_minimum_epa_observations": 1
+      },
+      "evidence_kind": "descriptive_observed_calls",
+      "metric_context": {
+        "frequency_unit": "proportion",
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "population": {
+        "games": 0,
+        "plays": 0
+      },
+      "source": {
+        "label": "Synthetic Decision API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Observed run/dropback categories are not verified intended calls; sacks and scrambles are Pass.",
+        "Only eligible run/pass plays are counted; not every attempted call or fourth-down option is represented.",
+        "Descriptive associations are not causal effects, guaranteed future performance or coaching recommendations.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Small-sample flags are count warnings, not validated reliability or ranking thresholds.",
+        "Opponent adjustment and EP/WP action values are not implemented here.",
+        "No matching plays; no widening or fallback. Frequencies and outcomes are null."
+      ]
+    },
+    "query": {
+      "before_week": 1,
+      "compare_league": false,
+      "distance_max": 10,
+      "distance_min": 10,
+      "down": 1,
+      "season": 2024,
+      "season_type": "REG",
+      "team": "CAR"
+    }
+  },
   "empty_selected": {
     "decision": {
       "candidates": [
@@ -8228,6 +8444,219 @@
     "query": {
       "before_week": 3,
       "compare_league": true,
+      "distance_max": 6,
+      "distance_min": 6,
+      "down": 2,
+      "season": 2024,
+      "season_type": "REG",
+      "team": "CAR"
+    }
+  },
+  "missing_epa_plain": {
+    "decision": {
+      "candidates": [
+        {
+          "availability": {
+            "frequency": "available",
+            "outcomes": "missing_epa"
+          },
+          "candidate": "run",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": 1.0,
+          "frequency_denominator": 1,
+          "games": 1,
+          "label": "Run (non-dropback)",
+          "mapping": {
+            "equals": 0,
+            "source_field": "qb_dropback"
+          },
+          "missing_epa": 1,
+          "plays": 1,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        },
+        {
+          "availability": {
+            "frequency": "available",
+            "outcomes": "unobserved_candidate"
+          },
+          "candidate": "pass",
+          "epa_observations": 0,
+          "epa_per_play": null,
+          "frequency": 0.0,
+          "frequency_denominator": 1,
+          "games": 0,
+          "label": "Pass (dropback, including sacks/scrambles)",
+          "mapping": {
+            "equals": 1,
+            "source_field": "qb_dropback"
+          },
+          "missing_epa": 0,
+          "plays": 0,
+          "small_epa_sample": true,
+          "small_sample": true,
+          "success_rate": null
+        }
+      ],
+      "cohort": {
+        "before_week_exclusive": 3,
+        "distance": {
+          "field": "yards_to_go",
+          "maximum_inclusive": 6,
+          "minimum_inclusive": 6,
+          "missing_policy": "reject_at_ingestion"
+        },
+        "down": {
+          "field": "down",
+          "maximum_inclusive": 2,
+          "minimum_inclusive": 2,
+          "missing_policy": "reject_at_ingestion"
+        },
+        "season": 2024,
+        "season_type": "REG",
+        "side": "offense",
+        "team": "CAR"
+      },
+      "comparison": {
+        "descriptive_contrast": {
+          "direction": "pass_minus_run",
+          "metrics": {
+            "epa_per_play": {
+              "status": "unavailable",
+              "unavailable_candidates": {
+                "pass": "unobserved_candidate",
+                "run": "missing_epa"
+              },
+              "unit": "expected_points_per_observed_play",
+              "value": null
+            },
+            "frequency_pp": {
+              "status": "available",
+              "unavailable_candidates": {},
+              "unit": "percentage_points",
+              "value": -100.0
+            },
+            "success_rate_pp": {
+              "status": "unavailable",
+              "unavailable_candidates": {
+                "pass": "unobserved_candidate",
+                "run": "missing_epa"
+              },
+              "unit": "percentage_points",
+              "value": null
+            }
+          },
+          "population": "selected_offense",
+          "uncertainty": {
+            "interval": null,
+            "status": "not_implemented"
+          }
+        },
+        "opponent_evidence": {
+          "reason": "opponent_conditioning_not_validated",
+          "status": "deferred"
+        },
+        "policy_version": "descriptive_only_v1",
+        "preferred_candidate": null,
+        "reason": "candidate_comparison_not_validated",
+        "status": "insufficient_evidence"
+      },
+      "contract_version": 1,
+      "data_quality": {
+        "distance_filter": {
+          "missing_yards_to_go": 0,
+          "outside_range": 1,
+          "plays_after_filter": 1,
+          "plays_before_filter": 2
+        },
+        "down_filter": {
+          "missing_down": 0,
+          "outside_range": 4,
+          "plays_after_filter": 2,
+          "plays_before_filter": 6
+        },
+        "eligible_rows_all_teams": 9,
+        "eligible_rows_outside_cohort": 8,
+        "eligible_rows_same_season_type_before_week": 7,
+        "excluded_rows_by_reason": {
+          "kneel": 1,
+          "non_run_pass": 1,
+          "spike": 1,
+          "two_point_attempt": 1
+        },
+        "filter_order": [
+          "down",
+          "distance"
+        ],
+        "input_rows": 13,
+        "team_plays_before_context_filters": 6
+      },
+      "estimation_policy": {
+        "frequency_minimum_parent_plays": 1,
+        "minimum_plays_warning": 30,
+        "outcome_minimum_epa_observations": 1
+      },
+      "evidence_kind": "descriptive_observed_calls",
+      "metric_context": {
+        "frequency_unit": "proportion",
+        "interpretation": "produced",
+        "perspective": "offense",
+        "success_condition": "epa > 0"
+      },
+      "population": {
+        "games": 1,
+        "plays": 1
+      },
+      "source": {
+        "label": "Synthetic Decision API/browser fixture; invented observations and provenance, not real NFL data",
+        "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+        "snapshot": {
+          "archive": {
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          },
+          "decoded_csv": {
+            "sha256": "a0b7a12b6eccf0b3b320c1e681da79a80232da0068523b5275422b7869308162",
+            "size_bytes": 950
+          },
+          "license": {
+            "attribution": "nflverse play-by-play data",
+            "identifier": "CC-BY-4.0",
+            "modifications": "Archive retained byte-for-byte; no data transformations.",
+            "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+            "url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          "retrieved_at_utc": "2026-10-08T00:00:00Z",
+          "schema_version": 1,
+          "season": 2024,
+          "source": {
+            "asset_id": 200,
+            "asset_name": "play_by_play_2024.csv.gz",
+            "asset_updated_at_utc": "2025-02-10T00:00:00Z",
+            "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+            "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+            "release_id": 100,
+            "release_tag": "pbp",
+            "sha256": "3ba54f1a2c9674aed83142ce67ed046741cc93767e73d9734d17652865a49d9c",
+            "size_bytes": 973
+          }
+        }
+      },
+      "warnings": [
+        "Observed run/dropback categories are not verified intended calls; sacks and scrambles are Pass.",
+        "Only eligible run/pass plays are counted; not every attempted call or fourth-down option is represented.",
+        "Descriptive associations are not causal effects, guaranteed future performance or coaching recommendations.",
+        "Week filtering does not reconstruct historical source availability or EPA model training.",
+        "Small-sample flags are count warnings, not validated reliability or ranking thresholds.",
+        "Opponent adjustment and EP/WP action values are not implemented here.",
+        "Missing EPA changes only candidate EPA/success denominators, not call frequency."
+      ]
+    },
+    "query": {
+      "before_week": 3,
+      "compare_league": false,
       "distance_max": 6,
       "distance_min": 6,
       "down": 2,

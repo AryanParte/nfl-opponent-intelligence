@@ -18,9 +18,10 @@ synthetic response.
 
 This is the implemented **Scout / Analysis** surface of the evolving
 [NFL Decision Intelligence product](DECISION_INTELLIGENCE.md). Play Caller /
-Decision Lab rendering is a future mode in this same app. Its
-[typed contract/parser and bounded request client](DECISION_WEB.md) are implemented
-with actual synthetic API fixtures and browser integration; no mode switch is shown yet.
+Decision Lab is now a second mode in the same app. Its
+[minimal situation form and Run/Pass evidence view](DECISION_WEB.md) use the typed
+contract/client, preserve Scout state and withhold a preferred call. Field/score/
+clock, baseline and interval controls remain Scout-only in the current rendered UI.
 
 ![Local report view of the retrospective CAR 2024 cohort](examples/local-report-view.png)
 
@@ -713,9 +714,10 @@ CI workflows or automation changed.
 
 P1.4's bounded local surface and P1.5–P1.8's descriptive foundation, bounded audits
 and local Decision API are complete. P1.9's [browser contract/client](DECISION_WEB.md)
-is implemented. Next add accessible mode navigation, a minimal situation form and
-basic Run/Pass evidence table using that client, preserving Scout state and explicit
-abstention. Test loading/errors/empty/stale responses; advanced controls/downloads
-follow separately. No models, storage or deployment belong in that slice.
+and first mode/form/evidence view are implemented. Both modes share cancellation,
+deadline and source-display components; completed Scout evidence and downloads
+survive mode changes. Next add optional Decision field-position bounds with effective
+coordinates, ordered exclusions and missing-data tests. Other contexts, baseline/
+interval views and Decision downloads follow separately. No models, storage or deployment belong in that slice.
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
 explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

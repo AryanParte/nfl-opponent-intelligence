@@ -2926,3 +2926,76 @@ Advanced controls, user-choice comparison and downloads follow separately.
 Model/charting admission, historical availability, calibration, cross-browser/
 assistive-technology coverage and deployment remain deferred. Do not merge or
 enable auto-merge; publication SHA, attribution and CI receipt belong in the PR.
+
+## 2026-11-06 — First Decision Lab view with preserved Scout state (P1.9)
+
+**Built / why it matters:** added Scout/Decision Lab mode tabs, a narrow offense
+situation form and a Run/Pass evidence table over the existing validated API.
+The user can inspect frequency, EPA, success, counts, games, missing states,
+warnings and provenance without a preferred-call claim. Both modes retain drafts,
+completed evidence and expanded details; Scout's download survives mode changes.
+Shared cancellation/deadline handling rejects late results after edits, mode
+changes, timeouts or unmount. This creates an inspectable decision-support surface
+without duplicating analytics or inventing model evidence.
+
+**Review these files:** `web/src/App.tsx`, `DecisionLab.tsx`,
+`useSnapshotRequest.ts`, `SourceView.tsx`, `DecisionLab.test.tsx`,
+`web/e2e/scout.spec.ts`, `tests_api/test_decision_frontend_contract.py` and
+`docs/DECISION_WEB.md`. Two actual synthetic HTTP fixtures add selected-only empty
+and missing-EPA responses; existing Decision/Scout fixtures are unchanged. The
+canonical clone was clean and matched its upstream. PR #40 was merged, no open
+PRs or reviews remained, and all eight main CI jobs passed at `d31ba35`. This unit
+starts from that main commit on `codex/decision-lab-view`.
+
+**Sports concepts:** Run is eligible non-dropback; Pass includes sacks and
+scrambles, so the data describes observed categories rather than verified intended
+calls. Frequency uses all eligible plays in the situation; EPA and success use
+each candidate's observed EPA. Candidate games can overlap. Empty parent, absent
+candidate, missing EPA and measured zero must remain visibly different. The first
+form leaves field/score/clock unrestricted and does not request league/uncertainty.
+
+**Software/statistical concepts / learn:** preserving a component preserves its
+in-memory state; hiding a view must also remove it from navigation and cancel
+pending work. Abort is advisory, so use generation checks and an independent UI
+deadline. Only synchronous validation should move focus. Test actual HTTP responses
+and independent small examples as well as UI transitions. Higher descriptive means
+do not establish a causal advantage or authorize a preferred call.
+
+**Three review questions:**
+
+1. How do frequency and EPA/success denominators differ, and what should the UI
+   show for an unobserved call compared with a call whose EPA is entirely missing?
+2. Why do these views need both abort signals and generation checks, and how can
+   a deadline end loading when the underlying request never settles?
+3. What state should survive a Scout/Decision switch, what work should be
+   cancelled, and why must a higher displayed EPA still yield no preferred call?
+
+**Verification / self-review:** 453 core / 45 API tests pass on each Python
+3.11/3.12/3.13, API warnings as errors, with dependency checks passing. All 893
+frontend tests pass with two local workers; TypeScript/build and all 22
+desktop/narrow Chromium cases pass. The browser uses a synthetic immutable
+snapshot and real proxy/API, checks hand-counted Run/Pass outcomes and Scout
+download preservation, and covers keyboard navigation and 320-pixel table reflow.
+Axe scans cover Decision idle/invalid/error/empty/loaded states alongside existing
+Scout checks. Final browser run took 26.4 seconds; no external browser requests or
+uncaught page errors, and both owned servers stopped. Screenshots were inspected.
+
+The first browser attempt found a low-contrast tab hover caused by CSS precedence;
+fixed and rerun. Visual review found cramped table sublabels; separated them and
+corrected singular game wording. Repaired test selectors for hidden fingerprints
+and cells containing denominator subtext, and a test-only form-element type
+assertion. Strengthened the empty-status assertion and used valid late payloads
+in both deadline regressions. Those failed attempts are not counted as passes. The shared deadline
+also fixes a pending-forever edge case if transport ignores abort, tested in both
+modes. Reviewed complete diff for stale state, cleanup, focus/ID collisions,
+denominators/nulls, source escaping, historical cutoffs and abstention. No formulas,
+source bytes/terms, model admission, dependencies, API schema, CI timeout or
+automation schedule changed. Exact-head publication and CI belong in the PR.
+
+**Remaining / next:** add optional pre-play field-position bounds to Decision Lab
+using existing validated semantics, displaying effective coordinates and ordered
+exclusion counts with missing-position/empty/stale tests. Score/clock, candidate
+league/interval views, user-choice comparison and Decision JSON downloads follow
+as separate units. Models/charting, opponent adjustment, calibration, historical
+availability, screen-reader/cross-browser coverage and deployment remain deferred.
+Do not merge or enable auto-merge.
