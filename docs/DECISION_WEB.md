@@ -1,9 +1,48 @@
-# Decision browser contract and client
+# Decision Lab view, browser contract and client
 
 Implemented 2026-11-05 as the first P1.9 slice. `web/src/decision.ts` consumes the
-existing [Decision API](API.md#decision-request-contract), contract v1. It is not
-a new rendered mode: Scout remains the current UI. Navigation, forms and evidence
-views follow separately. No package, API, core formula or data source changed.
+existing [Decision API](API.md#decision-request-contract), contract v1. The first
+rendered Decision Lab mode followed on 2026-11-06 in the same app as Scout. No
+package, API, core formula or data source changed.
+
+## First rendered slice
+
+Select **Decision Lab** in the mode tabs, then submit an offense team code,
+season/type, exclusive before-week cutoff, one exact down and inclusive whole-yard
+distance bounds. Defaults are inputs, not asserted source coverage. The first
+form leaves field/score/period/clock unrestricted, comparison off and bootstrap
+unrequested. It does not offer defense/opponent conditioning, a preferred call,
+user-call grading or advanced play families.
+
+`DecisionLab.tsx` renders the validated selected-offense population and fixed Run,
+then Pass rows. Frequency uses parent eligible plays; outcomes use candidate
+observed EPA. It displays games (which can overlap between candidates), observed/
+missing EPA, count flags and the returned threshold. Empty parent, unobserved call,
+missing EPA and measured zero remain distinct. All warnings, timestamps, source
+label, attribution and hashes are visible through the shared `SourceView`.
+The view explicitly withholds a preferred call even when one point estimate is
+larger, and labels these categories as observed plays rather than verified intent.
+No formula, model, contrast interval or fallback cohort is introduced.
+
+`App.tsx` uses manual-activation tabs following the
+[WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/): named tabs
+and panels, selected/tab-stop states, Left/Right wrapping, Home/End focus movement,
+Enter/Space activation and an active-mode skip link. Visited views stay mounted
+under `hidden` so drafts, completed evidence, expanded details and Scout's existing
+download URL survive mode changes, consistent with
+[React state preservation](https://react.dev/learn/preserving-and-resetting-state).
+Only the active panel participates in keyboard/accessibility navigation; the
+Decision form is first mounted on its initial visit. Reloading the page resets
+in-memory state; no persistent browser storage was added.
+
+Both views use `useSnapshotRequest.ts`. A control edit removes old evidence and
+aborts pending work. A mode switch preserves completed states but cancels pending
+requests and resets their spinner to idle. Generation checks prevent an ignored
+abort from publishing later. A 15-second deadline ends loading independently of
+transport settlement; retry is always explicit, and server work may continue
+after browser cancellation. Unmount clears timers and aborts requests. Only a
+new local validation failure focuses an invalid field; API errors, completion and
+returning to an existing validation error do not steal focus.
 
 ## Request and response boundaries
 
@@ -27,8 +66,8 @@ errors to fixed messages, and never displays raw server exceptions. Invalid JSON
 gets a safe error. Transport/cancellation errors propagate; there is no automatic
 retry, cohort widening or synthetic fallback. These choices follow the browser's
 [Fetch response and cancellation semantics](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch).
-Future React code must still invalidate stale requests after edits/mode changes;
-transport cancellation alone does not establish a UI state policy.
+The shared React request hook supplies the stale-response policy described above;
+transport cancellation alone is insufficient.
 
 `parseDecision` checks the consumed wire contract before returning the original
 object. Shared source guards in `contract.ts`, context checks in `report.ts` and
@@ -61,7 +100,7 @@ manifest metadata, source completeness, causal validity or historical availabili
 
 ## Reproducible evidence
 
-`tests_api/test_decision_frontend_contract.py` freezes **21 actual HTTP responses**
+`tests_api/test_decision_frontend_contract.py` freezes **23 actual HTTP responses**
 in `web/src/__fixtures__/decisions.json`. Observations, source IDs/timestamps and
 labels are explicitly synthetic; fixtures never enter the live app. Snapshot bytes
 and hashes are created with the existing factory, and acquisition/socket calls are
@@ -73,9 +112,15 @@ absent calls, missing EPA, distance ranges, combined contexts, zero clock, overt
 and all interval statuses. Frontend tests include hand-counted point expectations,
 malformed/mismatched payloads, denominator/provenance/policy mutations, bounded
 requests, safe HTTP errors, cancellation and query mutation during a request.
-The existing Chromium suite also calls this real client through Vite into FastAPI
-on desktop/narrow profiles while Scout remains idle. The existing 71 Scout API
-fixtures are unchanged.
+Two additional responses cover empty/missing-EPA cases without optional comparison,
+matching the initial form. Component tests cover fields/focus, exact narrow queries,
+all missing states, zero outcomes, safe errors, mandatory abstention, edits, ignored
+aborts, deadlines, unmount and preservation of both modes. Chromium exercises the
+rendered form through Vite into FastAPI on desktop/narrow profiles, checks
+hand-counted synthetic outcomes, keyboard tabs/forms and 320-pixel table containment,
+and scans idle/invalid/error/empty/loaded states with axe. Screenshots are inspected;
+automated scans do not establish accessibility conformance or screen-reader support.
+The existing 71 Scout API fixtures are unchanged.
 
 Run the normal core/API/browser checks in [WEB.md](WEB.md). To intentionally
 regenerate only the Decision fixtures with optional API dependencies installed:
@@ -89,10 +134,9 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add accessible Scout/Decision Lab navigation and a minimal Decision situation form
-(team, season/type, cutoff, exact down and inclusive distance). Use this client for
-a basic Run/Pass evidence table with denominators, games, missing states, warnings,
-provenance and permanent abstention. Test loading/error/empty/stale response states
-and preserve Scout state. Advanced context/baseline/uncertainty controls, user-choice
-comparison and downloads can follow as separate units. No ranking/model, new data
-layer, database or deployment is implied by this client.
+Add optional pre-play field-position bounds to Decision Lab using the existing
+validated query semantics. Show effective inclusive coordinates and ordered
+exclusions, including missing positions; test empty/stale/boundary cases without
+changing Scout. Score/period/clock, candidate league/interval views, user-choice
+comparison and downloads follow separately. No ranking/model, new data layer,
+database or deployment is implied by this view.
