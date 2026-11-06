@@ -39,7 +39,8 @@ P1.7's [FTN artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) and
 The [bounded field admission review](docs/FTN_FIELD_POLICY.md) is complete with
 all 22 contextual fields deferred from serving. P1.8's PBP-only decision API is
 implemented; unresolved charting does not block it or silently become serving
-evidence. Next is P1.9's first browser contract/client slice.
+evidence. P1.9's typed browser contract/client is implemented; the first narrow
+navigation/form/evidence view is next.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -353,11 +354,18 @@ One local worker remains the supported scope; no cross-process capacity guarante
 
 ### P1.9 — Play Caller / Decision Lab UI
 
-- **Next unit:** typed browser contract/parser and request client for Decision v1,
-  with fixtures produced by the actual API over invented snapshots. Test candidate
-  denominators, null/withheld states, provenance, optional blocks and mandatory
-  abstention before adding navigation/form rendering. Preserve Scout fixtures and
-  compute no football statistics in the browser.
+- [x] Typed browser contract/parser and bounded request client for Decision v1,
+      backed by 21 actual synthetic API fixtures, mutation/error tests and a real
+      browser-to-proxy-to-API check. Preserve denominator/null/withheld distinctions,
+      provenance, optional blocks and mandatory abstention; no browser estimation.
+      Shared guards retain Scout schema v2 and all 71 existing API fixtures.
+      See [browser contract](docs/DECISION_WEB.md) and [verification](docs/STATUS.md).
+- **Next unit:** accessible Scout/Decision navigation plus a minimal situation
+  form (team, season/type, cutoff, exact down, inclusive distance) and basic Run/Pass
+  evidence table using the client. Include counts/denominators/games, missing states,
+  warnings, provenance and abstention; test loading/error/empty/stale responses and
+  preserve Scout state. Advanced filters/baseline/interval controls and downloads
+  follow in separate units. No model/ranking/data-layer/storage/deployment work.
 - [ ] Scout and Play Caller navigation in the existing React app; keep Scout intact.
 - [ ] Situation definition, supported-call selection and comparison against
       alternatives, with clear historical versus model evidence labels.

@@ -49,6 +49,27 @@ async function scanAccessibility(page: Page, info: TestInfo, state: string) {
   expect(result.violations, `${state}: automatic checks are not a complete accessibility audit`).toEqual([]);
 }
 
+test('Decision client reaches the real local API through the bounded proxy without changing Scout', async ({ page }) => {
+  await openViewer(page);
+  const result = await page.evaluate(async () => {
+    const modulePath = '/src/decision.ts';
+    const { fetchDecisionDocument }: typeof import('../src/decision') = await import(/* @vite-ignore */ modulePath);
+    return fetchDecisionDocument({ team: 'CAR', season: 2024, season_type: 'REG', before_week: 3,
+      down: 1, distance_min: 10, distance_max: 10, yardline_max: 20, score_min: -7, score_max: 0,
+      period: 'Q4', clock_max: 120, compare_league: true, bootstrap_repetitions: 200 }, new AbortController().signal);
+  });
+  expect(JSON.parse(result.json)).toEqual(result.decision);
+  expect(result.decision.population).toEqual({ plays: 3, games: 1 });
+  expect(result.decision.candidates[0]).toMatchObject({ candidate: 'run', plays: 2, frequency: 2 / 3,
+    epa_observations: 1, missing_epa: 1, epa_per_play: -.4, success_rate: 0 });
+  expect(result.decision.candidates[1]).toMatchObject({ candidate: 'pass', plays: 1, epa_per_play: .8, success_rate: 1 });
+  expect(result.decision.league_comparison!.candidates[1].epa_per_play).toBe(3);
+  expect(result.decision.comparison.preferred_candidate).toBeNull();
+  expect(result.decision.uncertainty!.candidates[0].selected.frequency.status).toBe('insufficient_games');
+  expect(result.decision.source.label).toContain('SYNTHETIC browser integration fixture');
+  await expect(page.getByText('No report has been requested for these controls.', { exact: false })).toBeVisible();
+});
+
 test('real filtered API report, both roles, native JSON download and offline brief replay', async ({ page }, info) => {
   let requests = 0;
   page.on('request', request => { if (new URL(request.url()).pathname === '/api/v1/report') requests++; });

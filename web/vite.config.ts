@@ -7,7 +7,7 @@ export default defineConfig({
     // Do not expose the surrounding repository or its raw snapshots as assets.
     fs: { strict: true, allow: [fileURLToPath(new URL('.', import.meta.url))] },
     proxy: {
-      '^/api/v1/report(?:\\?|$)': {
+      '^/api/v1/(?:report|decision)(?:\\?|$)': {
         target: 'http://127.0.0.1:8000',
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

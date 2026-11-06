@@ -6,8 +6,8 @@ metric definitions, source fingerprints, and a cutoff that excludes the week bei
 prepared for. The existing Opponent Intelligence functionality is the **Scout /
 Analysis** mode. This same repository will evolve toward an evidence-first
 **Play Caller / Decision Lab**, starting with defensible Run vs Pass comparisons.
-Decision Lab's UI is planned; its Run/Pass evidence builder and narrow local API
-are implemented. Repository/package/CLI names stay intact.
+Decision Lab's rendered UI is planned; its Run/Pass evidence builder, narrow local
+API and typed browser client are implemented. Repository/package/CLI names stay intact.
 See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
 
 **Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
@@ -76,6 +76,9 @@ retains all 22 contextual charting fields as audit-only, with explicit defer rea
 and regression tests against accidental use. The optional `GET /v1/decision`
 endpoint now serves that PBP-only contract v1 from the same verified snapshot as
 Scout, with bounded requests, shared concurrency and explicit abstention.
+The [Decision browser contract/client](docs/DECISION_WEB.md) now validates those
+responses before a future view can display them, with actual synthetic API fixtures
+and local browser integration. Scout's current UI and original fixtures are preserved.
 Charting applicability and historical availability remain unverified.
 Decision Lab's UI, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or

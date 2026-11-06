@@ -2856,3 +2856,73 @@ from the actual API over invented snapshots. Test null/withheld evidence, denomi
 provenance, optional blocks and abstention before adding mode navigation/form views.
 Keep Scout intact. Charting/model admission, opponent adjustment, calibration,
 historical availability and deployment remain deferred; no merge or auto-merge.
+
+## 2026-11-05 — P1.9 Decision browser contract and request client
+
+**Built / why it matters:** synced the canonical clone, verified PR #39 merged at
+`b33842a` with all eight main CI jobs green, no open PRs/review feedback and no
+unpublished local changes. Started `codex/decision-browser-contract` from that main.
+Added a typed Decision v1 parser/client that rejects mismatched or inconsistent
+evidence before a future view displays it. It preserves original decoded JSON,
+bounded optional requests, cancellation and safe errors. The exact local proxy now
+permits Decision alongside Scout. No rendered mode, new analytics or model is added.
+
+**Review files:** `web/src/decision.ts`, shared `contract.ts` and `uncertainty.ts`
+guards, `web/src/decision.test.ts`, `tests_api/test_decision_frontend_contract.py`,
+the frozen synthetic Decision fixtures, `web/e2e/scout.spec.ts` and
+`docs/DECISION_WEB.md`. Roadmap/status/README/architecture/viewer docs are updated.
+
+**Sports concepts:** Run means eligible non-dropback; Pass includes sacks/scrambles.
+Frequency uses parent plays/games even if a candidate is absent. Candidate EPA and
+success use observed-EPA plays and contributing games. Empty parents, absent calls,
+missing EPA and measured zero are distinct. Candidate games may overlap. League
+comparisons exclude the selected offense, and their resampling frame unions games.
+All comparisons remain descriptive with no preferred call or opponent adjustment.
+
+**Software/statistical concepts / learn:** TypeScript types disappear at runtime;
+validate requests and responses at the network boundary. Copy the submitted query
+before awaiting so later edits cannot change response matching. Preserve decoded
+JSON instead of changing numeric lexemes through reserialization. Reuse source,
+context and interval validation; check accounting and declared units without
+rebuilding estimates. Exploratory intervals and small-sample flags do not authorize
+ranking. Browser checks cannot establish source authenticity or causal validity.
+
+**Three review questions:**
+
+1. Why can an absent Run candidate have zero plays but five frequency-support
+   games, and how does its outcome evidence differ from a measured zero EPA?
+2. How do the typed query, runtime guards, copied request and original JSON text
+   prevent different classes of misleading or unreproducible browser output?
+3. Why must the client still return no preferred call when both candidate means
+   and exploratory intervals are available, and what would justify changing that?
+
+**Verification / self-review:** 453 core and 45 API tests pass on each Python
+3.11/3.12/3.13, API warnings as errors; dependency checks pass. The API test freezes
+21 actual synthetic responses with network access blocked, including two explicitly
+controlled-draw cases that are not seed-replay claims. All 71 existing Scout
+fixtures remain unchanged. All 863 frontend tests pass with two local workers;
+TypeScript/build and all 16 desktop/narrow Chromium cases pass. The browser test
+uses the actual client, proxy, snapshot and API, not a mocked success response.
+Both owned servers stopped; no external browser requests or page errors occurred.
+
+An initial default-worker frontend run timed out in existing Scout tests; the
+bounded rerun passed without changing timeout/CI configuration. Browser startup
+first failed on sandbox Mach-port permission, then an authorized attempt timed
+out waiting for a server; diagnostic execution passed unchanged in 25.6 seconds.
+These failed attempts are not counted as passes. Exact-head CI is recorded in the PR.
+Complete-diff review found numeric closeness tolerance could admit rates just beyond
+0–1 (or differences beyond ±100 pp); explicit range guards and regressions now
+reject them. Corrected test expectations for companion-field validation and added
+absent-call/baseline-only resampling cases. Reviewed count partitions, shared games,
+null precedence, cutoff matching, provenance, cancellation/error sanitization,
+optional blocks and mandatory abstention. No formulas, source terms, dependency
+pins, ingestion, model admission, production UI or automation schedule changed.
+
+**Remaining / next:** add accessible Scout/Decision navigation, minimal
+team/season/type/cutoff/down/distance controls and a basic Run/Pass evidence table
+using this client. Show denominators/games/missing states/warnings/provenance and
+abstention; test loading/error/empty/stale responses and preserve Scout state.
+Advanced controls, user-choice comparison and downloads follow separately.
+Model/charting admission, historical availability, calibration, cross-browser/
+assistive-technology coverage and deployment remain deferred. Do not merge or
+enable auto-merge; publication SHA, attribution and CI receipt belong in the PR.

@@ -28,7 +28,9 @@ explicit defer decision for all 22 contextual fields and tested isolation from
 Scout/Run-Pass evidence. The PBP-only [Decision API](API.md#decision-request-contract)
 followed on 2026-11-04, reusing contract v1 with bounded work, shared serving and
 mandatory abstention. Charting applicability and historical feature availability
-remain unverified. Decision UI and production models remain planned.
+remain unverified. The [typed browser contract/client](DECISION_WEB.md) followed on
+2026-11-05 with synthetic HTTP fixtures, shared validation guards and local browser
+integration. Decision rendering and production models remain planned.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 
@@ -61,7 +63,7 @@ Verified immutable PBP → typed Play/Dataset → situational cohort selection
                                          ↓
                                     React Scout
 
-contract-v1 decision evidence → local Decision API → future React Decision Lab
+contract-v1 decision evidence → local Decision API → validated browser client → future React Decision Lab
 ```
 
 `snapshots.py`/`ingestion.py` retain acquisition and hash verification; `pbp.py`
