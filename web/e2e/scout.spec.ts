@@ -152,7 +152,7 @@ test('Decision keyboard navigation, cancelled mode switches and contained table 
   await page.keyboard.press('Enter');
   const decision = page.getByRole('tabpanel', { name: 'Decision Lab' });
   await page.keyboard.press('Tab'); await expect(decision).toBeFocused();
-  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max']) {
+  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max', 'yardline_min', 'yardline_max']) {
     await page.keyboard.press('Tab');
     const input = decision.locator(`[name="${name}"]`);
     await expect(input).toBeFocused();
@@ -185,6 +185,57 @@ test('Decision keyboard navigation, cancelled mode switches and contained table 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await scanAccessibility(page, info, 'decision-320');
   await region.focus(); await page.screenshot({ path: info.outputPath('decision-table-320.png') });
+});
+
+test('Decision field bounds retain exact cohorts, show ordered accounting and recover without fallback', async ({ page }, info) => {
+  await openViewer(page);
+  const decision = await openDecision(page);
+  const upper = decision.getByLabel('Maximum yards to goal', { exact: true });
+  await upper.fill('1e'); await upper.press('Enter');
+  await expect(upper).toBeFocused();
+  await expect(upper).toHaveValue('1e');
+  await expect(upper).toHaveAccessibleDescription(/Field-position bounds must be decimals/);
+  await scanAccessibility(page, info, 'decision-field-invalid');
+  await upper.fill('20.5');
+  const pending = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/decision');
+  await upper.press('Enter');
+  const response = await pending;
+  expect(response.status()).toBe(200);
+  expect(new URL(response.url()).searchParams.get('yardline_max')).toBe('20.5');
+  const evidence = await response.json();
+  // Independent invented browser rows: 15 CAR plays -> 2 missing positions + 1 at 80 + 12 retained.
+  expect(evidence.population).toEqual({ plays: 12, games: 1 });
+  expect(evidence.candidates[0]).toMatchObject({ plays: 3, frequency: .25, epa_observations: 2, missing_epa: 1, epa_per_play: -.5 });
+  await expect(decision.getByRole('status')).toHaveText('Decision evidence loaded: CAR, 12 eligible plays. No preferred call.');
+  const accounting = decision.getByRole('region', { name: 'Decision filter accounting, scroll horizontally on small screens' });
+  expect(await accounting.getByRole('rowheader').allTextContents()).toEqual(['Field position', 'Down', 'Distance']);
+  expect(await accounting.getByRole('row', { name: /^Field position/ }).getByRole('cell').allTextContents()).toEqual(['15', '2', '1', '12']);
+  await expect(decision.getByText('0–20.5 yards to the offense’s opponent’s goal line')).toBeVisible();
+  await scanAccessibility(page, info, 'decision-field-loaded');
+  await page.setViewportSize({ width: 320, height: 900 });
+  await accounting.focus(); await expect(accounting).toBeFocused();
+  await accounting.press('ArrowRight');
+  await expect.poll(() => accounting.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('decision-field-accounting-320.png') });
+  await scanAccessibility(page, info, 'decision-field-320');
+  await page.getByRole('tab', { name: 'Scout' }).click();
+  await expect(page.getByRole('textbox', { name: 'Maximum yards to goal' })).toHaveValue('');
+  await page.getByRole('tab', { name: 'Decision Lab' }).click();
+  await expect(upper).toHaveValue('20.5');
+  await expect(decision.getByRole('status')).toContainText('12 eligible plays');
+  await upper.fill('0');
+  await expect(decision.getByRole('article')).toHaveCount(0);
+  await upper.press('Enter');
+  await expect(decision.getByRole('heading', { name: 'No eligible plays match this situation.' })).toBeVisible();
+  await expect(decision.getByText('0–0 yards to the offense’s opponent’s goal line')).toBeVisible();
+  await upper.fill('');
+  const unrestricted = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/decision');
+  await upper.press('Enter');
+  expect(new URL((await unrestricted).url()).searchParams.has('yardline_max')).toBe(false);
+  await expect(decision.getByRole('status')).toContainText('15 eligible plays');
+  await expect(decision.getByRole('region', { name: 'Pre-play field position' })).toHaveCount(0);
+  await expect(decision.getByText('Field position: unrestricted; missing positions are not excluded by field position.')).toBeVisible();
 });
 
 test('real filtered API report, both roles, native JSON download and offline brief replay', async ({ page }, info) => {

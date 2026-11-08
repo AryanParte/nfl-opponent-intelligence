@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-11-06, the long-term direction is
+As of the daily run on 2026-11-07, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
 builder and its local API include matched candidate baselines and opt-in
@@ -46,20 +46,25 @@ immutable PBP snapshot and builder, bounded queries and one serving slot. P1.9's
 the first rendered Decision Lab. Mode tabs retain drafts, completed results and
 Scout downloads, while edits and mode changes cancel pending work and reject late
 responses. The narrow form selects offense/team/season/type/cutoff/exact down and
-inclusive distance. The fixed Run/Pass table shows frequency, EPA, success, counts,
+inclusive distance, with optional field-position bounds. Effective inclusive
+coordinates and ordered field → down → distance counts distinguish missing/outside
+exclusions from final survivors. Blank bounds differ from an explicit 0–100 filter.
+The fixed Run/Pass table shows frequency, EPA, success, counts,
 games, denominators, missing states, flags, warnings and provenance; a preferred
 call is always withheld. Shared request/source components preserve Scout behavior.
-Twenty-three actual synthetic API fixtures include two new no-comparison empty/
-missing-EPA responses. Original decoded Decision JSON is retained for a later
-download flow. Scout schema v2, controls, briefs, downloads and all 71 existing
+Thirty actual synthetic API fixtures include seven new field-position responses;
+all 23 previous Decision fixture values are unchanged. Original decoded Decision
+JSON is retained for a later download flow. Scout schema v2, controls, briefs,
+downloads and all 71 existing
 API fixtures are preserved. No new dependency, model execution, training, ranking, charting
 admission, database, deployment or automation change.
 Actual assistive-technology/cross-browser
 gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
 certification. P1.8 is complete within its single-worker, local PBP-only scope.
-Next: optional Decision Lab field-position bounds using existing query semantics,
-with effective coordinates, ordered exclusions and missing-position/empty/stale
-tests. Score/clock, league/interval views, user-choice comparison and Decision
+Next: optional Decision Lab pre-play score bounds using existing validation and
+offense-minus-defense signs. Extend accounting to field → score → down → distance
+when both apply, with missing/zero/boundary/empty/stale tests. Period/clock,
+league/interval views, user-choice comparison and Decision
 downloads follow separately. No assumed historical in-season availability, serving
 model or action ranking.
 The 8 AM automation is unchanged.
@@ -75,11 +80,15 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/decision-lab-view`, started from updated
-  `origin/main` at `d31ba35` after observing PR #40 merged. Do not merge or enable
-  auto-merge, and do not duplicate this unit while its PR is unmerged. The prior checkout
-  was clean and matched its upstream, with no unpublished commits. Only `main`
-  remained on the remote; no open PRs or review feedback remained. History is preserved.
+- Working branch: `codex/decision-lab-view`, originally started from updated
+  `origin/main` at `d31ba35` after PR #40 merged. On November 7,
+  [PR #41](https://github.com/AryanParte/nfl-opponent-intelligence/pull/41) was still
+  open at `ad6ace8`, with no reviews/comments and all eight push/PR CI jobs passing.
+  The clean clone matched upstream (0 ahead/behind); fetch and fast-forward
+  reconciliation preserved that state. Main remains `d31ba35`; only main and this
+  feature branch exist on the remote. The daily instruction to continue an existing
+  unmerged branch/PR governs this dependent follow-up; no duplicate branch or
+  rewritten history. Do not merge or enable auto-merge.
 - Publication/remote verification for this unit: consult the PR for
   `codex/decision-lab-view` for its exact published SHA, attribution and CI
   receipt. Local checks below are not a claim that remote CI has run.
@@ -296,6 +305,42 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.9 Decision field-position controls/accounting — 2026-11-07
+
+Shared Scout controls expose optional decimal bounds in Decision Lab without new
+formulas, API/schema, dependency or source changes. The selected-offense ledger
+renders field → down → distance after the historical cutoff. Seven new actual
+synthetic HTTP fixtures have independently counted stages; all 23 prior Decision
+fixtures and 71 Scout fixtures remain unchanged. Partial/default/full/fractional/
+zero/empty/all-missing cases distinguish missing EPA and final cohort counts.
+
+Final local checks: **453 core / 45 API** on each Python 3.11/3.12/3.13, API
+warnings as errors and `pip check`; **926 frontend tests** with two workers;
+TypeScript/production build; **24 desktop/narrow Chromium cases** in 27.0 seconds.
+Real proxy/API evidence reconciles 15 invented CAR plays to two missing positions,
+one outside the range and 12 retained, with three Runs, two observed EPA values
+and Run EPA −0.5. This is synthetic verification, not a football finding.
+Tests cover exact queries, invalid/reversed inputs, late responses, invalid
+ledgers, missing-column errors, mode preservation and explicit filter removal.
+Axe checks and keyboard/screenshot review cover the new controls and 320-pixel
+scrollable accounting. No unexpected external requests or page errors occurred;
+both owned browser servers stopped. Accessibility gaps remain documented.
+
+The first frontend attempt had one prolonged local timeout and an overly specific
+row selector. The selector was corrected; all 926 tests then passed in 10.87
+seconds without increasing any timeout. Complete-diff review checked zero versus
+blank, exact-boundary inclusion, filter order/final counts, field help IDs, stale
+state, independent Scout drafts and mandatory abstention. It also corrected stale
+documentation claiming no Decision browser existed, and expanded empty-state
+guidance to include the new field bounds. No formulas, data/terms,
+source/model admission, CI configuration or automation schedule changed.
+Exact published SHA, GitHub attribution and CI receipt belong in PR #41; local
+results do not substitute for remote verification.
+
+Next: optional pre-play score controls and ordered exclusion accounting as above.
+Other contexts, baseline/interval views, user-call comparison and downloads remain
+separate units. No merged/public deployment or validated recommendation claim.
 
 ### P1.9 first Decision Lab view — 2026-11-06
 
@@ -1593,8 +1638,10 @@ shared immutable snapshot serving, bounded computation and request/response/erro
 concurrency tests. P1.9's typed browser contract/client now preserves exact requests,
 null/withheld evidence, provenance and abstention using actual synthetic endpoint
 fixtures. Its first mode/form/candidate-evidence view is now implemented, preserving
-Scout state and keeping estimation in the core. Next: optional Decision field-position
-bounds with effective coordinates, ordered exclusions and missing-data checks.
+Scout state and keeping estimation in the core. Optional field-position bounds now
+show effective coordinates and ordered field/down/distance exclusions. Next:
+optional pre-play score differential bounds and field → score → down → distance
+accounting, with explicit missingness, offense-relative signs and boundary/stale checks.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual

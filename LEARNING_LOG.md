@@ -2999,3 +2999,69 @@ league/interval views, user-choice comparison and Decision JSON downloads follow
 as separate units. Models/charting, opponent adjustment, calibration, historical
 availability, screen-reader/cross-browser coverage and deployment remain deferred.
 Do not merge or enable auto-merge.
+
+## 2026-11-07 — Decision field-position controls and ordered exclusions
+
+**Built / why:** Decision Lab now accepts optional inclusive decimal field-position
+bounds through shared Scout controls. The returned range and field → down → distance
+ledger explain how historical plays reach the final sample. This prevents a
+filtered intermediate count from being mistaken for a candidate denominator.
+Both blank means unrestricted; explicit 0–100 excludes missing positions. The
+existing API/analytics supply every count and estimate; no preferred call is added.
+
+**Review:** `web/src/FieldPositionControls.tsx`, `DecisionFieldPositionView.tsx`,
+`DecisionLab.tsx`, `decision-field-position.test.tsx`, `web/e2e/scout.spec.ts`,
+`tests_api/test_decision_frontend_contract.py` and `docs/DECISION_WEB.md`.
+Seven actual synthetic HTTP fixtures extend the existing 23 without changing them;
+Scout's 71 fixtures are unchanged. After fetch, the clean branch matched upstream
+at `ad6ace8`; PR #41 remained open without review feedback and all eight prior
+CI jobs passed. Main remained `d31ba35`. The current daily instruction to continue
+the existing branch/PR governs this dependent follow-up; no duplicate branch,
+discarded commit or rewritten history.
+
+**Sports concepts:** field position is distance to the offense's opponent's goal
+line: 20 means opponent 20, 80 means own 20. It is a pre-play coordinate, not a
+drive-level red-zone statistic. Field filtering precedes down/distance; only final
+survivors contribute candidate metrics. Missing position, missing EPA, absent calls
+and measured zero remain different. Observed Run/Pass outcomes are not causal
+evidence that a call is optimal.
+
+**Software/statistical concepts / learn:** preserve invalid text so failed decimal
+input cannot silently omit a filter. Reuse validation and accessible controls while
+keeping mode state/help IDs independent. Ordered exclusion ledgers reconcile each
+stage without counting exclusions twice. Verify actual HTTP fixtures against small
+hand-counted examples, plus stale-response and malformed-payload cases.
+
+**Three review questions:**
+
+1. Why can blank field bounds and an explicit 0–100 range return different samples?
+2. Why does field-position accounting precede down/distance, and which stage's
+   retained count belongs in candidate frequency denominators?
+3. How do text-preserving validation, distinct help IDs and cancellation protect
+   the meaning of the requested cohort when editing or switching modes?
+
+**Verification / self-review:** 453 core / 45 API pass on each Python 3.11/3.12/3.13
+with API warnings as errors and passing dependency checks; 926 frontend tests,
+TypeScript/build and 24 desktop/narrow Chromium cases pass. Real proxy/API tests
+reconcile 15 invented plays to two missing positions, one outside and 12 retained;
+three Runs include two observed EPA values averaging −0.5. Tests cover exact,
+fractional/zero/default/empty/all-missing bounds, ordered counts, invalid input,
+late responses, unavailable columns, malformed ledgers and independent mode state.
+Axe, keyboard and inspected 320-pixel screenshots cover the new form/table;
+no unexpected external requests/page errors, and both owned servers stopped.
+
+The first frontend run had one prolonged timeout and a row selector that was too
+specific. Corrected the selector; the rerun passed all 926 in 10.87 seconds without
+timeout changes. Reviewed the complete diff for missingness, cutoff/filter order,
+final denominators, ID collisions, stale state, unchanged Scout behavior and
+abstention. Corrected stale browser-availability documentation and included field
+bounds in empty-state recovery guidance. No API/schema,
+formula, dependency, source/license, model admission or automation change.
+Exact-head publication, attribution and CI evidence belong in PR #41.
+
+**Remaining / next:** optional pre-play score differential controls, offense-minus-
+defense signs and field → score → down → distance accounting. Test missing scores,
+zero/equal/reversed bounds, empty/stale results and preserved mode state. Period/
+clock, baseline/interval views, user-call comparison and downloads follow separately.
+Models/charting, historical availability, screen-reader/cross-browser coverage and
+deployment remain deferred. Do not merge or enable auto-merge.

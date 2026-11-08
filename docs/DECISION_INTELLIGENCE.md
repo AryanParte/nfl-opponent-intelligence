@@ -31,7 +31,9 @@ mandatory abstention. Charting applicability and historical feature availability
 remain unverified. The [typed browser contract/client](DECISION_WEB.md) followed on
 2026-11-05 with synthetic HTTP fixtures, shared validation guards and local browser
 integration. The first rendered Decision Lab form/evidence table and Scout/Decision
-mode tabs followed on 2026-11-06. Advanced controls and production models remain deferred.
+mode tabs followed on 2026-11-06. Optional field-position bounds and ordered
+field/down/distance exclusion accounting followed on 2026-11-07, reusing existing
+query semantics. Score/clock, baseline/interval views and production models remain deferred.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 

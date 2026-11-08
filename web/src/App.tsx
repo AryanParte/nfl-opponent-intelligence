@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { epa, fetchReportDocument, number, parseQuery, percentage, PERIODS, QueryValidationError, type Draft, type ReportDocument } from './report';
 import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
+import { FieldPositionControls } from './FieldPositionControls';
 import { ScoreView } from './ScoreView';
 import { TimeView } from './TimeView';
 import { UncertaintyView } from './UncertaintyView';
@@ -134,20 +135,7 @@ function ScoutView({ active }: { active: boolean }) {
           <label>Season type<select name="season_type" value={draft.season_type} onChange={(e) => edit('season_type', e.target.value)} {...fieldAccessibility('season_type')}>
             <option value="REG">Regular season</option><option value="POST">Postseason</option></select></label>
         </div>
-        <fieldset className="field-controls" aria-describedby="field-help field-coordinate-help">
-          <legend>Pre-play field position (optional)</legend>
-          <p id="field-coordinate-help" className="muted">Yards to the offense’s opponent’s goal line, in either role.
-            20 = opponent’s 20; 80 = own 20. Defense mode does not reverse the coordinates.</p>
-          <div className="field-inputs">
-            {/* Keep invalid text distinguishable from blank (which means omit the filter). */}
-            <label>Minimum yards to goal<input name="yardline_min" type="text" inputMode="decimal" autoComplete="off"
-              value={draft.yardline_min} onChange={(e) => edit('yardline_min', e.target.value)} {...fieldAccessibility('yardline_min', 'field-help field-coordinate-help')} /></label>
-            <label>Maximum yards to goal<input name="yardline_max" type="text" inputMode="decimal" autoComplete="off"
-              value={draft.yardline_max} onChange={(e) => edit('yardline_max', e.target.value)} {...fieldAccessibility('yardline_max', 'field-help field-coordinate-help')} /></label>
-          </div>
-          <p id="field-help" className="muted">Inclusive decimals 0–100; use a dot. Both blank = no field filter.
-            With one bound entered, the blank end defaults to 0 or 100. Any requested range, even 0–100, excludes missing positions.</p>
-        </fieldset>
+        <FieldPositionControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
         <fieldset className="field-controls" aria-describedby="score-help score-perspective-help">
           <legend>Pre-play score difference (optional)</legend>
           <p id="score-perspective-help" className="muted">Offense points minus defense points before the play.

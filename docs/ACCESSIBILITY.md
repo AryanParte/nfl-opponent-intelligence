@@ -3,7 +3,21 @@
 This closes P1.4's **bounded local-viewer review**, not a WCAG conformance audit,
 screen-reader certification or public-release claim. Scout's analytics, API,
 schema v2, snapshots and downloadable evidence are unchanged. The original review
-preceded Decision Lab; the bounded follow-up below covers its first rendered slice.
+preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
+
+## Decision field-position follow-up — 2026-11-07
+
+Shared field controls retain text input, decimal keyboard hints and linked error/
+coordinate instructions. Decision-specific help IDs avoid collisions with mounted
+Scout controls. Invalid bounds preserve input and focus the field; edits clear
+stale evidence. Keyboard order now includes both optional bounds. The exclusion
+table has a caption, row/column headers and a named focusable scroll region.
+
+All 24 desktop/narrow Chromium cases pass. New real API cases include invalid,
+filtered, empty and cleared-bound recovery, mode preservation, axe scans and
+320-pixel horizontal keyboard scrolling without document overflow. The focused
+accounting screenshot was inspected. No unexpected external browser request or
+uncaught page error occurred. Existing coverage gaps below remain open.
 
 ## Decision Lab follow-up — 2026-11-06
 

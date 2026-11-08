@@ -5,8 +5,9 @@ data into offense tendencies and defense-side summaries with explicit sample siz
 metric definitions, source fingerprints, and a cutoff that excludes the week being
 prepared for. The existing Opponent Intelligence functionality is the **Scout /
 Analysis** mode. The same app now includes a narrow **Decision Lab**: define an
-offense, historical cutoff, exact down and inclusive distance, then inspect Run
-and Pass evidence with explicit denominators, missing states and no preferred call.
+offense, historical cutoff, exact down, inclusive distance and optional field-position
+bounds, then inspect Run and Pass evidence with explicit denominators, missing states
+and no preferred call. Ordered exclusion counts explain which plays reach the final sample.
 The existing builder, local API and typed browser client supply both modes.
 Repository/package/CLI names stay intact.
 See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
