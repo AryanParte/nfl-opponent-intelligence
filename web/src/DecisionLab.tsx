@@ -5,7 +5,8 @@ import { epa, number, percentage } from './report';
 import { SourceView } from './SourceView';
 import { useSnapshotRequest } from './useSnapshotRequest';
 import { FieldPositionControls } from './FieldPositionControls';
-import { DecisionFieldPositionView } from './DecisionFieldPositionView';
+import { DecisionContextView } from './DecisionContextView';
+import { ScoreControls } from './ScoreControls';
 
 const initial: DecisionDraft = {
   team: 'CAR', season: '2024', before_week: '19', season_type: 'REG', down: '1', distance_min: '10', distance_max: '10',
@@ -26,8 +27,8 @@ function DecisionEvidence({ decision }: { decision: Decision }) {
       <p className="cohort-tag">{cohort.season} {cohort.season_type} · weeks &lt; {cohort.before_week_exclusive}</p>
     </div>
     <p className="interpretation">Down {cohort.down.minimum_inclusive} · {cohort.distance.minimum_inclusive}–{cohort.distance.maximum_inclusive} yards to go, inclusive.
-      {' '}Score, period and clock are unrestricted. This is a historical situation, not a fully specified game state.</p>
-    <DecisionFieldPositionView decision={decision} />
+      {' '}Period and clock are unrestricted. This is a historical situation, not a fully specified game state.</p>
+    <DecisionContextView decision={decision} />
     <section className="notice" aria-labelledby="decision-abstention-title">
       <h3 id="decision-abstention-title">No preferred call</h3>
       <p>Insufficient evidence for a preferred call: candidate comparison has not been validated.
@@ -37,7 +38,7 @@ function DecisionEvidence({ decision }: { decision: Decision }) {
     </section>
     {population.plays === 0 && <section className="notice empty" aria-label="Empty decision cohort">
       <h3>No eligible plays match this situation.</h3>
-      <p>No broader cohort was substituted. Check the team, season, cutoff, down, distance and field-position bounds. Missing rates are unavailable, not zero performance.</p>
+      <p>No broader cohort was substituted. Check the team, season, cutoff, down, distance, field-position and score bounds. Missing rates are unavailable, not zero performance.</p>
     </section>}
     <section className="panel" aria-labelledby="decision-evidence-title">
       <div className="section-heading"><h3 id="decision-evidence-title">Observed call evidence</h3><span>Descriptive · offense only</span></div>
@@ -110,7 +111,7 @@ export function DecisionLab({ active }: { active: boolean }) {
     </section>
     <form ref={form} id="decision-query" className="panel query" noValidate onSubmit={submit} aria-labelledby="decision-query-title">
       <div className="section-heading"><h2 id="decision-query-title">Define a situation</h2><span>One configured snapshot</span></div>
-      <p className="muted">Team, season/type, cutoff, down and distance are required; field position is optional.
+      <p className="muted">Team, season/type, cutoff, down and distance are required; field position and pre-play score are optional.
         Offense only. Defaults are query inputs, not a claim of data availability.</p>
       <div className="controls decision-controls">
         <label>Offense team code<input name="team" autoComplete="off" maxLength={3} required value={draft.team}
@@ -135,6 +136,7 @@ export function DecisionLab({ active }: { active: boolean }) {
           Zero is observed, not missing. Blank bounds are invalid. No automatic widening or replacement cohort.</p>
       </fieldset>
       <FieldPositionControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} idPrefix="decision-" />
+      <ScoreControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} idPrefix="decision-" />
       <div className="form-footer"><div>
         <p id="decision-cutoff-help">Whole week 1–23. Exclusive cutoff: only weeks strictly before this week are included.</p>
         <p id="decision-season-help" className="muted">Whole season 1999–9999; it must be available in the configured snapshot.</p>

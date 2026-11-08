@@ -152,7 +152,7 @@ test('Decision keyboard navigation, cancelled mode switches and contained table 
   await page.keyboard.press('Enter');
   const decision = page.getByRole('tabpanel', { name: 'Decision Lab' });
   await page.keyboard.press('Tab'); await expect(decision).toBeFocused();
-  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max', 'yardline_min', 'yardline_max']) {
+  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max', 'yardline_min', 'yardline_max', 'score_min', 'score_max']) {
     await page.keyboard.press('Tab');
     const input = decision.locator(`[name="${name}"]`);
     await expect(input).toBeFocused();
@@ -234,7 +234,7 @@ test('Decision field bounds retain exact cohorts, show ordered accounting and re
   await upper.press('Enter');
   expect(new URL((await unrestricted).url()).searchParams.has('yardline_max')).toBe(false);
   await expect(decision.getByRole('status')).toContainText('15 eligible plays');
-  await expect(decision.getByRole('region', { name: 'Pre-play field position' })).toHaveCount(0);
+  await expect(decision.getByRole('region', { name: 'Situation filters' })).toHaveCount(0);
   await expect(decision.getByText('Field position: unrestricted; missing positions are not excluded by field position.')).toBeVisible();
 });
 
@@ -488,4 +488,73 @@ test('full keyboard order, expanded tables and 320 CSS-pixel reflow', async ({ p
   await page.screenshot({ path: info.outputPath('query-320.png') });
   await tables.first().focus();
   await page.screenshot({ path: info.outputPath('table-320.png') });
+});
+
+test('Decision score filters preserve pre-play signs and ordered missingness through the real API', async ({ page }, info) => {
+  await openViewer(page);
+  const decision = await openDecision(page);
+  const lower = decision.getByLabel('Minimum score difference', { exact: true });
+  const upper = decision.getByLabel('Maximum score difference', { exact: true });
+  let requests = 0;
+  page.on('request', request => { if (new URL(request.url()).pathname === '/api/v1/decision') requests++; });
+  await lower.fill('-'); await lower.press('Enter');
+  await expect(lower).toBeFocused(); await expect(lower).toHaveValue('-');
+  await expect(lower).toHaveAccessibleDescription(/Pre-play score bounds must be signed whole points/);
+  expect(requests).toBe(0);
+  await scanAccessibility(page, info, 'decision-score-invalid');
+  await decision.getByLabel('Maximum yards to goal', { exact: true }).fill('20.5');
+  await lower.fill('-7'); await upper.fill('0');
+  const pending = page.waitForResponse(response => new URL(response.url()).pathname === '/api/v1/decision');
+  await upper.press('Enter');
+  const response = await pending;
+  expect(response.status()).toBe(200);
+  const params = new URL(response.url()).searchParams;
+  expect(params.get('score_min')).toBe('-7'); expect(params.get('score_max')).toBe('0');
+  expect(params.get('yardline_max')).toBe('20.5');
+  const evidence = await response.json();
+  // Invented rows: field excludes two missing and one at 80; score then excludes one missing.
+  expect(evidence.population).toEqual({ plays: 11, games: 1 });
+  expect(evidence.candidates[0]).toMatchObject({ plays: 3, epa_observations: 2, missing_epa: 1, epa_per_play: -.5 });
+  expect(evidence.candidates[0].frequency).toBeCloseTo(3 / 11);
+  await expect(decision.getByRole('status')).toContainText('11 eligible plays');
+  const accounting = decision.getByRole('region', { name: 'Decision filter accounting, scroll horizontally on small screens' });
+  expect(await accounting.getByRole('rowheader').allTextContents()).toEqual(['Field position', 'Pre-play score', 'Down', 'Distance']);
+  const rows = await accounting.getByRole('row').all();
+  const expected = [['15', '2', '1', '12'], ['12', '1', '0', '11'], ['11', '0', '0', '11'], ['11', '0', '0', '11']];
+  for (let i = 1; i < rows.length; i++) expect(await rows[i].getByRole('cell').allTextContents()).toEqual(expected[i - 1]);
+  await expect(decision.getByText('-7 to 0 points', { exact: true })).toBeVisible();
+  await expect(decision.getByText(/a play missing both fields is removed at the field stage/)).toBeVisible();
+  await scanAccessibility(page, info, 'decision-score-loaded');
+  await page.setViewportSize({ width: 320, height: 900 });
+  await accounting.focus(); await accounting.press('ArrowRight');
+  await expect.poll(() => accounting.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('decision-score-accounting-320.png') });
+  await scanAccessibility(page, info, 'decision-score-320');
+  await page.getByRole('tab', { name: 'Scout' }).click();
+  const scoutScore = page.getByRole('textbox', { name: 'Minimum score difference' });
+  await expect(scoutScore).toHaveValue(''); await scoutScore.fill('-14');
+  await page.getByRole('tab', { name: 'Decision Lab' }).click();
+  await expect(lower).toHaveValue('-7'); await expect(decision.getByRole('status')).toContainText('11 eligible plays');
+  await lower.fill('0'); await upper.press('Enter');
+  await expect(decision.getByRole('status')).toContainText('2 eligible plays');
+  await expect(decision.getByText('0 to 0 points', { exact: true })).toBeVisible();
+  const candidates = decision.getByRole('region', { name: 'Run and Pass evidence, scroll horizontally on small screens' });
+  await expect(candidates.getByRole('row', { name: /^Run/ })).toContainText('EPA missing for every observed play');
+  await expect(candidates.getByRole('row', { name: /^Pass/ })).toContainText('0.000');
+  await lower.fill('1'); await upper.fill('6'); await upper.press('Enter');
+  await expect(decision.getByRole('heading', { name: 'No eligible plays match this situation.' })).toBeVisible();
+  await expect(decision.getByText('+1 to +6 points', { exact: true })).toBeVisible();
+  await scanAccessibility(page, info, 'decision-score-empty');
+  await lower.fill(''); await upper.fill('');
+  await expect(decision.getByRole('article')).toHaveCount(0);
+  const cleared = page.waitForResponse(result => new URL(result.url()).pathname === '/api/v1/decision');
+  await upper.press('Enter');
+  const clearedParams = new URL((await cleared).url()).searchParams;
+  expect(clearedParams.has('score_min')).toBe(false); expect(clearedParams.has('score_max')).toBe(false);
+  expect(clearedParams.get('yardline_max')).toBe('20.5');
+  await expect(decision.getByRole('status')).toContainText('12 eligible plays');
+  expect(await accounting.getByRole('rowheader').allTextContents()).toEqual(['Field position', 'Down', 'Distance']);
+  await expect(decision.getByText('Pre-play score: unrestricted; missing scores are not excluded by score.')).toBeVisible();
+  await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible();
 });

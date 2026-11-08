@@ -4,6 +4,7 @@ import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
 import { FieldPositionControls } from './FieldPositionControls';
 import { ScoreView } from './ScoreView';
+import { ScoreControls } from './ScoreControls';
 import { TimeView } from './TimeView';
 import { UncertaintyView } from './UncertaintyView';
 import { ReportDownload } from './ReportDownload';
@@ -136,22 +137,7 @@ function ScoutView({ active }: { active: boolean }) {
             <option value="REG">Regular season</option><option value="POST">Postseason</option></select></label>
         </div>
         <FieldPositionControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
-        <fieldset className="field-controls" aria-describedby="score-help score-perspective-help">
-          <legend>Pre-play score difference (optional)</legend>
-          <p id="score-perspective-help" className="muted">Offense points minus defense points before the play.
-            Negative = offense trailing; positive = offense leading; 0 = tied, not missing.
-            Defense mode does not reverse the sign.</p>
-          <div className="field-inputs">
-            {/* Text keeps partial signs invalid, not blank; the keyboard must allow minus. */}
-            <label>Minimum score difference<input name="score_min" type="text" autoComplete="off"
-              value={draft.score_min} onChange={(e) => edit('score_min', e.target.value)} {...fieldAccessibility('score_min', 'score-help score-perspective-help')} /></label>
-            <label>Maximum score difference<input name="score_max" type="text" autoComplete="off"
-              value={draft.score_max} onChange={(e) => edit('score_max', e.target.value)} {...fieldAccessibility('score_max', 'score-help score-perspective-help')} /></label>
-          </div>
-          <p id="score-help" className="muted">Inclusive signed whole points, -1000 to +1000 (API input limits, not typical game scores).
-            A blank end is unbounded; both blank = no score filter. Any requested score range excludes missing pre-play scores.
-            Field position is filtered first when both are requested.</p>
-        </fieldset>
+        <ScoreControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
         <fieldset className="field-controls" aria-describedby="time-help clock-help">
           <legend>Pre-play period &amp; clock (optional)</legend>
           <div className="field-inputs">

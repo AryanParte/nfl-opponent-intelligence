@@ -5,6 +5,18 @@ screen-reader certification or public-release claim. Scout's analytics, API,
 schema v2, snapshots and downloadable evidence are unchanged. The original review
 preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
 
+## Decision score follow-up — 2026-11-08
+
+Shared text controls retain partial signs for validation and permit a minus sign;
+Decision-specific help IDs keep mounted Scout controls independent. Keyboard order
+includes both score bounds; invalid input focuses its linked error without fetching.
+The combined context section retains table headers, a caption and a named focusable
+scroll region. All 26 desktop/narrow Chromium cases pass, including real API
+field/score accounting, tie/empty/filter-removal recovery, preserved mode state,
+axe scans and 320-pixel keyboard scrolling. The focused screenshot was inspected;
+no unexpected external requests or page errors occurred. Existing assistive-technology,
+zoom, real-device and cross-browser gaps remain open.
+
 ## Decision field-position follow-up — 2026-11-07
 
 Shared field controls retain text input, decimal keyboard hints and linked error/

@@ -6,7 +6,8 @@ metric definitions, source fingerprints, and a cutoff that excludes the week bei
 prepared for. The existing Opponent Intelligence functionality is the **Scout /
 Analysis** mode. The same app now includes a narrow **Decision Lab**: define an
 offense, historical cutoff, exact down, inclusive distance and optional field-position
-bounds, then inspect Run and Pass evidence with explicit denominators, missing states
+and pre-play score bounds, then inspect Run and Pass evidence with explicit
+denominators, missing states
 and no preferred call. Ordered exclusion counts explain which plays reach the final sample.
 The existing builder, local API and typed browser client supply both modes.
 Repository/package/CLI names stay intact.
@@ -81,7 +82,7 @@ Scout, with bounded requests, shared concurrency and explicit abstention.
 The [Decision Lab view and browser contract](docs/DECISION_WEB.md) now display that
 selected-offense evidence in the same app. Accessible mode tabs preserve drafts,
 completed results and Scout downloads; pending requests are cancelled and late
-responses discarded. The basic form covers season/type/cutoff/down/distance;
+responses discarded. The form covers season/type/cutoff/down/distance and optional field/score bounds;
 Run/Pass frequency, EPA, success, counts, missing states, warnings and provenance
 remain descriptive. Actual synthetic API fixtures and local browser integration
 verify the boundary. Scout's controls and original fixtures are preserved.

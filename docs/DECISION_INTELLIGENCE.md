@@ -33,7 +33,9 @@ remain unverified. The [typed browser contract/client](DECISION_WEB.md) followed
 integration. The first rendered Decision Lab form/evidence table and Scout/Decision
 mode tabs followed on 2026-11-06. Optional field-position bounds and ordered
 field/down/distance exclusion accounting followed on 2026-11-07, reusing existing
-query semantics. Score/clock, baseline/interval views and production models remain deferred.
+query semantics. Optional pre-play score bounds followed on 2026-11-08 with shared
+controls and ordered conditional missingness. Period/clock, baseline/interval views
+and production models remain deferred.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 

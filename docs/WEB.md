@@ -21,7 +21,7 @@ This is the implemented **Scout / Analysis** surface of the evolving
 Decision Lab is now a second mode in the same app. Its
 [minimal situation form and Run/Pass evidence view](DECISION_WEB.md) use the typed
 contract/client, preserve Scout state and withhold a preferred call. Both modes
-offer optional field-position bounds; score/clock, baseline and interval controls
+offer optional field-position and pre-play score bounds; period/clock, baseline and interval controls
 remain Scout-only in the current rendered UI.
 
 ![Local report view of the retrospective CAR 2024 cohort](examples/local-report-view.png)
@@ -718,9 +718,10 @@ and local Decision API are complete. P1.9's [browser contract/client](DECISION_W
 and first mode/form/evidence view are implemented. Both modes share cancellation,
 deadline and source-display components; completed Scout evidence and downloads
 survive mode changes. Optional Decision field-position bounds now show effective
-coordinates and field → down → distance exclusions. Next add optional pre-play
-score differential bounds with offense-relative signs and ordered missingness.
-Other contexts, baseline/
+coordinates and field → down → distance exclusions. Optional pre-play score bounds
+now extend that ledger to field → score → down → distance, with offense-relative
+signs and ordered missingness. Next add period/clock controls and their exclusion
+stages using the existing contract. Baseline/
 interval views and Decision downloads follow separately. No models, storage or deployment belong in that slice.
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
 explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

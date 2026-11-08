@@ -3065,3 +3065,64 @@ zero/equal/reversed bounds, empty/stale results and preserved mode state. Period
 clock, baseline/interval views, user-call comparison and downloads follow separately.
 Models/charting, historical availability, screen-reader/cross-browser coverage and
 deployment remain deferred. Do not merge or enable auto-merge.
+
+## 2026-11-08 — Decision pre-play score bounds and conditional missingness
+
+**Built / why:** Decision Lab now accepts signed pre-play score bounds. Shared
+Scout controls and range formatting preserve existing semantics; one context
+ledger shows active field → score → down → distance stages. This explains why
+missing-score counts change after field selection and prevents intermediate
+counts from being used as final candidate denominators. No preferred call is added.
+
+**Review:** `web/src/ScoreControls.tsx`, `DecisionContextView.tsx` (renamed from
+`DecisionFieldPositionView.tsx`), `DecisionLab.tsx`, `report.ts`, `ScoreView.tsx`,
+`decision-score.test.tsx`, `web/e2e/scout.spec.ts`,
+`tests_api/test_decision_frontend_contract.py` and `docs/DECISION_WEB.md`.
+PR #41 was merged; fetched main `bc7b9b0` has eight green CI jobs and the same tree
+as feature head `6038ff1`. No open PRs/reviews/comments or unpublished local work
+remained. Started `codex/decision-score-filter` from that updated main.
+
+**Sports concepts:** score differential is offense points minus defense points at
+play start. Negative means trailing, positive leading; zero is a known tie. Never
+substitute post-play scores. These ranges do not define neutral game states or
+win probability. Missing score, missing EPA, absent calls and measured zero are
+different states. Higher descriptive EPA still does not authorize a preferred call.
+
+**Software/statistical concepts / learn:** both blank score bounds omit filtering;
+a single blank end is unbounded, unlike field-position defaults. Preserve partial
+signs as text so invalid input cannot become omission. Missingness is conditional
+on prior-stage survivors: a play missing both field and score is counted once at
+field. Reuse API estimates and validation; keep independent accessible mode state.
+
+**Three review questions:**
+
+1. How do blank score bounds, one blank end and an explicit 0–0 range differ?
+2. Why must score missingness be measured after field selection, and which retained
+   count is the candidate frequency denominator?
+3. How do the same-snapshot filter-removal test, malformed-ledger tests and late-
+   response tests protect the meaning of the displayed cohort?
+
+**Verification / self-review:** 453 core / 45 API pass on each Python 3.11/3.12/3.13
+with API warnings as errors and passing dependency checks; 971 frontend tests,
+TypeScript/build and 26 desktop/narrow Chromium cases pass. Twelve added actual
+synthetic HTTP fixtures bring the Decision corpus to 42; all prior 30 and Scout's
+71 remain unchanged. Hand-counted stages cover signed/one-sided/tied/zero/full/
+empty/all-missing/combined contexts and final distance exclusion. Real browser
+checks reconcile 15 → 12 → 11 invented plays and distinguish missing Run EPA from
+zero Pass EPA in a tied scenario. Axe, keyboard order, inspected 320-pixel screenshots
+and mode preservation pass; no unexpected external requests/page errors; owned
+servers stopped. Synthetic results verify implementation, not football performance.
+
+Complete-diff review checked signs, null bounds, stage order, source/cutoff
+preservation, final denominators, unique help IDs, safe errors, Scout compatibility
+and abstention. Strengthened clearing-score verification to retain the same snapshot
+and field bounds, avoiding a confounded UI test. All completed test runs passed;
+no API/schema, formula, dependency, source/license, model admission, CI timeout or
+automation changes. Exact pushed SHA, attribution and CI receipt belong in the PR.
+
+**Remaining / next:** optional period/clock controls using Q1–Q4/OT and inclusive
+seconds remaining. Clock requires a period; add active stages before down/distance
+and test missing period/clock, zero clock, OT, bounds, empty/stale states and mode
+preservation. Candidate baselines/intervals, user choices and downloads follow
+separately. Historical availability, model/charting admission, assistive-technology/
+cross-browser coverage and deployment remain deferred. Do not merge or enable auto-merge.

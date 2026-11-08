@@ -3,7 +3,8 @@
 Implemented 2026-11-05 as the first P1.9 slice. `web/src/decision.ts` consumes the
 existing [Decision API](API.md#decision-request-contract), contract v1. The first
 rendered Decision Lab mode followed on 2026-11-06 in the same app as Scout;
-optional field-position controls and exclusion accounting followed on 2026-11-07. No
+optional field-position controls and exclusion accounting followed on 2026-11-07,
+then pre-play score controls on 2026-11-08. No
 package, API, core formula or data source changed.
 
 ## First rendered slice
@@ -11,8 +12,8 @@ package, API, core formula or data source changed.
 Select **Decision Lab** in the mode tabs, then submit an offense team code,
 season/type, exclusive before-week cutoff, one exact down and inclusive whole-yard
 distance bounds. Defaults are inputs, not asserted source coverage. The first
-form defaults to unrestricted field position and offers optional inclusive decimal
-bounds. Score/period/clock stay unrestricted, comparison off and bootstrap
+form defaults to unrestricted field position and score, with optional inclusive
+bounds for both. Period/clock stay unrestricted, comparison off and bootstrap
 unrequested. It does not offer defense/opponent conditioning, a preferred call,
 user-call grading or advanced play families.
 
@@ -57,16 +58,39 @@ are valid, and zero is observed rather than missing. Any explicit range, includi
 opponent's goal line: 20 is the opponent's 20, 80 is the offense's own 20, following
 the [nflverse field definition](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv).
 
-`DecisionFieldPositionView.tsx` renders the validated effective bounds and selected
-offense accounting in order: field → down → distance, after season/type/exclusive
-week selection. Each row displays before, missing, outside and after counts from
+`DecisionContextView.tsx` renders the validated effective bounds and selected
+offense accounting in order: field → score → down → distance, including only active
+optional stages after season/type/exclusive week selection. Each row displays before, missing, outside and after counts from
 the API. Down/distance are required at ingestion, so their missing counts are zero.
-Only final distance-stage survivors supply candidate metrics/games; field/down
+Only final distance-stage survivors supply candidate metrics/games; earlier
 counts are intermediate. Missing EPA is separate, and stage exclusions already
 belong to the global outside-cohort count. Do not sum them into it again.
 This is a play cohort, not drive-level red-zone efficiency or a complete game state.
 No preferred call is added. The view must be extended with every newly exposed
-context stage; it currently assumes field position is the only optional filter.
+context stage; it currently supports field position and pre-play score.
+
+## Optional pre-play score difference
+
+`ScoreControls.tsx` and the `scoreRange` presentation helper are shared with Scout;
+Decision retains separate draft state and help/error IDs. Inclusive signed whole
+points range from −1000 to +1000, the API input limits rather than typical scores.
+Both blank means no score filter. One blank end is unbounded (JSON null), not a
+zero/default maximum. A 0–0 range selects known ties; a requested range always
+excludes missing pre-play scores. Invalid signs, decimals and exponents remain
+visible text and cannot silently become an unfiltered request.
+
+Score means offense points minus defense points at play start, following the
+[nflverse dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv).
+Negative is trailing, positive leading. There is no post-play substitution, inferred
+possession, neutral-game definition or win-probability claim. The API retains the
+exclusive historical cutoff and mandatory abstention.
+
+When both filters apply, field precedes score. Score missingness counts only field
+survivors; a play missing both is excluded once at field. The same ledger then
+shows down/distance, so the score-stage count is still intermediate. Missing EPA
+remains separate. An absent requested score column is an error; a present column
+with all missing values may return an empty cohort. Clearing score bounds preserves
+field selection and requires a new explicit request, with no stale or fallback result.
 
 ## Request and response boundaries
 
@@ -124,7 +148,7 @@ manifest metadata, source completeness, causal validity or historical availabili
 
 ## Reproducible evidence
 
-`tests_api/test_decision_frontend_contract.py` freezes **30 actual HTTP responses**
+`tests_api/test_decision_frontend_contract.py` freezes **42 actual HTTP responses**
 in `web/src/__fixtures__/decisions.json`. Observations, source IDs/timestamps and
 labels are explicitly synthetic; fixtures never enter the live app. Snapshot bytes
 and hashes are created with the existing factory, and acquisition/socket calls are
@@ -155,6 +179,15 @@ recovery, keyboard order, independent Scout state and a focusable 320-pixel
 accounting table. Clearing both bounds restores an explicitly requested unrestricted
 cohort; an empty response never silently widens its query.
 
+Twelve score fixtures add inclusive/one-sided/tied/input-limit/all-missing/empty/
+missing-EPA/combined cases and filter removal within the same synthetic snapshot.
+All 30 prior Decision fixtures remain unchanged. Independent stage counts cover
+conditional missingness and a final distance-stage empty result; mutation tests
+reject wrong signs/perspective/bounds/order/chains. Real browser tests reconcile
+15 → 12 → 11 plays under combined field/score selection, then verify known ties,
+empty and cleared-bound recovery, mode state, keyboard order and 320-pixel scrolling.
+These invented outcomes verify the software, not football performance.
+
 Run the normal core/API/browser checks in [WEB.md](WEB.md). To intentionally
 regenerate only the Decision fixtures with optional API dependencies installed:
 
@@ -167,9 +200,9 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add optional pre-play score differential bounds using existing validation and
-offense-minus-defense signs. Extend the ledger to field → score → down → distance
-when both filters apply; test missing scores, zero/equal/reversed bounds and
-empty/stale states without changing Scout. Period/clock, candidate league/interval views, user-choice
+Add optional period/clock controls using existing validation: Q1–Q4/OT and inclusive
+seconds remaining, with clock requiring a period. Extend the ledger to active
+field → score → period → clock → down → distance; test missing periods/clocks,
+zero clock, OT, bounds and empty/stale states. Candidate league/interval views, user-choice
 comparison and downloads follow separately. No ranking/model, new data layer,
 database or deployment is implied by this view.

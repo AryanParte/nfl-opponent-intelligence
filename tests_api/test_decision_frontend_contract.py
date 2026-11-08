@@ -12,7 +12,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 from opponent_intelligence.api import create_app
 from tests_api.synthetic_snapshot import write_snapshot
-from tests_api.test_frontend_contract import field_position_rows, time_rows, uncertainty_rows
+from tests_api.test_frontend_contract import field_position_rows, score_rows, time_rows, uncertainty_rows
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,6 +40,18 @@ QUERIES = {
     "field_zero": BASE | {"yardline_max": 0},
     "field_lower": BASE | {"yardline_min": 80},
     "field_empty": BASE | {"yardline_min": 91, "yardline_max": 99},
+    "score_range": BASE | {"score_min": -7, "score_max": 0},
+    "score_lower_only": BASE | {"score_min": 1},
+    "score_upper_only": BASE | {"score_max": -7},
+    "score_tied": BASE | {"down": 2, "distance_min": 3, "distance_max": 3, "score_min": 0, "score_max": 0},
+    "score_input_limits": BASE | {"score_min": -1000, "score_max": 1000},
+    "score_empty": BASE | {"score_min": -6, "score_max": -1},
+    "score_all_missing": BASE | {"score_max": 0},
+    "score_missing_epa": BASE | {"down": 2, "distance_min": 3, "distance_max": 3, "score_min": 0, "score_max": 0},
+    "score_field": BASE | {"yardline_max": 20.5, "score_min": -7, "score_max": 0},
+    "score_field_unrestricted": BASE | {"yardline_max": 20.5},
+    "score_zero_lower": BASE | {"score_min": 0},
+    "score_distance_empty": BASE | {"down": 2, "distance_min": 6, "distance_max": 6, "score_min": -7, "score_max": 0},
 }
 QUERIES.update({"bootstrap_" + name: BASE | {"before_week": 19, "compare_league": True,
                 "bootstrap_repetitions": 200, "bootstrap_seed": 7}
@@ -62,6 +74,8 @@ def decision_fixtures():
             variant = rows
             if name.startswith("field_"):
                 variant = field_position_rows(rows, all_missing=name == "field_all_missing")
+            if name.startswith("score_"):
+                variant = score_rows(rows, name)
             if name in ("context", "overtime", "zero_clock"):
                 variant = time_rows(rows, "time_four_stage")
             if name.startswith("bootstrap_"):
