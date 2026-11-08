@@ -2,8 +2,43 @@
 
 This closes P1.4's **bounded local-viewer review**, not a WCAG conformance audit,
 screen-reader certification or public-release claim. Scout's analytics, API,
-schema v2, snapshots and downloadable evidence are unchanged. Decision Lab is
-still planned. The next implementation unit is its small offline P1.5 contract.
+schema v2, snapshots and downloadable evidence are unchanged. The original review
+preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
+
+## Decision field-position follow-up — 2026-11-07
+
+Shared field controls retain text input, decimal keyboard hints and linked error/
+coordinate instructions. Decision-specific help IDs avoid collisions with mounted
+Scout controls. Invalid bounds preserve input and focus the field; edits clear
+stale evidence. Keyboard order now includes both optional bounds. The exclusion
+table has a caption, row/column headers and a named focusable scroll region.
+
+All 24 desktop/narrow Chromium cases pass. New real API cases include invalid,
+filtered, empty and cleared-bound recovery, mode preservation, axe scans and
+320-pixel horizontal keyboard scrolling without document overflow. The focused
+accounting screenshot was inspected. No unexpected external browser request or
+uncaught page error occurred. Existing coverage gaps below remain open.
+
+## Decision Lab follow-up — 2026-11-06
+
+The same app now has manually activated Scout/Decision tabs, with named panels,
+selected/tab-stop states, Left/Right wrapping, Home/End, Enter/Space and a skip link
+to the active query. Hidden visited views retain drafts/results without entering
+the keyboard/accessibility tree. Only a new submitted validation error focuses a
+field; returning to a saved error or receiving an asynchronous result does not.
+The new form has field-linked instructions/errors and a persistent polite status;
+the candidate table has headers, a caption and a keyboard-focusable horizontal
+scroll region. A preferred call is explicitly withheld in every response.
+
+The expanded synthetic Chromium suite passes 22 desktop/narrow cases, including
+real Decision API evidence and Scout download preservation. Axe scans cover
+Decision idle/invalid/error/empty/loaded states and 320-pixel reflow. Keyboard-only
+navigation and screenshot inspection complement those scans. The initial scan
+found a low-contrast tab hover caused by generic button CSS; the selector was
+corrected and the full suite rerun. Visual review also separated table sublabels.
+No unexpected external browser request or uncaught page error occurred.
+These checks do not close the assistive-technology, cross-browser, zoom or real-device
+gaps below and do not constitute WCAG certification.
 
 ## Findings and changes
 

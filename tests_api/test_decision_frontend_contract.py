@@ -12,7 +12,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 from opponent_intelligence.api import create_app
 from tests_api.synthetic_snapshot import write_snapshot
-from tests_api.test_frontend_contract import time_rows, uncertainty_rows
+from tests_api.test_frontend_contract import field_position_rows, time_rows, uncertainty_rows
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,15 +22,24 @@ QUERIES = {
     "selected": BASE,
     "league": BASE | {"compare_league": True},
     "empty": BASE | {"before_week": 1, "compare_league": True},
+    "empty_plain": BASE | {"before_week": 1},
     "empty_selected": BASE | {"team": "ZZZ", "compare_league": True},
     "empty_baseline": BASE | {"season_type": "POST", "before_week": 20, "compare_league": True},
     "unobserved": BASE | {"down": 3, "distance_min": 7, "distance_max": 7},
     "missing_epa": BASE | {"down": 2, "distance_min": 6, "distance_max": 6, "compare_league": True},
+    "missing_epa_plain": BASE | {"down": 2, "distance_min": 6, "distance_max": 6},
     "distance_range": BASE | {"down": 2, "distance_min": 0, "distance_max": 100, "minimum_plays": 1},
     "context": BASE | {"yardline_max": 20, "score_min": -7, "score_max": 0,
                        "period": "Q4", "clock_max": 120, "compare_league": True},
     "overtime": BASE | {"period": "OT", "clock_min": 0, "clock_max": 120, "compare_league": True},
     "zero_clock": BASE | {"period": "Q4", "clock_min": 0, "clock_max": 0},
+    "field_partial": BASE | {"down": 2, "distance_min": 3, "distance_max": 3, "yardline_max": 20.5},
+    "field_full": BASE | {"yardline_min": 0, "yardline_max": 100},
+    "field_all_missing": BASE | {"yardline_max": 100},
+    "field_fractional": BASE | {"down": 2, "distance_min": 6, "distance_max": 6, "yardline_min": 20.5, "yardline_max": 20.5},
+    "field_zero": BASE | {"yardline_max": 0},
+    "field_lower": BASE | {"yardline_min": 80},
+    "field_empty": BASE | {"yardline_min": 91, "yardline_max": 99},
 }
 QUERIES.update({"bootstrap_" + name: BASE | {"before_week": 19, "compare_league": True,
                 "bootstrap_repetitions": 200, "bootstrap_seed": 7}
@@ -51,6 +60,8 @@ def decision_fixtures():
         result = {}
         for name, query in QUERIES.items():
             variant = rows
+            if name.startswith("field_"):
+                variant = field_position_rows(rows, all_missing=name == "field_all_missing")
             if name in ("context", "overtime", "zero_clock"):
                 variant = time_rows(rows, "time_four_stage")
             if name.startswith("bootstrap_"):

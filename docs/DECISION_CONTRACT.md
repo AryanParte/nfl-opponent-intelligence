@@ -7,7 +7,8 @@ Explicit descriptive contrast/abstention policy added 2026-10-21; see
 The **descriptive evidence builder** remains dependency-free Python. As of
 2026-11-04, the optional [Decision API](API.md#decision-request-contract) serves
 this same contract over a verified local snapshot; HTTP uses narrower cost bounds.
-There is no Decision CLI/browser mode, predictive model or recommendation engine.
+The local [Decision Lab browser mode](DECISION_WEB.md) now consumes this contract.
+There is no Decision CLI, predictive model or recommendation engine.
 Scout schema v2, report endpoint, briefs and UI stay unchanged. The request and
 JSON-compatible result have a separate `contract_version: 1`; do not send this result to the Scout
 brief renderer or treat it as a schema-v2 report.
@@ -325,5 +326,6 @@ gate within descriptive-only scope. Preferred calls and opponent conditioning
 remain explicitly deferred, not implicitly approved by completion of a milestone.
 P1.6's bounded model evaluation and P1.7's first charting review are now complete
 with production model/enrichment admission deferred. P1.8 serves this evidence
-over HTTP without changing its analytical contract. Next is P1.9's small browser
-contract/client slice; no client-side statistics or automatic preferred call.
+over HTTP without changing its analytical contract. P1.9's browser client and narrow
+Decision Lab view now consume it, including optional field-position bounds;
+no client-side statistics or automatic preferred call.

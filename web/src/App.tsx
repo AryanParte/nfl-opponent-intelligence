@@ -2,14 +2,16 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { epa, fetchReportDocument, number, parseQuery, percentage, PERIODS, QueryValidationError, type Draft, type ReportDocument } from './report';
 import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
+import { FieldPositionControls } from './FieldPositionControls';
 import { ScoreView } from './ScoreView';
 import { TimeView } from './TimeView';
 import { UncertaintyView } from './UncertaintyView';
 import { ReportDownload } from './ReportDownload';
+import { SourceView } from './SourceView';
+import { DecisionLab } from './DecisionLab';
+import { useSnapshotRequest } from './useSnapshotRequest';
 
-export const REQUEST_TIMEOUT_MS = 15_000;
-type State = { kind: 'idle' | 'loading' } | { kind: 'error'; message: string; fields?: readonly (keyof Draft)[] }
-  | { kind: 'ready'; document: ReportDocument };
+export { REQUEST_TIMEOUT_MS } from './useSnapshotRequest';
 const initial: Draft = { team: 'CAR', season: '2024', before_week: '19', side: 'offense', season_type: 'REG',
   compare_league: false, yardline_min: '', yardline_max: '', score_min: '', score_max: '', period: '', clock_min: '', clock_max: '', bootstrap_repetitions: '', bootstrap_seed: '' };
 
@@ -66,21 +68,7 @@ function ReportView({ document }: { document: ReportDocument }) {
     </section>
     <ComparisonView report={report} />
     <UncertaintyView report={report} />
-    <section className="panel source" aria-labelledby="source-title">
-      <div className="section-heading"><h3 id="source-title">Source &amp; availability</h3><span>Report schema v{report.schema_version}</span></div>
-      <p className="source-label">{source.label}</p>
-      <dl className="provenance">
-        <div><dt>Snapshot acquired (UTC)</dt><dd>{source.snapshot.retrieved_at_utc}</dd></div>
-        <div><dt>Upstream asset updated (UTC)</dt><dd>{source.snapshot.source.asset_updated_at_utc}</dd></div>
-      </dl>
-      <p className="muted">Dataset attribution: {source.snapshot.license.attribution} · {source.snapshot.license.identifier}. Displayed values are calculated cohort summaries.</p>
-      <p>These are source timestamps, not a live-feed or freshness guarantee. A week cutoff does not establish that the source was available before that week.</p>
-      <details><summary>Inspect source fingerprints</summary>
-        <dl><dt>Decoded CSV SHA-256</dt><dd className="fingerprint">{source.sha256}</dd>
-          <dt>Archive SHA-256</dt><dd className="fingerprint">{source.snapshot.archive.sha256}</dd></dl>
-        <p className="muted">Fingerprints identify bytes; they do not certify completeness or analytical validity.</p>
-      </details>
-    </section>
+    <SourceView source={source} titleId="source-title" versionLabel={`Report schema v${report.schema_version}`} />
     <section className="notice" aria-labelledby="warnings-title">
       <h3 id="warnings-title">Read before interpreting</h3>
       <p>League comparison: <strong>{report.league_comparison ? 'requested; shown above' : 'not requested'}</strong>.
@@ -92,17 +80,14 @@ function ReportView({ document }: { document: ReportDocument }) {
   </article>;
 }
 
-export function App() {
+function ScoutView({ active }: { active: boolean }) {
   const [draft, setDraft] = useState<Draft>(initial);
-  const [state, setState] = useState<State>({ kind: 'idle' });
-  const sequence = useRef(0);
-  const active = useRef<AbortController | null>(null);
+  const { state, invalidate, failValidation, load } = useSnapshotRequest<ReportDocument, keyof Draft>(active);
   const form = useRef<HTMLFormElement>(null);
-  useEffect(() => () => { sequence.current += 1; active.current?.abort(); }, []);
   useEffect(() => {
     // Only a synchronous, user-submitted validation error moves focus. A late
     // API response must not pull focus away from wherever the user navigated.
-    if (state.kind === 'error' && state.fields?.length) {
+    if (active && state.kind === 'error' && state.fields?.length) {
       const field = form.current?.elements.namedItem(state.fields[0]);
       if (field instanceof HTMLElement) field.focus();
     }
@@ -115,46 +100,23 @@ export function App() {
   }
 
   function edit<Key extends keyof Draft>(field: Key, value: Draft[Key]) {
-    sequence.current += 1;
-    active.current?.abort();
+    invalidate(); // Never relabel a previous response with a new draft query.
     setDraft((previous) => ({ ...previous, [field]: value }));
-    setState({ kind: 'idle' }); // Never relabel a previous response with a new draft query.
   }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    const request = ++sequence.current;
-    active.current?.abort();
     let query;
     try { query = parseQuery(draft); }
     catch (error) {
-      setState({ kind: 'error', message: (error as Error).message,
-        fields: error instanceof QueryValidationError ? error.fields : undefined });
+      failValidation((error as Error).message, error instanceof QueryValidationError ? error.fields : undefined);
       return;
     }
-    const controller = new AbortController();
-    active.current = controller;
-    let timedOut = false;
-    const timer = setTimeout(() => { timedOut = true; controller.abort(); }, REQUEST_TIMEOUT_MS);
-    setState({ kind: 'loading' });
-    try {
-      const document = await fetchReportDocument(query, controller.signal);
-      if (sequence.current === request && !controller.signal.aborted) setState({ kind: 'ready', document });
-    } catch (error) {
-      if (sequence.current === request) setState({ kind: 'error', message: timedOut
-        ? 'The request timed out after 15 seconds. Check the local API before retrying; server work may still be running.'
-        : error instanceof TypeError ? 'Cannot reach the local API. Start the configured API on 127.0.0.1:8000 and retry.'
-        : error instanceof SyntaxError ? 'The API returned unreadable JSON. No measurements were displayed.'
-        : error instanceof Error ? error.message : 'The report could not be loaded. Please retry.' });
-    } finally { clearTimeout(timer); if (sequence.current === request) active.current = null; }
+    await load(signal => fetchReportDocument(query, signal));
   }
 
   return <>
-    <a className="skip-link" href="#query">Skip to report query</a>
-    <header className="masthead"><div className="brand"><span className="monogram" aria-hidden="true">OI</span>Opponent Intelligence</div>
-      <span className="local-tag">Local snapshot · read-only</span></header>
-    <main>
-      <section className="intro"><p className="eyebrow">NFL / Historical report viewer</p>
+      <section className="intro"><p className="eyebrow">Scout / Historical report viewer</p>
         <h1>Know the sample.<br /><span>Then read the tendencies.</span></h1>
         <p>Explore a team's offense or the production its defense allowed. Every report keeps the cutoff, source and denominators in view.</p>
       </section>
@@ -173,20 +135,7 @@ export function App() {
           <label>Season type<select name="season_type" value={draft.season_type} onChange={(e) => edit('season_type', e.target.value)} {...fieldAccessibility('season_type')}>
             <option value="REG">Regular season</option><option value="POST">Postseason</option></select></label>
         </div>
-        <fieldset className="field-controls" aria-describedby="field-help field-coordinate-help">
-          <legend>Pre-play field position (optional)</legend>
-          <p id="field-coordinate-help" className="muted">Yards to the offense’s opponent’s goal line, in either role.
-            20 = opponent’s 20; 80 = own 20. Defense mode does not reverse the coordinates.</p>
-          <div className="field-inputs">
-            {/* Keep invalid text distinguishable from blank (which means omit the filter). */}
-            <label>Minimum yards to goal<input name="yardline_min" type="text" inputMode="decimal" autoComplete="off"
-              value={draft.yardline_min} onChange={(e) => edit('yardline_min', e.target.value)} {...fieldAccessibility('yardline_min', 'field-help field-coordinate-help')} /></label>
-            <label>Maximum yards to goal<input name="yardline_max" type="text" inputMode="decimal" autoComplete="off"
-              value={draft.yardline_max} onChange={(e) => edit('yardline_max', e.target.value)} {...fieldAccessibility('yardline_max', 'field-help field-coordinate-help')} /></label>
-          </div>
-          <p id="field-help" className="muted">Inclusive decimals 0–100; use a dot. Both blank = no field filter.
-            With one bound entered, the blank end defaults to 0 or 100. Any requested range, even 0–100, excludes missing positions.</p>
-        </fieldset>
+        <FieldPositionControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
         <fieldset className="field-controls" aria-describedby="score-help score-perspective-help">
           <legend>Pre-play score difference (optional)</legend>
           <p id="score-perspective-help" className="muted">Offense points minus defense points before the play.
@@ -250,6 +199,40 @@ export function App() {
         <h2>Select a cohort to inspect the evidence.</h2><p>No report has been requested for these controls. No automatic fetches or background refreshes.</p></section>}
       {state.kind === 'error' && <section className="notice error" role="alert"><h2>Report unavailable</h2><p id="query-error">{state.message}</p><p>Correct the query or connection, then select Build report. No previous result is shown.</p></section>}
       {state.kind === 'ready' && <ReportView document={state.document} />}
+  </>;
+}
+
+type Mode = 'scout' | 'decision';
+const modes = ['scout', 'decision'] as const;
+export function App() {
+  const [mode, setMode] = useState<Mode>('scout');
+  const [decisionVisited, setDecisionVisited] = useState(false);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  return <>
+    <a className="skip-link" href={mode === 'scout' ? '#query' : '#decision-query'}>
+      {mode === 'scout' ? 'Skip to report query' : 'Skip to decision query'}</a>
+    <header className="masthead"><div className="brand"><span className="monogram" aria-hidden="true">DI</span>NFL Decision Intelligence</div>
+      <span className="local-tag">Local snapshot · read-only</span></header>
+    <main>
+      <div className="mode-tabs" role="tablist" aria-label="Analysis mode">
+        {modes.map((item, index) => <button key={item} ref={element => { tabs.current[index] = element; }}
+          type="button" role="tab" id={`${item}-tab`} aria-controls={`${item}-panel`}
+          aria-selected={mode === item} tabIndex={mode === item ? 0 : -1}
+          onClick={() => { setMode(item); if (item === 'decision') setDecisionVisited(true); }}
+          onKeyDown={event => {
+            const target = event.key === 'Home' ? 0 : event.key === 'End' ? modes.length - 1
+              : event.key === 'ArrowRight' ? (index + 1) % modes.length
+              : event.key === 'ArrowLeft' ? (index + modes.length - 1) % modes.length : undefined;
+            if (target !== undefined) { event.preventDefault(); tabs.current[target]?.focus(); }
+          }}>{item === 'scout' ? 'Scout' : 'Decision Lab'}</button>)}
+      </div>
+      {/* Keep visited views mounted: draft controls, completed reports and downloads survive mode changes. */}
+      <section role="tabpanel" id="scout-panel" aria-labelledby="scout-tab" tabIndex={0} hidden={mode !== 'scout'}>
+        <ScoutView active={mode === 'scout'} />
+      </section>
+      <section role="tabpanel" id="decision-panel" aria-labelledby="decision-tab" tabIndex={0} hidden={mode !== 'decision'}>
+        {decisionVisited && <DecisionLab active={mode === 'decision'} />}
+      </section>
     </main>
     <footer>Independent portfolio project · No NFL or team affiliation · Local development view, not a deployed product</footer>
   </>;

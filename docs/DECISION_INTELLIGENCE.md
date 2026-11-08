@@ -30,7 +30,10 @@ followed on 2026-11-04, reusing contract v1 with bounded work, shared serving an
 mandatory abstention. Charting applicability and historical feature availability
 remain unverified. The [typed browser contract/client](DECISION_WEB.md) followed on
 2026-11-05 with synthetic HTTP fixtures, shared validation guards and local browser
-integration. Decision rendering and production models remain planned.
+integration. The first rendered Decision Lab form/evidence table and Scout/Decision
+mode tabs followed on 2026-11-06. Optional field-position bounds and ordered
+field/down/distance exclusion accounting followed on 2026-11-07, reusing existing
+query semantics. Score/clock, baseline/interval views and production models remain deferred.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 
@@ -39,11 +42,11 @@ See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 **Scout / Analysis** preserves detailed historical exploration: offense or defense,
 exclusive week cutoff, situational filters, tendencies, EPA, success, down/distance
 splits, matched league context, uncertainty, missingness, provenance and downloadable
-reports/briefs. The current React viewer is this mode, even though its displayed
-branding has not yet changed. It is not a head-to-head matchup prediction.
+reports/briefs. This is the default mode in the React viewer under NFL Decision
+Intelligence branding. It is not a head-to-head matchup prediction.
 
-**Play Caller / Decision Lab** will let a user define a situation, choose a supported
-call and compare alternatives. Begin with Run versus Pass evidence; no game mechanics
+**Play Caller / Decision Lab** now lets a user define a basic situation and inspect
+Run versus Pass evidence; user-call selection and advanced contexts follow later. No game mechanics
 or unsupported playbook concepts. Show why an option appears stronger, not an opaque
 score: frequency, outcomes, denominators, games, league differences and uncertainty.
 Historical associations are not proof of causal optimality, guaranteed future
@@ -63,7 +66,7 @@ Verified immutable PBP → typed Play/Dataset → situational cohort selection
                                          ↓
                                     React Scout
 
-contract-v1 decision evidence → local Decision API → validated browser client → future React Decision Lab
+contract-v1 decision evidence → local Decision API → validated browser client → React Decision Lab
 ```
 
 `snapshots.py`/`ingestion.py` retain acquisition and hash verification; `pbp.py`
