@@ -34,8 +34,10 @@ integration. The first rendered Decision Lab form/evidence table and Scout/Decis
 mode tabs followed on 2026-11-06. Optional field-position bounds and ordered
 field/down/distance exclusion accounting followed on 2026-11-07, reusing existing
 query semantics. Optional pre-play score bounds followed on 2026-11-08 with shared
-controls and ordered conditional missingness. Period/clock, baseline/interval views
-and production models remain deferred.
+controls and ordered conditional missingness. Optional period/clock controls
+followed on 2026-11-09, preserving missing-versus-zero semantics and the full ordered
+context/down/distance ledger. Candidate baseline/interval views and production
+models remain deferred.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 

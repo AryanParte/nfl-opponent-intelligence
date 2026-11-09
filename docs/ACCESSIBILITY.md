@@ -5,6 +5,24 @@ screen-reader certification or public-release claim. Scout's analytics, API,
 schema v2, snapshots and downloadable evidence are unchanged. The original review
 preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
 
+## Decision period/clock follow-up — 2026-11-09
+
+Shared controls preserve Scout behavior and give Decision unique help/error IDs.
+Keyboard order includes period and both seconds bounds. A clock without a period
+focuses the missing period; malformed seconds retain their text and focus their
+own error. Clearing period never silently clears entered bounds. Completed time
+queries and independent Scout drafts survive mode changes.
+
+All 28 desktop/narrow Chromium cases pass. Actual synthetic API checks cover
+period-only/full-clock missingness, combined six-stage accounting, OT/zero/empty
+states and filter-removal recovery. Axe reports no violations in the new scans;
+narrow numeric/clipped table cells retain contrast `incomplete` results for review.
+The focused 320-pixel accounting screenshot was inspected: text reflows, the
+focus outline is visible and wide columns scroll within the named table region.
+No unexpected external requests/page errors occurred; owned servers stopped.
+These checks do not establish assistive-technology or WCAG conformance. The
+existing manual, real-device, zoom and cross-browser gaps remain open.
+
 ## Decision score follow-up — 2026-11-08
 
 Shared text controls retain partial signs for validation and permit a minus sign;

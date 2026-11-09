@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { epa, fetchReportDocument, number, parseQuery, percentage, PERIODS, QueryValidationError, type Draft, type ReportDocument } from './report';
+import { epa, fetchReportDocument, number, parseQuery, percentage, QueryValidationError, type Draft, type ReportDocument } from './report';
 import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
 import { FieldPositionControls } from './FieldPositionControls';
 import { ScoreView } from './ScoreView';
 import { ScoreControls } from './ScoreControls';
 import { TimeView } from './TimeView';
+import { TimeControls } from './TimeControls';
 import { UncertaintyView } from './UncertaintyView';
 import { ReportDownload } from './ReportDownload';
 import { SourceView } from './SourceView';
@@ -138,26 +139,7 @@ function ScoutView({ active }: { active: boolean }) {
         </div>
         <FieldPositionControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
         <ScoreControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
-        <fieldset className="field-controls" aria-describedby="time-help clock-help">
-          <legend>Pre-play period &amp; clock (optional)</legend>
-          <div className="field-inputs">
-            <label>Period<select name="period" value={draft.period} onChange={(e) => edit('period', e.target.value)} {...fieldAccessibility('period', 'time-help')}>
-              <option value="">Unrestricted</option>
-              {PERIODS.map(period => <option key={period} value={period}>{period === 'OT' ? 'OT — all overtime periods' : period}</option>)}
-            </select></label>
-          </div>
-          <p id="time-help" className="muted">Q1–Q4 select one regulation quarter; OT selects all periods numbered 5 or higher.
-            Period-only selection excludes unknown periods but does not exclude missing clocks.</p>
-          <div className="field-inputs">
-            <label>Minimum seconds remaining<input name="clock_min" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.clock_min} onChange={(e) => edit('clock_min', e.target.value)} {...fieldAccessibility('clock_min', 'clock-help')} /></label>
-            <label>Maximum seconds remaining<input name="clock_max" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.clock_max} onChange={(e) => edit('clock_max', e.target.value)} {...fieldAccessibility('clock_max', 'clock-help')} /></label>
-          </div>
-          <p id="clock-help" className="muted">Inclusive whole seconds 0–900 remaining in the selected period at play start, not elapsed time or MM:SS.
-            Clock bounds require an explicit period. Both blank = no clock filter; with one bound entered, the blank end defaults to 0 or 900.
-            Zero is observed, not missing. Any requested clock range excludes missing clocks. Clearing the period does not clear entered bounds.</p>
-        </fieldset>
+        <TimeControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} />
         <label className="comparison-toggle"><input type="checkbox" name="compare_league" checked={draft.compare_league}
           onChange={(e) => edit('compare_league', e.target.checked)} {...fieldAccessibility('compare_league', 'comparison-help')} />
           Compare with other teams in the same role</label>

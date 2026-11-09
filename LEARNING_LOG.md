@@ -3126,3 +3126,66 @@ and test missing period/clock, zero clock, OT, bounds, empty/stale states and mo
 preservation. Candidate baselines/intervals, user choices and downloads follow
 separately. Historical availability, model/charting admission, assistive-technology/
 cross-browser coverage and deployment remain deferred. Do not merge or enable auto-merge.
+
+
+## 2026-11-09 — Decision period/clock selection and ordered exclusions
+
+**Built / why:** Decision Lab now offers Q1–Q4/OT and inclusive seconds remaining
+through shared Scout controls. One ledger shows active field → score → period →
+clock → down → distance counts, so users can see how missing context changes the
+final Run/Pass sample. No preferred call or new calculation is introduced.
+
+**Review:** `web/src/TimeControls.tsx`, `DecisionLab.tsx`, `DecisionContextView.tsx`,
+`App.tsx`, `decision-time.test.tsx`, `web/e2e/scout.spec.ts`,
+`tests_api/test_decision_frontend_contract.py` and `docs/DECISION_WEB.md`.
+Fetched main remains `bc7b9b0`. PR #42 is open; its prior head `5e5e9bf` had green
+push/PR CI, no reviews/comments and a clean 0-ahead/behind checkout. Continued its
+existing branch as explicitly requested by the latest heartbeat; preserved history.
+
+**Sports concepts:** clock is seconds remaining within the pre-play period, not
+elapsed/game time. Q4 excludes overtime; OT groups all periods numbered 5 or higher.
+The input cap is not a season-specific rules validator. Missing periods/clocks,
+known zero, missing EPA and an unobserved call have different meanings. Observed
+outcomes remain descriptive, not causal or validated recommendations.
+
+**Software/statistical concepts / learn:** period-only selection can retain missing
+clocks and work without a clock column. Explicit 0–900 removes unknown clocks;
+one entered end supplies the existing 0/900 default. Requested missing context
+is excluded once at the first applicable stage. Clock survivors are still
+intermediate because down/distance follow. Keep request semantics, response
+validation, display and focus behavior consistent across independent mode state.
+
+**Three review questions:**
+
+1. Why can Q4-only return more plays than Q4 with an explicit 0–900 clock range?
+2. When field, score, period and clock are requested, where is a play missing both
+   period and clock counted, and which stage supplies candidate denominators?
+3. Why must clearing a period preserve entered seconds and prevent a request until
+   the user fixes that dependency, and how do tests prevent stale evidence appearing?
+
+**Verification / self-review:** 453 core / 45 API tests pass on each Python
+3.11/3.12/3.13 with API warnings as errors and passing dependency checks. All 1,032
+frontend tests, TypeScript/build and 28 desktop/narrow Chromium cases pass. Seventeen
+new actual synthetic HTTP fixtures bring the Decision corpus to 59; all prior 42
+and Scout's 71 remain unchanged. Independent counts and real browser checks reconcile
+15 → 12 → 11 → 5 → 3 plays, including final Run frequency 2/3 with only one observed
+EPA. Same-snapshot removal tests distinguish Q4-only 8 from full-clock 7. These are
+invented software verification observations, not football performance evidence.
+
+Reviewed the complete diff for cutoff/source identity, pre-play clock fields,
+inclusive/blank endpoints, the distinct period outside-count key, stage ordering,
+final denominators, unique help IDs, Scout compatibility, safe errors and abstention.
+Removed the obsolete unconditional unrestricted-time summary. No failed tests or
+changed timeouts; no API/schema, formula, dependency, source/license, model or
+automation change. Axe/keyboard/320px scrolling pass; screenshot inspected. Contrast
+incompletes in narrow tables and assistive-technology/cross-browser gaps remain.
+No external browser requests/page errors; owned servers stopped. Final remote SHA,
+GitHub attribution and CI receipt belong in PR #42.
+
+**Remaining / next:** opt-in matched candidate league view, showing same-situation
+leave-team-out Run/Pass evidence, selected-minus-baseline differences with units,
+coverage/shared games and ordered baseline exclusions. Test off/on, empty/missing
+baseline, unchanged selected evidence, context matching and stale responses without
+ranking or fallback. Intervals, user choices and downloads follow separately.
+Historical availability, model/charting admission and deployment remain deferred.
+Do not merge or enable auto-merge.

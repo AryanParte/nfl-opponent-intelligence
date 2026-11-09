@@ -152,7 +152,7 @@ test('Decision keyboard navigation, cancelled mode switches and contained table 
   await page.keyboard.press('Enter');
   const decision = page.getByRole('tabpanel', { name: 'Decision Lab' });
   await page.keyboard.press('Tab'); await expect(decision).toBeFocused();
-  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max', 'yardline_min', 'yardline_max', 'score_min', 'score_max']) {
+  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max', 'yardline_min', 'yardline_max', 'score_min', 'score_max', 'period', 'clock_min', 'clock_max']) {
     await page.keyboard.press('Tab');
     const input = decision.locator(`[name="${name}"]`);
     await expect(input).toBeFocused();
@@ -556,5 +556,89 @@ test('Decision score filters preserve pre-play signs and ordered missingness thr
   await expect(decision.getByRole('status')).toContainText('12 eligible plays');
   expect(await accounting.getByRole('rowheader').allTextContents()).toEqual(['Field position', 'Down', 'Distance']);
   await expect(decision.getByText('Pre-play score: unrestricted; missing scores are not excluded by score.')).toBeVisible();
+  await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible();
+});
+
+test('Decision period and clock filters preserve missingness and all ordered stages through the real API', async ({ page }, info) => {
+  await openViewer(page);
+  const decision = await openDecision(page);
+  const period = decision.getByRole('combobox', { name: 'Period', exact: true });
+  const lower = decision.getByLabel('Minimum seconds remaining', { exact: true });
+  const upper = decision.getByLabel('Maximum seconds remaining', { exact: true });
+  const compare = decision.getByRole('button', { name: 'Compare Run and Pass' });
+  let requests = 0;
+  page.on('request', request => { if (new URL(request.url()).pathname === '/api/v1/decision') requests++; });
+  await upper.fill('0'); await upper.press('Enter');
+  await expect(period).toBeFocused(); await expect(period).toHaveAccessibleDescription(/Choose an explicit period/);
+  await expect(upper).toHaveValue('0'); expect(requests).toBe(0);
+  await scanAccessibility(page, info, 'decision-time-invalid');
+  await period.selectOption('Q4'); await upper.fill('2:00'); await upper.press('Enter');
+  await expect(upper).toBeFocused(); await expect(upper).toHaveValue('2:00');
+  await expect(upper).toHaveAccessibleDescription(/Clock bounds must be whole seconds/); expect(requests).toBe(0);
+  await upper.fill(''); await compare.click();
+  await expect(decision.getByRole('status')).toContainText('8 eligible plays'); // Q4 includes one missing clock.
+  await expect(decision.getByText(/Clock unrestricted: period selection alone/)).toBeVisible();
+  await lower.fill('0'); await upper.fill('900'); await compare.click();
+  await expect(decision.getByRole('status')).toContainText('7 eligible plays'); // Same snapshot, explicit full range excludes it.
+  await lower.fill(''); await upper.fill('120');
+  await decision.getByLabel('Maximum yards to goal', { exact: true }).fill('20');
+  await decision.getByLabel('Minimum score difference', { exact: true }).fill('-7');
+  await decision.getByLabel('Maximum score difference', { exact: true }).fill('0');
+  const pending = page.waitForResponse(response => new URL(response.url()).pathname === '/api/v1/decision');
+  await upper.press('Enter'); const response = await pending;
+  expect(response.status()).toBe(200);
+  const params = new URL(response.url()).searchParams;
+  expect(params.get('period')).toBe('Q4'); expect(params.get('clock_max')).toBe('120'); expect(params.has('clock_min')).toBe(false);
+  const evidence = await response.json();
+  expect(evidence.population).toEqual({ plays: 3, games: 1 });
+  expect(evidence.candidates[0]).toMatchObject({ plays: 2, epa_observations: 1, missing_epa: 1, epa_per_play: -.4 });
+  expect(evidence.candidates[0].frequency).toBeCloseTo(2 / 3);
+  expect(evidence.candidates[1]).toMatchObject({ plays: 1, epa_observations: 1, epa_per_play: .8 });
+  await expect(decision.getByRole('status')).toContainText('3 eligible plays');
+  const accounting = decision.getByRole('region', { name: 'Decision filter accounting, scroll horizontally on small screens' });
+  expect(await accounting.getByRole('rowheader').allTextContents()).toEqual(['Field position', 'Pre-play score', 'Period', 'Clock', 'Down', 'Distance']);
+  const rows = await accounting.getByRole('row').all();
+  const expected = [['15', '2', '1', '12'], ['12', '1', '0', '11'], ['11', '1', '5', '5'], ['5', '1', '1', '3'], ['3', '0', '0', '3'], ['3', '0', '0', '3']];
+  for (let i = 1; i < rows.length; i++) expect(await rows[i].getByRole('cell').allTextContents()).toEqual(expected[i - 1]);
+  await expect(decision.getByText('0–120 seconds remaining at play start', { exact: true })).toBeVisible();
+  await expect(decision.getByText(/a play missing both period and clock is removed at period/)).toBeVisible();
+  await scanAccessibility(page, info, 'decision-time-loaded');
+  await page.setViewportSize({ width: 320, height: 900 });
+  await accounting.focus(); await accounting.press('ArrowRight');
+  await expect.poll(() => accounting.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await accounting.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('decision-time-accounting-320.png') });
+  await scanAccessibility(page, info, 'decision-time-320');
+  await page.getByRole('tab', { name: 'Scout' }).click();
+  await expect(page.getByRole('combobox', { name: 'Period', exact: true })).toHaveValue('');
+  await page.getByRole('combobox', { name: 'Period', exact: true }).selectOption('Q2');
+  await page.getByRole('tab', { name: 'Decision Lab' }).click();
+  await expect(period).toHaveValue('Q4'); await expect(upper).toHaveValue('120');
+  await expect(decision.getByRole('status')).toContainText('3 eligible plays');
+  await period.selectOption('OT'); await compare.click();
+  await expect(decision.getByRole('status')).toContainText('2 eligible plays'); // Both overtime periods 5 and 6.
+  await expect(decision.getByText('OT — all periods numbered 5 or higher', { exact: true })).toBeVisible();
+  await expect(decision.getByRole('row', { name: /^Run/ })).toContainText('-0.600');
+  await expect(decision.getByRole('row', { name: /^Pass/ })).toContainText('0.400');
+  await period.selectOption('Q4'); await lower.fill('0'); await upper.fill('0'); await compare.click();
+  await expect(decision.getByRole('status')).toContainText('1 eligible plays');
+  await expect(decision.getByText('0–0 seconds remaining at play start', { exact: true })).toBeVisible();
+  await expect(decision.getByRole('row', { name: /^Run/ })).toContainText('-0.400');
+  await lower.fill('1'); await upper.fill('59'); await compare.click();
+  await expect(decision.getByRole('heading', { name: 'No eligible plays match this situation.' })).toBeVisible();
+  await scanAccessibility(page, info, 'decision-time-empty');
+  await period.selectOption('');
+  await expect(lower).toHaveValue('1'); await expect(upper).toHaveValue('59');
+  await expect(decision.getByRole('article')).toHaveCount(0);
+  const beforeInvalid = requests;
+  await compare.click(); await expect(period).toBeFocused(); expect(requests).toBe(beforeInvalid);
+  await lower.fill(''); await upper.fill('');
+  const cleared = page.waitForResponse(result => new URL(result.url()).pathname === '/api/v1/decision');
+  await compare.click(); const clearedParams = new URL((await cleared).url()).searchParams;
+  for (const key of ['period', 'clock_min', 'clock_max']) expect(clearedParams.has(key)).toBe(false);
+  expect(clearedParams.get('yardline_max')).toBe('20'); expect(clearedParams.get('score_min')).toBe('-7');
+  await expect(decision.getByRole('status')).toContainText('11 eligible plays');
+  expect(await accounting.getByRole('rowheader').allTextContents()).toEqual(['Field position', 'Pre-play score', 'Down', 'Distance']);
   await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible();
 });

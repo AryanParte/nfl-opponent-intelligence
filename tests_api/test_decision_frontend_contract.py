@@ -52,6 +52,24 @@ QUERIES = {
     "score_field_unrestricted": BASE | {"yardline_max": 20.5},
     "score_zero_lower": BASE | {"score_min": 0},
     "score_distance_empty": BASE | {"down": 2, "distance_min": 6, "distance_max": 6, "score_min": -7, "score_max": 0},
+    "time_unfiltered": BASE,
+    "time_period": BASE | {"period": "Q4"},
+    "time_period_no_clock": BASE | {"period": "Q4"},
+    "time_clock": BASE | {"period": "Q4", "clock_max": 120},
+    "time_q1": BASE | {"period": "Q1"},
+    "time_q2": BASE | {"period": "Q2", "clock_max": 120},
+    "time_q3": BASE | {"period": "Q3"},
+    "time_ot": BASE | {"period": "OT", "clock_max": 120},
+    "time_lower_only": BASE | {"period": "Q4", "clock_min": 900},
+    "time_full_clock": BASE | {"period": "Q4", "clock_min": 0, "clock_max": 900},
+    "time_four_stage": BASE | {"yardline_max": 20, "score_min": -7, "score_max": 0,
+                              "period": "Q4", "clock_max": 120},
+    "time_context_unrestricted": BASE | {"yardline_max": 20, "score_min": -7, "score_max": 0},
+    "time_all_missing_period": BASE | {"period": "Q4", "clock_max": 120},
+    "time_all_missing_clock": BASE | {"period": "Q4", "clock_max": 120},
+    "time_empty_clock": BASE | {"period": "Q4", "clock_min": 1, "clock_max": 59},
+    "time_distance_empty": BASE | {"period": "Q4", "clock_max": 120, "distance_min": 11, "distance_max": 11},
+    "time_boundary": BASE | {"period": "Q4", "clock_min": 120, "clock_max": 120},
 }
 QUERIES.update({"bootstrap_" + name: BASE | {"before_week": 19, "compare_league": True,
                 "bootstrap_repetitions": 200, "bootstrap_seed": 7}
@@ -78,6 +96,8 @@ def decision_fixtures():
                 variant = score_rows(rows, name)
             if name in ("context", "overtime", "zero_clock"):
                 variant = time_rows(rows, "time_four_stage")
+            if name.startswith("time_"):
+                variant = time_rows(rows, name)
             if name.startswith("bootstrap_"):
                 variant = uncertainty_rows(rows, name.removeprefix("bootstrap_"))
             if name == "bootstrap_unobserved":

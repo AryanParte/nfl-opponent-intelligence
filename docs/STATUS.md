@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-11-08, the long-term direction is
+As of the daily run on 2026-11-09, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
 builder and its local API include matched candidate baselines and opt-in
@@ -47,28 +47,31 @@ the rendered Decision Lab (mode and field controls merged through PR #41).
 Mode tabs retain drafts, completed results and
 Scout downloads, while edits and mode changes cancel pending work and reject late
 responses. The narrow form selects offense/team/season/type/cutoff/exact down and
-inclusive distance, with optional field-position and pre-play score bounds. Effective
-coordinates/signs and ordered field → score → down → distance counts include only
-active optional filters. Score missingness is conditional on earlier field survival;
-final candidate denominators use distance survivors. Blank score ends are unbounded,
-while zero means a known tie. Blank field bounds differ from explicit 0–100.
-The fixed Run/Pass table shows frequency, EPA, success, counts,
-games, denominators, missing states, flags, warnings and provenance; a preferred
-call is always withheld. Shared request/source components preserve Scout behavior.
-Forty-two actual synthetic API fixtures include twelve new score/context responses;
-all 30 previous Decision fixture values are unchanged. Original decoded Decision
-JSON is retained for a later download flow. Scout schema v2, controls, briefs,
-downloads and all 71 existing API fixtures are preserved. No new dependency, model execution, training, ranking, charting
-admission, database, deployment or automation change.
-Actual assistive-technology/cross-browser
-gaps remain in the [bounded accessibility review](ACCESSIBILITY.md), not a WCAG
-certification. P1.8 is complete within its single-worker, local PBP-only scope.
-Next: optional Decision Lab period/clock controls using existing validation for
-Q1–Q4/OT and inclusive seconds remaining. Extend accounting to active field → score →
-period → clock → down → distance; test missing context, zero clock, OT, bounds,
-empty/stale results and mode preservation. League/interval views, user-choice comparison and Decision
-downloads follow separately. No assumed historical in-season availability, serving
-model or action ranking.
+inclusive distance, with optional field-position, pre-play score and period/clock
+filters. Shared controls preserve Scout behavior and independent mode state.
+Q1–Q4/OT and inclusive whole seconds require an explicit period for clock bounds;
+period-only selection can retain missing clocks, while an explicit 0–900 range
+excludes them. Effective bounds and ordered active field → score → period → clock →
+down → distance counts separate unknown context from outside values. Only final
+distance survivors supply candidate denominators. Score ends remain unbounded;
+field/clock omitted-end defaults differ. All zero values remain observed, not missing.
+The fixed Run/Pass table shows frequency, EPA, success, counts, games, denominators,
+missing states, flags, warnings and provenance; a preferred call is always withheld.
+Fifty-nine actual synthetic Decision HTTP fixtures include seventeen new time
+responses; all 42 prior values and 71 Scout fixtures remain unchanged. Original
+Decision JSON is retained for a later download flow. Scout schema v2, controls,
+briefs and downloads are preserved. No new dependency, model execution, training,
+ranking, charting admission, database, deployment or automation change.
+Actual assistive-technology/cross-browser gaps remain in the
+[bounded accessibility review](ACCESSIBILITY.md), not a WCAG certification.
+P1.8 is complete within its single-worker, local PBP-only scope.
+Next: opt-in matched candidate league comparison using existing validated responses.
+Show same-situation leave-team-out Run/Pass evidence, selected-minus-baseline
+differences with explicit units, coverage/shared games and ordered baseline
+exclusions. Test off/on, empty/missing baseline, unchanged selected evidence,
+context matching, stale responses and abstention. Intervals, user-choice comparison
+and Decision downloads follow separately. No assumed historical in-season
+availability, serving model or action ranking.
 The 8 AM automation is unchanged.
 
 P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
@@ -82,11 +85,16 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/decision-score-filter`, created from fetched `origin/main`
-  at `bc7b9b0` after PR #41 merged. The prior checkout was clean and matched its
-  upstream (0 ahead/behind), with no unpublished commits; fast-forward reconciliation
-  confirmed it was current. Only main remained on the remote, with no open PRs or
-  review/comment feedback. Preserve history; do not merge or enable auto-merge.
+- Working branch: `codex/decision-score-filter`, continued on 2026-11-09 because
+  [PR #42](https://github.com/AryanParte/nfl-opponent-intelligence/pull/42) is still open.
+  The latest heartbeat explicitly requests continuing the appropriate existing
+  branch/PR. Fetched main remains `bc7b9b0`; prior local/upstream head `5e5e9bf`
+  was clean and 0 ahead/behind. Remote has main and this branch, with no review or
+  comment feedback. Prior-head push/PR CI passed all eight jobs on first attempts
+  ([push](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/42489471922),
+  [PR](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/42489531894)).
+  Baseline 453 core / 45 API passed on Python 3.13 before edits. Preserve history;
+  do not duplicate the open work, merge or enable auto-merge.
 - Publication: consult this branch's PR for the exact pushed SHA, GitHub attribution
   and remote CI receipt. Local results below do not substitute for remote checks.
 - Previous Decision view/field review: [PR #41](https://github.com/AryanParte/nfl-opponent-intelligence/pull/41),
@@ -305,6 +313,45 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.9 Decision period/clock controls/accounting — 2026-11-09
+
+Decision Lab reuses shared `TimeControls` and the existing query validator.
+Q1–Q4/OT and inclusive whole seconds support period-only selection, omitted-end
+clock defaults, known zero and explicit missingness. `DecisionContextView` now
+shows active field → score → period → clock → down → distance; period uses the
+returned `outside_period` count. Even the clock-stage retained count is intermediate.
+No data, analytical formula, request/schema, dependency or source/terms change.
+
+Seventeen additional actual synthetic HTTP fixtures cover all quarters, pooled OT,
+period-only with an absent clock column, zero/equal/one-sided/full/empty bounds,
+all-missing contexts and final-distance exclusion. All 42 previous Decision fixture
+values and 71 Scout fixtures (58 standard, 13 uncertainty) are unchanged. Forty-four
+new component cases verify independent counts, request omission/defaults, validation
+focus, stale results, mode state, safe errors and malformed context/ledger rejection.
+Clock-removal/time-removal checks hold the snapshot and other filters fixed.
+
+Final local checks: **453 core / 45 API** on each Python 3.11/3.12/3.13 (API warnings
+as errors; dependency checks pass), **1,032 frontend tests**, TypeScript/build, and
+**28 desktop/narrow Chromium cases** in 39.5 seconds. The actual API/browser flow
+reconciles 15 → 12 → 11 → 5 → 3 invented plays; final Run frequency is 2/3 but EPA
+uses one observed value (−0.4), with Pass EPA 0.8. Q4-only retains 8 plays; explicit
+0–900 retains 7 because one clock is missing. OT pools periods 5/6; zero and empty
+ranges remain distinct. These are software checks, not real football findings.
+Keyboard, axe, independent mode drafts and 320-pixel table scrolling pass. The
+focused screenshot was inspected; narrow contrast incompletes remain documented.
+No unexpected browser requests/errors; test-owned ports 8000/5173 were stopped.
+
+Self-review checked the complete branch diff, including the existing score slice:
+pre-play/period-relative meaning, inclusive endpoints, separate period outside keys,
+ordered conditional counts, final denominators, source/cutoff preservation, required
+period focus, safe errors, unique help IDs and retained Scout behavior. Removed the
+old unconditional unrestricted-time summary when wiring the controls. No test failure
+or timeout adjustment; no model/ranking admission or automation change. Exact pushed
+SHA, GitHub attribution and final CI receipt belong in PR #42.
+
+Next: the opt-in matched candidate league view described above. Intervals, user-call
+comparison and downloads remain separate units; no deployment or production model.
 
 ### P1.9 Decision pre-play score controls/accounting — 2026-11-08
 
@@ -1676,10 +1723,13 @@ concurrency tests. P1.9's typed browser contract/client now preserves exact requ
 null/withheld evidence, provenance and abstention using actual synthetic endpoint
 fixtures. Its first mode/form/candidate-evidence view is now implemented, preserving
 Scout state and keeping estimation in the core. Optional field-position bounds now
-show effective coordinates and ordered field/down/distance exclusions. Next:
-optional period/clock controls and active field → score → period → clock → down →
-distance accounting. Score controls now preserve unbounded ends, pre-play signs and
-conditional missingness; period/clock must preserve the same boundaries and cancellation.
+show effective coordinates and ordered field/down/distance exclusions. Score
+controls preserve unbounded ends, pre-play signs and conditional missingness.
+Optional period/clock controls now add missing/zero/default semantics and active
+field → score → period → clock → down → distance accounting. Next: opt-in matched
+candidate league evidence, differences, coverage/shared games and baseline stage
+counts using the existing API; preserve selected evidence and explicit unavailable
+states. Intervals, user choices and downloads remain later units.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual

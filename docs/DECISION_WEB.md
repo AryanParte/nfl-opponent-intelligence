@@ -4,17 +4,16 @@ Implemented 2026-11-05 as the first P1.9 slice. `web/src/decision.ts` consumes t
 existing [Decision API](API.md#decision-request-contract), contract v1. The first
 rendered Decision Lab mode followed on 2026-11-06 in the same app as Scout;
 optional field-position controls and exclusion accounting followed on 2026-11-07,
-then pre-play score controls on 2026-11-08. No
-package, API, core formula or data source changed.
+then pre-play score controls on 2026-11-08 and period/clock controls on 2026-11-09.
+No package, API, core formula or data source changed.
 
 ## First rendered slice
 
 Select **Decision Lab** in the mode tabs, then submit an offense team code,
 season/type, exclusive before-week cutoff, one exact down and inclusive whole-yard
 distance bounds. Defaults are inputs, not asserted source coverage. The first
-form defaults to unrestricted field position and score, with optional inclusive
-bounds for both. Period/clock stay unrestricted, comparison off and bootstrap
-unrequested. It does not offer defense/opponent conditioning, a preferred call,
+form defaults to unrestricted field position, score and period/clock, with optional
+context controls. Comparison stays off and bootstrap unrequested. It does not offer defense/opponent conditioning, a preferred call,
 user-call grading or advanced play families.
 
 `DecisionLab.tsx` renders the validated selected-offense population and fixed Run,
@@ -59,7 +58,7 @@ opponent's goal line: 20 is the opponent's 20, 80 is the offense's own 20, follo
 the [nflverse field definition](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv).
 
 `DecisionContextView.tsx` renders the validated effective bounds and selected
-offense accounting in order: field → score → down → distance, including only active
+offense accounting in order: field → score → period → clock → down → distance, including only active
 optional stages after season/type/exclusive week selection. Each row displays before, missing, outside and after counts from
 the API. Down/distance are required at ingestion, so their missing counts are zero.
 Only final distance-stage survivors supply candidate metrics/games; earlier
@@ -67,7 +66,7 @@ counts are intermediate. Missing EPA is separate, and stage exclusions already
 belong to the global outside-cohort count. Do not sum them into it again.
 This is a play cohort, not drive-level red-zone efficiency or a complete game state.
 No preferred call is added. The view must be extended with every newly exposed
-context stage; it currently supports field position and pre-play score.
+context stage; it supports field position, pre-play score, period and clock.
 
 ## Optional pre-play score difference
 
@@ -91,6 +90,34 @@ shows down/distance, so the score-stage count is still intermediate. Missing EPA
 remains separate. An absent requested score column is an error; a present column
 with all missing values may return an empty cohort. Clearing score bounds preserves
 field selection and requires a new explicit request, with no stale or fallback result.
+
+## Optional pre-play period and clock
+
+`TimeControls.tsx` is shared with Scout, preserving its labels and IDs; Decision
+uses separate help IDs and independent state. Q1–Q4 select one regulation quarter;
+OT selects every period numbered 5 or higher under the existing cohort contract.
+Clock bounds require a period, use inclusive whole seconds remaining within that
+period (0–900), and never interpret MM:SS or elapsed/half/game clocks. The source
+fields remain `qtr` and `quarter_seconds_remaining`, following the
+[nflverse dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv).
+No new source, terms or enrichment is introduced.
+
+Both blank clock ends omit filtering. One entered end defaults its companion to
+0 or 900; an explicit 0–900 range excludes missing clocks, unlike period-only
+selection. Zero is observed, not missing. Period-only selection works even when
+the snapshot has no clock column; requesting an absent context column is an error.
+A present but entirely missing requested column may yield an empty cohort.
+Clearing the period preserves entered bounds and produces a linked validation
+error until the clock bounds are cleared or an explicit period is restored.
+
+The ledger reads the API's `outside_period` for period and `outside_range` for the
+other stages, after any field/score selection. Clock receives only period survivors;
+a play missing both values is removed once at period. Down/distance still follow:
+even the clock-stage count is intermediate. No imputation, automatic widening or
+fallback occurs. Q4 excludes OT; Q4 0–120 does not define a game's final two minutes.
+OT bounds apply separately within each overtime period, not cumulatively. The
+input maximum does not certify season-specific overtime rules. These are historical
+cohorts, not complete game states or validated recommendations.
 
 ## Request and response boundaries
 
@@ -148,7 +175,7 @@ manifest metadata, source completeness, causal validity or historical availabili
 
 ## Reproducible evidence
 
-`tests_api/test_decision_frontend_contract.py` freezes **42 actual HTTP responses**
+`tests_api/test_decision_frontend_contract.py` freezes **59 actual HTTP responses**
 in `web/src/__fixtures__/decisions.json`. Observations, source IDs/timestamps and
 labels are explicitly synthetic; fixtures never enter the live app. Snapshot bytes
 and hashes are created with the existing factory, and acquisition/socket calls are
@@ -188,6 +215,17 @@ reject wrong signs/perspective/bounds/order/chains. Real browser tests reconcile
 empty and cleared-bound recovery, mode state, keyboard order and 320-pixel scrolling.
 These invented outcomes verify the software, not football performance.
 
+Seventeen time fixtures add period-only/absent-clock-column, all regulation
+quarters, pooled OT, zero/equal/one-sided/full/empty bounds, all-missing contexts,
+combined filters and a final distance-stage empty cohort. All prior 42 Decision
+fixtures and 71 Scout fixtures (58 standard and 13 uncertainty) remain unchanged.
+Independent expectations reconcile all six active stages to final candidates.
+Clearing-clock and clearing-time tests hold snapshot and earlier filters fixed;
+mutations reject wrong clock sources/timing, bounds, missing policies and ledgers.
+The browser checks 15 → 12 → 11 → 5 → 3 survivors, period-only versus explicit
+full-clock missingness, OT, zero clock, recovery, mode state and keyboard scrolling.
+These synthetic tests verify implementation, not statistical or football validity.
+
 Run the normal core/API/browser checks in [WEB.md](WEB.md). To intentionally
 regenerate only the Decision fixtures with optional API dependencies installed:
 
@@ -200,9 +238,10 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add optional period/clock controls using existing validation: Q1–Q4/OT and inclusive
-seconds remaining, with clock requiring a period. Extend the ledger to active
-field → score → period → clock → down → distance; test missing periods/clocks,
-zero clock, OT, bounds and empty/stale states. Candidate league/interval views, user-choice
-comparison and downloads follow separately. No ranking/model, new data layer,
-database or deployment is implied by this view.
+Add an opt-in matched candidate league view using existing validated responses.
+Show same-situation leave-team-out Run/Pass evidence, selected-minus-baseline
+differences with explicit units, coverage/shared games and baseline stage counts.
+Keep selected evidence unchanged and missing/empty baselines explicit; test
+request toggling, context matching, stale responses and abstention. Uncertainty
+views, user-choice comparison and downloads follow separately. No ranking/model,
+new data layer, database or deployment is implied by this view.
