@@ -41,7 +41,8 @@ all 22 contextual fields deferred from serving. P1.8's PBP-only decision API is
 implemented; unresolved charting does not block it or silently become serving
 evidence. P1.9's typed browser contract/client and first mode/form/evidence view
 are implemented, including optional field-position/score controls and ordered exclusions.
-Optional Decision period/clock controls are implemented; matched candidate league views are next.
+Optional Decision period/clock controls and matched candidate league views are
+implemented; bounded game-support/uncertainty views are next.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -356,7 +357,7 @@ One local worker remains the supported scope; no cross-process capacity guarante
 ### P1.9 — Play Caller / Decision Lab UI
 
 - [x] Typed browser contract/parser and bounded request client for Decision v1,
-      backed by 59 actual synthetic API fixtures, mutation/error tests and a real
+      backed by 64 actual synthetic API fixtures, mutation/error tests and a real
       browser-to-proxy-to-API check. Preserve denominator/null/withheld distinctions,
       provenance, optional blocks and mandatory abstention; no browser estimation.
       Shared guards retain Scout schema v2 and all 71 existing API fixtures.
@@ -386,13 +387,21 @@ One local worker remains the supported scope; no cross-process capacity guarante
       period → clock → down → distance accounting separates missing periods/clocks
       from outside values and final candidate denominators. Seventeen added actual
       synthetic HTTP fixtures; 1,032 frontend and 28 desktop/narrow browser cases pass.
-- **Next unit:** opt-in matched candidate league comparison in Decision Lab. Reuse
-  returned same-situation leave-team-out Run/Pass evidence, selected-minus-baseline
-  differences (percentage points for rates), coverage/shared-game counts and ordered
-  baseline exclusions. Test off/on, missing/empty baseline, unchanged selected
-  evidence, context matching, stale results and abstention; no fallback estimates.
-  Uncertainty views, user-choice comparison and Decision JSON downloads remain
-  separate later units. No model/ranking/data-layer/storage/deployment work.
+- [x] Opt-in matched candidate league view (2026-11-10): reuse same-situation
+      leave-team-out Run/Pass evidence, signed selected-minus-baseline differences,
+      pooled play denominators, team/game/shared-game coverage and ordered baseline
+      exclusions. Preserve selected evidence and distinguish empty cohorts, absent
+      calls, missing EPA and zero; no ranking or wider fallback. Five additional
+      synthetic HTTP fixtures; 1,059 frontend and 30 desktop/narrow browser cases pass.
+- **Next unit:** bounded opt-in candidate game-support/exploratory uncertainty view.
+  Reuse existing contract, guards and interval presentation; expose 200–1,000
+  repetitions and an optional uint32 seed. Distinguish parent-game frequency support
+  from observed-EPA game support, and show returned selected/baseline/difference
+  intervals with unavailable, withheld, degenerate and valid-draw states. Test exact
+  requests, on/off, empty/sparse evidence, stale responses and unchanged point
+  estimates. No Pass-minus-Run contrast interval, preferred call or browser resampling.
+  User-choice comparison and Decision JSON downloads follow separately. No new
+  model/data layer, storage or deployment.
 - [ ] Situation definition, supported-call selection and comparison against
       alternatives, with clear historical versus model evidence labels.
 - [ ] Explain frequency/outcomes/league context/support/provenance; honest empty,

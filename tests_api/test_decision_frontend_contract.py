@@ -70,6 +70,11 @@ QUERIES = {
     "time_empty_clock": BASE | {"period": "Q4", "clock_min": 1, "clock_max": 59},
     "time_distance_empty": BASE | {"period": "Q4", "clock_max": 120, "distance_min": 11, "distance_max": 11},
     "time_boundary": BASE | {"period": "Q4", "clock_min": 120, "clock_max": 120},
+    "league_multi": BASE | {"compare_league": True},
+    "league_multi_plain": BASE,
+    "league_missing_epa": BASE | {"compare_league": True},
+    "league_selected_missing_epa": BASE | {"compare_league": True},
+    "league_unobserved_selected_run": BASE | {"compare_league": True},
 }
 QUERIES.update({"bootstrap_" + name: BASE | {"before_week": 19, "compare_league": True,
                 "bootstrap_repetitions": 200, "bootstrap_seed": 7}
@@ -79,6 +84,35 @@ QUERIES["bootstrap_selected"].update(compare_league=False)
 del QUERIES["bootstrap_selected"]["bootstrap_seed"]
 QUERIES["bootstrap_empty"].update(before_week=1)
 QUERIES["bootstrap_empty_selected"].update(team="ZZZ")
+
+
+def league_rows(rows, name):
+    """Invented unequal team mixes: 6 baseline plays across ATL/NYG/DAL, 3 games.
+
+    Runs: -1, 2; passes: existing 3 plus 0, missing, 1. Pooled run frequency
+    is 2/6, not the mean of the three team rates (1/3, 1/2, 0).
+    CAR is unchanged unless the named missing/unobserved variant requests it.
+    """
+    variant = list(rows)
+    extra = [
+        ("ATL", rows[0]["game_id"], 1, "run", "-1"),
+        ("ATL", rows[0]["game_id"], 1, "pass", "0"),
+        ("NYG", "SYNTHETIC_LEAGUE_02", 2, "run", "2"),
+        ("NYG", "SYNTHETIC_LEAGUE_02", 2, "pass", ""),
+        ("DAL", "SYNTHETIC_LEAGUE_03", 1, "pass", "1"),
+    ]
+    for play_id, (team, game, week, call, epa) in enumerate(extra, 301):
+        variant.append(rows[0] | {"posteam": team, "defteam": "CAR", "game_id": game,
+            "play_id": str(play_id), "week": str(week), "play_type": call,
+            "qb_dropback": "1" if call == "pass" else "0", "epa": epa})
+    if name == "league_missing_epa":
+        return [row | {"epa": ""} if row["posteam"] != "CAR" else row for row in variant]
+    if name == "league_selected_missing_epa":
+        return [row | {"epa": ""} if row["posteam"] == "CAR" else row for row in variant]
+    if name == "league_unobserved_selected_run":
+        return [row | {"qb_dropback": "1", "play_type": "pass"}
+                if row["posteam"] == "CAR" and row["play_type"] in ("run", "pass") else row for row in variant]
+    return variant
 
 
 def decision_fixtures():
@@ -98,6 +132,8 @@ def decision_fixtures():
                 variant = time_rows(rows, "time_four_stage")
             if name.startswith("time_"):
                 variant = time_rows(rows, name)
+            if name.startswith("league_"):
+                variant = league_rows(rows, name)
             if name.startswith("bootstrap_"):
                 variant = uncertainty_rows(rows, name.removeprefix("bootstrap_"))
             if name == "bootstrap_unobserved":

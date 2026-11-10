@@ -1,5 +1,6 @@
 import type { Decision } from './decision';
-import { number, scoreRange } from './report';
+import { scoreRange } from './report';
+import { DecisionFilterTable } from './DecisionFilterTable';
 
 /** Show returned context stages in selection order; final distance survivors feed metrics. */
 export function DecisionContextView({ decision }: { decision: Decision }) {
@@ -8,15 +9,6 @@ export function DecisionContextView({ decision }: { decision: Decision }) {
   const unrestrictedScore = <p className="muted">Pre-play score: unrestricted; missing scores are not excluded by score.</p>;
   const unrestrictedTime = <p className="muted">Period and clock: unrestricted; no time-context exclusions.</p>;
   if (!field && !score && !period) return <>{unrestrictedField}{unrestrictedScore}{unrestrictedTime}</>;
-  const quality = decision.data_quality;
-  const rows = [
-    ...(field ? [{ label: 'Field position', counts: quality.field_position_filter!, missing: 'missing_yardline_100', outside: 'outside_range' }] : []),
-    ...(score ? [{ label: 'Pre-play score', counts: quality.score_differential_filter!, missing: 'missing_score_differential', outside: 'outside_range' }] : []),
-    ...(period ? [{ label: 'Period', counts: quality.period_filter!, missing: 'missing_qtr', outside: 'outside_period' }] : []),
-    ...(clock ? [{ label: 'Clock', counts: quality.clock_filter!, missing: 'missing_quarter_seconds_remaining', outside: 'outside_range' }] : []),
-    { label: 'Down', counts: quality.down_filter!, missing: 'missing_down', outside: 'outside_range' },
-    { label: 'Distance', counts: quality.distance_filter!, missing: 'missing_yards_to_go', outside: 'outside_range' },
-  ];
   return <section className="panel field-position" aria-labelledby="decision-context-title">
     <div className="section-heading"><h3 id="decision-context-title">Situation filters</h3><span>Returned filters · inclusive</span></div>
     {field ? <><h4>Pre-play field position</h4>
@@ -45,16 +37,7 @@ export function DecisionContextView({ decision }: { decision: Decision }) {
         : 'No clock stage was requested; missing clocks can remain.'}
       {' '}Zero seconds is observed, not missing. No substitution from elapsed, half/game clocks or later outcomes.</p>}
     <p className="table-hint muted">Scroll the accounting table horizontally to read all columns.</p>
-    <div className="table-scroll" role="region" tabIndex={0} aria-label="Decision filter accounting, scroll horizontally on small screens">
-      <table><caption className="sr-only">Selected offense exclusions after season and exclusive week cutoff</caption>
-        <thead><tr><th scope="col">Stage</th><th scope="col">Before filter</th><th scope="col">Missing value</th>
-          <th scope="col">Outside filter</th><th scope="col">After filter</th></tr></thead>
-        <tbody>{rows.map(({ label, counts, missing, outside }) => <tr key={label}><th scope="row">{label}</th>
-          <td>{number(counts.plays_before_filter)}</td><td>{number(counts[missing])}</td>
-          <td>{number(counts[outside])}</td><td>{number(counts.plays_after_filter)}</td>
-        </tr>)}</tbody>
-      </table>
-    </div>
+    <DecisionFilterTable cohort={decision.cohort} quality={decision.data_quality} />
     <p className="muted">Counts before the final distance stage are intermediate. Candidate metrics and games use only final distance-stage survivors.
       Missing EPA is counted separately. Stage exclusions already belong to the global outside-cohort count; do not add them again.</p>
   </section>;

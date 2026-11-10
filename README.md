@@ -7,8 +7,9 @@ prepared for. The existing Opponent Intelligence functionality is the **Scout /
 Analysis** mode. The same app now includes a narrow **Decision Lab**: define an
 offense, historical cutoff, exact down, inclusive distance and optional field-position
 and pre-play score bounds, plus period/clock selection, then inspect Run and Pass
-evidence with explicit denominators, missing states
-and no preferred call. Ordered exclusion counts explain which plays reach the final sample.
+evidence with explicit denominators, missing states and optional matched league
+comparisons. No preferred call is selected. Ordered exclusion counts explain which
+plays reach the final sample.
 The existing builder, local API and typed browser client supply both modes.
 Repository/package/CLI names stay intact.
 See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
@@ -84,10 +85,13 @@ selected-offense evidence in the same app. Accessible mode tabs preserve drafts,
 completed results and Scout downloads; pending requests are cancelled and late
 responses discarded. The form covers season/type/cutoff/down/distance and optional field/score/period/clock filters;
 Run/Pass frequency, EPA, success, counts, missing states, warnings and provenance
-remain descriptive. Actual synthetic API fixtures and local browser integration
-verify the boundary. Scout's controls and original fixtures are preserved.
+remain descriptive. An opt-in comparison shows other offenses under identical
+filters, candidate-specific differences, coverage and baseline exclusions.
+Actual synthetic API fixtures and local browser integration verify the boundary.
+Scout's controls and original fixtures are preserved.
 Charting applicability and historical availability remain unverified.
-Decision Lab's advanced controls, league/interval views, downloads, adjustment and deployment remain on the
+Decision Lab's interval views, user-call comparison, downloads, adjustment and
+deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 

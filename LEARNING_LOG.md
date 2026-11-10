@@ -3189,3 +3189,75 @@ baseline, unchanged selected evidence, context matching and stale responses with
 ranking or fallback. Intervals, user choices and downloads follow separately.
 Historical availability, model/charting admission and deployment remain deferred.
 Do not merge or enable auto-merge.
+
+
+## 2026-11-10 — Matched candidate league evidence in Decision Lab
+
+**Built / why:** an off-by-default league comparison checkbox and Run/Pass evidence
+view using the existing validated response. Each call shows selected versus other-
+offense frequency, EPA, success, explicit differences/units, denominators, missing
+states, count flags and game/team/shared-game coverage. Separate baseline exclusion
+counts explain how that population was selected. Selected estimates stay unchanged;
+empty/missing evidence never produces a wider fallback or a preferred call. This
+makes league context inspectable without suggesting that an association is optimal.
+
+**Start state:** verified the canonical root/origin and fetched; main remains
+`bc7b9b0`. PR #42 is still open at prior head `b70cf42`, clean and 0 ahead/behind,
+with no review/comment feedback and green push/PR CI. Continued the existing branch
+as the latest heartbeat requests, preserving both earlier slices and full history.
+Baseline 453 core / 45 API passed on Python 3.13 before edits.
+
+**Review:** `web/src/DecisionComparisonView.tsx`, `DecisionFilterTable.tsx`,
+`DecisionContextView.tsx`, `DecisionLab.tsx`, `decision-comparison.test.tsx`,
+`tests_api/test_decision_frontend_contract.py`, `web/e2e/scout.spec.ts` and
+`docs/DECISION_WEB.md`. Roadmap, status, README, architecture/contract and accessibility
+notes now describe the shipped view and next bounded unit.
+
+**Sports analytics:** compare the same observed call across matched populations;
+Pass remains dropbacks including sacks/scrambles. The baseline excludes the selected
+offense before context selection; its defensive appearances can remain. Pooled play
+rates differ from average team rates. Frequency uses parent plays; outcomes use
+candidate observed EPA. Candidate games can overlap, and shared games/repeated teams
+create dependence. Matching does not establish opponent adjustment or causal quality.
+
+**Software/statistics / learn:** share table presentation while retaining separate
+population ledgers; display validated server differences without recalculating them
+from rounded cells. Keep missing, unobserved, empty and measured-zero states distinct.
+Reuse the explicit-submit/cancellation lifecycle and independent mode state. Learn to
+trace a comparison from its source/cutoff through exclusions to each denominator.
+
+**Three review questions:**
+1. Why is the synthetic baseline Run frequency 2/6 rather than the mean of its three team rates, and why does Pass EPA use three observations instead of four plays?
+2. What does selected-minus-baseline mean for each call, how do percentage points differ from percent change, and why does a positive difference not select a preferred call?
+3. How do prior filter survivors, overlapping games and missing EPA affect the meaning of baseline coverage and unavailable comparisons?
+
+**Verification / self-review:** 453 core / 45 API tests pass on each Python
+3.11/3.12/3.13 (API warnings as errors; dependency checks pass), plus 1,059 frontend
+tests, TypeScript/build and 30 desktop/narrow Chromium cases in 45.2 seconds. Five
+actual synthetic HTTP fixtures bring Decision to 64; all prior 59 values and 71
+Scout fixtures remain unchanged. Twenty-two new component cases use independent
+pooled metrics/counts, missing/empty/OT cases, malformed contracts, exact requests,
+stale-response rejection, safe errors and mode-state checks. Browser tests reconcile
+six selected/baseline stages and same-source off/on/off without changing estimates.
+
+Complete-diff review checked pooled denominators, same-call differences, nulls,
+coverage overlap, source/cutoff identity, exclusion order, Scout compatibility and
+abstention. Clarified that coverage includes missing-EPA plays, not observed-EPA
+support. Fixed a TypeScript test-helper target type and an accidental edit to an
+existing clock-clear assertion. An initial browser run also timed out during page
+setup; the complete rerun passed without changing timeouts or retries. Axe reports
+no violations in new scans, but narrow/clipped contrast incompletes remain. Focused
+320-pixel comparison/ledger screenshots were inspected; owned servers stopped and
+no unexpected requests/page errors occurred. No API/schema, analytics formula,
+dependency, data/source/license, model or automation change. Exact publication SHA,
+GitHub attribution and CI receipt belong in PR #42.
+
+**Remaining / next:** bounded opt-in candidate game-support/exploratory uncertainty
+controls and views using existing contracts/helpers: 200–1,000 repetitions, optional
+uint32 seed, parent versus observed-EPA game support, selected/baseline/difference
+intervals and explicit unavailable/withheld/degenerate/valid-draw states. Test exact
+requests, on/off, sparse/empty evidence, stale results and unchanged point estimates.
+No Pass-minus-Run contrast interval, browser resampling or ranking. User choices and
+downloads follow separately. Historical availability, production model/charting
+admission, accessibility coverage and deployment remain deferred. Do not merge or
+enable auto-merge.

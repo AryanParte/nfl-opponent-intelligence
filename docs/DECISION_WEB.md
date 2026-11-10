@@ -5,6 +5,7 @@ existing [Decision API](API.md#decision-request-contract), contract v1. The firs
 rendered Decision Lab mode followed on 2026-11-06 in the same app as Scout;
 optional field-position controls and exclusion accounting followed on 2026-11-07,
 then pre-play score controls on 2026-11-08 and period/clock controls on 2026-11-09.
+The optional matched candidate league view followed on 2026-11-10.
 No package, API, core formula or data source changed.
 
 ## First rendered slice
@@ -13,7 +14,8 @@ Select **Decision Lab** in the mode tabs, then submit an offense team code,
 season/type, exclusive before-week cutoff, one exact down and inclusive whole-yard
 distance bounds. Defaults are inputs, not asserted source coverage. The first
 form defaults to unrestricted field position, score and period/clock, with optional
-context controls. Comparison stays off and bootstrap unrequested. It does not offer defense/opponent conditioning, a preferred call,
+context controls. Comparison defaults off but can be requested; bootstrap remains
+unrequested by the rendered form. It does not offer defense/opponent conditioning, a preferred call,
 user-call grading or advanced play families.
 
 `DecisionLab.tsx` renders the validated selected-offense population and fixed Run,
@@ -60,7 +62,8 @@ the [nflverse field definition](https://raw.githubusercontent.com/nflverse/nflre
 `DecisionContextView.tsx` renders the validated effective bounds and selected
 offense accounting in order: field → score → period → clock → down → distance, including only active
 optional stages after season/type/exclusive week selection. Each row displays before, missing, outside and after counts from
-the API. Down/distance are required at ingestion, so their missing counts are zero.
+the API through `DecisionFilterTable.tsx`, which also renders the separate baseline
+ledger. Down/distance are required at ingestion, so their missing counts are zero.
 Only final distance-stage survivors supply candidate metrics/games; earlier
 counts are intermediate. Missing EPA is separate, and stage exclusions already
 belong to the global outside-cohort count. Do not sum them into it again.
@@ -119,6 +122,49 @@ OT bounds apply separately within each overtime period, not cumulatively. The
 input maximum does not certify season-specific overtime rules. These are historical
 cohorts, not complete game states or validated recommendations.
 
+## Optional matched candidate league comparison
+
+**Compare with other offenses** defaults off and uses the existing boolean request
+field. Toggling clears stale evidence and aborts pending work; only submission
+fetches. Its draft/help IDs are independent of Scout, and returning to a completed
+Decision result preserves the comparison without another request. No uncertainty
+request is implied by checking comparison.
+
+`DecisionComparisonView.tsx` renders other offenses under the same snapshot,
+season/type, exclusive cutoff, exact down, inclusive distance and all requested
+context filters/missingness policies. The selected team is excluded as the offense
+before situation filtering; its defensive appearances may remain. Matching is not
+opponent adjustment, standardization within ranges, complete league coverage or
+historical-availability certification. Baseline rates pool plays rather than
+averaging team rates. The selected estimates and provenance remain unchanged.
+
+Each fixed Run/Pass section shows selected and baseline plays/games, observed and
+missing EPA, count flags and availability. Frequency uses each population's final
+play denominator; outcomes use that candidate's observed EPA. Returned differences
+are selected minus the **same baseline call**, not Pass minus Run. Rate differences
+are percentage points, not percent change. Positive means numerically higher, not
+better or significant. Values are formatted only; differences use the API's
+unrounded estimates and are never recomputed from displayed rounded cells.
+
+Parent/candidate offense codes and game/shared-game coverage remain separate.
+Candidate game/team counts can overlap and must not be summed; shared games and
+repeated teams can create dependence. Coverage includes plays missing EPA and does
+not measure observed-EPA game support. Count flags are not reliability tests.
+
+Empty selected/baseline populations, unobserved calls, missing EPA and observed zero
+stay distinct. Baseline evidence may remain visible when the selected cohort is
+empty, but differences are unavailable. An unobserved candidate in a nonempty parent
+has zero frequency and unavailable outcomes. No wider cohort, zero outcome or other
+fallback replaces unavailable evidence; a preferred call remains withheld.
+
+Baseline accounting first shows eligible temporal plays, selected-offense removals
+and the remaining other-offense plays. The shared table then shows active field →
+score → period → clock → down → distance counts, each conditional on prior survivors.
+Final distance survivors supply baseline metrics/coverage; missing EPA is separate.
+These are baseline exclusions, not selected-team missingness or source-wide coverage.
+Returned baseline warnings are displayed. Tables retain captions, headers and named
+keyboard-focusable horizontal scroll regions.
+
 ## Request and response boundaries
 
 `parseDecisionQuery` accepts a complete `DecisionDraft`: string controls (blank
@@ -175,7 +221,7 @@ manifest metadata, source completeness, causal validity or historical availabili
 
 ## Reproducible evidence
 
-`tests_api/test_decision_frontend_contract.py` freezes **59 actual HTTP responses**
+`tests_api/test_decision_frontend_contract.py` freezes **64 actual HTTP responses**
 in `web/src/__fixtures__/decisions.json`. Observations, source IDs/timestamps and
 labels are explicitly synthetic; fixtures never enter the live app. Snapshot bytes
 and hashes are created with the existing factory, and acquisition/socket calls are
@@ -226,6 +272,16 @@ The browser checks 15 → 12 → 11 → 5 → 3 survivors, period-only versus ex
 full-clock missingness, OT, zero clock, recovery, mode state and keyboard scrolling.
 These synthetic tests verify implementation, not statistical or football validity.
 
+Five league fixtures add an unequal three-offense mix, its same-snapshot comparison-
+off counterpart, all-baseline/all-selected missing EPA and an unobserved selected
+Run. All 59 prior Decision values and 71 Scout fixtures remain unchanged. Independent
+expectations distinguish pooled rates from team means, candidate/parent coverage,
+shared games and signed differences. Twenty-two new component cases cover off/on/off,
+empty/missing states, separate six-stage counts, OT, stale responses, mode preservation,
+safe errors and invalid baseline rejection. The browser tests same-source off/on/off,
+hand-counted selected/baseline evidence, empty states, keyboard toggling and narrow
+comparison/accounting scrolling. These synthetic outcomes are software checks.
+
 Run the normal core/API/browser checks in [WEB.md](WEB.md). To intentionally
 regenerate only the Decision fixtures with optional API dependencies installed:
 
@@ -238,10 +294,12 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add an opt-in matched candidate league view using existing validated responses.
-Show same-situation leave-team-out Run/Pass evidence, selected-minus-baseline
-differences with explicit units, coverage/shared games and baseline stage counts.
-Keep selected evidence unchanged and missing/empty baselines explicit; test
-request toggling, context matching, stale responses and abstention. Uncertainty
-views, user-choice comparison and downloads follow separately. No ranking/model,
-new data layer, database or deployment is implied by this view.
+Add bounded opt-in candidate game-support/exploratory uncertainty controls and views
+using the existing contract, guards and interval presentation. Expose 200–1,000
+repetitions and an optional uint32 seed. Distinguish parent-game frequency support
+from observed-EPA game support; show returned selected/baseline/difference intervals
+and unavailable, withheld, degenerate and valid-draw states. Test exact requests,
+on/off, empty/sparse evidence, stale responses and unchanged point estimates. No
+Pass-minus-Run contrast interval, preferred call or browser resampling. User-choice
+comparison and downloads follow separately. No new model/data layer, storage or
+deployment belongs in that unit.
