@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { epa, fetchReportDocument, number, parseQuery, percentage, PERIODS, QueryValidationError, type Draft, type ReportDocument } from './report';
+import { epa, fetchReportDocument, number, parseQuery, percentage, QueryValidationError, type Draft, type ReportDocument } from './report';
 import { ComparisonView } from './ComparisonView';
 import { FieldPositionView } from './FieldPositionView';
 import { FieldPositionControls } from './FieldPositionControls';
 import { ScoreView } from './ScoreView';
+import { ScoreControls } from './ScoreControls';
 import { TimeView } from './TimeView';
+import { TimeControls } from './TimeControls';
 import { UncertaintyView } from './UncertaintyView';
+import { BootstrapControls } from './BootstrapControls';
 import { ReportDownload } from './ReportDownload';
 import { SourceView } from './SourceView';
 import { DecisionLab } from './DecisionLab';
@@ -136,58 +139,13 @@ function ScoutView({ active }: { active: boolean }) {
             <option value="REG">Regular season</option><option value="POST">Postseason</option></select></label>
         </div>
         <FieldPositionControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
-        <fieldset className="field-controls" aria-describedby="score-help score-perspective-help">
-          <legend>Pre-play score difference (optional)</legend>
-          <p id="score-perspective-help" className="muted">Offense points minus defense points before the play.
-            Negative = offense trailing; positive = offense leading; 0 = tied, not missing.
-            Defense mode does not reverse the sign.</p>
-          <div className="field-inputs">
-            {/* Text keeps partial signs invalid, not blank; the keyboard must allow minus. */}
-            <label>Minimum score difference<input name="score_min" type="text" autoComplete="off"
-              value={draft.score_min} onChange={(e) => edit('score_min', e.target.value)} {...fieldAccessibility('score_min', 'score-help score-perspective-help')} /></label>
-            <label>Maximum score difference<input name="score_max" type="text" autoComplete="off"
-              value={draft.score_max} onChange={(e) => edit('score_max', e.target.value)} {...fieldAccessibility('score_max', 'score-help score-perspective-help')} /></label>
-          </div>
-          <p id="score-help" className="muted">Inclusive signed whole points, -1000 to +1000 (API input limits, not typical game scores).
-            A blank end is unbounded; both blank = no score filter. Any requested score range excludes missing pre-play scores.
-            Field position is filtered first when both are requested.</p>
-        </fieldset>
-        <fieldset className="field-controls" aria-describedby="time-help clock-help">
-          <legend>Pre-play period &amp; clock (optional)</legend>
-          <div className="field-inputs">
-            <label>Period<select name="period" value={draft.period} onChange={(e) => edit('period', e.target.value)} {...fieldAccessibility('period', 'time-help')}>
-              <option value="">Unrestricted</option>
-              {PERIODS.map(period => <option key={period} value={period}>{period === 'OT' ? 'OT — all overtime periods' : period}</option>)}
-            </select></label>
-          </div>
-          <p id="time-help" className="muted">Q1–Q4 select one regulation quarter; OT selects all periods numbered 5 or higher.
-            Period-only selection excludes unknown periods but does not exclude missing clocks.</p>
-          <div className="field-inputs">
-            <label>Minimum seconds remaining<input name="clock_min" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.clock_min} onChange={(e) => edit('clock_min', e.target.value)} {...fieldAccessibility('clock_min', 'clock-help')} /></label>
-            <label>Maximum seconds remaining<input name="clock_max" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.clock_max} onChange={(e) => edit('clock_max', e.target.value)} {...fieldAccessibility('clock_max', 'clock-help')} /></label>
-          </div>
-          <p id="clock-help" className="muted">Inclusive whole seconds 0–900 remaining in the selected period at play start, not elapsed time or MM:SS.
-            Clock bounds require an explicit period. Both blank = no clock filter; with one bound entered, the blank end defaults to 0 or 900.
-            Zero is observed, not missing. Any requested clock range excludes missing clocks. Clearing the period does not clear entered bounds.</p>
-        </fieldset>
+        <ScoreControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} showDefenseNote />
+        <TimeControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} />
         <label className="comparison-toggle"><input type="checkbox" name="compare_league" checked={draft.compare_league}
           onChange={(e) => edit('compare_league', e.target.checked)} {...fieldAccessibility('compare_league', 'comparison-help')} />
           Compare with other teams in the same role</label>
         <p id="comparison-help" className="muted">Optional pooled baseline from available source plays. Does not request uncertainty calculations.</p>
-        <fieldset className="field-controls" aria-describedby="bootstrap-help">
-          <legend>Exploratory game bootstrap (optional)</legend>
-          <div className="field-inputs">
-            <label>Bootstrap repetitions<input name="bootstrap_repetitions" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.bootstrap_repetitions} onChange={e => edit('bootstrap_repetitions', e.target.value)} {...fieldAccessibility('bootstrap_repetitions', 'bootstrap-help')} /></label>
-            <label>Bootstrap seed<input name="bootstrap_seed" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.bootstrap_seed} onChange={e => edit('bootstrap_seed', e.target.value)} {...fieldAccessibility('bootstrap_seed', 'bootstrap-help')} /></label>
-          </div>
-          <p id="bootstrap-help" className="muted">Whole repetitions 200–1000 opt in; both blank means not requested. Seed 0–4294967295 requires repetitions;
-            blank seed defaults to 0. Works with or without comparison. More draws add computation, not observed games or statistical reliability.
-            Bounds are exploratory, not calibrated confidence. Editing clears results; aborting or timing out does not stop server computation.</p>
-        </fieldset>
+        <BootstrapControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} />
         <div className="form-footer"><div><p id="cutoff-help">Whole week 1–23. Exclusive cutoff: only weeks strictly before this week are included.</p>
           <p id="season-help" className="muted">Whole season 1999–9999; it must be available in the configured snapshot.</p>
           <p id="query-help" className="muted">Use 2–3 letter uppercase source team codes. The API's operator selects the local season snapshot, not this form.</p></div>

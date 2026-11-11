@@ -5,6 +5,74 @@ screen-reader certification or public-release claim. Scout's analytics, API,
 schema v2, snapshots and downloadable evidence are unchanged. The original review
 preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
 
+## Decision uncertainty follow-up — 2026-11-11
+
+Shared text inputs preserve invalid partial values and use Decision-specific help/
+error IDs. Both controls join the native tab order; invalid repetitions or an
+orphaned seed focus repetitions, while an invalid seed focuses itself. Correcting
+the query removes stale evidence and requires explicit submission. Mode changes
+preserve independent drafts and completed results without another request.
+
+Run/Pass interval tables have captions, row/column headers and named keyboard-
+focusable scroll regions. Availability and withheld reasons are text, not color;
+method metadata is a native disclosure. All 32 desktop/narrow Chromium cases pass,
+including actual synthetic API evidence, sparse/empty support, input correction,
+keyboard order, comparison toggling and 320-pixel containment/scrolling. The focused
+narrow screenshot was inspected. New axe scans have zero violations; loaded desktop
+and invalid states have no incompletes, while narrow/clipped numeric tables retain
+contrast incompletes (including empty-state tables). This does not resolve every
+contrast node or establish conformance. Screen-reader, real-device, zoom and cross-
+browser gaps remain. No unexpected requests/errors; owned servers stopped.
+
+## Decision league comparison follow-up — 2026-11-10
+
+The optional checkbox is in the native tab order, works with Space and has unique
+Decision help/error IDs. Toggling removes stale evidence without fetching; returning
+from Scout preserves a completed result and independent mode state. Candidate
+comparison and baseline-accounting tables have captions, row/column headers and
+named keyboard-focusable scroll regions. Unavailable values are text, not color.
+
+All 30 desktop/narrow Chromium cases pass, including real synthetic API off/on/off,
+separate selected/baseline accounting and empty-baseline/empty-selected states.
+New axe scans have no violations. Loaded desktop has no incomplete checks;
+loaded narrow and 320-pixel/empty-state scans retain color-contrast incompletes
+on numeric/clipped table content. Focused 320-pixel comparison and ledger screenshots
+were inspected: surrounding text reflows, focus outlines remain visible and wide
+columns scroll within their regions without page overflow. Those checks do not
+resolve all incomplete contrast nodes or establish conformance. No unexpected
+external requests/page errors occurred; owned servers stopped. Screen-reader,
+real-device, zoom and cross-browser coverage remain open.
+
+## Decision period/clock follow-up — 2026-11-09
+
+Shared controls preserve Scout behavior and give Decision unique help/error IDs.
+Keyboard order includes period and both seconds bounds. A clock without a period
+focuses the missing period; malformed seconds retain their text and focus their
+own error. Clearing period never silently clears entered bounds. Completed time
+queries and independent Scout drafts survive mode changes.
+
+All 28 desktop/narrow Chromium cases pass. Actual synthetic API checks cover
+period-only/full-clock missingness, combined six-stage accounting, OT/zero/empty
+states and filter-removal recovery. Axe reports no violations in the new scans;
+narrow numeric/clipped table cells retain contrast `incomplete` results for review.
+The focused 320-pixel accounting screenshot was inspected: text reflows, the
+focus outline is visible and wide columns scroll within the named table region.
+No unexpected external requests/page errors occurred; owned servers stopped.
+These checks do not establish assistive-technology or WCAG conformance. The
+existing manual, real-device, zoom and cross-browser gaps remain open.
+
+## Decision score follow-up — 2026-11-08
+
+Shared text controls retain partial signs for validation and permit a minus sign;
+Decision-specific help IDs keep mounted Scout controls independent. Keyboard order
+includes both score bounds; invalid input focuses its linked error without fetching.
+The combined context section retains table headers, a caption and a named focusable
+scroll region. All 26 desktop/narrow Chromium cases pass, including real API
+field/score accounting, tie/empty/filter-removal recovery, preserved mode state,
+axe scans and 320-pixel keyboard scrolling. The focused screenshot was inspected;
+no unexpected external requests or page errors occurred. Existing assistive-technology,
+zoom, real-device and cross-browser gaps remain open.
+
 ## Decision field-position follow-up — 2026-11-07
 
 Shared field controls retain text input, decimal keyboard hints and linked error/

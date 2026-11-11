@@ -3,17 +3,20 @@
 Implemented 2026-11-05 as the first P1.9 slice. `web/src/decision.ts` consumes the
 existing [Decision API](API.md#decision-request-contract), contract v1. The first
 rendered Decision Lab mode followed on 2026-11-06 in the same app as Scout;
-optional field-position controls and exclusion accounting followed on 2026-11-07. No
-package, API, core formula or data source changed.
+optional field-position controls and exclusion accounting followed on 2026-11-07,
+then pre-play score controls on 2026-11-08 and period/clock controls on 2026-11-09.
+The optional matched candidate league view followed on 2026-11-10, with bounded
+candidate game-support/uncertainty controls and views on 2026-11-11.
+No package, API, core formula or data source changed.
 
 ## First rendered slice
 
 Select **Decision Lab** in the mode tabs, then submit an offense team code,
 season/type, exclusive before-week cutoff, one exact down and inclusive whole-yard
 distance bounds. Defaults are inputs, not asserted source coverage. The first
-form defaults to unrestricted field position and offers optional inclusive decimal
-bounds. Score/period/clock stay unrestricted, comparison off and bootstrap
-unrequested. It does not offer defense/opponent conditioning, a preferred call,
+form defaults to unrestricted field position, score and period/clock, with optional
+context controls. Comparison defaults off; bootstrap repetitions and seed default
+blank. Each feature is opt-in and can be requested independently. It does not offer defense/opponent conditioning, a preferred call,
 user-call grading or advanced play families.
 
 `DecisionLab.tsx` renders the validated selected-offense population and fixed Run,
@@ -57,16 +60,150 @@ are valid, and zero is observed rather than missing. Any explicit range, includi
 opponent's goal line: 20 is the opponent's 20, 80 is the offense's own 20, following
 the [nflverse field definition](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv).
 
-`DecisionFieldPositionView.tsx` renders the validated effective bounds and selected
-offense accounting in order: field → down → distance, after season/type/exclusive
-week selection. Each row displays before, missing, outside and after counts from
-the API. Down/distance are required at ingestion, so their missing counts are zero.
-Only final distance-stage survivors supply candidate metrics/games; field/down
+`DecisionContextView.tsx` renders the validated effective bounds and selected
+offense accounting in order: field → score → period → clock → down → distance, including only active
+optional stages after season/type/exclusive week selection. Each row displays before, missing, outside and after counts from
+the API through `DecisionFilterTable.tsx`, which also renders the separate baseline
+ledger. Down/distance are required at ingestion, so their missing counts are zero.
+Only final distance-stage survivors supply candidate metrics/games; earlier
 counts are intermediate. Missing EPA is separate, and stage exclusions already
 belong to the global outside-cohort count. Do not sum them into it again.
 This is a play cohort, not drive-level red-zone efficiency or a complete game state.
 No preferred call is added. The view must be extended with every newly exposed
-context stage; it currently assumes field position is the only optional filter.
+context stage; it supports field position, pre-play score, period and clock.
+
+## Optional pre-play score difference
+
+`ScoreControls.tsx` and the `scoreRange` presentation helper are shared with Scout;
+Decision retains separate draft state and help/error IDs. Inclusive signed whole
+points range from −1000 to +1000, the API input limits rather than typical scores.
+Both blank means no score filter. One blank end is unbounded (JSON null), not a
+zero/default maximum. A 0–0 range selects known ties; a requested range always
+excludes missing pre-play scores. Invalid signs, decimals and exponents remain
+visible text and cannot silently become an unfiltered request.
+
+Score means offense points minus defense points at play start, following the
+[nflverse dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv).
+Negative is trailing, positive leading. There is no post-play substitution, inferred
+possession, neutral-game definition or win-probability claim. The API retains the
+exclusive historical cutoff and mandatory abstention.
+
+When both filters apply, field precedes score. Score missingness counts only field
+survivors; a play missing both is excluded once at field. The same ledger then
+shows down/distance, so the score-stage count is still intermediate. Missing EPA
+remains separate. An absent requested score column is an error; a present column
+with all missing values may return an empty cohort. Clearing score bounds preserves
+field selection and requires a new explicit request, with no stale or fallback result.
+
+## Optional pre-play period and clock
+
+`TimeControls.tsx` is shared with Scout, preserving its labels and IDs; Decision
+uses separate help IDs and independent state. Q1–Q4 select one regulation quarter;
+OT selects every period numbered 5 or higher under the existing cohort contract.
+Clock bounds require a period, use inclusive whole seconds remaining within that
+period (0–900), and never interpret MM:SS or elapsed/half/game clocks. The source
+fields remain `qtr` and `quarter_seconds_remaining`, following the
+[nflverse dictionary](https://raw.githubusercontent.com/nflverse/nflreadr/main/data-raw/dictionary_pbp.csv).
+No new source, terms or enrichment is introduced.
+
+Both blank clock ends omit filtering. One entered end defaults its companion to
+0 or 900; an explicit 0–900 range excludes missing clocks, unlike period-only
+selection. Zero is observed, not missing. Period-only selection works even when
+the snapshot has no clock column; requesting an absent context column is an error.
+A present but entirely missing requested column may yield an empty cohort.
+Clearing the period preserves entered bounds and produces a linked validation
+error until the clock bounds are cleared or an explicit period is restored.
+
+The ledger reads the API's `outside_period` for period and `outside_range` for the
+other stages, after any field/score selection. Clock receives only period survivors;
+a play missing both values is removed once at period. Down/distance still follow:
+even the clock-stage count is intermediate. No imputation, automatic widening or
+fallback occurs. Q4 excludes OT; Q4 0–120 does not define a game's final two minutes.
+OT bounds apply separately within each overtime period, not cumulatively. The
+input maximum does not certify season-specific overtime rules. These are historical
+cohorts, not complete game states or validated recommendations.
+
+## Optional matched candidate league comparison
+
+**Compare with other offenses** defaults off and uses the existing boolean request
+field. Toggling clears stale evidence and aborts pending work; only submission
+fetches. Its draft/help IDs are independent of Scout, and returning to a completed
+Decision result preserves the comparison without another request. No uncertainty
+request is implied by checking comparison.
+
+`DecisionComparisonView.tsx` renders other offenses under the same snapshot,
+season/type, exclusive cutoff, exact down, inclusive distance and all requested
+context filters/missingness policies. The selected team is excluded as the offense
+before situation filtering; its defensive appearances may remain. Matching is not
+opponent adjustment, standardization within ranges, complete league coverage or
+historical-availability certification. Baseline rates pool plays rather than
+averaging team rates. The selected estimates and provenance remain unchanged.
+
+Each fixed Run/Pass section shows selected and baseline plays/games, observed and
+missing EPA, count flags and availability. Frequency uses each population's final
+play denominator; outcomes use that candidate's observed EPA. Returned differences
+are selected minus the **same baseline call**, not Pass minus Run. Rate differences
+are percentage points, not percent change. Positive means numerically higher, not
+better or significant. Values are formatted only; differences use the API's
+unrounded estimates and are never recomputed from displayed rounded cells.
+
+Parent/candidate offense codes and game/shared-game coverage remain separate.
+Candidate game/team counts can overlap and must not be summed; shared games and
+repeated teams can create dependence. Coverage includes plays missing EPA and does
+not measure observed-EPA game support. Count flags are not reliability tests.
+
+Empty selected/baseline populations, unobserved calls, missing EPA and observed zero
+stay distinct. Baseline evidence may remain visible when the selected cohort is
+empty, but differences are unavailable. An unobserved candidate in a nonempty parent
+has zero frequency and unavailable outcomes. No wider cohort, zero outcome or other
+fallback replaces unavailable evidence; a preferred call remains withheld.
+
+Baseline accounting first shows eligible temporal plays, selected-offense removals
+and the remaining other-offense plays. The shared table then shows active field →
+score → period → clock → down → distance counts, each conditional on prior survivors.
+Final distance survivors supply baseline metrics/coverage; missing EPA is separate.
+These are baseline exclusions, not selected-team missingness or source-wide coverage.
+Returned baseline warnings are displayed. Tables retain captions, headers and named
+keyboard-focusable horizontal scroll regions.
+
+## Optional candidate support and uncertainty
+
+`BootstrapControls.tsx` is shared with Scout, with independent Decision draft state
+and help/error IDs. Repetitions 200–1,000 opt in; an optional uint32 seed defaults to
+zero. Both blank omits uncertainty. Text inputs preserve malformed partial values;
+a seed without repetitions is an error, including a retained seed after clearing
+repetitions. No automatic fetch, retry or silent option removal. Edits cancel stale
+browser work but do not guarantee server computation has stopped.
+
+`DecisionUncertaintyView.tsx` consumes the existing candidate block.
+`IntervalCells.tsx` shares formatting, support/draw counts and status labels with
+Scout without sharing their different metric mappings. Run/Pass tables display
+selected, and when requested baseline and paired selected-minus-baseline evidence.
+Rates are shown as percentages, rate differences as percentage points; bounds and
+point estimates are returned values, never reconstructed in React.
+
+Frequency support counts all parent-cohort games, including games without the call.
+Outcome support counts games with observed EPA for that call; candidate point-table
+games include missing-EPA plays and are a different count. Both calls use the same
+game draws even when `shared_game_weights` is false for selected-only evidence.
+With league comparison, both populations also share weights from the game-ID union.
+Comparison can change selected bounds through the frame; it does not change points.
+Paired differences are formed within draws, not by subtracting marginal endpoints.
+
+The view preserves all five returned interval states: available, undefined, fewer
+than five contributing games, fewer than 95% defined draws, and degenerate bounds.
+The separate below-20-games flag is a warning, not a reliability guarantee. Withheld
+bounds do not mean zero uncertainty; undefined estimates stay unavailable. Empty
+frames perform zero draws, while a baseline-only frame can still perform draws.
+More repetitions add no observed games. These are exploratory nominal 95% pointwise
+bounds, not calibrated confidence, significance tests or predictions. No contrast
+interval or preferred call is introduced, including when bounds exclude zero.
+
+Method/RNG/quantile, seed, frame size, performed/requested draws and all warnings
+remain visible. Replay still needs source/cohort/runtime identity. Keyboard-focusable
+tables expose support and interval status on narrow screens. See the existing
+[analytical contract](DECISION_CONTRACT.md#optional-candidate-uncertainty) for the
+procedure and unaddressed dependence, missingness and source/model limitations.
 
 ## Request and response boundaries
 
@@ -124,7 +261,7 @@ manifest metadata, source completeness, causal validity or historical availabili
 
 ## Reproducible evidence
 
-`tests_api/test_decision_frontend_contract.py` freezes **30 actual HTTP responses**
+`tests_api/test_decision_frontend_contract.py` freezes **69 actual HTTP responses**
 in `web/src/__fixtures__/decisions.json`. Observations, source IDs/timestamps and
 labels are explicitly synthetic; fixtures never enter the live app. Snapshot bytes
 and hashes are created with the existing factory, and acquisition/socket calls are
@@ -155,6 +292,46 @@ recovery, keyboard order, independent Scout state and a focusable 320-pixel
 accounting table. Clearing both bounds restores an explicitly requested unrestricted
 cohort; an empty response never silently widens its query.
 
+Twelve score fixtures add inclusive/one-sided/tied/input-limit/all-missing/empty/
+missing-EPA/combined cases and filter removal within the same synthetic snapshot.
+All 30 prior Decision fixtures remain unchanged. Independent stage counts cover
+conditional missingness and a final distance-stage empty result; mutation tests
+reject wrong signs/perspective/bounds/order/chains. Real browser tests reconcile
+15 → 12 → 11 plays under combined field/score selection, then verify known ties,
+empty and cleared-bound recovery, mode state, keyboard order and 320-pixel scrolling.
+These invented outcomes verify the software, not football performance.
+
+Seventeen time fixtures add period-only/absent-clock-column, all regulation
+quarters, pooled OT, zero/equal/one-sided/full/empty bounds, all-missing contexts,
+combined filters and a final distance-stage empty cohort. All prior 42 Decision
+fixtures and 71 Scout fixtures (58 standard and 13 uncertainty) remain unchanged.
+Independent expectations reconcile all six active stages to final candidates.
+Clearing-clock and clearing-time tests hold snapshot and earlier filters fixed;
+mutations reject wrong clock sources/timing, bounds, missing policies and ledgers.
+The browser checks 15 → 12 → 11 → 5 → 3 survivors, period-only versus explicit
+full-clock missingness, OT, zero clock, recovery, mode state and keyboard scrolling.
+These synthetic tests verify implementation, not statistical or football validity.
+
+Five league fixtures add an unequal three-offense mix, its same-snapshot comparison-
+off counterpart, all-baseline/all-selected missing EPA and an unobserved selected
+Run. All 59 prior Decision values and 71 Scout fixtures remain unchanged. Independent
+expectations distinguish pooled rates from team means, candidate/parent coverage,
+shared games and signed differences. Twenty-two new component cases cover off/on/off,
+empty/missing states, separate six-stage counts, OT, stale responses, mode preservation,
+safe errors and invalid baseline rejection. The browser tests same-source off/on/off,
+hand-counted selected/baseline evidence, empty states, keyboard toggling and narrow
+comparison/accounting scrolling. These synthetic outcomes are software checks.
+
+Five uncertainty fixtures add same-snapshot selected/league uncertainty-off counterparts,
+combined contexts, maximum request/seed and selected-only empty-frame behavior.
+All prior 64 Decision values and 71 Scout fixtures are unchanged. Thirty-nine new
+component cases cover unchanged points across off/on/off, parent versus candidate
+support, every interval state, the controlled 189/200 versus 190/200 valid-draw gate,
+paired differences/units, maximum/invalid inputs, safe errors, stale responses and
+independent mode state. Controlled draws stay explicitly labeled, not seed replays.
+Real browser checks use the actual API for optional comparisons, sparse/empty
+support, input correction, point preservation, keyboard flow and 320-pixel scrolling.
+
 Run the normal core/API/browser checks in [WEB.md](WEB.md). To intentionally
 regenerate only the Decision fixtures with optional API dependencies installed:
 
@@ -167,9 +344,11 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add optional pre-play score differential bounds using existing validation and
-offense-minus-defense signs. Extend the ledger to field → score → down → distance
-when both filters apply; test missing scores, zero/equal/reversed bounds and
-empty/stale states without changing Scout. Period/clock, candidate league/interval views, user-choice
-comparison and downloads follow separately. No ranking/model, new data layer,
-database or deployment is implied by this view.
+Add user Run/Pass selection and inspect it alongside the alternative using the
+existing server-provided, fixed Pass-minus-Run descriptive contrast. Keep the choice
+as UI state, not an API option or evidence mutation; clear it when the situation
+changes and preserve it across mode switches. Retain explicit unavailable reasons,
+mandatory abstention and the unimplemented contrast-interval state. Test keyboard
+selection, query changes, missing/empty evidence and state preservation. No grading,
+ranked winner, sign-inverted browser calculation or new model. Decision JSON download
+follows as a separate unit.

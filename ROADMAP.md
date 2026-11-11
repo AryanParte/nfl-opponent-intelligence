@@ -40,8 +40,10 @@ The [bounded field admission review](docs/FTN_FIELD_POLICY.md) is complete with
 all 22 contextual fields deferred from serving. P1.8's PBP-only decision API is
 implemented; unresolved charting does not block it or silently become serving
 evidence. P1.9's typed browser contract/client and first mode/form/evidence view
-are implemented, including optional field-position controls and ordered exclusions.
-Optional Decision pre-play score bounds are next.
+are implemented, including optional field-position/score controls and ordered exclusions.
+Optional Decision period/clock controls, matched candidate league views and bounded
+support/uncertainty views are implemented. User-call selection and descriptive
+contrast inspection are next.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -356,7 +358,7 @@ One local worker remains the supported scope; no cross-process capacity guarante
 ### P1.9 — Play Caller / Decision Lab UI
 
 - [x] Typed browser contract/parser and bounded request client for Decision v1,
-      backed by 30 actual synthetic API fixtures, mutation/error tests and a real
+      backed by 69 actual synthetic API fixtures, mutation/error tests and a real
       browser-to-proxy-to-API check. Preserve denominator/null/withheld distinctions,
       provenance, optional blocks and mandatory abstention; no browser estimation.
       Shared guards retain Scout schema v2 and all 71 existing API fixtures.
@@ -375,13 +377,36 @@ One local worker remains the supported scope; no cross-process capacity guarante
       distance accounting. Blank versus explicit 0–100 preserves missingness semantics;
       fractional/zero/empty/late-response cases use seven additional synthetic HTTP
       fixtures. Final checks: 926 frontend tests and 24 desktop/narrow Chromium cases.
-- **Next unit:** optional pre-play score differential bounds in Decision Lab. Reuse
-  existing query validation, explain offense-minus-defense signs, and extend ordered
-  accounting to field → score → down → distance when both optional filters apply.
-  Verify missing-score, zero/equal/reversed bounds, empty/stale and mode-preservation
-  cases without double-counting intermediate exclusions. Period/clock,
-  league/uncertainty views, user-choice comparison and Decision JSON
-  downloads remain later units. No model/ranking/data-layer/storage/deployment work.
+- [x] Optional pre-play score differential bounds (2026-11-08): shared Scout controls
+      and range presentation, offense-relative signs, unbounded blank ends and known
+      ties. One ledger includes active field/score stages followed by down/distance;
+      missingness is conditional on prior survivors. Twelve additional actual synthetic
+      HTTP fixtures; 971 frontend tests and 26 desktop/narrow Chromium cases pass.
+- [x] Optional pre-play period/clock controls (2026-11-09): reuse Scout controls and
+      validation, with Q1–Q4/OT, inclusive whole seconds, a required period for clock
+      bounds and explicit omitted-end defaults. Ordered active field → score →
+      period → clock → down → distance accounting separates missing periods/clocks
+      from outside values and final candidate denominators. Seventeen added actual
+      synthetic HTTP fixtures; 1,032 frontend and 28 desktop/narrow browser cases pass.
+- [x] Opt-in matched candidate league view (2026-11-10): reuse same-situation
+      leave-team-out Run/Pass evidence, signed selected-minus-baseline differences,
+      pooled play denominators, team/game/shared-game coverage and ordered baseline
+      exclusions. Preserve selected evidence and distinguish empty cohorts, absent
+      calls, missing EPA and zero; no ranking or wider fallback. Five additional
+      synthetic HTTP fixtures; 1,059 frontend and 30 desktop/narrow browser cases pass.
+- [x] Bounded opt-in candidate game support/exploratory intervals (2026-11-11):
+      shared bootstrap controls and interval cells, 200–1,000 draws and optional
+      uint32 seed; separate parent-frequency versus observed-EPA support. Show
+      returned selected/baseline/paired-difference bounds, all five interval states,
+      defined/undefined draws and replay metadata. Preserve point estimates and
+      abstention. Five additional actual synthetic HTTP fixtures; see current status
+      for verification and remaining accessibility limits.
+- **Next unit:** user Run/Pass selection with the existing fixed Pass-minus-Run
+  descriptive contrast. Choice is UI state, not an API option or evidence mutation;
+  clear it on situation edits and preserve it across mode switches. Test keyboard
+  selection, null/empty evidence, explicit unavailable reasons and abstention.
+  No grading, ranked winner, browser sign inversion or contrast interval.
+  Decision JSON download follows separately. No model/data layer, storage or deployment.
 - [ ] Situation definition, supported-call selection and comparison against
       alternatives, with clear historical versus model evidence labels.
 - [ ] Explain frequency/outcomes/league context/support/provenance; honest empty,

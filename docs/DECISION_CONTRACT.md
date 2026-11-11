@@ -327,5 +327,7 @@ remain explicitly deferred, not implicitly approved by completion of a milestone
 P1.6's bounded model evaluation and P1.7's first charting review are now complete
 with production model/enrichment admission deferred. P1.8 serves this evidence
 over HTTP without changing its analytical contract. P1.9's browser client and narrow
-Decision Lab view now consume it, including optional field-position bounds;
-no client-side statistics or automatic preferred call.
+Decision Lab view now consume it, including optional field-position, score and
+period/clock filters, opt-in matched candidate league comparisons and bounded
+candidate support/exploratory interval views. No client-side statistics, contrast
+interval or automatic preferred call.

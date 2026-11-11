@@ -40,7 +40,7 @@ it.each([
 ] as const)('renders independent ordered counts and effective bounds: %s', async (name, expected, bounds, finalPlays) => {
   vi.mocked(fetch).mockResolvedValue(response(fixtures[name].decision));
   setup(name); submit();
-  const region = within(await view().findByRole('region', { name: 'Pre-play field position' }));
+  const region = within(await view().findByRole('region', { name: 'Situation filters' }));
   expect(region.getByText(`${bounds} yards to the offense’s opponent’s goal line`)).toBeVisible();
   expect(region.getAllByRole('rowheader').map(row => row.textContent)).toEqual(['Field position', 'Down', 'Distance']);
   expect(region.getAllByRole('row').slice(1).map(row => within(row).getAllByRole('cell').map(cell => Number(cell.textContent)))).toEqual(expected);
@@ -97,7 +97,7 @@ it('clears stale evidence and omits both blank bounds on an explicit unfiltered 
   expect(view().getByText('Field position: unrestricted; missing positions are not excluded by field position.')).toBeVisible();
   expect(view().getByRole('status')).toHaveTextContent('CAR, 3 eligible plays.');
   expect(String(vi.mocked(fetch).mock.calls[1][0])).not.toContain('yardline_');
-  expect(view().queryByRole('region', { name: 'Pre-play field position' })).not.toBeInTheDocument();
+  expect(view().queryByRole('region', { name: 'Situation filters' })).not.toBeInTheDocument();
 });
 
 it.each(['yardline_min', 'yardline_max'])('editing %s aborts and rejects a late filtered response', async name => {
@@ -119,7 +119,7 @@ it('preserves a field-filtered result across mode changes without colliding with
   fireEvent.change(screen.getByRole('textbox', { name: 'Maximum yards to goal' }), { target: { value: '80' } });
   fireEvent.click(screen.getByRole('tab', { name: 'Decision Lab' }));
   expect(view().getByRole('textbox', { name: 'Maximum yards to goal' })).toHaveValue('20.5');
-  expect(view().getByRole('region', { name: 'Pre-play field position' })).toBeVisible();
+  expect(view().getByRole('region', { name: 'Situation filters' })).toBeVisible();
   expect(fetch).toHaveBeenCalledTimes(1);
   const ids = Array.from(document.querySelectorAll('[id]'), node => node.id);
   expect(new Set(ids).size).toBe(ids.length);

@@ -365,6 +365,11 @@ export async function fetchReport(query: Query, signal: AbortSignal): Promise<Re
 export const percentage = (value: number | null) => value === null ? 'Unavailable' : `${(value * 100).toFixed(1)}%`;
 export const epa = (value: number | null) => value === null ? 'Unavailable' : value.toFixed(3);
 export const number = (value: number) => value.toLocaleString('en-US');
+export function scoreRange({ minimum_inclusive: lower, maximum_inclusive: upper }: ScoreContext): string {
+  const points = (value: number) => `${value > 0 ? '+' : ''}${value}`;
+  return lower === null ? `At most ${points(upper!)} points`
+    : upper === null ? `At least ${points(lower)} points` : `${points(lower)} to ${points(upper)} points`;
+}
 export function signedDifference(value: number | null, unit: 'pp' | 'EPA/play'): string {
   if (value === null) return 'Unavailable';
   // Normalize displayed negative zero; signs describe direction, never "better".

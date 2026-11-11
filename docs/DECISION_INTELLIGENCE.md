@@ -33,7 +33,13 @@ remain unverified. The [typed browser contract/client](DECISION_WEB.md) followed
 integration. The first rendered Decision Lab form/evidence table and Scout/Decision
 mode tabs followed on 2026-11-06. Optional field-position bounds and ordered
 field/down/distance exclusion accounting followed on 2026-11-07, reusing existing
-query semantics. Score/clock, baseline/interval views and production models remain deferred.
+query semantics. Optional pre-play score bounds followed on 2026-11-08 with shared
+controls and ordered conditional missingness. Optional period/clock controls
+followed on 2026-11-09, preserving missing-versus-zero semantics and the full ordered
+context/down/distance ledger. The matched candidate league view followed on
+2026-11-10, showing pooled evidence, differences and separate baseline exclusions.
+Candidate interval views followed on 2026-11-11, preserving per-metric game support,
+shared draws, explicit withheld states and unchanged points. Production models remain deferred.
 The repository/CLI/package names and schema-v2 report contract remain unchanged.
 See [ROADMAP](../ROADMAP.md) and [STATUS](STATUS.md) for shipped capabilities.
 
@@ -46,7 +52,8 @@ reports/briefs. This is the default mode in the React viewer under NFL Decision
 Intelligence branding. It is not a head-to-head matchup prediction.
 
 **Play Caller / Decision Lab** now lets a user define a basic situation and inspect
-Run versus Pass evidence; user-call selection and advanced contexts follow later. No game mechanics
+Run versus Pass evidence with situational filters and optional league comparisons;
+exploratory interval views are available, and user-call selection follows later. No game mechanics
 or unsupported playbook concepts. Show why an option appears stronger, not an opaque
 score: frequency, outcomes, denominators, games, league differences and uncertainty.
 Historical associations are not proof of causal optimality, guaranteed future

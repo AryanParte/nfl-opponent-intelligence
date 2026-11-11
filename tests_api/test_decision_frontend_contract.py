@@ -12,7 +12,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 from opponent_intelligence.api import create_app
 from tests_api.synthetic_snapshot import write_snapshot
-from tests_api.test_frontend_contract import field_position_rows, time_rows, uncertainty_rows
+from tests_api.test_frontend_contract import field_position_rows, score_rows, time_rows, uncertainty_rows
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,6 +40,41 @@ QUERIES = {
     "field_zero": BASE | {"yardline_max": 0},
     "field_lower": BASE | {"yardline_min": 80},
     "field_empty": BASE | {"yardline_min": 91, "yardline_max": 99},
+    "score_range": BASE | {"score_min": -7, "score_max": 0},
+    "score_lower_only": BASE | {"score_min": 1},
+    "score_upper_only": BASE | {"score_max": -7},
+    "score_tied": BASE | {"down": 2, "distance_min": 3, "distance_max": 3, "score_min": 0, "score_max": 0},
+    "score_input_limits": BASE | {"score_min": -1000, "score_max": 1000},
+    "score_empty": BASE | {"score_min": -6, "score_max": -1},
+    "score_all_missing": BASE | {"score_max": 0},
+    "score_missing_epa": BASE | {"down": 2, "distance_min": 3, "distance_max": 3, "score_min": 0, "score_max": 0},
+    "score_field": BASE | {"yardline_max": 20.5, "score_min": -7, "score_max": 0},
+    "score_field_unrestricted": BASE | {"yardline_max": 20.5},
+    "score_zero_lower": BASE | {"score_min": 0},
+    "score_distance_empty": BASE | {"down": 2, "distance_min": 6, "distance_max": 6, "score_min": -7, "score_max": 0},
+    "time_unfiltered": BASE,
+    "time_period": BASE | {"period": "Q4"},
+    "time_period_no_clock": BASE | {"period": "Q4"},
+    "time_clock": BASE | {"period": "Q4", "clock_max": 120},
+    "time_q1": BASE | {"period": "Q1"},
+    "time_q2": BASE | {"period": "Q2", "clock_max": 120},
+    "time_q3": BASE | {"period": "Q3"},
+    "time_ot": BASE | {"period": "OT", "clock_max": 120},
+    "time_lower_only": BASE | {"period": "Q4", "clock_min": 900},
+    "time_full_clock": BASE | {"period": "Q4", "clock_min": 0, "clock_max": 900},
+    "time_four_stage": BASE | {"yardline_max": 20, "score_min": -7, "score_max": 0,
+                              "period": "Q4", "clock_max": 120},
+    "time_context_unrestricted": BASE | {"yardline_max": 20, "score_min": -7, "score_max": 0},
+    "time_all_missing_period": BASE | {"period": "Q4", "clock_max": 120},
+    "time_all_missing_clock": BASE | {"period": "Q4", "clock_max": 120},
+    "time_empty_clock": BASE | {"period": "Q4", "clock_min": 1, "clock_max": 59},
+    "time_distance_empty": BASE | {"period": "Q4", "clock_max": 120, "distance_min": 11, "distance_max": 11},
+    "time_boundary": BASE | {"period": "Q4", "clock_min": 120, "clock_max": 120},
+    "league_multi": BASE | {"compare_league": True},
+    "league_multi_plain": BASE,
+    "league_missing_epa": BASE | {"compare_league": True},
+    "league_selected_missing_epa": BASE | {"compare_league": True},
+    "league_unobserved_selected_run": BASE | {"compare_league": True},
 }
 QUERIES.update({"bootstrap_" + name: BASE | {"before_week": 19, "compare_league": True,
                 "bootstrap_repetitions": 200, "bootstrap_seed": 7}
@@ -49,6 +84,42 @@ QUERIES["bootstrap_selected"].update(compare_league=False)
 del QUERIES["bootstrap_selected"]["bootstrap_seed"]
 QUERIES["bootstrap_empty"].update(before_week=1)
 QUERIES["bootstrap_empty_selected"].update(team="ZZZ")
+QUERIES.update({
+    "bootstrap_selected_plain": BASE | {"before_week": 19},
+    "bootstrap_comparison_plain": BASE | {"before_week": 19, "compare_league": True},
+    "bootstrap_context": QUERIES["context"] | {"bootstrap_repetitions": 200, "bootstrap_seed": 7},
+    "bootstrap_maximum": BASE | {"before_week": 19, "bootstrap_repetitions": 1000, "bootstrap_seed": 4294967295},
+    "bootstrap_empty_selected_only": BASE | {"before_week": 19, "team": "ZZZ", "bootstrap_repetitions": 200},
+})
+
+
+def league_rows(rows, name):
+    """Invented unequal team mixes: 6 baseline plays across ATL/NYG/DAL, 3 games.
+
+    Runs: -1, 2; passes: existing 3 plus 0, missing, 1. Pooled run frequency
+    is 2/6, not the mean of the three team rates (1/3, 1/2, 0).
+    CAR is unchanged unless the named missing/unobserved variant requests it.
+    """
+    variant = list(rows)
+    extra = [
+        ("ATL", rows[0]["game_id"], 1, "run", "-1"),
+        ("ATL", rows[0]["game_id"], 1, "pass", "0"),
+        ("NYG", "SYNTHETIC_LEAGUE_02", 2, "run", "2"),
+        ("NYG", "SYNTHETIC_LEAGUE_02", 2, "pass", ""),
+        ("DAL", "SYNTHETIC_LEAGUE_03", 1, "pass", "1"),
+    ]
+    for play_id, (team, game, week, call, epa) in enumerate(extra, 301):
+        variant.append(rows[0] | {"posteam": team, "defteam": "CAR", "game_id": game,
+            "play_id": str(play_id), "week": str(week), "play_type": call,
+            "qb_dropback": "1" if call == "pass" else "0", "epa": epa})
+    if name == "league_missing_epa":
+        return [row | {"epa": ""} if row["posteam"] != "CAR" else row for row in variant]
+    if name == "league_selected_missing_epa":
+        return [row | {"epa": ""} if row["posteam"] == "CAR" else row for row in variant]
+    if name == "league_unobserved_selected_run":
+        return [row | {"qb_dropback": "1", "play_type": "pass"}
+                if row["posteam"] == "CAR" and row["play_type"] in ("run", "pass") else row for row in variant]
+    return variant
 
 
 def decision_fixtures():
@@ -62,8 +133,14 @@ def decision_fixtures():
             variant = rows
             if name.startswith("field_"):
                 variant = field_position_rows(rows, all_missing=name == "field_all_missing")
+            if name.startswith("score_"):
+                variant = score_rows(rows, name)
             if name in ("context", "overtime", "zero_clock"):
                 variant = time_rows(rows, "time_four_stage")
+            if name.startswith("time_"):
+                variant = time_rows(rows, name)
+            if name.startswith("league_"):
+                variant = league_rows(rows, name)
             if name.startswith("bootstrap_"):
                 variant = uncertainty_rows(rows, name.removeprefix("bootstrap_"))
             if name == "bootstrap_unobserved":

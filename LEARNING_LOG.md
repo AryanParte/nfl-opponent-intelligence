@@ -3065,3 +3065,264 @@ zero/equal/reversed bounds, empty/stale results and preserved mode state. Period
 clock, baseline/interval views, user-call comparison and downloads follow separately.
 Models/charting, historical availability, screen-reader/cross-browser coverage and
 deployment remain deferred. Do not merge or enable auto-merge.
+
+## 2026-11-08 — Decision pre-play score bounds and conditional missingness
+
+**Built / why:** Decision Lab now accepts signed pre-play score bounds. Shared
+Scout controls and range formatting preserve existing semantics; one context
+ledger shows active field → score → down → distance stages. This explains why
+missing-score counts change after field selection and prevents intermediate
+counts from being used as final candidate denominators. No preferred call is added.
+
+**Review:** `web/src/ScoreControls.tsx`, `DecisionContextView.tsx` (renamed from
+`DecisionFieldPositionView.tsx`), `DecisionLab.tsx`, `report.ts`, `ScoreView.tsx`,
+`decision-score.test.tsx`, `web/e2e/scout.spec.ts`,
+`tests_api/test_decision_frontend_contract.py` and `docs/DECISION_WEB.md`.
+PR #41 was merged; fetched main `bc7b9b0` has eight green CI jobs and the same tree
+as feature head `6038ff1`. No open PRs/reviews/comments or unpublished local work
+remained. Started `codex/decision-score-filter` from that updated main.
+
+**Sports concepts:** score differential is offense points minus defense points at
+play start. Negative means trailing, positive leading; zero is a known tie. Never
+substitute post-play scores. These ranges do not define neutral game states or
+win probability. Missing score, missing EPA, absent calls and measured zero are
+different states. Higher descriptive EPA still does not authorize a preferred call.
+
+**Software/statistical concepts / learn:** both blank score bounds omit filtering;
+a single blank end is unbounded, unlike field-position defaults. Preserve partial
+signs as text so invalid input cannot become omission. Missingness is conditional
+on prior-stage survivors: a play missing both field and score is counted once at
+field. Reuse API estimates and validation; keep independent accessible mode state.
+
+**Three review questions:**
+
+1. How do blank score bounds, one blank end and an explicit 0–0 range differ?
+2. Why must score missingness be measured after field selection, and which retained
+   count is the candidate frequency denominator?
+3. How do the same-snapshot filter-removal test, malformed-ledger tests and late-
+   response tests protect the meaning of the displayed cohort?
+
+**Verification / self-review:** 453 core / 45 API pass on each Python 3.11/3.12/3.13
+with API warnings as errors and passing dependency checks; 971 frontend tests,
+TypeScript/build and 26 desktop/narrow Chromium cases pass. Twelve added actual
+synthetic HTTP fixtures bring the Decision corpus to 42; all prior 30 and Scout's
+71 remain unchanged. Hand-counted stages cover signed/one-sided/tied/zero/full/
+empty/all-missing/combined contexts and final distance exclusion. Real browser
+checks reconcile 15 → 12 → 11 invented plays and distinguish missing Run EPA from
+zero Pass EPA in a tied scenario. Axe, keyboard order, inspected 320-pixel screenshots
+and mode preservation pass; no unexpected external requests/page errors; owned
+servers stopped. Synthetic results verify implementation, not football performance.
+
+Complete-diff review checked signs, null bounds, stage order, source/cutoff
+preservation, final denominators, unique help IDs, safe errors, Scout compatibility
+and abstention. Strengthened clearing-score verification to retain the same snapshot
+and field bounds, avoiding a confounded UI test. All completed test runs passed;
+no API/schema, formula, dependency, source/license, model admission, CI timeout or
+automation changes. Exact pushed SHA, attribution and CI receipt belong in the PR.
+
+**Remaining / next:** optional period/clock controls using Q1–Q4/OT and inclusive
+seconds remaining. Clock requires a period; add active stages before down/distance
+and test missing period/clock, zero clock, OT, bounds, empty/stale states and mode
+preservation. Candidate baselines/intervals, user choices and downloads follow
+separately. Historical availability, model/charting admission, assistive-technology/
+cross-browser coverage and deployment remain deferred. Do not merge or enable auto-merge.
+
+
+## 2026-11-09 — Decision period/clock selection and ordered exclusions
+
+**Built / why:** Decision Lab now offers Q1–Q4/OT and inclusive seconds remaining
+through shared Scout controls. One ledger shows active field → score → period →
+clock → down → distance counts, so users can see how missing context changes the
+final Run/Pass sample. No preferred call or new calculation is introduced.
+
+**Review:** `web/src/TimeControls.tsx`, `DecisionLab.tsx`, `DecisionContextView.tsx`,
+`App.tsx`, `decision-time.test.tsx`, `web/e2e/scout.spec.ts`,
+`tests_api/test_decision_frontend_contract.py` and `docs/DECISION_WEB.md`.
+Fetched main remains `bc7b9b0`. PR #42 is open; its prior head `5e5e9bf` had green
+push/PR CI, no reviews/comments and a clean 0-ahead/behind checkout. Continued its
+existing branch as explicitly requested by the latest heartbeat; preserved history.
+
+**Sports concepts:** clock is seconds remaining within the pre-play period, not
+elapsed/game time. Q4 excludes overtime; OT groups all periods numbered 5 or higher.
+The input cap is not a season-specific rules validator. Missing periods/clocks,
+known zero, missing EPA and an unobserved call have different meanings. Observed
+outcomes remain descriptive, not causal or validated recommendations.
+
+**Software/statistical concepts / learn:** period-only selection can retain missing
+clocks and work without a clock column. Explicit 0–900 removes unknown clocks;
+one entered end supplies the existing 0/900 default. Requested missing context
+is excluded once at the first applicable stage. Clock survivors are still
+intermediate because down/distance follow. Keep request semantics, response
+validation, display and focus behavior consistent across independent mode state.
+
+**Three review questions:**
+
+1. Why can Q4-only return more plays than Q4 with an explicit 0–900 clock range?
+2. When field, score, period and clock are requested, where is a play missing both
+   period and clock counted, and which stage supplies candidate denominators?
+3. Why must clearing a period preserve entered seconds and prevent a request until
+   the user fixes that dependency, and how do tests prevent stale evidence appearing?
+
+**Verification / self-review:** 453 core / 45 API tests pass on each Python
+3.11/3.12/3.13 with API warnings as errors and passing dependency checks. All 1,032
+frontend tests, TypeScript/build and 28 desktop/narrow Chromium cases pass. Seventeen
+new actual synthetic HTTP fixtures bring the Decision corpus to 59; all prior 42
+and Scout's 71 remain unchanged. Independent counts and real browser checks reconcile
+15 → 12 → 11 → 5 → 3 plays, including final Run frequency 2/3 with only one observed
+EPA. Same-snapshot removal tests distinguish Q4-only 8 from full-clock 7. These are
+invented software verification observations, not football performance evidence.
+
+Reviewed the complete diff for cutoff/source identity, pre-play clock fields,
+inclusive/blank endpoints, the distinct period outside-count key, stage ordering,
+final denominators, unique help IDs, Scout compatibility, safe errors and abstention.
+Removed the obsolete unconditional unrestricted-time summary. No failed tests or
+changed timeouts; no API/schema, formula, dependency, source/license, model or
+automation change. Axe/keyboard/320px scrolling pass; screenshot inspected. Contrast
+incompletes in narrow tables and assistive-technology/cross-browser gaps remain.
+No external browser requests/page errors; owned servers stopped. Final remote SHA,
+GitHub attribution and CI receipt belong in PR #42.
+
+**Remaining / next:** opt-in matched candidate league view, showing same-situation
+leave-team-out Run/Pass evidence, selected-minus-baseline differences with units,
+coverage/shared games and ordered baseline exclusions. Test off/on, empty/missing
+baseline, unchanged selected evidence, context matching and stale responses without
+ranking or fallback. Intervals, user choices and downloads follow separately.
+Historical availability, model/charting admission and deployment remain deferred.
+Do not merge or enable auto-merge.
+
+
+## 2026-11-10 — Matched candidate league evidence in Decision Lab
+
+**Built / why:** an off-by-default league comparison checkbox and Run/Pass evidence
+view using the existing validated response. Each call shows selected versus other-
+offense frequency, EPA, success, explicit differences/units, denominators, missing
+states, count flags and game/team/shared-game coverage. Separate baseline exclusion
+counts explain how that population was selected. Selected estimates stay unchanged;
+empty/missing evidence never produces a wider fallback or a preferred call. This
+makes league context inspectable without suggesting that an association is optimal.
+
+**Start state:** verified the canonical root/origin and fetched; main remains
+`bc7b9b0`. PR #42 is still open at prior head `b70cf42`, clean and 0 ahead/behind,
+with no review/comment feedback and green push/PR CI. Continued the existing branch
+as the latest heartbeat requests, preserving both earlier slices and full history.
+Baseline 453 core / 45 API passed on Python 3.13 before edits.
+
+**Review:** `web/src/DecisionComparisonView.tsx`, `DecisionFilterTable.tsx`,
+`DecisionContextView.tsx`, `DecisionLab.tsx`, `decision-comparison.test.tsx`,
+`tests_api/test_decision_frontend_contract.py`, `web/e2e/scout.spec.ts` and
+`docs/DECISION_WEB.md`. Roadmap, status, README, architecture/contract and accessibility
+notes now describe the shipped view and next bounded unit.
+
+**Sports analytics:** compare the same observed call across matched populations;
+Pass remains dropbacks including sacks/scrambles. The baseline excludes the selected
+offense before context selection; its defensive appearances can remain. Pooled play
+rates differ from average team rates. Frequency uses parent plays; outcomes use
+candidate observed EPA. Candidate games can overlap, and shared games/repeated teams
+create dependence. Matching does not establish opponent adjustment or causal quality.
+
+**Software/statistics / learn:** share table presentation while retaining separate
+population ledgers; display validated server differences without recalculating them
+from rounded cells. Keep missing, unobserved, empty and measured-zero states distinct.
+Reuse the explicit-submit/cancellation lifecycle and independent mode state. Learn to
+trace a comparison from its source/cutoff through exclusions to each denominator.
+
+**Three review questions:**
+1. Why is the synthetic baseline Run frequency 2/6 rather than the mean of its three team rates, and why does Pass EPA use three observations instead of four plays?
+2. What does selected-minus-baseline mean for each call, how do percentage points differ from percent change, and why does a positive difference not select a preferred call?
+3. How do prior filter survivors, overlapping games and missing EPA affect the meaning of baseline coverage and unavailable comparisons?
+
+**Verification / self-review:** 453 core / 45 API tests pass on each Python
+3.11/3.12/3.13 (API warnings as errors; dependency checks pass), plus 1,059 frontend
+tests, TypeScript/build and 30 desktop/narrow Chromium cases in 45.2 seconds. Five
+actual synthetic HTTP fixtures bring Decision to 64; all prior 59 values and 71
+Scout fixtures remain unchanged. Twenty-two new component cases use independent
+pooled metrics/counts, missing/empty/OT cases, malformed contracts, exact requests,
+stale-response rejection, safe errors and mode-state checks. Browser tests reconcile
+six selected/baseline stages and same-source off/on/off without changing estimates.
+
+Complete-diff review checked pooled denominators, same-call differences, nulls,
+coverage overlap, source/cutoff identity, exclusion order, Scout compatibility and
+abstention. Clarified that coverage includes missing-EPA plays, not observed-EPA
+support. Fixed a TypeScript test-helper target type and an accidental edit to an
+existing clock-clear assertion. An initial browser run also timed out during page
+setup; the complete rerun passed without changing timeouts or retries. Axe reports
+no violations in new scans, but narrow/clipped contrast incompletes remain. Focused
+320-pixel comparison/ledger screenshots were inspected; owned servers stopped and
+no unexpected requests/page errors occurred. No API/schema, analytics formula,
+dependency, data/source/license, model or automation change. Exact publication SHA,
+GitHub attribution and CI receipt belong in PR #42.
+
+**Remaining / next:** bounded opt-in candidate game-support/exploratory uncertainty
+controls and views using existing contracts/helpers: 200–1,000 repetitions, optional
+uint32 seed, parent versus observed-EPA game support, selected/baseline/difference
+intervals and explicit unavailable/withheld/degenerate/valid-draw states. Test exact
+requests, on/off, sparse/empty evidence, stale results and unchanged point estimates.
+No Pass-minus-Run contrast interval, browser resampling or ranking. User choices and
+downloads follow separately. Historical availability, production model/charting
+admission, accessibility coverage and deployment remain deferred. Do not merge or
+enable auto-merge.
+
+
+## 2026-11-11 — Candidate support and exploratory uncertainty
+
+**Built / why:** optional bounded bootstrap controls and Run/Pass interval tables in
+Decision Lab. The view exposes per-metric game support, selected/baseline/paired-
+difference bounds, defined/undefined draws, all five interval states and replay
+metadata. Shared controls/cells retain Scout behavior. This helps an analyst see
+why an outcome interval may be withheld even when its frequency interval exists;
+point estimates and the no-preferred-call policy stay unchanged.
+
+**Start state:** canonical root/origin verified and fetched. Main stays `bc7b9b0`;
+PR #42 remains open at prior head `87f80b1`, clean and 0 ahead/behind, with no review/
+comment feedback and successful push/PR CI. Continued the existing branch under the
+latest heartbeat. Baseline 453 core / 45 API tests passed on Python 3.13 before edits.
+
+**Review files:** `web/src/BootstrapControls.tsx`, `IntervalCells.tsx`,
+`DecisionUncertaintyView.tsx`, `DecisionLab.tsx`, `UncertaintyView.tsx`,
+`decision-uncertainty.test.tsx`, `tests_api/test_decision_frontend_contract.py`,
+`web/e2e/scout.spec.ts` and `docs/DECISION_WEB.md`.
+
+**Sports/statistical concepts:** frequency has parent-game support, including games
+without the call; outcomes need observed candidate EPA. Candidate game counts and
+EPA support are different. Run and Pass share game draws; league comparisons pair
+populations over the game-ID union. Differences are within-draw, same-call selected
+minus baseline, not differences of marginal endpoints. Missing outcomes, zero rates,
+withheld bounds and absent frames remain distinct. Five-game/95%-draw gates and
+below-20 warnings are safeguards, not NFL calibration or optimal-call evidence.
+
+**Software / learn:** reuse presentation without duplicating sampling or formulas;
+keep each mode's controls/IDs independent. Trace query limits and default seed to
+returned method/support metadata. Understand why more draws do not add observations,
+why changing comparison can change bounds without changing points, and why an
+interval excluding zero still cannot supply a preferred call.
+
+**Three review questions:**
+1. Why can a Run candidate have five frequency-support games but only two observed-EPA games, and what happens when that call is unobserved?
+2. How are same-call league differences paired, and why does selected-only shared_game_weights=false not mean Run and Pass are resampled independently?
+3. How do undefined, insufficient-game, insufficient-valid-draw and degenerate intervals differ, and why does none of these states justify replacing a missing bound with zero?
+
+**Verification / self-review:** 453 core / 45 API tests pass on Python 3.11, 3.12 and
+3.13 (API warnings as errors; dependency checks pass), plus 1,103 frontend tests,
+TypeScript/build and 32 desktop/narrow Chromium cases in 51.6 seconds. Five new
+actual synthetic HTTP fixtures bring Decision to 69; all prior 64 and 71 Scout
+fixtures are unchanged. Thirty-nine new component cases cover unchanged points,
+all interval states, request limits, context preservation, malformed evidence,
+stale requests and mode state. Controlled boundary draws remain explicitly labeled.
+
+Complete-diff review checked support semantics, candidate/paired mappings, units,
+source/cutoff preservation, no client estimation and Scout compatibility. Fixed
+three test-only issues: the focus matcher, the period-control locator and a rendered-
+text assertion mixing innerText with textContent. Final checks retain existing
+timeouts/retries. New axe scans have no violations; narrow/clipped contrast
+incompletes and assistive-technology/cross-browser gaps remain. Screenshot inspected;
+no unexpected browser requests/errors and owned servers stopped. No API/schema,
+core formula, dependency, data/source/license, model or automation change. Exact
+publication SHA, attribution and CI receipt belong in PR #42.
+
+**Remaining / next:** user Run/Pass selection with the existing fixed Pass-minus-Run
+descriptive contrast. Choice stays UI state, not a request option or evidence
+mutation; clear it on situation edits and preserve it across mode switches. Test
+keyboard selection, null/empty reasons and mandatory abstention. No grading, ranked
+winner, browser sign inversion or contrast interval. Decision JSON download follows
+separately; model/charting admission, historical availability and deployment remain
+deferred. Do not merge or enable auto-merge.

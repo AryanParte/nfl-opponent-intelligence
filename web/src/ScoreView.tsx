@@ -1,18 +1,13 @@
-import { number, type Report, type ScoreCounts } from './report';
-
-const points = (value: number) => `${value > 0 ? '+' : ''}${value}`;
+import { number, scoreRange, type Report, type ScoreCounts } from './report';
 
 export function ScoreView({ report }: { report: Report }) {
   const score = report.cohort.score_differential;
   if (!score) return <p className="muted">Pre-play score: unrestricted; no score-based exclusions.</p>;
-  const { minimum_inclusive: lower, maximum_inclusive: upper } = score;
-  const range = lower === null ? `At most ${points(upper!)} points`
-    : upper === null ? `At least ${points(lower)} points` : `${points(lower)} to ${points(upper)} points`;
   const rows: [string, ScoreCounts][] = [['Selected cohort', report.data_quality.score_differential_filter!]];
   if (report.league_comparison) rows.push(['Other teams baseline', report.league_comparison.data_quality.score_differential_filter!]);
   return <section className="panel field-position" aria-labelledby="score-title">
     <div className="section-heading"><h3 id="score-title">Pre-play score difference</h3><span>Returned filter · inclusive</span></div>
-    <p><strong>{range}</strong> · offense points minus defense points before the play. A blank end remains unbounded, not zero.</p>
+    <p><strong>{scoreRange(score)}</strong> · offense points minus defense points before the play. A blank end remains unbounded, not zero.</p>
     <p>Negative means the offense is trailing; positive means it is leading; 0 is a known tie, not a missing score.
       For a selected defense, -7 means the opposing offense trails that defense by 7. Baseline plays use their own offense’s perspective too.
       No sign reversal or post-play score substitution. This range is not a neutral-game or win-probability definition.</p>
