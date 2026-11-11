@@ -8,6 +8,7 @@ import { ScoreControls } from './ScoreControls';
 import { TimeView } from './TimeView';
 import { TimeControls } from './TimeControls';
 import { UncertaintyView } from './UncertaintyView';
+import { BootstrapControls } from './BootstrapControls';
 import { ReportDownload } from './ReportDownload';
 import { SourceView } from './SourceView';
 import { DecisionLab } from './DecisionLab';
@@ -144,18 +145,7 @@ function ScoutView({ active }: { active: boolean }) {
           onChange={(e) => edit('compare_league', e.target.checked)} {...fieldAccessibility('compare_league', 'comparison-help')} />
           Compare with other teams in the same role</label>
         <p id="comparison-help" className="muted">Optional pooled baseline from available source plays. Does not request uncertainty calculations.</p>
-        <fieldset className="field-controls" aria-describedby="bootstrap-help">
-          <legend>Exploratory game bootstrap (optional)</legend>
-          <div className="field-inputs">
-            <label>Bootstrap repetitions<input name="bootstrap_repetitions" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.bootstrap_repetitions} onChange={e => edit('bootstrap_repetitions', e.target.value)} {...fieldAccessibility('bootstrap_repetitions', 'bootstrap-help')} /></label>
-            <label>Bootstrap seed<input name="bootstrap_seed" type="text" inputMode="numeric" autoComplete="off"
-              value={draft.bootstrap_seed} onChange={e => edit('bootstrap_seed', e.target.value)} {...fieldAccessibility('bootstrap_seed', 'bootstrap-help')} /></label>
-          </div>
-          <p id="bootstrap-help" className="muted">Whole repetitions 200–1000 opt in; both blank means not requested. Seed 0–4294967295 requires repetitions;
-            blank seed defaults to 0. Works with or without comparison. More draws add computation, not observed games or statistical reliability.
-            Bounds are exploratory, not calibrated confidence. Editing clears results; aborting or timing out does not stop server computation.</p>
-        </fieldset>
+        <BootstrapControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} />
         <div className="form-footer"><div><p id="cutoff-help">Whole week 1–23. Exclusive cutoff: only weeks strictly before this week are included.</p>
           <p id="season-help" className="muted">Whole season 1999–9999; it must be available in the configured snapshot.</p>
           <p id="query-help" className="muted">Use 2–3 letter uppercase source team codes. The API's operator selects the local season snapshot, not this form.</p></div>

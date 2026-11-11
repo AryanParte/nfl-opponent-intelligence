@@ -5,7 +5,8 @@ existing [Decision API](API.md#decision-request-contract), contract v1. The firs
 rendered Decision Lab mode followed on 2026-11-06 in the same app as Scout;
 optional field-position controls and exclusion accounting followed on 2026-11-07,
 then pre-play score controls on 2026-11-08 and period/clock controls on 2026-11-09.
-The optional matched candidate league view followed on 2026-11-10.
+The optional matched candidate league view followed on 2026-11-10, with bounded
+candidate game-support/uncertainty controls and views on 2026-11-11.
 No package, API, core formula or data source changed.
 
 ## First rendered slice
@@ -14,8 +15,8 @@ Select **Decision Lab** in the mode tabs, then submit an offense team code,
 season/type, exclusive before-week cutoff, one exact down and inclusive whole-yard
 distance bounds. Defaults are inputs, not asserted source coverage. The first
 form defaults to unrestricted field position, score and period/clock, with optional
-context controls. Comparison defaults off but can be requested; bootstrap remains
-unrequested by the rendered form. It does not offer defense/opponent conditioning, a preferred call,
+context controls. Comparison defaults off; bootstrap repetitions and seed default
+blank. Each feature is opt-in and can be requested independently. It does not offer defense/opponent conditioning, a preferred call,
 user-call grading or advanced play families.
 
 `DecisionLab.tsx` renders the validated selected-offense population and fixed Run,
@@ -165,6 +166,45 @@ These are baseline exclusions, not selected-team missingness or source-wide cove
 Returned baseline warnings are displayed. Tables retain captions, headers and named
 keyboard-focusable horizontal scroll regions.
 
+## Optional candidate support and uncertainty
+
+`BootstrapControls.tsx` is shared with Scout, with independent Decision draft state
+and help/error IDs. Repetitions 200–1,000 opt in; an optional uint32 seed defaults to
+zero. Both blank omits uncertainty. Text inputs preserve malformed partial values;
+a seed without repetitions is an error, including a retained seed after clearing
+repetitions. No automatic fetch, retry or silent option removal. Edits cancel stale
+browser work but do not guarantee server computation has stopped.
+
+`DecisionUncertaintyView.tsx` consumes the existing candidate block.
+`IntervalCells.tsx` shares formatting, support/draw counts and status labels with
+Scout without sharing their different metric mappings. Run/Pass tables display
+selected, and when requested baseline and paired selected-minus-baseline evidence.
+Rates are shown as percentages, rate differences as percentage points; bounds and
+point estimates are returned values, never reconstructed in React.
+
+Frequency support counts all parent-cohort games, including games without the call.
+Outcome support counts games with observed EPA for that call; candidate point-table
+games include missing-EPA plays and are a different count. Both calls use the same
+game draws even when `shared_game_weights` is false for selected-only evidence.
+With league comparison, both populations also share weights from the game-ID union.
+Comparison can change selected bounds through the frame; it does not change points.
+Paired differences are formed within draws, not by subtracting marginal endpoints.
+
+The view preserves all five returned interval states: available, undefined, fewer
+than five contributing games, fewer than 95% defined draws, and degenerate bounds.
+The separate below-20-games flag is a warning, not a reliability guarantee. Withheld
+bounds do not mean zero uncertainty; undefined estimates stay unavailable. Empty
+frames perform zero draws, while a baseline-only frame can still perform draws.
+More repetitions add no observed games. These are exploratory nominal 95% pointwise
+bounds, not calibrated confidence, significance tests or predictions. No contrast
+interval or preferred call is introduced, including when bounds exclude zero.
+
+Method/RNG/quantile, seed, frame size, performed/requested draws and all warnings
+remain visible. Replay still needs source/cohort/runtime identity. Keyboard-focusable
+tables expose support and interval status on narrow screens. See the existing
+[analytical contract](DECISION_CONTRACT.md#optional-candidate-uncertainty) for the
+procedure and unaddressed dependence, missingness and source/model limitations.
+
 ## Request and response boundaries
 
 `parseDecisionQuery` accepts a complete `DecisionDraft`: string controls (blank
@@ -221,7 +261,7 @@ manifest metadata, source completeness, causal validity or historical availabili
 
 ## Reproducible evidence
 
-`tests_api/test_decision_frontend_contract.py` freezes **64 actual HTTP responses**
+`tests_api/test_decision_frontend_contract.py` freezes **69 actual HTTP responses**
 in `web/src/__fixtures__/decisions.json`. Observations, source IDs/timestamps and
 labels are explicitly synthetic; fixtures never enter the live app. Snapshot bytes
 and hashes are created with the existing factory, and acquisition/socket calls are
@@ -282,6 +322,16 @@ safe errors and invalid baseline rejection. The browser tests same-source off/on
 hand-counted selected/baseline evidence, empty states, keyboard toggling and narrow
 comparison/accounting scrolling. These synthetic outcomes are software checks.
 
+Five uncertainty fixtures add same-snapshot selected/league uncertainty-off counterparts,
+combined contexts, maximum request/seed and selected-only empty-frame behavior.
+All prior 64 Decision values and 71 Scout fixtures are unchanged. Thirty-nine new
+component cases cover unchanged points across off/on/off, parent versus candidate
+support, every interval state, the controlled 189/200 versus 190/200 valid-draw gate,
+paired differences/units, maximum/invalid inputs, safe errors, stale responses and
+independent mode state. Controlled draws stay explicitly labeled, not seed replays.
+Real browser checks use the actual API for optional comparisons, sparse/empty
+support, input correction, point preservation, keyboard flow and 320-pixel scrolling.
+
 Run the normal core/API/browser checks in [WEB.md](WEB.md). To intentionally
 regenerate only the Decision fixtures with optional API dependencies installed:
 
@@ -294,12 +344,11 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add bounded opt-in candidate game-support/exploratory uncertainty controls and views
-using the existing contract, guards and interval presentation. Expose 200–1,000
-repetitions and an optional uint32 seed. Distinguish parent-game frequency support
-from observed-EPA game support; show returned selected/baseline/difference intervals
-and unavailable, withheld, degenerate and valid-draw states. Test exact requests,
-on/off, empty/sparse evidence, stale responses and unchanged point estimates. No
-Pass-minus-Run contrast interval, preferred call or browser resampling. User-choice
-comparison and downloads follow separately. No new model/data layer, storage or
-deployment belongs in that unit.
+Add user Run/Pass selection and inspect it alongside the alternative using the
+existing server-provided, fixed Pass-minus-Run descriptive contrast. Keep the choice
+as UI state, not an API option or evidence mutation; clear it when the situation
+changes and preserve it across mode switches. Retain explicit unavailable reasons,
+mandatory abstention and the unimplemented contrast-interval state. Test keyboard
+selection, query changes, missing/empty evidence and state preservation. No grading,
+ranked winner, sign-inverted browser calculation or new model. Decision JSON download
+follows as a separate unit.

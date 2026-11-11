@@ -9,6 +9,8 @@ import { DecisionContextView } from './DecisionContextView';
 import { ScoreControls } from './ScoreControls';
 import { TimeControls } from './TimeControls';
 import { DecisionComparisonView } from './DecisionComparisonView';
+import { BootstrapControls } from './BootstrapControls';
+import { DecisionUncertaintyView } from './DecisionUncertaintyView';
 
 const initial: DecisionDraft = {
   team: 'CAR', season: '2024', before_week: '19', season_type: 'REG', down: '1', distance_min: '10', distance_max: '10',
@@ -68,10 +70,11 @@ function DecisionEvidence({ decision }: { decision: Decision }) {
       <p className="muted">Count warning threshold: {decision.estimation_policy.minimum_plays_warning}. Absence of a flag does not establish statistical reliability.</p>
     </section>
     <DecisionComparisonView decision={decision} />
+    <DecisionUncertaintyView decision={decision} />
     <SourceView source={decision.source} titleId="decision-source-title" versionLabel={`Decision contract v${decision.contract_version}`} />
     <section className="notice" aria-labelledby="decision-warnings-title">
       <h3 id="decision-warnings-title">Read before interpreting</h3>
-      <p>{decision.league_comparison ? 'Matched league comparison was requested. Uncertainty was not requested; differences are descriptive, not significance tests.'
+      <p>{decision.uncertainty ? 'Exploratory uncertainty was requested. Intervals do not validate a preferred call.' : decision.league_comparison ? 'Matched league comparison was requested. Uncertainty was not requested; differences are descriptive, not significance tests.'
         : 'League comparison and uncertainty were not requested. This view displays selected-offense evidence only.'}</p>
       {decision.warnings.length > 0 && <ul>{decision.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul>}
     </section>
@@ -147,6 +150,7 @@ export function DecisionLab({ active }: { active: boolean }) {
         Compare with other offenses</label>
       <p id="decision-comparison-help" className="muted">Optional pooled baseline excludes the selected offense and matches this situation within the available snapshot.
         Does not request uncertainty or recommend a call.</p>
+      <BootstrapControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} idPrefix="decision-" />
       <div className="form-footer"><div>
         <p id="decision-cutoff-help">Whole week 1–23. Exclusive cutoff: only weeks strictly before this week are included.</p>
         <p id="decision-season-help" className="muted">Whole season 1999–9999; it must be available in the configured snapshot.</p>

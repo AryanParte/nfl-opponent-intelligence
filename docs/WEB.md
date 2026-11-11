@@ -22,7 +22,8 @@ Decision Lab is now a second mode in the same app. Its
 [minimal situation form and Run/Pass evidence view](DECISION_WEB.md) use the typed
 contract/client, preserve Scout state and withhold a preferred call. Both modes
 offer optional field-position, pre-play score and period/clock filters, plus matched
-league comparisons. Interval controls remain Scout-only in the current rendered UI.
+league comparisons and bounded exploratory game-bootstrap controls. Decision uses
+per-candidate parent/observed-EPA support and preserves all returned interval states.
 
 ![Local report view of the retrospective CAR 2024 cohort](examples/local-report-view.png)
 
@@ -724,9 +725,10 @@ signs and ordered missingness. Optional period/clock controls now extend the act
 ledger through period → clock → down → distance, preserving zero/missing values
 and period-only versus explicit clock selection. The opt-in matched candidate
 league view now adds pooled evidence, coverage/shared games, signed differences and
-separate baseline exclusion counts. Next add bounded candidate game-support and
-exploratory interval controls/views, preserving null/withheld/degenerate states and
-unchanged point estimates. User-call comparison and Decision downloads follow
-separately. No models, storage or deployment belong in that slice.
+separate baseline exclusion counts. Bounded candidate support/interval views now
+preserve unavailable/withheld/degenerate states and unchanged point estimates.
+Next add user Run/Pass selection with the fixed returned descriptive contrast and
+mandatory abstention. Decision downloads follow separately. No models, storage or
+deployment belong in that slice.
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
 explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

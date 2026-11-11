@@ -5,6 +5,25 @@ screen-reader certification or public-release claim. Scout's analytics, API,
 schema v2, snapshots and downloadable evidence are unchanged. The original review
 preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
 
+## Decision uncertainty follow-up — 2026-11-11
+
+Shared text inputs preserve invalid partial values and use Decision-specific help/
+error IDs. Both controls join the native tab order; invalid repetitions or an
+orphaned seed focus repetitions, while an invalid seed focuses itself. Correcting
+the query removes stale evidence and requires explicit submission. Mode changes
+preserve independent drafts and completed results without another request.
+
+Run/Pass interval tables have captions, row/column headers and named keyboard-
+focusable scroll regions. Availability and withheld reasons are text, not color;
+method metadata is a native disclosure. All 32 desktop/narrow Chromium cases pass,
+including actual synthetic API evidence, sparse/empty support, input correction,
+keyboard order, comparison toggling and 320-pixel containment/scrolling. The focused
+narrow screenshot was inspected. New axe scans have zero violations; loaded desktop
+and invalid states have no incompletes, while narrow/clipped numeric tables retain
+contrast incompletes (including empty-state tables). This does not resolve every
+contrast node or establish conformance. Screen-reader, real-device, zoom and cross-
+browser gaps remain. No unexpected requests/errors; owned servers stopped.
+
 ## Decision league comparison follow-up — 2026-11-10
 
 The optional checkbox is in the native tab order, works with Space and has unique

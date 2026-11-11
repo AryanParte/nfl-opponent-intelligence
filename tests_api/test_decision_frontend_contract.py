@@ -84,6 +84,13 @@ QUERIES["bootstrap_selected"].update(compare_league=False)
 del QUERIES["bootstrap_selected"]["bootstrap_seed"]
 QUERIES["bootstrap_empty"].update(before_week=1)
 QUERIES["bootstrap_empty_selected"].update(team="ZZZ")
+QUERIES.update({
+    "bootstrap_selected_plain": BASE | {"before_week": 19},
+    "bootstrap_comparison_plain": BASE | {"before_week": 19, "compare_league": True},
+    "bootstrap_context": QUERIES["context"] | {"bootstrap_repetitions": 200, "bootstrap_seed": 7},
+    "bootstrap_maximum": BASE | {"before_week": 19, "bootstrap_repetitions": 1000, "bootstrap_seed": 4294967295},
+    "bootstrap_empty_selected_only": BASE | {"before_week": 19, "team": "ZZZ", "bootstrap_repetitions": 200},
+})
 
 
 def league_rows(rows, name):

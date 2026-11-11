@@ -86,12 +86,13 @@ completed results and Scout downloads; pending requests are cancelled and late
 responses discarded. The form covers season/type/cutoff/down/distance and optional field/score/period/clock filters;
 Run/Pass frequency, EPA, success, counts, missing states, warnings and provenance
 remain descriptive. An opt-in comparison shows other offenses under identical
-filters, candidate-specific differences, coverage and baseline exclusions.
+filters, candidate-specific differences, coverage and baseline exclusions. Optional
+bounded game-bootstrap controls now show per-candidate game support, exploratory
+intervals, draw counts and explicit unavailable/withheld states.
 Actual synthetic API fixtures and local browser integration verify the boundary.
 Scout's controls and original fixtures are preserved.
 Charting applicability and historical availability remain unverified.
-Decision Lab's interval views, user-call comparison, downloads, adjustment and
-deployment remain on the
+Decision Lab's user-call comparison, downloads, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 

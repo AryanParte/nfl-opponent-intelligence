@@ -3261,3 +3261,68 @@ No Pass-minus-Run contrast interval, browser resampling or ranking. User choices
 downloads follow separately. Historical availability, production model/charting
 admission, accessibility coverage and deployment remain deferred. Do not merge or
 enable auto-merge.
+
+
+## 2026-11-11 — Candidate support and exploratory uncertainty
+
+**Built / why:** optional bounded bootstrap controls and Run/Pass interval tables in
+Decision Lab. The view exposes per-metric game support, selected/baseline/paired-
+difference bounds, defined/undefined draws, all five interval states and replay
+metadata. Shared controls/cells retain Scout behavior. This helps an analyst see
+why an outcome interval may be withheld even when its frequency interval exists;
+point estimates and the no-preferred-call policy stay unchanged.
+
+**Start state:** canonical root/origin verified and fetched. Main stays `bc7b9b0`;
+PR #42 remains open at prior head `87f80b1`, clean and 0 ahead/behind, with no review/
+comment feedback and successful push/PR CI. Continued the existing branch under the
+latest heartbeat. Baseline 453 core / 45 API tests passed on Python 3.13 before edits.
+
+**Review files:** `web/src/BootstrapControls.tsx`, `IntervalCells.tsx`,
+`DecisionUncertaintyView.tsx`, `DecisionLab.tsx`, `UncertaintyView.tsx`,
+`decision-uncertainty.test.tsx`, `tests_api/test_decision_frontend_contract.py`,
+`web/e2e/scout.spec.ts` and `docs/DECISION_WEB.md`.
+
+**Sports/statistical concepts:** frequency has parent-game support, including games
+without the call; outcomes need observed candidate EPA. Candidate game counts and
+EPA support are different. Run and Pass share game draws; league comparisons pair
+populations over the game-ID union. Differences are within-draw, same-call selected
+minus baseline, not differences of marginal endpoints. Missing outcomes, zero rates,
+withheld bounds and absent frames remain distinct. Five-game/95%-draw gates and
+below-20 warnings are safeguards, not NFL calibration or optimal-call evidence.
+
+**Software / learn:** reuse presentation without duplicating sampling or formulas;
+keep each mode's controls/IDs independent. Trace query limits and default seed to
+returned method/support metadata. Understand why more draws do not add observations,
+why changing comparison can change bounds without changing points, and why an
+interval excluding zero still cannot supply a preferred call.
+
+**Three review questions:**
+1. Why can a Run candidate have five frequency-support games but only two observed-EPA games, and what happens when that call is unobserved?
+2. How are same-call league differences paired, and why does selected-only shared_game_weights=false not mean Run and Pass are resampled independently?
+3. How do undefined, insufficient-game, insufficient-valid-draw and degenerate intervals differ, and why does none of these states justify replacing a missing bound with zero?
+
+**Verification / self-review:** 453 core / 45 API tests pass on Python 3.11, 3.12 and
+3.13 (API warnings as errors; dependency checks pass), plus 1,103 frontend tests,
+TypeScript/build and 32 desktop/narrow Chromium cases in 51.6 seconds. Five new
+actual synthetic HTTP fixtures bring Decision to 69; all prior 64 and 71 Scout
+fixtures are unchanged. Thirty-nine new component cases cover unchanged points,
+all interval states, request limits, context preservation, malformed evidence,
+stale requests and mode state. Controlled boundary draws remain explicitly labeled.
+
+Complete-diff review checked support semantics, candidate/paired mappings, units,
+source/cutoff preservation, no client estimation and Scout compatibility. Fixed
+three test-only issues: the focus matcher, the period-control locator and a rendered-
+text assertion mixing innerText with textContent. Final checks retain existing
+timeouts/retries. New axe scans have no violations; narrow/clipped contrast
+incompletes and assistive-technology/cross-browser gaps remain. Screenshot inspected;
+no unexpected browser requests/errors and owned servers stopped. No API/schema,
+core formula, dependency, data/source/license, model or automation change. Exact
+publication SHA, attribution and CI receipt belong in PR #42.
+
+**Remaining / next:** user Run/Pass selection with the existing fixed Pass-minus-Run
+descriptive contrast. Choice stays UI state, not a request option or evidence
+mutation; clear it on situation edits and preserve it across mode switches. Test
+keyboard selection, null/empty reasons and mandatory abstention. No grading, ranked
+winner, browser sign inversion or contrast interval. Decision JSON download follows
+separately; model/charting admission, historical availability and deployment remain
+deferred. Do not merge or enable auto-merge.

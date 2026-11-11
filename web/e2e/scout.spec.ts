@@ -152,7 +152,7 @@ test('Decision keyboard navigation, cancelled mode switches and contained table 
   await page.keyboard.press('Enter');
   const decision = page.getByRole('tabpanel', { name: 'Decision Lab' });
   await page.keyboard.press('Tab'); await expect(decision).toBeFocused();
-  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max', 'yardline_min', 'yardline_max', 'score_min', 'score_max', 'period', 'clock_min', 'clock_max', 'compare_league']) {
+  for (const name of ['team', 'season', 'before_week', 'season_type', 'down', 'distance_min', 'distance_max', 'yardline_min', 'yardline_max', 'score_min', 'score_max', 'period', 'clock_min', 'clock_max', 'compare_league', 'bootstrap_repetitions', 'bootstrap_seed']) {
     await page.keyboard.press('Tab');
     const input = decision.locator(`[name="${name}"]`);
     await expect(input).toBeFocused();
@@ -720,4 +720,79 @@ test('Decision league comparison preserves evidence, matches baseline contexts a
   await expect(decision.getByRole('status')).toContainText('3 eligible plays'); await expect(comparison).toHaveCount(0);
   expect(await selectedTable.innerText()).toBe(originalSelected);
   await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible(); expect(requests).toBe(5);
+});
+
+test('Decision uncertainty uses real API support, bounded inputs and explicit empty states without changing point evidence', async ({ page }, info) => {
+  await openViewer(page); const decision = await openDecision(page);
+  await decision.getByLabel('Maximum yards to goal', { exact: true }).fill('20');
+  await decision.getByLabel('Minimum score difference', { exact: true }).fill('-7');
+  await decision.getByLabel('Maximum score difference', { exact: true }).fill('0');
+  await decision.getByRole('combobox', { name: 'Period', exact: true }).selectOption('Q4');
+  await decision.getByLabel('Maximum seconds remaining', { exact: true }).fill('120');
+  const compare = decision.getByRole('checkbox', { name: 'Compare with other offenses' }); await compare.check();
+  const repetitions = decision.getByLabel('Bootstrap repetitions', { exact: true });
+  const seed = decision.getByLabel('Bootstrap seed', { exact: true });
+  const title = 'Candidate game support and exploratory uncertainty';
+  let requests = 0;
+  page.on('request', r => { if (new URL(r.url()).pathname === '/api/v1/decision') requests++; });
+  const request = async () => {
+    const response = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/decision');
+    await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+    const result = await response; expect(result.status()).toBe(200); return result;
+  };
+  const off = await (await request()).json(); expect(off.population.plays).toBe(3);
+  const selected = decision.getByRole('region', { name: 'Run and Pass evidence, scroll horizontally on small screens' });
+  const original = await selected.innerText();
+  await repetitions.fill('199'); await seed.fill('0');
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  await expect(repetitions).toBeFocused(); await expect(repetitions).toHaveAccessibleDescription(/200.*1000/);
+  await expect(decision.getByRole('alert')).toBeVisible(); expect(requests).toBe(1);
+  await scanAccessibility(page, info, 'decision-uncertainty-invalid');
+  await repetitions.fill('200'); await expect(decision.getByRole('article')).toHaveCount(0); expect(requests).toBe(1);
+  const response = await request();
+  expect(new URL(response.url()).searchParams.get('bootstrap_seed')).toBe('0');
+  const { uncertainty, ...points } = await response.json(); expect(points).toEqual(off);
+  expect(uncertainty).toMatchObject({ resampling_games: 1, repetitions: 200, performed_repetitions: 200, seed: 0, shared_game_weights: true });
+  await expect(selected).toHaveText(original, { useInnerText: true });
+  const section = decision.getByRole('region', { name: title }); await expect(section).toBeVisible();
+  const run = decision.getByRole('region', { name: 'Run uncertainty, scroll horizontally on small screens' });
+  const pass = decision.getByRole('region', { name: 'Pass uncertainty, scroll horizontally on small screens' });
+  const runEPA = run.getByRole('row', { name: /^Selected \/ EPA/ }).getByRole('cell');
+  await expect(runEPA.nth(0)).toHaveText('-0.400 EPA/play'); await expect(runEPA.nth(1)).toHaveText('Withheld');
+  await expect(runEPA.nth(2)).toContainText('Selected 1'); await expect(runEPA.nth(3)).toHaveText('200 / 0');
+  await expect(runEPA.nth(4)).toContainText('fewer than 5 contributing games');
+  await expect(run.getByRole('row', { name: /^Baseline \/ Call frequency/ }).getByRole('cell').nth(0)).toHaveText('0.0%');
+  await expect(run.getByRole('row', { name: /^Selected − baseline \/ EPA/ }).getByRole('cell').nth(1)).toHaveText('Unavailable');
+  await expect(pass.getByRole('row', { name: /^Selected − baseline \/ EPA/ }).getByRole('cell').nth(0)).toHaveText('-2.200 EPA/play');
+  await expect(section).toContainText('No Pass-minus-Run contrast interval is implemented');
+  await decision.getByText('Decision uncertainty method and replay metadata').click();
+  await expect(section).toContainText('python_random.Random.randrange / linear_n_minus_1');
+  await scanAccessibility(page, info, 'decision-uncertainty-loaded');
+  await page.setViewportSize({ width: 320, height: 900 }); await run.focus(); await run.press('ArrowRight');
+  await expect.poll(() => run.evaluate(e => e.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await run.scrollIntoViewIfNeeded(); await page.screenshot({ path: info.outputPath('decision-uncertainty-320.png') });
+  await scanAccessibility(page, info, 'decision-uncertainty-320');
+  await page.getByRole('tab', { name: 'Scout' }).click();
+  const scoutRepetitions = page.getByRole('tabpanel', { name: 'Scout' }).getByLabel('Bootstrap repetitions', { exact: true }); await expect(scoutRepetitions).toHaveValue(''); await scoutRepetitions.fill('500');
+  await page.getByRole('tab', { name: 'Decision Lab' }).click();
+  await expect(repetitions).toHaveValue('200'); await expect(section).toBeVisible(); expect(requests).toBe(2);
+  await compare.uncheck(); const selectedOnly = await (await request()).json(); expect(selectedOnly.candidates).toEqual(off.candidates);
+  expect(selectedOnly.uncertainty.shared_game_weights).toBe(false); await expect(section).toContainText('selected-only resampling frame');
+  await expect(run.getByRole('row')).toHaveCount(4); await expect(section).toContainText('shared weights still apply across Run and Pass');
+  await decision.getByLabel('Offense team code', { exact: true }).fill('ZZZ');
+  const empty = await (await request()).json(); expect(empty.uncertainty.performed_repetitions).toBe(0);
+  await expect(section).toContainText('0 / 200 performed / requested draws');
+  await expect(run.getByRole('row', { name: /^Selected \/ Call frequency/ }).getByRole('cell').nth(1)).toHaveText('Unavailable');
+  await scanAccessibility(page, info, 'decision-uncertainty-empty');
+  await compare.check(); const baselineOnly = await (await request()).json(); expect(baselineOnly.uncertainty.performed_repetitions).toBe(200);
+  await expect(run.getByRole('row', { name: /^Baseline \/ Call frequency/ }).getByRole('cell').nth(0)).toHaveText('50.0%');
+  await expect(run.getByRole('row', { name: /^Selected − baseline \/ Call frequency/ }).getByRole('cell').nth(0)).toHaveText('Unavailable');
+  await decision.getByLabel('Offense team code', { exact: true }).fill('CAR');
+  await repetitions.fill(''); await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  await expect(repetitions).toBeFocused(); expect(requests).toBe(5); // retained seed requires correction
+  await seed.fill(''); const restored = await request(); expect(await restored.json()).toEqual(off);
+  expect(new URL(restored.url()).searchParams.has('bootstrap_repetitions')).toBe(false);
+  await expect(section).toHaveCount(0); await expect(selected).toHaveText(original, { useInnerText: true });
+  await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible(); expect(requests).toBe(6);
 });

@@ -41,8 +41,9 @@ all 22 contextual fields deferred from serving. P1.8's PBP-only decision API is
 implemented; unresolved charting does not block it or silently become serving
 evidence. P1.9's typed browser contract/client and first mode/form/evidence view
 are implemented, including optional field-position/score controls and ordered exclusions.
-Optional Decision period/clock controls and matched candidate league views are
-implemented; bounded game-support/uncertainty views are next.
+Optional Decision period/clock controls, matched candidate league views and bounded
+support/uncertainty views are implemented. User-call selection and descriptive
+contrast inspection are next.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -357,7 +358,7 @@ One local worker remains the supported scope; no cross-process capacity guarante
 ### P1.9 — Play Caller / Decision Lab UI
 
 - [x] Typed browser contract/parser and bounded request client for Decision v1,
-      backed by 64 actual synthetic API fixtures, mutation/error tests and a real
+      backed by 69 actual synthetic API fixtures, mutation/error tests and a real
       browser-to-proxy-to-API check. Preserve denominator/null/withheld distinctions,
       provenance, optional blocks and mandatory abstention; no browser estimation.
       Shared guards retain Scout schema v2 and all 71 existing API fixtures.
@@ -393,15 +394,19 @@ One local worker remains the supported scope; no cross-process capacity guarante
       exclusions. Preserve selected evidence and distinguish empty cohorts, absent
       calls, missing EPA and zero; no ranking or wider fallback. Five additional
       synthetic HTTP fixtures; 1,059 frontend and 30 desktop/narrow browser cases pass.
-- **Next unit:** bounded opt-in candidate game-support/exploratory uncertainty view.
-  Reuse existing contract, guards and interval presentation; expose 200–1,000
-  repetitions and an optional uint32 seed. Distinguish parent-game frequency support
-  from observed-EPA game support, and show returned selected/baseline/difference
-  intervals with unavailable, withheld, degenerate and valid-draw states. Test exact
-  requests, on/off, empty/sparse evidence, stale responses and unchanged point
-  estimates. No Pass-minus-Run contrast interval, preferred call or browser resampling.
-  User-choice comparison and Decision JSON downloads follow separately. No new
-  model/data layer, storage or deployment.
+- [x] Bounded opt-in candidate game support/exploratory intervals (2026-11-11):
+      shared bootstrap controls and interval cells, 200–1,000 draws and optional
+      uint32 seed; separate parent-frequency versus observed-EPA support. Show
+      returned selected/baseline/paired-difference bounds, all five interval states,
+      defined/undefined draws and replay metadata. Preserve point estimates and
+      abstention. Five additional actual synthetic HTTP fixtures; see current status
+      for verification and remaining accessibility limits.
+- **Next unit:** user Run/Pass selection with the existing fixed Pass-minus-Run
+  descriptive contrast. Choice is UI state, not an API option or evidence mutation;
+  clear it on situation edits and preserve it across mode switches. Test keyboard
+  selection, null/empty evidence, explicit unavailable reasons and abstention.
+  No grading, ranked winner, browser sign inversion or contrast interval.
+  Decision JSON download follows separately. No model/data layer, storage or deployment.
 - [ ] Situation definition, supported-call selection and comparison against
       alternatives, with clear historical versus model evidence labels.
 - [ ] Explain frequency/outcomes/league context/support/provenance; honest empty,
