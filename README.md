@@ -8,8 +8,9 @@ Analysis** mode. The same app now includes a narrow **Decision Lab**: define an
 offense, historical cutoff, exact down, inclusive distance and optional field-position
 and pre-play score bounds, plus period/clock selection, then inspect Run and Pass
 evidence with explicit denominators, missing states and optional matched league
-comparisons. No preferred call is selected. Ordered exclusion counts explain which
-plays reach the final sample.
+comparisons. An optional Run/Pass choice labels the two alternatives beside a fixed
+Pass-minus-Run descriptive contrast. No preferred call is selected. Ordered
+exclusion counts explain which plays reach the final sample.
 The existing builder, local API and typed browser client supply both modes.
 Repository/package/CLI names stay intact.
 See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
@@ -92,7 +93,9 @@ intervals, draw counts and explicit unavailable/withheld states.
 Actual synthetic API fixtures and local browser integration verify the boundary.
 Scout's controls and original fixtures are preserved.
 Charting applicability and historical availability remain unverified.
-Decision Lab's user-call comparison, downloads, adjustment and deployment remain on the
+Call selection stays local, clears on query edits and preserves the returned evidence
+and fixed contrast direction. No call is graded; contrast intervals remain unavailable.
+Decision Lab downloads, adjustment and deployment remain on the
 [roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
 team affiliation or predictive-validation claim.
 

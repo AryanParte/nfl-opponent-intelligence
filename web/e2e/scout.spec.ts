@@ -110,7 +110,7 @@ test('Decision Lab renders real API evidence and preserves both modes and the Sc
   await expect(page.getByRole('link', { name: 'Download report JSON' })).toHaveAttribute('href', href!);
   await expect(page.getByRole('status')).toHaveText('Report loaded: CAR, offense, 15 eligible plays.');
   await page.getByRole('tab', { name: 'Decision Lab' }).click();
-  await expect(decision.getByRole('table')).toBeVisible();
+  await expect(decision.getByRole('table', { name: 'Observed Run and Pass evidence for the selected offense' })).toBeVisible();
   await expect(decision.locator('details')).toHaveAttribute('open', '');
   expect(await page.locator('[id]').evaluateAll(nodes => new Set(nodes.map(node => node.id)).size === nodes.length)).toBe(true);
 });
@@ -137,7 +137,7 @@ test('Decision Lab invalid, unavailable and empty states remain accessible witho
   await decision.getByLabel('Before week', { exact: true }).fill('1');
   await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
   await expect(decision.getByRole('heading', { name: 'No eligible plays match this situation.' })).toBeVisible();
-  await expect(decision.getByRole('cell', { name: /^Unavailable/ })).toHaveCount(6);
+  await expect(decision.getByRole('table', { name: 'Observed Run and Pass evidence for the selected offense' }).getByRole('cell', { name: /^Unavailable/ })).toHaveCount(6);
   await expect(decision.getByRole('alert')).toHaveCount(0);
   await scanAccessibility(page, info, 'decision-empty');
 });
@@ -159,6 +159,8 @@ test('Decision keyboard navigation, cancelled mode switches and contained table 
     if (name === 'before_week') { await page.keyboard.press('ControlOrMeta+A'); await page.keyboard.insertText('3'); }
   }
   await page.keyboard.press('Tab');
+  await expect(decision.getByRole('radio', { name: 'Run', exact: true })).toBeFocused();
+  await page.keyboard.press('Tab'); // No selection yet; Clear choice is disabled.
   await expect(decision.getByRole('button', { name: 'Compare Run and Pass' })).toBeFocused();
   let release!: () => void;
   const held = new Promise<void>(resolve => { release = resolve; });
@@ -795,4 +797,107 @@ test('Decision uncertainty uses real API support, bounded inputs and explicit em
   expect(new URL(restored.url()).searchParams.has('bootstrap_repetitions')).toBe(false);
   await expect(section).toHaveCount(0); await expect(selected).toHaveText(original, { useInnerText: true });
   await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible(); expect(requests).toBe(6);
+});
+
+test('Run/Pass choice stays local, keyboard operable and fixed-direction alongside real evidence', async ({ page }, info) => {
+  await openViewer(page);
+  const decision = await openDecision(page);
+  const calls: string[] = [];
+  page.on('request', request => { if (new URL(request.url()).pathname === '/api/v1/decision') calls.push(request.url()); });
+  await decision.getByLabel('Maximum yards to goal').fill('20');
+  await decision.getByLabel('Minimum score difference').fill('-7');
+  await decision.getByLabel('Maximum score difference').fill('0');
+  await decision.getByRole('combobox', { name: 'Period', exact: true }).selectOption('Q4');
+  await decision.getByLabel('Maximum seconds remaining').fill('120');
+  const run = decision.getByRole('radio', { name: 'Run', exact: true });
+  const pass = decision.getByRole('radio', { name: 'Pass', exact: true });
+  const clear = decision.getByRole('button', { name: 'Clear choice' });
+  await expect(run).not.toBeChecked(); await expect(pass).not.toBeChecked(); await expect(clear).toBeDisabled();
+  await run.focus(); await page.keyboard.press('Space'); await expect(run).toBeChecked();
+  await page.keyboard.press('ArrowRight'); await expect(pass).toBeFocused(); await expect(pass).toBeChecked();
+  await page.keyboard.press('ArrowLeft'); await expect(run).toBeFocused(); await expect(run).toBeChecked();
+  await page.keyboard.press('Tab'); await expect(clear).toBeFocused(); await page.keyboard.press('Space');
+  await expect(run).not.toBeChecked(); await expect(pass).not.toBeChecked();
+  expect(calls).toHaveLength(0);
+  await pass.check();
+  await decision.getByRole('group', { name: 'Your call (optional)' }).scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('decision-choice-controls.png') });
+  const response = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/decision');
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  const received = await response;
+  expect(received.status()).toBe(200);
+  const data = await received.json();
+  expect(data.comparison.preferred_candidate).toBeNull();
+  expect(data.comparison.descriptive_contrast.direction).toBe('pass_minus_run');
+  expect(data.comparison.descriptive_contrast.metrics.epa_per_play.value).toBeCloseTo(1.2);
+  const comparison = decision.getByRole('region', { name: 'Run vs Pass: descriptive contrast', exact: true });
+  const table = comparison.getByRole('table');
+  await expect(table.getByRole('row', { name: /^Call frequency/ })).toContainText('-33.3 pp');
+  await expect(table.getByRole('row', { name: /^EPA/ })).toContainText('+1.200 EPA/play');
+  await expect(table.getByRole('row', { name: /^Offensive success/ })).toContainText('+100.0 pp');
+  const text = await table.innerText();
+  await expect(comparison).toContainText('Your choice: Pass. Alternative: Run.');
+  await run.check();
+  await expect(comparison).toContainText('Your choice: Run. Alternative: Pass.');
+  await expect(table).toHaveText(text, { useInnerText: true });
+  const points = decision.getByRole('table', { name: 'Observed Run and Pass evidence for the selected offense' });
+  await expect(points.getByRole('rowheader').nth(0)).toHaveText(/RunYour choice/);
+  await expect(points.getByRole('rowheader').nth(1)).toHaveText(/PassAlternative/);
+  await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible();
+  await expect(comparison).toContainText('Pass-minus-Run interval: not implemented.');
+  await page.getByRole('tab', { name: 'Scout' }).click();
+  await expect(page.getByText('No report has been requested for these controls.', { exact: false })).toBeVisible();
+  await page.getByRole('tab', { name: 'Decision Lab' }).click();
+  await expect(run).toBeChecked(); await expect(table).toHaveText(text, { useInnerText: true });
+  await scanAccessibility(page, info, 'decision-choice');
+  await comparison.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('decision-choice-contrast.png') });
+  await page.setViewportSize({ width: 320, height: 900 });
+  const scroll = comparison.getByRole('region', { name: /Pass minus Run descriptive contrast/ });
+  await scroll.focus(); await expect(scroll).toBeFocused();
+  expect(await scroll.evaluate(element => element.scrollWidth > element.clientWidth)).toBe(true);
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(() => scroll.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+  await page.keyboard.press('Tab'); await expect(scroll).not.toBeFocused();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await scanAccessibility(page, info, 'decision-choice-320');
+  await clear.click(); await expect(comparison).toContainText('No call selected');
+  await expect(table).toHaveText(text, { useInnerText: true });
+  expect(calls).toHaveLength(1);
+  expect(new URL(calls[0]).searchParams.has('decision_choice')).toBe(false);
+  await pass.check(); await decision.getByLabel('Before week', { exact: true }).fill('2');
+  await expect(pass).not.toBeChecked(); await expect(decision.getByRole('article')).toHaveCount(0);
+  expect(calls).toHaveLength(1);
+});
+
+test('a selected call never fills absent or empty contrast evidence from the real API', async ({ page }, info) => {
+  await openViewer(page);
+  const decision = await openDecision(page);
+  await decision.getByRole('combobox', { name: 'Period', exact: true }).selectOption('Q4');
+  await decision.getByLabel('Minimum seconds remaining').fill('0');
+  await decision.getByLabel('Maximum seconds remaining').fill('0');
+  const pass = decision.getByRole('radio', { name: 'Pass', exact: true });
+  await pass.check(); await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  const contrast = decision.getByRole('region', { name: 'Run vs Pass: descriptive contrast', exact: true });
+  await expect(contrast.getByRole('row', { name: /^Call frequency/ })).toContainText('-100.0 pp');
+  const epa = contrast.getByRole('row', { name: /^EPA/ });
+  await expect(epa.getByRole('cell').nth(0)).toHaveText('Unavailable');
+  await expect(epa).toContainText('Pass: no observed plays of this call.');
+  await expect(contrast).toContainText('Your choice: Pass. Alternative: Run.');
+  await scanAccessibility(page, info, 'decision-choice-unobserved');
+  await decision.getByLabel('Before week', { exact: true }).fill('1');
+  await expect(pass).not.toBeChecked(); await expect(contrast).toHaveCount(0);
+  await decision.getByRole('radio', { name: 'Run', exact: true }).check();
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  await expect(decision.getByRole('heading', { name: 'No eligible plays match this situation.' })).toBeVisible();
+  await expect(contrast.getByRole('row')).toHaveCount(4);
+  const cells = await contrast.getByRole('row').all();
+  for (const row of cells.slice(1)) {
+    await expect(row.getByRole('cell').nth(0)).toHaveText('Unavailable');
+    await expect(row).toContainText('Run: selected cohort is empty.');
+    await expect(row).toContainText('Pass: selected cohort is empty.');
+  }
+  await expect(contrast).toContainText('Your choice: Run. Alternative: Pass.');
+  await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible();
+  await scanAccessibility(page, info, 'decision-choice-empty');
 });

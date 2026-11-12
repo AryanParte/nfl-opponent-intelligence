@@ -3326,3 +3326,72 @@ keyboard selection, null/empty reasons and mandatory abstention. No grading, ran
 winner, browser sign inversion or contrast interval. Decision JSON download follows
 separately; model/charting admission, historical availability and deployment remain
 deferred. Do not merge or enable auto-merge.
+
+
+## 2026-11-12 — User call choice and fixed descriptive contrast
+
+**Built / why:** optional Run/Pass radio selection, choice/alternative labels on
+stable evidence rows and the existing server-provided Pass-minus-Run contrast.
+Analysts can inspect their chosen call beside the alternative without turning
+historical associations into a grade or recommendation. Missing candidate reasons
+and the unimplemented contrast interval remain visible; choosing is optional.
+
+**Start state:** canonical root/origin verified, clean prior branch and history
+preserved. PR #42 merged; its `45786b8` tree matches prior `b818b6a`. No open PRs or
+review feedback; main CI passed all eight jobs. Fetched origin, then created
+`codex/decision-call-choice` from updated main. Baseline 453 core / 45 API tests
+passed on Python 3.13 before edits.
+
+**Review files:** `web/src/DecisionLab.tsx`, `DecisionContrastView.tsx`,
+`decision-choice.test.tsx`, `styles.css`, `web/e2e/scout.spec.ts` and
+`docs/DECISION_WEB.md`; compare the existing `docs/DECISION_POLICY.md` contract.
+
+**Sports/statistical concepts:** observed Pass includes sacks/scrambles; categories
+are not verified intended calls. Frequency contrasts use the parent play count,
+while EPA/success contrasts require observed EPA for both calls. pp is percentage
+points, not percent change. Empty cohorts, unobserved calls, missing EPA and true
+zero differ; formatted zero may also reflect rounding. Selected-offense Pass-minus-
+Run is separate from same-call selected-minus-league. Neither candidate intervals
+nor league intervals supply a contrast interval. Selection bias and unmeasured
+context remain, even with more observations or narrow situation filters.
+
+**Software / learn:** separate a local annotation from request identity and server
+evidence. Choice changes neither fetch nor cancel work; all query edits clear
+choice/evidence. Same-query retries and mode switches preserve choice, while late
+responses after edits stay rejected. Reuse validated differences and formatting
+instead of calculating or sign-inverting them in React. Native radios provide
+keyboard behavior without custom event machinery.
+
+**Three review questions:**
+
+1. Why does choosing Run leave Pass-minus-Run signs unchanged, and how does that contrast differ from Run's selected-minus-league difference?
+2. When can a frequency contrast exist while EPA/success contrasts are unavailable, and why can't a candidate or league interval fill the missing contrast interval?
+3. Which user actions clear the choice, which preserve it, and why must changing the choice never alter the API query or accept a stale response?
+
+**Verification / self-review:** 453 core / 45 API tests pass on Python 3.11, 3.12
+and 3.13 (API warnings as errors; dependency checks pass), plus 1,123 frontend tests,
+TypeScript/build and 36 desktop/narrow Chromium cases. Twenty new component cases
+exercise signs/zeros/nulls, unchanged queries/evidence, invalid contrast rejection,
+choice/query/mode lifecycles, pending requests and retries. Four new browser profile
+cases use actual synthetic HTTP responses; all 69 Decision and 71 Scout fixtures
+remain unchanged. No statistical validation or real-data claim is added.
+
+The complete review checked request/evidence separation, denominators, signs/units,
+null reasons, absent contrast intervals, mandatory abstention, provenance and Scout
+compatibility. Corrected rounded-zero wording, test-only response-body reuse,
+accessible labels and a locator option rejected by TypeScript; scoped older table
+assertions and updated keyboard order for the new radios. Desktop/narrow screenshots
+inspected; eight new axe scans have no
+violations, with existing narrow/320-pixel contrast incompletes retained. No
+unexpected requests/page errors; owned servers stopped. No core/API/schema,
+source/license, dependency, model or automation change. Exact publication SHA,
+GitHub attribution and CI receipt belong in this branch's PR.
+
+**Remaining / next:** Decision JSON download using the original validated response
+text, with complete provenance/contexts/warnings/contrasts/baselines/uncertainty.
+Keep the local choice out of the evidence. Reuse Scout's owned-URL lifecycle where
+practical, safe distinct filenames/help IDs, ready-only links and query/error
+invalidation. Test exact text/native downloads, preparation failure, stale results
+and mode preservation without breaking Scout. Contrast intervals, preferred calls,
+model/charting admission, historical availability and deployment remain deferred.
+Do not merge or enable auto-merge.

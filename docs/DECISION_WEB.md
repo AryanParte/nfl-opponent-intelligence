@@ -6,7 +6,8 @@ rendered Decision Lab mode followed on 2026-11-06 in the same app as Scout;
 optional field-position controls and exclusion accounting followed on 2026-11-07,
 then pre-play score controls on 2026-11-08 and period/clock controls on 2026-11-09.
 The optional matched candidate league view followed on 2026-11-10, with bounded
-candidate game-support/uncertainty controls and views on 2026-11-11.
+candidate game-support/uncertainty controls and views on 2026-11-11, then optional
+user-call selection and fixed descriptive contrasts on 2026-11-12.
 No package, API, core formula or data source changed.
 
 ## First rendered slice
@@ -40,7 +41,7 @@ Only the active panel participates in keyboard/accessibility navigation; the
 Decision form is first mounted on its initial visit. Reloading the page resets
 in-memory state; no persistent browser storage was added.
 
-Both views use `useSnapshotRequest.ts`. A control edit removes old evidence and
+Both views use `useSnapshotRequest.ts`. A query-field edit removes old evidence and
 aborts pending work. A mode switch preserves completed states but cancels pending
 requests and resets their spinner to idle. Generation checks prevent an ignored
 abort from publishing later. A 15-second deadline ends loading independently of
@@ -48,6 +49,45 @@ transport settlement; retry is always explicit, and server work may continue
 after browser cancellation. Unmount clears timers and aborts requests. Only a
 new local validation failure focuses an invalid field; API errors, completion and
 returning to an existing validation error do not steal focus.
+
+## Optional user choice and fixed descriptive contrast
+
+**Your call (optional)** is a native Run/Pass radio group with a Clear choice button.
+It starts unselected and is independent of `DecisionDraft` and the API query.
+Selecting or clearing a call annotates the fixed Run-then-Pass evidence rows with
+Your choice / Alternative. It never fetches, cancels an active request, changes the
+response, reorders rows, recomputes a statistic or grades the choice. Evidence and
+the contrast remain available without a choice. These are observed categories,
+including sacks/scrambles in Pass, not verified intended coaching calls.
+
+Any query-field edit clears both choice and evidence, including comparison and
+bootstrap edits; restoring the old query value does not restore the old choice.
+A same-query retry preserves the choice but hides old/failed evidence. A choice
+made while loading annotates the current response only; existing generation guards
+still reject late responses after query edits. Mode changes preserve the choice,
+with the existing pending-request cancellation policy. Reload clears it; nothing
+is sent to the server or saved to persistent browser storage.
+
+`DecisionContrastView.tsx` formats only the validated server-provided
+`comparison.descriptive_contrast`. Direction is always **Pass minus Run**, for
+selected-offense frequency (pp), EPA/observed play and offensive success (pp),
+regardless of the selected call. It is separate from same-call selected-minus-
+league differences. Frequency uses the parent play denominator; outcomes require
+observed EPA for each candidate. Missing inputs expose each candidate's returned
+empty-cohort / unobserved-call / missing-EPA reason, with no league substitution.
+Measured zero and negative values remain estimates; a displayed zero can also
+reflect rounding. Selection bias is not removed by matching these filters.
+
+The Pass-minus-Run interval remains explicitly **not implemented**. Candidate and
+league-difference intervals cannot be substituted or subtracted to supply it.
+Mandatory abstention remains visible with or without a choice, including absent
+calls and empty cohorts. The [existing policy](DECISION_POLICY.md) is unchanged.
+Twenty new component cases use existing actual synthetic HTTP fixtures for signs,
+zeros/nulls, unchanged query/evidence, query invalidation, pending/retry behavior,
+mode preservation and malformed contrast rejection. Desktop/narrow real-API tests
+add native radio/clear keyboard flow, actual signed values, absence/empty reasons,
+320-pixel table containment and axe scans. All 69 Decision and 71 Scout fixtures
+remain unchanged; these checks verify software, not decision quality.
 
 ## Optional pre-play field position
 
@@ -344,11 +384,12 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add user Run/Pass selection and inspect it alongside the alternative using the
-existing server-provided, fixed Pass-minus-Run descriptive contrast. Keep the choice
-as UI state, not an API option or evidence mutation; clear it when the situation
-changes and preserve it across mode switches. Retain explicit unavailable reasons,
-mandatory abstention and the unimplemented contrast-interval state. Test keyboard
-selection, query changes, missing/empty evidence and state preservation. No grading,
-ranked winner, sign-inverted browser calculation or new model. Decision JSON download
-follows as a separate unit.
+Add a Decision JSON download for the current validated `DecisionDocument.json`.
+Preserve the original decoded response text, full provenance, contexts, warnings,
+contrasts, baselines and uncertainty; do not reserialize or add the local choice.
+Reuse the Scout object-URL lifecycle where practical, with distinct safe filenames
+and help IDs. Show a ready-only link; invalidate it on query changes/errors and
+revoke owned URLs on replacement/unmount, while preserving completed downloads
+across mode switches and call-choice edits. Test native downloads, exact text,
+failed preparation, stale responses and Scout compatibility. No new request,
+statistics, data source, model, storage or deployment.

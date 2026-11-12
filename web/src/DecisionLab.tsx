@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { DecisionQueryValidationError, fetchDecisionDocument, parseDecisionQuery,
-  type Candidate, type Decision, type DecisionDocument, type DecisionDraft } from './decision';
+  type Call, type Candidate, type Decision, type DecisionDocument, type DecisionDraft } from './decision';
 import { epa, number, percentage } from './report';
 import { SourceView } from './SourceView';
 import { useSnapshotRequest } from './useSnapshotRequest';
@@ -11,6 +11,7 @@ import { TimeControls } from './TimeControls';
 import { DecisionComparisonView } from './DecisionComparisonView';
 import { BootstrapControls } from './BootstrapControls';
 import { DecisionUncertaintyView } from './DecisionUncertaintyView';
+import { DecisionContrastView } from './DecisionContrastView';
 
 const initial: DecisionDraft = {
   team: 'CAR', season: '2024', before_week: '19', season_type: 'REG', down: '1', distance_min: '10', distance_max: '10',
@@ -23,7 +24,7 @@ const outcomes: Record<Candidate['availability']['outcomes'], string> = {
   missing_epa: 'EPA missing for every observed play of this call: outcomes unavailable',
 };
 
-function DecisionEvidence({ decision }: { decision: Decision }) {
+function DecisionEvidence({ decision, choice }: { decision: Decision; choice: Call | null }) {
   const { cohort, population, candidates } = decision;
   return <article aria-labelledby="decision-result-title">
     <div className="report-heading">
@@ -56,7 +57,9 @@ function DecisionEvidence({ decision }: { decision: Decision }) {
           <thead><tr><th scope="col">Observed call</th><th scope="col">Frequency</th><th scope="col">Games</th>
             <th scope="col">EPA / observed play</th><th scope="col">Offensive success</th><th scope="col">EPA n / missing</th><th scope="col">Evidence state</th></tr></thead>
           <tbody>{candidates.map(candidate => <tr key={candidate.candidate}>
-            <th scope="row">{candidate.candidate === 'run' ? 'Run' : 'Pass'}<small>{candidate.label}</small></th>
+            <th scope="row">{candidate.candidate === 'run' ? 'Run' : 'Pass'}
+              {choice && <small className="call-marker">{choice === candidate.candidate ? 'Your choice' : 'Alternative'}</small>}
+              <small>{candidate.label}</small></th>
             <td>{percentage(candidate.frequency)}<small>{number(candidate.plays)} / {number(candidate.frequency_denominator)} plays</small></td>
             <td>{number(candidate.games)}</td><td>{epa(candidate.epa_per_play)}</td>
             <td>{percentage(candidate.success_rate)}<small>{number(candidate.epa_observations)} observed EPA denominator</small></td>
@@ -69,6 +72,7 @@ function DecisionEvidence({ decision }: { decision: Decision }) {
       </div>
       <p className="muted">Count warning threshold: {decision.estimation_policy.minimum_plays_warning}. Absence of a flag does not establish statistical reliability.</p>
     </section>
+    <DecisionContrastView decision={decision} choice={choice} />
     <DecisionComparisonView decision={decision} />
     <DecisionUncertaintyView decision={decision} />
     <SourceView source={decision.source} titleId="decision-source-title" versionLabel={`Decision contract v${decision.contract_version}`} />
@@ -83,6 +87,8 @@ function DecisionEvidence({ decision }: { decision: Decision }) {
 
 export function DecisionLab({ active }: { active: boolean }) {
   const [draft, setDraft] = useState(initial);
+  // Choice annotates the view; it is never a query field or a change to server evidence.
+  const [choice, setChoice] = useState<Call | null>(null);
   const { state, invalidate, failValidation, load } = useSnapshotRequest<DecisionDocument, keyof DecisionDraft>(active);
   const form = useRef<HTMLFormElement>(null);
   useEffect(() => {
@@ -99,6 +105,7 @@ export function DecisionLab({ active }: { active: boolean }) {
   }
   function edit<Key extends keyof DecisionDraft>(field: Key, value: DecisionDraft[Key]) {
     invalidate();
+    setChoice(null);
     setDraft(previous => ({ ...previous, [field]: value }));
   }
   async function submit(event: FormEvent) {
@@ -151,6 +158,17 @@ export function DecisionLab({ active }: { active: boolean }) {
       <p id="decision-comparison-help" className="muted">Optional pooled baseline excludes the selected offense and matches this situation within the available snapshot.
         Does not request uncertainty or recommend a call.</p>
       <BootstrapControls draft={draft} edit={edit} fieldAccessibility={fieldAccessibility} idPrefix="decision-" />
+      <fieldset className="field-controls" aria-describedby="decision-choice-help"><legend>Your call (optional)</legend>
+        <div className="call-choices">
+          {(['run', 'pass'] as const).map(call => <label key={call}>
+            <input type="radio" name="decision_choice" value={call} checked={choice === call}
+              onChange={() => setChoice(call)} />{call === 'run' ? 'Run' : 'Pass'}
+          </label>)}
+          <button type="button" disabled={choice === null} onClick={() => setChoice(null)}>Clear choice</button>
+        </div>
+        <p id="decision-choice-help" className="muted">Optional annotation in this view. Choosing a call does not send a request, change the evidence or grade your choice.
+          Editing any query field clears your choice; switching modes preserves it. Run and Pass are observed categories, not verified intended calls.</p>
+      </fieldset>
       <div className="form-footer"><div>
         <p id="decision-cutoff-help">Whole week 1–23. Exclusive cutoff: only weeks strictly before this week are included.</p>
         <p id="decision-season-help" className="muted">Whole season 1999–9999; it must be available in the configured snapshot.</p>
@@ -163,6 +181,6 @@ export function DecisionLab({ active }: { active: boolean }) {
       <p>No evidence has been requested for these controls. No automatic fetches or background refreshes.</p></section>}
     {state.kind === 'error' && <section className="notice error" role="alert"><h2>Decision evidence unavailable</h2>
       <p id="decision-query-error">{state.message}</p><p>Correct the query or connection, then select Compare Run and Pass. No previous result is shown.</p></section>}
-    {state.kind === 'ready' && <DecisionEvidence decision={state.document.decision} />}
+    {state.kind === 'ready' && <DecisionEvidence decision={state.document.decision} choice={choice} />}
   </>;
 }
