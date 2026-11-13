@@ -332,4 +332,8 @@ period/clock filters, opt-in matched candidate league comparisons and bounded
 candidate support/exploratory interval views. Optional user-call selection is local
 UI state, absent from the request and response. The view displays the existing
 fixed Pass-minus-Run descriptive contrast without changing it for the user choice.
-No client-side statistics, contrast interval or automatic preferred call.
+The view can download the original validated Decision JSON unchanged, including
+all context, warnings, provenance and optional evidence; the local choice is not
+inserted into it. Decision v1 is distinct from Scout schema v2 and is not accepted
+by the Scout brief renderer. No client-side statistics, contrast interval or
+automatic preferred call.

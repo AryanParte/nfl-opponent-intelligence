@@ -5,6 +5,24 @@ screen-reader certification or public-release claim. Scout's analytics, API,
 schema v2, snapshots and downloadable evidence are unchanged. The original review
 preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
 
+## Decision JSON download follow-up — 2026-11-13
+
+The ready-only native link has a distinct accessible name and associated helper
+text; Scout and Decision retain unique IDs even after both modes are visited.
+Keyboard Enter saves the original response without changing choice or evidence.
+Preparation failure announces a safe alert while the report and abstention remain
+readable; query edits, loading and request errors remove stale links. Completed
+mode switches retain each mode's download independently.
+
+All 40 desktop/narrow Chromium cases pass, including eight native Decision exports
+with exact API bytes. Desktop/narrow screenshots of the focused download inspected.
+Eight new axe scans have zero violations. Full-width desktop states have no
+incompletes; three narrow evidence/empty/preparation-error scans retain existing
+color-contrast incompletes on clipped numeric tables. The request-error scan has
+no incompletes. These results do not establish screen-reader, real-device, zoom or
+cross-browser conformance. Existing coverage gaps below remain. No unexpected
+requests/page errors; the harness stopped its owned servers.
+
 ## Decision user-call choice follow-up — 2026-11-12
 
 Native radios share a labeled fieldset and name, with an accessible group
