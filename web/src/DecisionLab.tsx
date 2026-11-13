@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { DecisionQueryValidationError, fetchDecisionDocument, parseDecisionQuery,
-  type Call, type Candidate, type Decision, type DecisionDocument, type DecisionDraft } from './decision';
+  type Call, type Candidate, type DecisionDocument, type DecisionDraft } from './decision';
 import { epa, number, percentage } from './report';
 import { SourceView } from './SourceView';
 import { useSnapshotRequest } from './useSnapshotRequest';
@@ -12,6 +12,7 @@ import { DecisionComparisonView } from './DecisionComparisonView';
 import { BootstrapControls } from './BootstrapControls';
 import { DecisionUncertaintyView } from './DecisionUncertaintyView';
 import { DecisionContrastView } from './DecisionContrastView';
+import { DecisionDownload } from './DecisionDownload';
 
 const initial: DecisionDraft = {
   team: 'CAR', season: '2024', before_week: '19', season_type: 'REG', down: '1', distance_min: '10', distance_max: '10',
@@ -24,7 +25,8 @@ const outcomes: Record<Candidate['availability']['outcomes'], string> = {
   missing_epa: 'EPA missing for every observed play of this call: outcomes unavailable',
 };
 
-function DecisionEvidence({ decision, choice }: { decision: Decision; choice: Call | null }) {
+function DecisionEvidence({ document, choice }: { document: DecisionDocument; choice: Call | null }) {
+  const { decision } = document;
   const { cohort, population, candidates } = decision;
   return <article aria-labelledby="decision-result-title">
     <div className="report-heading">
@@ -33,6 +35,7 @@ function DecisionEvidence({ decision, choice }: { decision: Decision; choice: Ca
     </div>
     <p className="interpretation">Down {cohort.down.minimum_inclusive} · {cohort.distance.minimum_inclusive}–{cohort.distance.maximum_inclusive} yards to go, inclusive.
       {' '}This is a historical situation, not a fully specified game state.</p>
+    <DecisionDownload document={document} />
     <DecisionContextView decision={decision} />
     <section className="notice" aria-labelledby="decision-abstention-title">
       <h3 id="decision-abstention-title">No preferred call</h3>
@@ -181,6 +184,6 @@ export function DecisionLab({ active }: { active: boolean }) {
       <p>No evidence has been requested for these controls. No automatic fetches or background refreshes.</p></section>}
     {state.kind === 'error' && <section className="notice error" role="alert"><h2>Decision evidence unavailable</h2>
       <p id="decision-query-error">{state.message}</p><p>Correct the query or connection, then select Compare Run and Pass. No previous result is shown.</p></section>}
-    {state.kind === 'ready' && <DecisionEvidence decision={state.document.decision} choice={choice} />}
+    {state.kind === 'ready' && <DecisionEvidence document={state.document} choice={choice} />}
   </>;
 }

@@ -55,8 +55,10 @@ Intelligence branding. It is not a head-to-head matchup prediction.
 Run versus Pass evidence with situational filters and optional league comparisons;
 exploratory interval views and optional user-call selection are available. The local
 choice labels alternatives beside fixed returned Pass-minus-Run differences; it
-does not change evidence or grade a call. No game mechanics
-or unsupported playbook concepts. Show why an option appears stronger, not an opaque
+does not change evidence or grade a call. Both modes download the original
+validated response text; a Decision download excludes the local choice and keeps
+the full contract/provenance. P1.9 is complete within this local descriptive scope.
+No game mechanics or unsupported playbook concepts. Show why an option appears stronger, not an opaque
 score: frequency, outcomes, denominators, games, league differences and uncertainty.
 Historical associations are not proof of causal optimality, guaranteed future
 performance or a coaching recommendation. Do not display "evidence favors" solely

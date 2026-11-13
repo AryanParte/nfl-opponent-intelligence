@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-11-12, the long-term direction is
+As of the daily run on 2026-11-13, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
 builder and its local API include matched candidate baselines and opt-in
@@ -44,10 +44,10 @@ P1.8's optional **GET `/v1/decision`**, merged through PR #39, reuses the shared
 immutable PBP snapshot and builder, bounded queries and one serving slot. P1.9's
 [typed browser contract/client](DECISION_WEB.md), merged through PR #40, now powers
 the rendered Decision Lab (mode and field controls merged through PR #41,
-score/time/league/uncertainty controls through PR #42).
+score/time/league/uncertainty controls through PR #42, user-call choice through PR #43).
 Mode tabs retain drafts, completed results and
-Scout downloads, while query edits and mode changes cancel pending work and reject late
-responses. The narrow form selects offense/team/season/type/cutoff/exact down and
+independent Scout/Decision downloads, while query edits and mode changes cancel
+pending work and reject late responses. The narrow form selects offense/team/season/type/cutoff/exact down and
 inclusive distance, with optional field-position, pre-play score and period/clock
 filters. Shared controls preserve Scout behavior and independent mode state.
 Q1–Q4/OT and inclusive whole seconds require an explicit period for clock bounds;
@@ -72,22 +72,30 @@ fixtures remain unchanged. Optional user-call selection now labels fixed evidenc
 rows beside the returned Pass-minus-Run descriptive contrast. Selection never
 fetches, changes the evidence or grades a call; any query edit clears it, while
 mode changes preserve it. Null reasons and the unimplemented contrast interval
-remain explicit. Original
-Decision JSON is retained for a later download flow. Scout schema v2, controls,
+remain explicit. Original validated Decision JSON is now downloadable as UTF-8,
+with full returned evidence and no local call-choice annotation. Shared URL
+ownership preserves both modes, invalidates stale links and safely reports browser
+preparation failures while retaining readable evidence. Scout schema v2, controls,
 briefs and downloads are preserved. No new dependency, model execution, training,
 ranking, charting admission, database, deployment or automation change.
 Actual assistive-technology/cross-browser gaps remain in the
 [bounded accessibility review](ACCESSIBILITY.md), not a WCAG certification.
 P1.8 is complete within its single-worker, local PBP-only scope.
-Next: Add a Decision JSON download for the current validated `DecisionDocument.json`.
-Preserve the original decoded response text, full provenance, contexts, warnings,
-contrasts, baselines and uncertainty; do not reserialize or add the local choice.
-Reuse the Scout object-URL lifecycle where practical, with distinct safe filenames
-and help IDs. Show a ready-only link; invalidate it on query changes/errors and
-revoke owned URLs on replacement/unmount, while preserving completed downloads
-across mode switches and call-choice edits. Test native downloads, exact text,
-failed preparation, stale responses and Scout compatibility. No new request,
-statistics, data source, model, storage or deployment.
+P1.9's bounded local descriptive scope is complete.
+
+Next: begin P1.10 with one API-only container unit. Inspect the existing validation
+Docker/runtime patterns and available engine first, then package the current
+FastAPI app with an explicitly pinned base and reviewed dependency inputs,
+a non-root runtime and one worker. Read the operator-configured immutable PBP
+snapshot from a read-only mount; require its source label and verify startup as
+usual. Exclude raw data, local environments, credentials and research runtimes
+from the image/build context. Test synthetic startup, invalid/missing configuration,
+read-only snapshot access and both report/decision routes in CI without new
+analytics or runtime downloads. Document loopback-only local operation and cleanup.
+Frontend container packaging, acquisition scheduling and deployment are separate
+units. Existing API constraints pin versions but are not a wheel-hash/build-tool
+lock; resolve and document that boundary instead of claiming byte-reproducible
+images from version pins alone.
 No historical-availability, production model, new data layer or deployment claim.
 The 8 AM automation is unchanged.
 
@@ -327,6 +335,52 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.9 Original Decision JSON download — 2026-11-13
+
+Verified canonical root/origin and a clean prior branch, fetched origin and preserved
+history. PR #43 merged at `8079790` with the same tree as prior `e2eb7a2`;
+GitHub listed only main, no open PRs or review feedback. Main run
+[43335103102](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43335103102)
+passed all eight jobs. Created `codex/decision-json-download` from updated
+`origin/main`; baseline 453 core / 45 API tests passed on Python 3.13 before edits.
+
+The ready-only Decision link exports `DecisionDocument.json` as UTF-8 without
+reserializing or rounding. It retains all fields, nulls, provenance, contexts,
+contrasts, baselines, uncertainty and warnings, including unrendered additions.
+The filename uses only validated basic cohort values; the complete JSON, not the
+filename, identifies optional context. User choice remains local and never enters
+the file or triggers a request. Scout and Decision now share `useJsonDownload`;
+identity guards prevent old bytes receiving a new filename. Replacements, query
+edits, loading/errors and unmount revoke owned URLs; completed mode/choice changes
+retain them. Preparation failures leave the evidence readable with a safe alert.
+
+Verification:
+
+- 453 core / 45 API tests pass on each of Python 3.11/3.12/3.13, API warnings as
+  errors; all three environments pass dependency checks.
+- 1,150 frontend tests pass, including 27 new exact-text, lifecycle, empty/missing,
+  StrictMode, failure, invalid-response and late-response cases. TypeScript and
+  production build pass. All 69 Decision and 71 Scout API fixtures are unchanged.
+- All 40 desktop/narrow Chromium cases pass against the actual synthetic API.
+  Eight native Decision files match response bytes, including local Pass/Run/clear
+  choices and an empty cohort; offline parsing retains source hash and abstention.
+  Existing Scout downloads/offline briefs still pass. No unexpected requests/page
+  errors; owned 8000/5173 servers stopped.
+- Desktop/narrow screenshots inspected. Eight new axe scans have zero violations;
+  full-width desktop states have no incompletes. Three narrow states retain
+  color-contrast incompletes on clipped numeric table cells, not resolved by these
+  scans. Assistive-technology, device, zoom and cross-browser gaps remain explicit.
+
+Complete review checked original text versus lossy JS serialization, filename
+safety, URL lifetime, hidden-mode IDs, query/choice separation and cleanup after
+ignored aborts. Fixed test timing for the child preparation alert, kept injected
+browser failure active through StrictMode replay and disambiguated yards-to-go
+versus yards-to-goal locators; relevant checks reran successfully. No runtime
+formula, core/API/schema, data/license, dependency, model or automation change.
+The source hash identifies the PBP snapshot, not the export file; Decision v1 is
+not a Scout v2 brief input. Exact pushed SHA, attribution and CI receipt belong in
+this branch's PR. Next: the bounded API-only container unit above.
 
 ### P1.9 User call choice and descriptive contrast — 2026-11-12
 
@@ -1863,9 +1917,12 @@ stage counts while preserving selected evidence and explicit unavailable states.
 Bounded candidate game-support/uncertainty controls and interval views now preserve
 parent versus observed-EPA game support and explicit interval states. Optional
 user-call selection now accompanies the fixed returned Pass-minus-Run descriptive
-contrast without grading or a preference claim. Next: a Decision JSON download
-that retains the original validated response text, source/warnings and unchanged
-evidence; keep choice local and preserve Scout downloads/owned-URL cleanup.
+contrast without grading or a preference claim. Decision JSON now exports the
+original validated response text and full evidence, excludes local choice and
+shares Scout's owned-URL cleanup. P1.9's bounded local scope is complete. Next:
+P1.10's API-only container with a read-only snapshot mount and explicit runtime/
+dependency boundaries, as specified above. Frontend packaging and deployment are
+separate units.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual
