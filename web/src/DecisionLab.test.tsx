@@ -22,7 +22,7 @@ function setup() {
 }
 const submit = () => fireEvent.click(view().getByRole('button', { name: 'Compare Run and Pass' }));
 async function loaded() { await view().findByRole('heading', { name: 'CAR · Run vs Pass' }); }
-function rows() { return view().getAllByRole('row').slice(1).map(row => within(row)); }
+function rows() { return within(view().getByRole('table', { name: 'Observed Run and Pass evidence for the selected offense' })).getAllByRole('row').slice(1).map(row => within(row)); }
 
 it('opens an accessible second mode without fetching or offering unsupported controls', () => {
   setup();
@@ -223,7 +223,7 @@ it('preserves both completed results, details and the Scout download across mode
   expect(within(screen.getByRole('tabpanel', { name: 'Scout' })).getByText(reports.offense.report.source.sha256)).toBeVisible();
   expect(URL.revokeObjectURL).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole('tab', { name: 'Decision Lab' }));
-  expect(view().getByRole('table')).toBeVisible();
+  expect(view().getByRole('table', { name: 'Observed Run and Pass evidence for the selected offense' })).toBeVisible();
   expect(view().getByText(fixtures.selected.decision.source.sha256)).toBeVisible();
   expect(fetch).toHaveBeenCalledTimes(2);
   const ids = Array.from(document.querySelectorAll('[id]'), node => node.id);

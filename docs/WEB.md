@@ -727,8 +727,13 @@ and period-only versus explicit clock selection. The opt-in matched candidate
 league view now adds pooled evidence, coverage/shared games, signed differences and
 separate baseline exclusion counts. Bounded candidate support/interval views now
 preserve unavailable/withheld/degenerate states and unchanged point estimates.
-Next add user Run/Pass selection with the fixed returned descriptive contrast and
-mandatory abstention. Decision downloads follow separately. No models, storage or
+Optional user Run/Pass selection now annotates fixed evidence rows beside the
+returned Pass-minus-Run descriptive contrast, with explicit unavailable reasons
+and mandatory abstention. Query edits clear choice/evidence; mode switches retain
+completed state. Selection never fetches, mutates evidence or reverses the contrast.
+Next: a Decision JSON download preserving the original decoded API text, independent
+of the local choice, with ready-only links, safe filenames and owned-URL cleanup.
+Test exact text/native downloads and retain Scout behavior. No models, storage or
 deployment belong in that slice.
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
 explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

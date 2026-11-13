@@ -329,5 +329,7 @@ with production model/enrichment admission deferred. P1.8 serves this evidence
 over HTTP without changing its analytical contract. P1.9's browser client and narrow
 Decision Lab view now consume it, including optional field-position, score and
 period/clock filters, opt-in matched candidate league comparisons and bounded
-candidate support/exploratory interval views. No client-side statistics, contrast
-interval or automatic preferred call.
+candidate support/exploratory interval views. Optional user-call selection is local
+UI state, absent from the request and response. The view displays the existing
+fixed Pass-minus-Run descriptive contrast without changing it for the user choice.
+No client-side statistics, contrast interval or automatic preferred call.

@@ -5,6 +5,25 @@ screen-reader certification or public-release claim. Scout's analytics, API,
 schema v2, snapshots and downloadable evidence are unchanged. The original review
 preceded Decision Lab; the bounded follow-ups below cover its rendered slices.
 
+## Decision user-call choice follow-up — 2026-11-12
+
+Native radios share a labeled fieldset and name, with an accessible group
+explanation and no default choice. Space/arrow keys select, Tab reaches Clear choice
+when enabled, and clearing does not submit. Query edits clear the choice, while
+mode changes retain it. Text labels identify Your choice / Alternative in stable
+rows; neither color nor a numeric sign grades the selection. The fixed contrast
+has a caption, row/column headers and a named focusable horizontal scroll region.
+Null reasons and the absent contrast interval are explicit text.
+
+All 36 desktop/narrow Chromium cases pass, including real-API selection, absence/
+empty evidence, mode preservation and keyboard scrolling without page overflow
+at 320 CSS pixels. Desktop/narrow screenshots of the controls and contrast were
+inspected. The eight new axe scans have zero violations; full-width desktop states
+have no incompletes, while narrow/320-pixel scans retain color-contrast incompletes on
+clipped/numeric table cells. These do not establish assistive-technology, real-
+device, zoom or cross-browser conformance. No unexpected requests/page errors;
+owned test servers stopped. The remaining coverage section still applies.
+
 ## Decision uncertainty follow-up — 2026-11-11
 
 Shared text inputs preserve invalid partial values and use Decision-specific help/

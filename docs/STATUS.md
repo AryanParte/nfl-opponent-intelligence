@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-11-11, the long-term direction is
+As of the daily run on 2026-11-12, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
 builder and its local API include matched candidate baselines and opt-in
@@ -43,9 +43,10 @@ enrichment or new play family is approved.
 P1.8's optional **GET `/v1/decision`**, merged through PR #39, reuses the shared
 immutable PBP snapshot and builder, bounded queries and one serving slot. P1.9's
 [typed browser contract/client](DECISION_WEB.md), merged through PR #40, now powers
-the rendered Decision Lab (mode and field controls merged through PR #41).
+the rendered Decision Lab (mode and field controls merged through PR #41,
+score/time/league/uncertainty controls through PR #42).
 Mode tabs retain drafts, completed results and
-Scout downloads, while edits and mode changes cancel pending work and reject late
+Scout downloads, while query edits and mode changes cancel pending work and reject late
 responses. The narrow form selects offense/team/season/type/cutoff/exact down and
 inclusive distance, with optional field-position, pre-play score and period/clock
 filters. Shared controls preserve Scout behavior and independent mode state.
@@ -67,21 +68,26 @@ uses parent-game support; outcomes use games with observed candidate EPA. Shared
 presentation preserves Scout behavior, while comparison can change the resampling
 frame without changing point estimates. Sixty-nine actual synthetic Decision HTTP
 fixtures include five new uncertainty responses; all 64 prior values and 71 Scout
-fixtures remain unchanged. Original
+fixtures remain unchanged. Optional user-call selection now labels fixed evidence
+rows beside the returned Pass-minus-Run descriptive contrast. Selection never
+fetches, changes the evidence or grades a call; any query edit clears it, while
+mode changes preserve it. Null reasons and the unimplemented contrast interval
+remain explicit. Original
 Decision JSON is retained for a later download flow. Scout schema v2, controls,
 briefs and downloads are preserved. No new dependency, model execution, training,
 ranking, charting admission, database, deployment or automation change.
 Actual assistive-technology/cross-browser gaps remain in the
 [bounded accessibility review](ACCESSIBILITY.md), not a WCAG certification.
 P1.8 is complete within its single-worker, local PBP-only scope.
-Next: Add user Run/Pass selection and inspect it alongside the alternative using the
-existing server-provided, fixed Pass-minus-Run descriptive contrast. Keep the choice
-as UI state, not an API option or evidence mutation; clear it when the situation
-changes and preserve it across mode switches. Retain explicit unavailable reasons,
-mandatory abstention and the unimplemented contrast-interval state. Test keyboard
-selection, query changes, missing/empty evidence and state preservation. No grading,
-ranked winner, sign-inverted browser calculation or new model. Decision JSON download
-follows as a separate unit.
+Next: Add a Decision JSON download for the current validated `DecisionDocument.json`.
+Preserve the original decoded response text, full provenance, contexts, warnings,
+contrasts, baselines and uncertainty; do not reserialize or add the local choice.
+Reuse the Scout object-URL lifecycle where practical, with distinct safe filenames
+and help IDs. Show a ready-only link; invalidate it on query changes/errors and
+revoke owned URLs on replacement/unmount, while preserving completed downloads
+across mode switches and call-choice edits. Test native downloads, exact text,
+failed preparation, stale responses and Scout compatibility. No new request,
+statistics, data source, model, storage or deployment.
 No historical-availability, production model, new data layer or deployment claim.
 The 8 AM automation is unchanged.
 
@@ -96,16 +102,13 @@ projections or validated scouting recommendations.
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/decision-score-filter`, continued on 2026-11-11 because
-  [PR #42](https://github.com/AryanParte/nfl-opponent-intelligence/pull/42) is still open.
-  The latest heartbeat explicitly requests continuing the appropriate existing
-  branch/PR. Fetched main remains `bc7b9b0`; prior local/upstream head `87f80b1`
-  was clean and 0 ahead/behind. Remote has main and this branch, with no review or
-  comment feedback. Prior-head push/PR CI passed all eight jobs on first attempts
-  ([push](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/42826209498),
-  [PR](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/42826216248)).
-  Baseline 453 core / 45 API passed on Python 3.13 before edits. Preserve history;
-  do not duplicate the open work, merge or enable auto-merge.
+- Working branch: `codex/decision-call-choice`, created from fetched `origin/main`
+  (`45786b8`) on 2026-11-12 after [PR #42](https://github.com/AryanParte/nfl-opponent-intelligence/pull/42)
+  merged. Its merged tree equals prior head `b818b6a`; the stable clone was clean,
+  with no local-only work or open PRs/review feedback. Actual remote branches held
+  only main. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43123201146)
+  passed all eight jobs on its first attempt. Baseline 453 core / 45 API tests passed
+  on Python 3.13 before edits. Preserve history; do not merge or enable auto-merge.
 - Publication: consult this branch's PR for the exact pushed SHA, GitHub attribution
   and remote CI receipt. Local results below do not substitute for remote checks.
 - Previous Decision view/field review: [PR #41](https://github.com/AryanParte/nfl-opponent-intelligence/pull/41),
@@ -324,6 +327,39 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.9 User call choice and descriptive contrast — 2026-11-12
+
+Optional native Run/Pass radios annotate the fixed observed-call rows and the
+server-provided selected-offense Pass-minus-Run contrast. Query edits clear the
+choice; mode switches and same-query retries preserve it. Choosing/clearing never
+fetches, cancels pending work, mutates evidence, changes signs or grades a call.
+The contrast shows signed pp/EPA values, explicit per-candidate null reasons and
+an unimplemented interval; candidate/league intervals cannot fill it. Missing and
+zero stay distinct, and rounded-zero wording avoids implying exact equality.
+
+Verification:
+
+- 453 core / 45 API tests on Python 3.11, 3.12 and 3.13, API warnings as errors;
+  dependency checks pass. All 69 Decision and 71 Scout fixtures remain unchanged.
+- 1,123 frontend tests, including 20 new choice/contrast cases; TypeScript/build pass.
+- 36 desktop/narrow Chromium cases pass, including four new profile cases using
+  the actual synthetic API. Keyboard radios/clear, fixed signs, choice/query/mode
+  lifecycle, empty/absent calls, 320-pixel scrolling and Scout regressions pass.
+  No unexpected requests/page errors; owned loopback servers stopped.
+- New axe scans have zero violations; full-width desktop has no incompletes. Narrow/320-pixel
+  numeric/clipped cells retain color-contrast incompletes, not an accessibility
+  certification. Desktop/narrow control/contrast screenshots were inspected.
+
+Complete-diff review checked query/evidence separation, stale responses, denominator
+semantics, sign/unit/direction consistency, missing reasons, absent contrast
+intervals, no ranking, source preservation and Scout compatibility. Fixed test-only
+response-body reuse, accessible-name assumptions and a Testing Library locator
+option rejected by TypeScript; scoped existing table checks to their intended table
+and updated native keyboard order. Clarified that displayed
+zeros may reflect rounding. No core/API/schema, source, dependency, model or
+schedule change. Exact pushed SHA, GitHub attribution and CI receipt belong in this
+branch's PR. Next: the bounded Decision JSON download described above.
 
 ### P1.9 Candidate game support and exploratory intervals — 2026-11-11
 
@@ -1825,9 +1861,11 @@ field → score → period → clock → down → distance accounting. Matched c
 league evidence now adds differences, coverage/shared games and separate baseline
 stage counts while preserving selected evidence and explicit unavailable states.
 Bounded candidate game-support/uncertainty controls and interval views now preserve
-parent versus observed-EPA game support and explicit interval states. Next: user-call
-selection with the fixed returned Pass-minus-Run descriptive contrast, no grading
-or preference claim. Decision JSON download follows separately.
+parent versus observed-EPA game support and explicit interval states. Optional
+user-call selection now accompanies the fixed returned Pass-minus-Run descriptive
+contrast without grading or a preference claim. Next: a Decision JSON download
+that retains the original validated response text, source/warnings and unchanged
+evidence; keep choice local and preserve Scout downloads/owned-URL cleanup.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual

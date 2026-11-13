@@ -401,14 +401,20 @@ One local worker remains the supported scope; no cross-process capacity guarante
       defined/undefined draws and replay metadata. Preserve point estimates and
       abstention. Five additional actual synthetic HTTP fixtures; see current status
       for verification and remaining accessibility limits.
-- **Next unit:** user Run/Pass selection with the existing fixed Pass-minus-Run
-  descriptive contrast. Choice is UI state, not an API option or evidence mutation;
-  clear it on situation edits and preserve it across mode switches. Test keyboard
-  selection, null/empty evidence, explicit unavailable reasons and abstention.
-  No grading, ranked winner, browser sign inversion or contrast interval.
-  Decision JSON download follows separately. No model/data layer, storage or deployment.
-- [ ] Situation definition, supported-call selection and comparison against
-      alternatives, with clear historical versus model evidence labels.
+- [x] Optional user Run/Pass selection and comparison against alternatives (2026-11-12):
+      local choice annotates stable rows beside server-provided Pass-minus-Run
+      differences, explicit unavailable reasons and the unimplemented contrast interval.
+      Query edits clear choice/evidence; mode switches preserve completed state.
+      No request, evidence mutation, sign inversion, grading or ranking from selection.
+      Twenty new component cases; 1,123 frontend and 36 desktop/narrow Chromium cases
+      pass using unchanged fixtures. Historical evidence stays labeled as such.
+- **Next unit:** Decision JSON download using the original validated response text.
+  Preserve all provenance, contexts, warnings, contrasts, baselines and uncertainty;
+  do not serialize the local choice into the evidence. Reuse Scout's owned-URL
+  lifecycle where practical with distinct safe filenames/help IDs, ready-only links,
+  query/error invalidation and mode preservation. Test exact text, native downloads,
+  failed preparation and stale-response cleanup without breaking Scout. No new
+  request, model/data layer, storage or deployment.
 - [ ] Explain frequency/outcomes/league context/support/provenance; honest empty,
       insufficient and abstention states, accessible request/download flows.
 - [ ] No browser analytics or causal-optimality/coaching/guaranteed-performance claims.
