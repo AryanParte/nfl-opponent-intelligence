@@ -367,6 +367,10 @@ has no time columns; clock tests generate explicitly synthetic inputs. See
 
 ## Serve Scout and Decision evidence locally (optional)
 
+A [pinned API-only container](docs/CONTAINER.md) is also available for Linux amd64
+and arm64, using a non-root single worker and an explicitly mounted read-only
+snapshot. It serves these same endpoints; the local viewer still runs separately.
+
 The first product endpoint is `GET /v1/report`. It loads one explicitly configured
 immutable snapshot at startup and reuses the analytical builder; requests cannot
 choose paths, refresh data or trigger downloads. API dependencies are optional.
@@ -531,6 +535,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [FTN/PBP join coverage, field issues and source applicability limits](docs/FTN_COVERAGE.md)
 - [FTN field admission/defer decisions and tested PBP isolation](docs/FTN_FIELD_POLICY.md)
 - [Optional local API contract and setup](docs/API.md)
+- [Pinned API container, localhost operation and verification](docs/CONTAINER.md)
 - [Local browser viewer and verification](docs/WEB.md)
 - [Bounded accessibility review and remaining coverage](docs/ACCESSIBILITY.md)
 - [Portfolio presentation plan](docs/PORTFOLIO.md)

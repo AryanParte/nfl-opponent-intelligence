@@ -3395,3 +3395,73 @@ invalidation. Test exact text/native downloads, preparation failure, stale resul
 and mode preservation without breaking Scout. Contrast intervals, preferred calls,
 model/charting admission, historical availability and deployment remain deferred.
 Do not merge or enable auto-merge.
+
+## 2026-11-14 — Pinned API container with isolated contract checks
+
+**Built / why:** a local API-only Docker image for the existing Scout and Decision
+endpoints. The official Python base is digest-pinned; 15 reviewed wheels lock the
+14 existing runtime dependencies for CPython 3.13 on Linux amd64/arm64. Explicit
+configuration, non-root single-worker serving and read-only snapshot/root filesystems
+make the service easier to reproduce without changing its evidence or analytics.
+A tested build-context allowlist keeps data, credentials and local/research artifacts
+out of the image. CI adds real container checks alongside existing verification.
+
+**Start state:** fetched canonical origin; clean prior branch was 0/0 with upstream.
+PR #44 remains open at `a6043b5`, both CI runs green, no comments/reviews. Main
+`8079790` also has green CI. Preserved PR #44 intact and created independent
+`codex/api-container` from main; API packaging needs no unmerged UI changes.
+Baseline 453 core / 45 API tests passed on Python 3.13. Docker was installed but
+stopped; started it for testing after a read-only approval timeout succeeded on retry.
+No automation or global Git/developer setting changed.
+
+**Review files:** `docker/api.Dockerfile`, `api.Dockerfile.dockerignore`,
+`api-requirements.lock`, `api-inputs.json`, `tests_container/test_api_container.py`,
+`.github/workflows/ci.yml` and `docs/CONTAINER.md`.
+
+**Sports/statistical concepts:** packaging must retain offense-relative EPA,
+Run/Pass classification (including dropbacks/scrambles), exclusive week cutoffs,
+missing outcomes, candidate denominators, optional baselines/uncertainty and
+mandatory abstention. The tests use invented plays/acquisition metadata, including
+independent 1 Run / 2 Pass expectations. Transport parity is engineering evidence,
+not validation of optimal calls, statistical coverage or historical availability.
+
+**Software / learn:** a version pin alone does not identify wheel bytes. Verify
+registry/image digests and PyPI wheel hashes, retain metadata/notices and test the
+actual installed closure. The base pins Python 3.13.18/pip 26.2.2; source is copied
+directly, so no unpinned package build backend runs. Container isolation and
+application snapshot isolation are separate: a read-only mount restricts container
+writes but does not freeze the host file. Bind the host port to loopback while the
+server listens on the container interface. A single worker preserves process-local
+capacity semantics; image input pins do not promise universal byte-identical output.
+
+**Three review questions:**
+
+1. Why are the base digest, wheel hashes and existing version constraints different controls, and what remains outside a byte-reproducibility claim?
+2. Why must the snapshot hash-directory name survive the mount, and how do read-only mounts differ from the API's resident snapshot isolation?
+3. What did the real build-context and HTTP checks prove that a Dockerfile text check alone could not prove, and why is that not football-model validation?
+
+**Verification / self-review:** eight real-container tests pass on native arm64 and
+emulated amd64: actual context export, input/source/version identity, non-root and
+write/network restrictions, complete Scout/Decision core parity, empty/error/cost
+boundaries, six rejected startup cases, loopback publishing and graceful shutdown.
+All test containers were removed. 453 core / 45 API tests pass on Python 3.11/3.12/3.13
+(API warnings as errors; dependency checks pass), plus 1,123 frontend tests and
+TypeScript/build. The existing 36-case browser suite remains in CI; no frontend,
+core/API/schema, fixture, model or statistical formula was changed in this branch.
+
+Complete review found parent allowlist exceptions admitting bytecode/egg-info;
+the actual BuildKit context test caught this. Tightened exclusions, checked image
+sources recursively, removed shutdown-test ordering dependence and made cleanup
+errors visible. Repeated affected checks on both architectures. Inputs were checked
+against official Docker/PyPI metadata and primary build/pip/FastAPI documentation;
+no new data/license assumptions or unreviewed dependency upgrade. Exact pushed SHA,
+GitHub identity and all CI receipts belong in this branch's PR. Local image IDs and
+reproducibility limits are in STATUS; no registry image/public deployment claim.
+
+**Remaining / next:** reconcile current PRs/main, preserving PR #44 and both dated
+logs. Then package the existing React viewer and a same-origin proxy to the API
+on a private service network, with only the viewer exposed on host loopback, one
+API worker and the explicit read-only snapshot. Reuse the npm lock and contracts;
+verify both modes/downloads and the actual browser-to-container path in CI. Keep
+scheduled acquisition, real-workload capacity, public deployment, database and
+new model/data layers separate. Do not merge or enable auto-merge.

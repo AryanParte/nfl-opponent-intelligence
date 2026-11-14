@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-11-12, the long-term direction is
+As of the daily run on 2026-11-14, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
 builder and its local API include matched candidate baselines and opt-in
@@ -79,15 +79,24 @@ ranking, charting admission, database, deployment or automation change.
 Actual assistive-technology/cross-browser gaps remain in the
 [bounded accessibility review](ACCESSIBILITY.md), not a WCAG certification.
 P1.8 is complete within its single-worker, local PBP-only scope.
-Next: Add a Decision JSON download for the current validated `DecisionDocument.json`.
-Preserve the original decoded response text, full provenance, contexts, warnings,
-contrasts, baselines and uncertainty; do not reserialize or add the local choice.
-Reuse the Scout object-URL lifecycle where practical, with distinct safe filenames
-and help IDs. Show a ready-only link; invalidate it on query changes/errors and
-revoke owned URLs on replacement/unmount, while preserving completed downloads
-across mode switches and call-choice edits. Test native downloads, exact text,
-failed preparation, stale responses and Scout compatibility. No new request,
-statistics, data source, model, storage or deployment.
+Decision JSON download is already implemented on [PR #44](https://github.com/AryanParte/nfl-opponent-intelligence/pull/44)
+(`a6043b5`), awaiting review with green CI. That branch remains intact; do not rebuild,
+copy or merge it automatically. This run starts an independent P1.10 API packaging
+unit from main `8079790`, which already contains both stable endpoints.
+The [API-only container](CONTAINER.md) now supplies pinned build inputs, non-root
+single-worker serving, a read-only operator snapshot and real synthetic container
+checks. It changes neither API contracts nor the UI. Core/API dependencies remain
+optional outside this image; the Docker lock adds verified wheels for 3.13 on Linux
+amd64/arm64 without changing the general API constraints.
+
+Next: reconcile open PRs and main, then package the existing React viewer with
+pinned build inputs and a same-origin proxy to the existing API on a private
+service network. Publish only the viewer on host loopback; retain one API worker
+and an explicit read-only snapshot. Verify both modes, native JSON downloads,
+browser-to-container requests and cleanup in CI. Reuse the current npm lock and
+contracts. No database, model, new data/formulas, scheduled acquisition or public
+deployment in that unit. Preserve the pending download PR and both learning logs
+when integrating independently based branches.
 No historical-availability, production model, new data layer or deployment claim.
 The 8 AM automation is unchanged.
 
@@ -327,6 +336,58 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### P1.10 Pinned local API container — 2026-11-14
+
+Verified canonical root/origin, fetched origin and confirmed the prior branch was
+clean and 0/0 with its upstream. PR #44 remains open at `a6043b5`; both CI runs are
+green and there are no reviews/comments. Actual remote branches are main and that
+feature branch. Main remains `8079790`, with all eight jobs green. The API container
+is independent of PR #44's UI changes: created `codex/api-container` from main,
+preserved the other branch/history and did not copy its work. Baseline Python 3.13
+453 core / 45 API tests passed before editing.
+
+The image pins the official Python index and platform manifests, plus exact PyPI
+wheel hashes for 14 existing runtime packages (15 wheels across amd64/arm64).
+Release JSON hashes and wheel license metadata were inspected; notices remain in
+the image. Python 3.13.18 / pip 26.2.2 come from the base; source is copied directly
+without an unpinned build backend. API extras/test constraints are unchanged.
+A Dockerfile-specific allowlist excludes data, secrets, environments, frontend,
+research and bytecode/packaging caches. The non-root UID/GID 10001:10001 process uses
+one Uvicorn worker, required lifespan and disabled proxy-header trust. Operator
+configuration stays mandatory; the documented root and snapshot mount are read-only.
+Health uses the existing OpenAPI route; no new endpoint or statistical calculation.
+
+Verification:
+
+- Eight real-container checks pass on native Linux arm64 and emulated Linux amd64.
+  Actual BuildKit context export and recursive image source checks match the allowed
+  files. Installed versions match the wheel record. Both routes preserve full core
+  output, optional league/bootstrap blocks and independent synthetic call counts.
+- Non-root execution, denied writes, capabilities/no-new-privileges, network-none
+  service, six rejected startup cases, empty/errors/expensive-option limits, graceful
+  shutdown and an ephemeral 127.0.0.1-only publishing recipe pass. No real data was
+  downloaded or mounted; all fixture records/acquisition metadata are invented.
+- 453 core / 45 API tests pass on Python 3.11, 3.12 and 3.13 (API warnings as
+  errors; dependency checks pass), plus 1,123 frontend tests and TypeScript/build.
+  CI adds one amd64 container job alongside the existing eight jobs, retaining
+  the 36-case browser suite. Exact pushed SHA and CI/attribution receipts belong
+  in the PR.
+
+Local image config IDs: arm64 `3f5fcb7d376d1d90f271cb345454daf11d0e66bd85e1624d897672eb863b35a7`,
+amd64 `881a9eca9f58a5c3ee999168b265da0ef4ab39772b824ce91a9026c8d8557bfd`.
+These identify the verified local images, not portable expected output digests.
+Inputs are pinned; builder versions, timestamps/attestations and source changes
+still prevent a claim of universally byte-identical images.
+
+Review found and fixed parent allowlist exceptions admitting local caches/egg-info;
+real context export caught it. Added recursive image inspection and removed a
+shutdown-test ordering dependency and made cleanup failures visible, then reran
+both architectures. The localhost
+recipe was independently exercised, not only documented. Test cleanup owns unique
+container names; it does not prune images or touch unrelated services. Remaining:
+full frontend packaging, real-workload capacity/freshness, deployment and wider
+accessibility/model validation. Next is the frontend container/proxy unit above.
 
 ### P1.9 User call choice and descriptive contrast — 2026-11-12
 
@@ -1863,9 +1924,10 @@ stage counts while preserving selected evidence and explicit unavailable states.
 Bounded candidate game-support/uncertainty controls and interval views now preserve
 parent versus observed-EPA game support and explicit interval states. Optional
 user-call selection now accompanies the fixed returned Pass-minus-Run descriptive
-contrast without grading or a preference claim. Next: a Decision JSON download
-that retains the original validated response text, source/warnings and unchanged
-evidence; keep choice local and preserve Scout downloads/owned-URL cleanup.
+contrast without grading or a preference claim. Decision JSON download is ready
+in PR #44; retain that branch and do not duplicate its evidence/resource work.
+Independent API container packaging is complete here. Next: the bounded local
+frontend container/proxy unit described above, after reconciling pending PRs/main.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual
