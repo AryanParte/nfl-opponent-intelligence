@@ -42,8 +42,10 @@ implemented; unresolved charting does not block it or silently become serving
 evidence. P1.9's typed browser contract/client and first mode/form/evidence view
 are implemented, including optional field-position/score controls and ordered exclusions.
 Optional Decision period/clock controls, matched candidate league views and bounded
-support/uncertainty views are implemented. User-call selection and descriptive
-contrast inspection are next.
+support/uncertainty views, user-call selection and descriptive contrast inspection
+are implemented. Decision JSON download is complete on [PR #44](https://github.com/AryanParte/nfl-opponent-intelligence/pull/44),
+awaiting review; do not duplicate it. P1.10's independent API-only container now
+packages the existing endpoints; frontend container packaging follows separately.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -408,7 +410,7 @@ One local worker remains the supported scope; no cross-process capacity guarante
       No request, evidence mutation, sign inversion, grading or ranking from selection.
       Twenty new component cases; 1,123 frontend and 36 desktop/narrow Chromium cases
       pass using unchanged fixtures. Historical evidence stays labeled as such.
-- **Next unit:** Decision JSON download using the original validated response text.
+- **In review (PR #44; do not rebuild):** Decision JSON download using the original validated response text.
   Preserve all provenance, contexts, warnings, contrasts, baselines and uncertainty;
   do not serialize the local choice into the evidence. Reuse Scout's owned-URL
   lifecycle where practical with distinct safe filenames/help IDs, ready-only links,
@@ -421,7 +423,21 @@ One local worker remains the supported scope; no cross-process capacity guarante
 
 ### P1.10 — Operational evidence and case study (preserved from former P1.5)
 
-- [ ] Docker, repeatable builds, and CI that verifies data and API contracts.
+- [x] API-only container (2026-11-14): pinned official Python base, hash-checked
+      CPython 3.13 runtime wheels for Linux amd64/arm64, a tested context allowlist,
+      non-root single-worker serving and an explicit read-only snapshot mount.
+      Eight real-container tests pass on native arm64 and emulated amd64, including
+      exact Scout/Decision parity, isolation, localhost publishing, invalid startup
+      and shutdown. A ninth CI job runs the amd64 container checks. Core/API and UI
+      behavior remain unchanged. See [operating instructions](docs/CONTAINER.md).
+- [ ] Frontend container and repeatable local whole-app operation.
+      **Next unit:** after reconciling current PRs/main, package the existing React
+      viewer with pinned build inputs and a same-origin proxy to the existing API
+      on a private service network. Bind only the viewer to host loopback, keep the
+      explicit snapshot read-only and retain one API worker. Verify the actual
+      browser-to-container API path, both modes, JSON downloads and cleanup in CI.
+      Reuse current npm lock/contracts; no new data, formulas, database, ingestion
+      scheduling or public deployment. Preserve PR #44's download work when merged.
 - [ ] Scheduled ingestion with freshness checks, retries, failure reporting, and
       immutable dataset manifests. Do not describe delayed releases as live feeds.
 - [ ] Deployment appropriate to measured needs; document costs and limitations.
