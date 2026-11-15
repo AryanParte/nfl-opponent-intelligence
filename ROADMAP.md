@@ -42,10 +42,12 @@ implemented; unresolved charting does not block it or silently become serving
 evidence. P1.9's typed browser contract/client and first mode/form/evidence view
 are implemented, including optional field-position/score controls and ordered exclusions.
 Optional Decision period/clock controls, matched candidate league views and bounded
-support/uncertainty views, user-call selection and descriptive contrast inspection
-are implemented. Decision JSON download is complete on [PR #44](https://github.com/AryanParte/nfl-opponent-intelligence/pull/44),
-awaiting review; do not duplicate it. P1.10's independent API-only container now
-packages the existing endpoints; frontend container packaging follows separately.
+support/uncertainty views, local user-call selection, descriptive contrast inspection
+and original Decision JSON download are implemented. P1.9's bounded local scope is
+complete. P1.10's API-only container is implemented in PR #45; its branch now
+includes merged PR #44. Frontend container packaging is next after PR #45 review.
+Model admission, assistive-technology/release readiness and public deployment
+remain separate gates.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -357,7 +359,7 @@ See [HTTP contract and replay](docs/API.md#decision-request-contract). No charti
 model integration, new dependency, database, frontend, deployment or automation change.
 One local worker remains the supported scope; no cross-process capacity guarantee.
 
-### P1.9 — Play Caller / Decision Lab UI
+### P1.9 — Play Caller / Decision Lab UI (bounded local scope complete, 2026-11-13)
 
 - [x] Typed browser contract/parser and bounded request client for Decision v1,
       backed by 69 actual synthetic API fixtures, mutation/error tests and a real
@@ -410,16 +412,19 @@ One local worker remains the supported scope; no cross-process capacity guarante
       No request, evidence mutation, sign inversion, grading or ranking from selection.
       Twenty new component cases; 1,123 frontend and 36 desktop/narrow Chromium cases
       pass using unchanged fixtures. Historical evidence stays labeled as such.
-- **In review (PR #44; do not rebuild):** Decision JSON download using the original validated response text.
-  Preserve all provenance, contexts, warnings, contrasts, baselines and uncertainty;
-  do not serialize the local choice into the evidence. Reuse Scout's owned-URL
-  lifecycle where practical with distinct safe filenames/help IDs, ready-only links,
-  query/error invalidation and mode preservation. Test exact text, native downloads,
-  failed preparation and stale-response cleanup without breaking Scout. No new
-  request, model/data layer, storage or deployment.
-- [ ] Explain frequency/outcomes/league context/support/provenance; honest empty,
-      insufficient and abstention states, accessible request/download flows.
-- [ ] No browser analytics or causal-optimality/coaching/guaranteed-performance claims.
+- [x] Original validated Decision JSON download (2026-11-13): preserve the decoded
+      response text, including provenance, contexts, warnings, contrasts, baselines
+      and uncertainty. Local call choice never enters the exported evidence. Share
+      Scout's owned-URL lifecycle; distinct safe filenames/help IDs, ready-only links,
+      query/error invalidation and independent mode preservation. All 1,150 frontend
+      and 40 desktop/narrow Chromium cases pass, including eight byte-identical native
+      Decision downloads, failed preparation and stale-response cleanup. Fixtures,
+      core/API contracts and Scout exports are unchanged.
+- [x] Explain frequency/outcomes/league context/support/provenance; honest empty,
+      insufficient and abstention states, with bounded keyboard/automated coverage
+      of request/download flows. Real assistive-technology, device, zoom and browser
+      coverage remain open in [ACCESSIBILITY.md](docs/ACCESSIBILITY.md); no conformance claim.
+- [x] No browser analytics or causal-optimality/coaching/guaranteed-performance claims.
 
 ### P1.10 — Operational evidence and case study (preserved from former P1.5)
 
@@ -431,13 +436,13 @@ One local worker remains the supported scope; no cross-process capacity guarante
       and shutdown. A ninth CI job runs the amd64 container checks. Core/API and UI
       behavior remain unchanged. See [operating instructions](docs/CONTAINER.md).
 - [ ] Frontend container and repeatable local whole-app operation.
-      **Next unit:** after reconciling current PRs/main, package the existing React
+      **Next unit:** after PR #45 review/merge, sync main and package the existing React
       viewer with pinned build inputs and a same-origin proxy to the existing API
       on a private service network. Bind only the viewer to host loopback, keep the
       explicit snapshot read-only and retain one API worker. Verify the actual
       browser-to-container API path, both modes, JSON downloads and cleanup in CI.
       Reuse current npm lock/contracts; no new data, formulas, database, ingestion
-      scheduling or public deployment. Preserve PR #44's download work when merged.
+      scheduling or public deployment. Preserve the merged Decision download behavior.
 - [ ] Scheduled ingestion with freshness checks, retries, failure reporting, and
       immutable dataset manifests. Do not describe delayed releases as live feeds.
 - [ ] Deployment appropriate to measured needs; document costs and limitations.

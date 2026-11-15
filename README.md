@@ -95,9 +95,11 @@ Scout's controls and original fixtures are preserved.
 Charting applicability and historical availability remain unverified.
 Call selection stays local, clears on query edits and preserves the returned evidence
 and fixed contrast direction. No call is graded; contrast intervals remain unavailable.
-Decision Lab downloads, adjustment and deployment remain on the
-[roadmap](ROADMAP.md). This is an independent portfolio project, with no NFL or
-team affiliation or predictive-validation claim.
+Both modes now download their original validated JSON without another request;
+Decision exports retain all evidence and omit the local call choice. P1.9's bounded
+local interface is complete. Operational packaging, adjustment and deployment
+remain on the [roadmap](ROADMAP.md). This is an independent portfolio project,
+with no NFL or team affiliation or predictive-validation claim.
 
 [GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
 source of truth. The daily workflow preserves existing work and follows the roadmap,

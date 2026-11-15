@@ -3396,6 +3396,72 @@ and mode preservation without breaking Scout. Contrast intervals, preferred call
 model/charting admission, historical availability and deployment remain deferred.
 Do not merge or enable auto-merge.
 
+## 2026-11-13 — Original Decision evidence download
+
+**Built / why:** a native Decision JSON download of the original validated decoded
+response, preserving full precision, unrendered fields, nulls, contexts, provenance,
+contrasts, baselines, uncertainty and warnings. Analysts can retain reproducible
+evidence independently of display rounding or their local Run/Pass choice. Scout
+and Decision share one URL-lifecycle hook, preserving both modes' exports.
+
+**Start state:** canonical root/origin and clean prior branch verified. PR #43
+merged at `8079790` with the prior `e2eb7a2` tree; no open PRs or review feedback.
+Main CI passed all eight jobs. Fetched origin and created
+`codex/decision-json-download` from updated main; baseline 453 core / 45 API tests
+passed on Python 3.13 before editing. Full history and the 8 AM automation preserved.
+
+**Review files:** `web/src/DecisionDownload.tsx`, `useJsonDownload.ts`,
+`ReportDownload.tsx`, `DecisionLab.tsx`, `decision-download.test.tsx`,
+`web/e2e/scout.spec.ts` and `docs/DECISION_WEB.md`.
+
+**Sports/statistical concepts:** exporting never changes parent-play versus
+observed-EPA denominators, missing data, candidate support, interval availability
+or mandatory abstention. Observed Run/Pass categories are not verified intended
+calls; local choice is an annotation, not an observation or validated recommendation.
+The source SHA identifies the PBP snapshot, not the export file. A complete historical
+cohort is still not a fully specified game state or proof of historical availability.
+
+**Software / learn:** retain validated source text rather than stringify a JS object
+that can alter number spelling/precision. Own one Blob URL per document, hide prior
+resources synchronously on identity changes and revoke them on replacement/unmount.
+Choice changes keep the same document; query edits invalidate it. Test actual saved
+bytes as well as mocked lifecycle behavior, StrictMode and ignored aborts. A browser
+save request does not prove the user's filesystem accepted a download.
+
+**Three review questions:**
+
+1. Why can reserializing parsed JSON change an exported number, and which text does this download preserve?
+2. Which actions preserve the current URL, which invalidate it, and how does the identity guard prevent old evidence receiving a new filename?
+3. Why are local choice, snapshot SHA, filename and exported evidence different things, and why does none establish an optimal call?
+
+**Verification / self-review:** 453 core / 45 API tests pass on Python 3.11/3.12/3.13
+(API warnings as errors; dependency checks pass). All 1,150 frontend tests,
+TypeScript/build and 40 desktop/narrow Chromium cases pass. The 27 new component
+cases cover exact text, lexical numbers/Unicode, all evidence shapes, failure and
+stale-resource cleanup. Eight native Decision downloads equal actual synthetic API
+bytes, including Pass/Run/cleared choices and empty evidence. No fixtures changed
+(69 Decision / 71 Scout); existing Scout download/offline brief checks still pass.
+
+Reviewed the complete diff for resource ownership, request/choice separation,
+filename/source safety, preserved denominators/abstention and misleading provenance
+claims. Corrected test-only alert timing, StrictMode-persistent failure injection
+and an ambiguous yards-to-go locator, then reran relevant checks. Desktop/narrow
+screenshots inspected; eight new axe scans have zero violations, with three narrow
+color-contrast incompletes retained. No unexpected requests/page errors; owned
+servers stopped. No new formula, schema, source/license, dependency, model or
+schedule change. Publication SHA, attribution and exact CI receipt belong in the PR.
+
+**Remaining / next:** P1.9's bounded local descriptive UI is complete. Begin P1.10
+with an API-only container around the existing app: inspect runtime patterns/engine,
+pin and review base/dependency inputs, run non-root with one worker, mount the
+explicit immutable snapshot read-only and test startup failures plus both routes
+in CI. Exclude data/secrets/environments/research runtimes from the build; document
+loopback operation and cleanup. Current version constraints do not constitute a
+wheel-hash/build-tool lock or byte-reproducible image. Frontend packaging, ingestion
+scheduling and deployment are separate units. Real assistive-technology/browser
+coverage, model/charting admission and causal/predictive validation remain open.
+Do not merge or enable auto-merge.
+
 ## 2026-11-14 — Pinned API container with isolated contract checks
 
 **Built / why:** a local API-only Docker image for the existing Scout and Decision
@@ -3465,3 +3531,51 @@ API worker and the explicit read-only snapshot. Reuse the npm lock and contracts
 verify both modes/downloads and the actual browser-to-container path in CI. Keep
 scheduled acquisition, real-workload capacity, public deployment, database and
 new model/data layers separate. Do not merge or enable auto-merge.
+
+## 2026-11-15 — Preserve both features while resolving PR #45 conflicts (manual)
+
+**Built / why:** integrated merged PR #44 (`265b657`) into the existing API
+container branch (`4be5179`) with a normal merge, preserving both implementations
+and published history. Combined the roadmap/status changes and retained the
+November 13/14 learning records exactly. Reconciled stale next-step text in both
+web guides. This makes PR #45 reviewable against current main without duplicating
+features or starting another product unit.
+
+**Review files:** `ROADMAP.md`, `docs/STATUS.md`, `LEARNING_LOG.md`,
+`docs/WEB.md` and `docs/DECISION_WEB.md`; compare the merge parents to see which
+feature each branch contributes.
+
+**Sports analytics concepts:** Scout and Decision Lab keep their existing
+Run/Pass definitions, offense-relative EPA, historical cutoffs, denominators,
+missing-data states, provenance and mandatory abstention. Neither packaging nor
+successful integration tests prove that one football call is causally optimal.
+
+**Software/statistical concepts / learn:** a two-parent merge preserves both
+histories; resolving a documentation conflict requires reconciling current state
+without rewriting historical evidence. Test the combined tree, distinguish local
+checks from remote CI, and separate completed bounded features from deferred
+model validation and release-readiness work.
+
+**Three review questions:**
+
+1. Why does merging main into the feature branch preserve both histories without merging PR #45 itself?
+2. How do the parent-tree comparisons and integration tests show that both downloads and API packaging survived?
+3. Why do passing software tests leave causal call quality, model admission and public deployment readiness unproven?
+
+**Verification / self-review:** 453 core and 45 API tests pass on Python 3.13
+(API warnings as errors), along with 1,150 frontend tests and TypeScript/build.
+Merged-main CI passed. The merged app/source/tests/dependency inputs equal main;
+Docker inputs, container tests and CI equal the original PR #45 head. Review
+fixed obsolete API-container next-step prose in auto-merged web guides, confirmed
+both dated learning records byte-for-byte, and found no remaining conflict markers
+or runtime/statistical changes. Docker remains stopped locally; the unchanged
+container suite and combined 40-case browser suite are covered by remote CI.
+Publication, exact SHA/attribution and CI results belong in PR #45, and are not
+inferred from local tests.
+
+**Remaining / next:** after Aryan reviews/merges PR #45, sync main and package the
+existing React viewer with a same-origin API proxy on a private service network,
+host-loopback publishing, one API worker and the read-only snapshot. Then finish
+P1.10 freshness/retry operations, realistic workload evidence, deployment and the
+case study/demo/domain feedback. Richer play families and production models remain
+deferred; no merge/auto-merge or scheduled automation change in this run.

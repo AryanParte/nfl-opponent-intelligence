@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-11-14, the long-term direction is
+As of the manual PR integration on 2026-11-15, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
 builder and its local API include matched candidate baselines and opt-in
@@ -44,10 +44,10 @@ P1.8's optional **GET `/v1/decision`**, merged through PR #39, reuses the shared
 immutable PBP snapshot and builder, bounded queries and one serving slot. P1.9's
 [typed browser contract/client](DECISION_WEB.md), merged through PR #40, now powers
 the rendered Decision Lab (mode and field controls merged through PR #41,
-score/time/league/uncertainty controls through PR #42).
+score/time/league/uncertainty controls through PR #42, user-call choice through PR #43).
 Mode tabs retain drafts, completed results and
-Scout downloads, while query edits and mode changes cancel pending work and reject late
-responses. The narrow form selects offense/team/season/type/cutoff/exact down and
+independent Scout/Decision downloads, while query edits and mode changes cancel
+pending work and reject late responses. The narrow form selects offense/team/season/type/cutoff/exact down and
 inclusive distance, with optional field-position, pre-play score and period/clock
 filters. Shared controls preserve Scout behavior and independent mode state.
 Q1–Q4/OT and inclusive whole seconds require an explicit period for clock bounds;
@@ -72,31 +72,31 @@ fixtures remain unchanged. Optional user-call selection now labels fixed evidenc
 rows beside the returned Pass-minus-Run descriptive contrast. Selection never
 fetches, changes the evidence or grades a call; any query edit clears it, while
 mode changes preserve it. Null reasons and the unimplemented contrast interval
-remain explicit. Original
-Decision JSON is retained for a later download flow. Scout schema v2, controls,
+remain explicit. Original validated Decision JSON is now downloadable as UTF-8,
+with full returned evidence and no local call-choice annotation. Shared URL
+ownership preserves both modes, invalidates stale links and safely reports browser
+preparation failures while retaining readable evidence. Scout schema v2, controls,
 briefs and downloads are preserved. No new dependency, model execution, training,
 ranking, charting admission, database, deployment or automation change.
 Actual assistive-technology/cross-browser gaps remain in the
 [bounded accessibility review](ACCESSIBILITY.md), not a WCAG certification.
 P1.8 is complete within its single-worker, local PBP-only scope.
-Decision JSON download is already implemented on [PR #44](https://github.com/AryanParte/nfl-opponent-intelligence/pull/44)
-(`a6043b5`), awaiting review with green CI. That branch remains intact; do not rebuild,
-copy or merge it automatically. This run starts an independent P1.10 API packaging
-unit from main `8079790`, which already contains both stable endpoints.
-The [API-only container](CONTAINER.md) now supplies pinned build inputs, non-root
-single-worker serving, a read-only operator snapshot and real synthetic container
-checks. It changes neither API contracts nor the UI. Core/API dependencies remain
-optional outside this image; the Docker lock adds verified wheels for 3.13 on Linux
-amd64/arm64 without changing the general API constraints.
+P1.9's bounded local descriptive scope is complete. PR #44 merged at `265b657`
+on 2026-11-15. PR #45's API container branch now incorporates that main history,
+preserving both implementations and the November 13/14 learning records. This
+resolves the parallel branches' documentation conflicts without rewriting commits.
+The [API-only container](CONTAINER.md) supplies pinned build inputs, non-root
+single-worker serving, a read-only operator snapshot and synthetic container checks.
+Its optional runtime and both API contracts are unchanged by this integration.
 
-Next: reconcile open PRs and main, then package the existing React viewer with
-pinned build inputs and a same-origin proxy to the existing API on a private
-service network. Publish only the viewer on host loopback; retain one API worker
-and an explicit read-only snapshot. Verify both modes, native JSON downloads,
-browser-to-container requests and cleanup in CI. Reuse the current npm lock and
-contracts. No database, model, new data/formulas, scheduled acquisition or public
-deployment in that unit. Preserve the pending download PR and both learning logs
-when integrating independently based branches.
+Next: after PR #45 is reviewed/merged, sync main and package the existing React
+viewer with pinned build inputs and a same-origin proxy to the existing API on a
+private service network. Publish only the viewer on host loopback; retain one API
+worker and the explicit read-only snapshot. Verify both modes, native JSON downloads,
+browser-to-container requests and cleanup in CI. Reuse the npm lock and contracts.
+No database, model, new data/formulas, scheduled acquisition or public deployment
+in that unit. The broader P1.10 finish line still includes freshness/retry handling,
+real-workload measurement, deployment, the case study/demo and domain feedback.
 No historical-availability, production model, new data layer or deployment claim.
 The 8 AM automation is unchanged.
 
@@ -337,6 +337,31 @@ This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
 
+### PR #45 integration with merged Decision downloads — 2026-11-15
+
+Manual conflict-resolution unit: merged `origin/main` (`265b657`, PR #44) into
+`codex/api-container` from published `4be5179`, preserving both parents and all
+published history. Only `ROADMAP.md`, this status file and `LEARNING_LOG.md`
+conflicted. Reconciled current continuation text in `docs/WEB.md` and
+`docs/DECISION_WEB.md`; kept both November 13/14 learning records byte-for-byte.
+P1.9 is complete within its documented scope; the API container remains under
+PR #45 review, with frontend packaging next. No new product unit was started.
+
+Local integration verification on Python 3.13: **453 core tests**, **45 API tests**
+with warnings as errors, **1,150 frontend tests** across 18 files, and the
+TypeScript/production build pass. The merged app, fixtures, tests and dependency
+inputs equal main; Docker inputs, container tests and CI equal the previously
+verified PR #45 head. Complete-diff review found and fixed stale API-container
+next-step text in the two auto-merged web guides; no unresolved conflict markers
+remain. No analytics, denominators, temporal cutoffs, source/model admission or
+runtime behavior changed during resolution. Merged-main CI
+[43770591739](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43770591739)
+passed. The merge commit's remote SHA, identity and full CI receipts will be
+recorded in PR #45 after publication; these local results do not substitute for
+remote checks. Docker remains stopped locally; the unchanged container suite and
+the 40-case browser suite run in CI. No public deployment or release-readiness
+claim, PR merge, history rewrite or automation change.
+
 ### P1.10 Pinned local API container — 2026-11-14
 
 Verified canonical root/origin, fetched origin and confirmed the prior branch was
@@ -388,6 +413,52 @@ recipe was independently exercised, not only documented. Test cleanup owns uniqu
 container names; it does not prune images or touch unrelated services. Remaining:
 full frontend packaging, real-workload capacity/freshness, deployment and wider
 accessibility/model validation. Next is the frontend container/proxy unit above.
+
+### P1.9 Original Decision JSON download — 2026-11-13
+
+Verified canonical root/origin and a clean prior branch, fetched origin and preserved
+history. PR #43 merged at `8079790` with the same tree as prior `e2eb7a2`;
+GitHub listed only main, no open PRs or review feedback. Main run
+[43335103102](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43335103102)
+passed all eight jobs. Created `codex/decision-json-download` from updated
+`origin/main`; baseline 453 core / 45 API tests passed on Python 3.13 before edits.
+
+The ready-only Decision link exports `DecisionDocument.json` as UTF-8 without
+reserializing or rounding. It retains all fields, nulls, provenance, contexts,
+contrasts, baselines, uncertainty and warnings, including unrendered additions.
+The filename uses only validated basic cohort values; the complete JSON, not the
+filename, identifies optional context. User choice remains local and never enters
+the file or triggers a request. Scout and Decision now share `useJsonDownload`;
+identity guards prevent old bytes receiving a new filename. Replacements, query
+edits, loading/errors and unmount revoke owned URLs; completed mode/choice changes
+retain them. Preparation failures leave the evidence readable with a safe alert.
+
+Verification:
+
+- 453 core / 45 API tests pass on each of Python 3.11/3.12/3.13, API warnings as
+  errors; all three environments pass dependency checks.
+- 1,150 frontend tests pass, including 27 new exact-text, lifecycle, empty/missing,
+  StrictMode, failure, invalid-response and late-response cases. TypeScript and
+  production build pass. All 69 Decision and 71 Scout API fixtures are unchanged.
+- All 40 desktop/narrow Chromium cases pass against the actual synthetic API.
+  Eight native Decision files match response bytes, including local Pass/Run/clear
+  choices and an empty cohort; offline parsing retains source hash and abstention.
+  Existing Scout downloads/offline briefs still pass. No unexpected requests/page
+  errors; owned 8000/5173 servers stopped.
+- Desktop/narrow screenshots inspected. Eight new axe scans have zero violations;
+  full-width desktop states have no incompletes. Three narrow states retain
+  color-contrast incompletes on clipped numeric table cells, not resolved by these
+  scans. Assistive-technology, device, zoom and cross-browser gaps remain explicit.
+
+Complete review checked original text versus lossy JS serialization, filename
+safety, URL lifetime, hidden-mode IDs, query/choice separation and cleanup after
+ignored aborts. Fixed test timing for the child preparation alert, kept injected
+browser failure active through StrictMode replay and disambiguated yards-to-go
+versus yards-to-goal locators; relevant checks reran successfully. No runtime
+formula, core/API/schema, data/license, dependency, model or automation change.
+The source hash identifies the PBP snapshot, not the export file; Decision v1 is
+not a Scout v2 brief input. Exact pushed SHA, attribution and CI receipt belong in
+this branch's PR. Next: the bounded API-only container unit above.
 
 ### P1.9 User call choice and descriptive contrast — 2026-11-12
 
@@ -1924,10 +1995,12 @@ stage counts while preserving selected evidence and explicit unavailable states.
 Bounded candidate game-support/uncertainty controls and interval views now preserve
 parent versus observed-EPA game support and explicit interval states. Optional
 user-call selection now accompanies the fixed returned Pass-minus-Run descriptive
-contrast without grading or a preference claim. Decision JSON download is ready
-in PR #44; retain that branch and do not duplicate its evidence/resource work.
-Independent API container packaging is complete here. Next: the bounded local
-frontend container/proxy unit described above, after reconciling pending PRs/main.
+contrast without grading or a preference claim. Decision JSON now exports the
+original validated response text and full evidence, excludes local choice and
+shares Scout's owned-URL cleanup. P1.9's bounded local scope is complete. The
+API-only container is implemented in PR #45, now reconciled with merged PR #44.
+Next: the local frontend container/proxy unit specified above, after PR #45 review.
+Deployment remains a separate unit.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual
