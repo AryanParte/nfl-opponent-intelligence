@@ -44,8 +44,10 @@ are implemented, including optional field-position/score controls and ordered ex
 Optional Decision period/clock controls, matched candidate league views and bounded
 support/uncertainty views, local user-call selection, descriptive contrast inspection
 and original Decision JSON download are implemented. P1.9's bounded local scope is
-complete; P1.10 begins with API-only container packaging, while model admission,
-assistive-technology/release readiness and public deployment remain separate gates.
+complete. P1.10's API-only container is implemented in PR #45; its branch now
+includes merged PR #44. Frontend container packaging is next after PR #45 review.
+Model admission, assistive-technology/release readiness and public deployment
+remain separate gates.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -426,17 +428,21 @@ One local worker remains the supported scope; no cross-process capacity guarante
 
 ### P1.10 — Operational evidence and case study (preserved from former P1.5)
 
-- [ ] Docker, repeatable builds, and CI that verifies data and API contracts.
-  **Next unit:** API-only container for the existing FastAPI app; inspect current
-  validation Docker/runtime patterns and the available engine, pin the base and
-  review dependency inputs, run non-root with one worker and read the configured
-  immutable snapshot from a read-only mount. Test synthetic startup/configuration
-  failures and both routes in CI, preserving existing contract checks. Exclude raw
-  data, local environments, secrets and research runtimes from build context/image;
-  document loopback-only operation and cleanup. Current API constraints are version
-  pins, not a wheel-hash/build-tool lock; resolve and document that boundary without
-  claiming byte-reproducible images. No frontend packaging, acquisition scheduling
-  or deployment in this first unit.
+- [x] API-only container (2026-11-14): pinned official Python base, hash-checked
+      CPython 3.13 runtime wheels for Linux amd64/arm64, a tested context allowlist,
+      non-root single-worker serving and an explicit read-only snapshot mount.
+      Eight real-container tests pass on native arm64 and emulated amd64, including
+      exact Scout/Decision parity, isolation, localhost publishing, invalid startup
+      and shutdown. A ninth CI job runs the amd64 container checks. Core/API and UI
+      behavior remain unchanged. See [operating instructions](docs/CONTAINER.md).
+- [ ] Frontend container and repeatable local whole-app operation.
+      **Next unit:** after PR #45 review/merge, sync main and package the existing React
+      viewer with pinned build inputs and a same-origin proxy to the existing API
+      on a private service network. Bind only the viewer to host loopback, keep the
+      explicit snapshot read-only and retain one API worker. Verify the actual
+      browser-to-container API path, both modes, JSON downloads and cleanup in CI.
+      Reuse current npm lock/contracts; no new data, formulas, database, ingestion
+      scheduling or public deployment. Preserve the merged Decision download behavior.
 - [ ] Scheduled ingestion with freshness checks, retries, failure reporting, and
       immutable dataset manifests. Do not describe delayed releases as live feeds.
 - [ ] Deployment appropriate to measured needs; document costs and limitations.

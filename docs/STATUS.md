@@ -1,6 +1,6 @@
 # Engineering status
 
-As of the daily run on 2026-11-13, the long-term direction is
+As of the manual PR integration on 2026-11-15, the long-term direction is
 **NFL Decision Intelligence**, with the current product preserved as **Scout /
 Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
 builder and its local API include matched candidate baselines and opt-in
@@ -81,21 +81,22 @@ ranking, charting admission, database, deployment or automation change.
 Actual assistive-technology/cross-browser gaps remain in the
 [bounded accessibility review](ACCESSIBILITY.md), not a WCAG certification.
 P1.8 is complete within its single-worker, local PBP-only scope.
-P1.9's bounded local descriptive scope is complete.
+P1.9's bounded local descriptive scope is complete. PR #44 merged at `265b657`
+on 2026-11-15. PR #45's API container branch now incorporates that main history,
+preserving both implementations and the November 13/14 learning records. This
+resolves the parallel branches' documentation conflicts without rewriting commits.
+The [API-only container](CONTAINER.md) supplies pinned build inputs, non-root
+single-worker serving, a read-only operator snapshot and synthetic container checks.
+Its optional runtime and both API contracts are unchanged by this integration.
 
-Next: begin P1.10 with one API-only container unit. Inspect the existing validation
-Docker/runtime patterns and available engine first, then package the current
-FastAPI app with an explicitly pinned base and reviewed dependency inputs,
-a non-root runtime and one worker. Read the operator-configured immutable PBP
-snapshot from a read-only mount; require its source label and verify startup as
-usual. Exclude raw data, local environments, credentials and research runtimes
-from the image/build context. Test synthetic startup, invalid/missing configuration,
-read-only snapshot access and both report/decision routes in CI without new
-analytics or runtime downloads. Document loopback-only local operation and cleanup.
-Frontend container packaging, acquisition scheduling and deployment are separate
-units. Existing API constraints pin versions but are not a wheel-hash/build-tool
-lock; resolve and document that boundary instead of claiming byte-reproducible
-images from version pins alone.
+Next: after PR #45 is reviewed/merged, sync main and package the existing React
+viewer with pinned build inputs and a same-origin proxy to the existing API on a
+private service network. Publish only the viewer on host loopback; retain one API
+worker and the explicit read-only snapshot. Verify both modes, native JSON downloads,
+browser-to-container requests and cleanup in CI. Reuse the npm lock and contracts.
+No database, model, new data/formulas, scheduled acquisition or public deployment
+in that unit. The broader P1.10 finish line still includes freshness/retry handling,
+real-workload measurement, deployment, the case study/demo and domain feedback.
 No historical-availability, production model, new data layer or deployment claim.
 The 8 AM automation is unchanged.
 
@@ -335,6 +336,83 @@ updated documents, commit, push, remote-SHA verification, and PR review.
 This run did not modify, duplicate, disable, or reschedule it.
 
 ## Verification
+
+### PR #45 integration with merged Decision downloads — 2026-11-15
+
+Manual conflict-resolution unit: merged `origin/main` (`265b657`, PR #44) into
+`codex/api-container` from published `4be5179`, preserving both parents and all
+published history. Only `ROADMAP.md`, this status file and `LEARNING_LOG.md`
+conflicted. Reconciled current continuation text in `docs/WEB.md` and
+`docs/DECISION_WEB.md`; kept both November 13/14 learning records byte-for-byte.
+P1.9 is complete within its documented scope; the API container remains under
+PR #45 review, with frontend packaging next. No new product unit was started.
+
+Local integration verification on Python 3.13: **453 core tests**, **45 API tests**
+with warnings as errors, **1,150 frontend tests** across 18 files, and the
+TypeScript/production build pass. The merged app, fixtures, tests and dependency
+inputs equal main; Docker inputs, container tests and CI equal the previously
+verified PR #45 head. Complete-diff review found and fixed stale API-container
+next-step text in the two auto-merged web guides; no unresolved conflict markers
+remain. No analytics, denominators, temporal cutoffs, source/model admission or
+runtime behavior changed during resolution. Merged-main CI
+[43770591739](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43770591739)
+passed. The merge commit's remote SHA, identity and full CI receipts will be
+recorded in PR #45 after publication; these local results do not substitute for
+remote checks. Docker remains stopped locally; the unchanged container suite and
+the 40-case browser suite run in CI. No public deployment or release-readiness
+claim, PR merge, history rewrite or automation change.
+
+### P1.10 Pinned local API container — 2026-11-14
+
+Verified canonical root/origin, fetched origin and confirmed the prior branch was
+clean and 0/0 with its upstream. PR #44 remains open at `a6043b5`; both CI runs are
+green and there are no reviews/comments. Actual remote branches are main and that
+feature branch. Main remains `8079790`, with all eight jobs green. The API container
+is independent of PR #44's UI changes: created `codex/api-container` from main,
+preserved the other branch/history and did not copy its work. Baseline Python 3.13
+453 core / 45 API tests passed before editing.
+
+The image pins the official Python index and platform manifests, plus exact PyPI
+wheel hashes for 14 existing runtime packages (15 wheels across amd64/arm64).
+Release JSON hashes and wheel license metadata were inspected; notices remain in
+the image. Python 3.13.18 / pip 26.2.2 come from the base; source is copied directly
+without an unpinned build backend. API extras/test constraints are unchanged.
+A Dockerfile-specific allowlist excludes data, secrets, environments, frontend,
+research and bytecode/packaging caches. The non-root UID/GID 10001:10001 process uses
+one Uvicorn worker, required lifespan and disabled proxy-header trust. Operator
+configuration stays mandatory; the documented root and snapshot mount are read-only.
+Health uses the existing OpenAPI route; no new endpoint or statistical calculation.
+
+Verification:
+
+- Eight real-container checks pass on native Linux arm64 and emulated Linux amd64.
+  Actual BuildKit context export and recursive image source checks match the allowed
+  files. Installed versions match the wheel record. Both routes preserve full core
+  output, optional league/bootstrap blocks and independent synthetic call counts.
+- Non-root execution, denied writes, capabilities/no-new-privileges, network-none
+  service, six rejected startup cases, empty/errors/expensive-option limits, graceful
+  shutdown and an ephemeral 127.0.0.1-only publishing recipe pass. No real data was
+  downloaded or mounted; all fixture records/acquisition metadata are invented.
+- 453 core / 45 API tests pass on Python 3.11, 3.12 and 3.13 (API warnings as
+  errors; dependency checks pass), plus 1,123 frontend tests and TypeScript/build.
+  CI adds one amd64 container job alongside the existing eight jobs, retaining
+  the 36-case browser suite. Exact pushed SHA and CI/attribution receipts belong
+  in the PR.
+
+Local image config IDs: arm64 `3f5fcb7d376d1d90f271cb345454daf11d0e66bd85e1624d897672eb863b35a7`,
+amd64 `881a9eca9f58a5c3ee999168b265da0ef4ab39772b824ce91a9026c8d8557bfd`.
+These identify the verified local images, not portable expected output digests.
+Inputs are pinned; builder versions, timestamps/attestations and source changes
+still prevent a claim of universally byte-identical images.
+
+Review found and fixed parent allowlist exceptions admitting local caches/egg-info;
+real context export caught it. Added recursive image inspection and removed a
+shutdown-test ordering dependency and made cleanup failures visible, then reran
+both architectures. The localhost
+recipe was independently exercised, not only documented. Test cleanup owns unique
+container names; it does not prune images or touch unrelated services. Remaining:
+full frontend packaging, real-workload capacity/freshness, deployment and wider
+accessibility/model validation. Next is the frontend container/proxy unit above.
 
 ### P1.9 Original Decision JSON download — 2026-11-13
 
@@ -1919,10 +1997,10 @@ parent versus observed-EPA game support and explicit interval states. Optional
 user-call selection now accompanies the fixed returned Pass-minus-Run descriptive
 contrast without grading or a preference claim. Decision JSON now exports the
 original validated response text and full evidence, excludes local choice and
-shares Scout's owned-URL cleanup. P1.9's bounded local scope is complete. Next:
-P1.10's API-only container with a read-only snapshot mount and explicit runtime/
-dependency boundaries, as specified above. Frontend packaging and deployment are
-separate units.
+shares Scout's owned-URL cleanup. P1.9's bounded local scope is complete. The
+API-only container is implemented in PR #45, now reconciled with merged PR #44.
+Next: the local frontend container/proxy unit specified above, after PR #45 review.
+Deployment remains a separate unit.
 No play-family exposure or historical-availability assumptions. Participation and
 tracking source reviews remain later work rather than endpoint prerequisites.
 Preserve Scout schema v2 and the actual

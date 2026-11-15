@@ -13,6 +13,11 @@ does not serve frontend assets and its CORS policy was not changed for that view
 
 ## Install and start
 
+Alternatively, use the [pinned API container](CONTAINER.md) with the same required
+snapshot/source-label configuration. Its non-root single worker reads a read-only
+mount; the image contains no data or frontend. The Python install below remains
+optional and unchanged.
+
 From the repository root, with Python 3.11–3.13:
 
 ```sh
@@ -150,7 +155,7 @@ sanitized 500, including any non-null preferred candidate. In particular:
   regardless of count flags, mean differences, baselines or exploratory intervals.
   Descriptive contrasts are not causal, predictive or coaching recommendations.
 - A Decision result is not Scout schema v2 and must not be sent to the Scout
-  brief renderer. The existing React viewer continues to consume Scout only.
+  brief renderer. The existing React viewer consumes Scout and Decision in separate modes.
 
 Empty cohorts return **200**, zero counts, null rates and the builder's warnings,
 not 404. A syntactically valid but absent team such as `ZZZ` also gives an empty

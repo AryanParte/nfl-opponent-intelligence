@@ -1,0 +1,13 @@
+# Deny by default; re-including a parent must not admit all its descendants.
+**
+!docker/
+docker/**
+!docker/api.Dockerfile
+!docker/api.Dockerfile.dockerignore
+!docker/api-requirements.lock
+!docker/api-inputs.json
+!src/
+src/**
+!src/opponent_intelligence/
+src/opponent_intelligence/**
+!src/opponent_intelligence/*.py

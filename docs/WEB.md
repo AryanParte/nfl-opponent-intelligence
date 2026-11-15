@@ -736,10 +736,11 @@ and mandatory abstention. Query edits clear choice/evidence; mode switches retai
 completed state. Selection never fetches, mutates evidence or reverses the contrast.
 Decision downloads now preserve the original decoded API text, independent of the
 local choice, with ready-only links, distinct safe filenames and shared owned-URL
-cleanup. This closes P1.9's bounded local UI scope. Next: P1.10's API-only container
-with pinned/reviewed build inputs, non-root single-worker serving, a read-only
-operator-supplied snapshot, synthetic route/startup checks and local cleanup.
-Keep raw data, credentials and research runtimes out of the image; no runtime
-acquisition or public deployment. Frontend packaging follows separately.
+cleanup. This closes P1.9's bounded local UI scope. P1.10's API-only container is
+implemented in PR #45, now reconciled with merged PR #44. Next, after PR #45 review,
+package the current viewer and same-origin API proxy with pinned inputs, a private
+service network, host-loopback publishing and the existing read-only snapshot/API
+worker constraints. Verify both modes, downloads and the actual container request
+path in CI. Acquisition scheduling, benchmarking and deployment remain separate.
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
 explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

@@ -434,16 +434,11 @@ P1.9 is complete within its bounded local, descriptive scope. Assistive-technolo
 real-device, zoom and cross-browser coverage remain explicit release-readiness
 gaps; model/causal validity is not implied by UI tests.
 
-Begin P1.10 with one API-only container unit. Inspect the existing validation
-Docker/runtime patterns and available engine first, then package the current
-FastAPI app with an explicitly pinned base and reviewed dependency inputs,
-a non-root runtime and one worker. Read the operator-configured immutable PBP
-snapshot from a read-only mount; require its source label and verify startup as
-usual. Exclude raw data, local environments, credentials and research runtimes
-from the image/build context. Test synthetic startup, invalid/missing configuration,
-read-only snapshot access and both report/decision routes in CI without new
-analytics or runtime downloads. Document loopback-only local operation and cleanup.
-Frontend container packaging, acquisition scheduling and deployment are separate
-units. Existing API constraints pin versions but are not a wheel-hash/build-tool
-lock; resolve and document that boundary instead of claiming byte-reproducible
-images from version pins alone.
+P1.10's [API-only container](CONTAINER.md) is implemented in PR #45; its branch now
+includes merged PR #44's Decision downloads. After that PR is reviewed/merged,
+sync main and package the current React viewer with pinned build inputs and a
+same-origin API proxy on a private service network. Expose only the viewer on host
+loopback, retain one API worker and mount the explicit snapshot read-only. Test
+both modes, native JSON downloads, the browser-to-container API path and cleanup
+in CI, reusing the existing npm lock and contracts. Scheduled acquisition,
+real-workload measurement and public deployment remain separate units.
