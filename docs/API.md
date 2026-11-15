@@ -13,6 +13,9 @@ does not serve frontend assets and its CORS policy was not changed for that view
 
 ## Install and start
 
+For the full local app, use the [one-terminal launcher](LOCAL_START.md). The
+standalone API commands below remain available for API-only review.
+
 Alternatively, use the [pinned API container](CONTAINER.md) with the same required
 snapshot/source-label configuration. Its non-root single worker reads a read-only
 mount; the image contains no data or frontend. The Python install below remains

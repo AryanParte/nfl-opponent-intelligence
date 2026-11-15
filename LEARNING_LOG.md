@@ -3579,3 +3579,61 @@ host-loopback publishing, one API worker and the read-only snapshot. Then finish
 P1.10 freshness/retry operations, realistic workload evidence, deployment and the
 case study/demo/domain feedback. Richer play families and production models remain
 deferred; no merge/auto-merge or scheduled automation change in this run.
+
+## 2026-11-15 — Local portfolio finish line and one-terminal startup (manual)
+
+**Built / why:** re-scoped the repository as a personal local portfolio v1 with
+Scout and bounded Run/Pass Decision Lab already complete. Production operations,
+public hosting, orchestration, certification, expert feedback and more data/models
+are optional ideas, not completion gates. Added a small Python launcher for the
+existing API and React/Vite viewer so reviewers need one terminal after explicit
+setup/acquisition. The remaining required work is a focused presentation/example
+pass, followed by a completion marker and no autonomous expansion.
+
+**Review files:** `scripts/start_local.py`, `tests_local/test_start_local.py`,
+`docs/LOCAL_START.md`, `.github/workflows/ci.yml`, `ROADMAP.md`, `docs/STATUS.md`,
+`AGENTS.md` and `docs/DAILY_WORKFLOW.md`. README and related guides now agree on
+scope/startup; no existing analytics, API/UI contract, fixture, dependency or
+container input changed.
+
+**Sports analytics concepts:** explicit retrospective cohorts, source hashes,
+Run/Pass mapping (scrambles remain Pass), offense-relative EPA, denominators,
+missingness and abstention survive the new startup path. The synthetic test
+independently expects first-down 1 Run / 2 Pass, EPA 0 / 0.6. The existing real
+snapshot smoke retains CAR 984 Scout plays and first-and-ten 189 Run / 198 Pass;
+these are parity checks, not new conclusions or causal recommendations.
+
+**Software/statistical concepts / learn:** a finite definition of done is an
+engineering decision. Local usability does not require production infrastructure.
+Explicit setup is separate from serving; readiness, process ownership and bounded
+cleanup make a small launcher understandable. Synthetic tests verify plumbing;
+real-snapshot smoke verifies integration with existing evidence, not statistical
+calibration or new model quality. Document limitations without making every possible
+improvement mandatory. Preserve historical records while superseding obsolete scope.
+
+**Three review questions:**
+
+1. Which items now define local portfolio v1 completion, and what must an automated run do after that state is recorded?
+2. How does the launcher keep the current snapshot/API/proxy behavior while refusing occupied ports and cleaning up only its own processes?
+3. Why do matching synthetic and real-snapshot results verify integration without proving a preferred football call or model validity?
+
+**Verification / self-review:** ten launcher checks pass with warnings as errors,
+including real HTTP/proxy output, paths with spaces, no snapshot mutation, failure/
+timeout handling, occupied-port ownership, service exit and cleanup. 453 core /
+45 API tests pass on Python 3.13, dependency checks pass, and 1,150 frontend tests,
+TypeScript/build and all 40 Chromium cases pass. The existing pinned real snapshot
+served both modes and SIGTERM stopped both services. No data was acquired.
+Review fixed an output-pipe error that could interrupt cleanup, added its failure
+case, corrected a Decision-version assertion and test socket reuse, and removed
+stale instructions to begin frontend orchestration. Rechecked links, unchanged
+runtime/container inputs and preservation of historical verification/learning text.
+Remote SHA, attribution and final CI are recorded in this branch's PR. The API
+container is unchanged and not rebuilt locally; its CI coverage remains.
+
+**Remaining / next:** after review/merge, curate the existing CAR brief, screenshots
+and audited Run/Pass situations into focused README/architecture presentation and
+2–3 reproducible retrospective walkthroughs. Add a representative Decision Lab
+screenshot; a video outline is optional. Once verified, mark local portfolio v1
+complete in roadmap/status and stop autonomous implementation until Aryan explicitly
+requests more. The 8 AM automation configuration is unchanged. No new mandatory
+production, modeling or enrichment phases, PR merge or auto-merge.

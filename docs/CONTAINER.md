@@ -4,7 +4,9 @@ P1.10's first packaging slice serves the existing Scout `/v1/report` and Decisio
 `/v1/decision` endpoints from one operator-selected immutable PBP snapshot. It
 contains no frontend, database or research model runtime. The core and optional
 API contracts are unchanged; see [API.md](API.md) for query/response definitions.
-This is a local operating path, not a public deployment or football validation.
+This is an optional local operating path, not a public deployment or football
+validation. The [small Python/Node launcher](LOCAL_START.md) is the default
+whole-app path; local portfolio v1 requires no Docker or further orchestration.
 
 ## Reviewed build inputs
 
@@ -124,8 +126,9 @@ docker stop --time 5 nfl-oi-api-local
 `--rm` removes that named container on exit; its image and the host snapshot remain.
 Stop only the container you started, not unrelated containers or the Docker engine.
 The existing Vite local viewer can use the same localhost API address. Frontend
-container packaging is a separate next unit; no CORS, TLS or deployment changes
-are implied here.
+container packaging is future/optional work, not a v1 requirement. Run the
+viewer separately with `npm --prefix web run dev`; the launcher starts its own
+API and must not be used simultaneously with this container on port 8000.
 
 ## Verification and refresh procedure
 
