@@ -7,7 +7,8 @@ optional field-position controls and exclusion accounting followed on 2026-11-07
 then pre-play score controls on 2026-11-08 and period/clock controls on 2026-11-09.
 The optional matched candidate league view followed on 2026-11-10, with bounded
 candidate game-support/uncertainty controls and views on 2026-11-11, then optional
-user-call selection and fixed descriptive contrasts on 2026-11-12.
+user-call selection and fixed descriptive contrasts on 2026-11-12. Original-response
+Decision JSON downloads followed on 2026-11-13.
 No package, API, core formula or data source changed.
 
 ## First rendered slice
@@ -34,8 +35,8 @@ No formula, model, contrast interval or fallback cohort is introduced.
 [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/): named tabs
 and panels, selected/tab-stop states, Left/Right wrapping, Home/End focus movement,
 Enter/Space activation and an active-mode skip link. Visited views stay mounted
-under `hidden` so drafts, completed evidence, expanded details and Scout's existing
-download URL survive mode changes, consistent with
+under `hidden` so drafts, completed evidence, expanded details and both modes'
+download URLs survive mode changes, consistent with
 [React state preservation](https://react.dev/learn/preserving-and-resetting-state).
 Only the active panel participates in keyboard/accessibility navigation; the
 Decision form is first mounted on its initial visit. Reloading the page resets
@@ -88,6 +89,51 @@ mode preservation and malformed contrast rejection. Desktop/narrow real-API test
 add native radio/clear keyboard flow, actual signed values, absence/empty reasons,
 320-pixel table containment and axe scans. All 69 Decision and 71 Scout fixtures
 remain unchanged; these checks verify software, not decision quality.
+
+## Download the current decision evidence
+
+After a valid response, **Download decision JSON** saves the original decoded
+`DecisionDocument.json` as a UTF-8 JSON file. No request, browser calculation,
+rounding, filtering or `JSON.stringify` of the parsed evidence occurs. All returned
+provenance, context/denominator/exclusion fields, warnings, nulls, candidate and
+league evidence, descriptive contrasts and requested uncertainty remain intact,
+including fields not currently rendered. Number spelling, whitespace and escaped
+Unicode are preserved. This is decoded response text, not the compressed HTTP
+transport or raw PBP snapshot; source hashes still identify their declared sources,
+not the exported file itself. The existing client validates the response first.
+
+The safe suggested filename is based only on validated team, season/type, exclusive
+week, exact down and distance, for example:
+`nfl-di-CAR-2024-REG-before-week-3-down-1-distance-10-10.decision.json`.
+It is distinct from Scout's `.report.json`. Other contexts, uncertainty options
+and snapshot identity stay in the JSON; the filename is not a unique cache key.
+The browser controls the save destination and may change the name. The UI makes no
+claim that a click successfully saved a file. Decision v1 is not Scout schema v2;
+`opponent_intelligence.brief` remains a Scout-only consumer.
+
+The local Run/Pass choice is an annotation, not API evidence, and is never inserted
+into the export. Choosing, changing or clearing it leaves the download resource
+and bytes unchanged. Completed Decision and Scout downloads survive mode changes
+independently, with unique help IDs. Query edits, resubmission, errors and unmount
+remove old links; pending, timed-out, cancelled or incompatible responses never
+create one. A valid empty cohort can still be exported with its nulls and provenance.
+
+`useJsonDownload.ts` extracts Scout's existing lifecycle without changing its
+labels, filename or semantics. Each effect owns one object URL, reuses it while
+the validated document remains current, and revokes it on replacement/unmount.
+A document-identity guard prevents briefly pairing a new filename with old bytes
+before the effect runs. StrictMode replay cleans up each owned URL; nothing is
+revoked on click or merely switching modes. Blob/URL preparation failure shows a
+fixed error while leaving evidence and abstention readable, with no old link or
+raw exception text. An explicit resubmission can prepare a new resource.
+
+Tests reuse seven representative actual synthetic HTTP fixtures for selected,
+context/league/uncertainty, empty, unobserved, missing-EPA and overtime evidence.
+Additional cases cover lexical fidelity, safe names, simultaneous mode resources,
+choice independence, pre-effect replacement, StrictMode, preparation failure and
+late/invalid responses. Native Chromium saves are compared byte-for-byte to the
+actual API body and opened offline with Python; choosing either call or clearing
+it does not change their contents. No new dataset, formula or model is introduced.
 
 ## Optional pre-play field position
 
@@ -295,7 +341,7 @@ interval guards in `uncertainty.ts` preserve Scout's existing behavior. Checks c
 Count identities and declared difference arithmetic are validation checks. The
 client returns the server's estimates unchanged; it never fills in missing values,
 generates predictions or derives a recommendation. `DecisionDocument.json` retains
-the original decoded response text for a later download flow: reserialization in
+the original decoded response text for download: reserialization in
 JavaScript can change numeric lexemes. The typed view does not certify unconsumed
 manifest metadata, source completeness, causal validity or historical availability.
 
@@ -384,12 +430,20 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 ## Next bounded unit
 
-Add a Decision JSON download for the current validated `DecisionDocument.json`.
-Preserve the original decoded response text, full provenance, contexts, warnings,
-contrasts, baselines and uncertainty; do not reserialize or add the local choice.
-Reuse the Scout object-URL lifecycle where practical, with distinct safe filenames
-and help IDs. Show a ready-only link; invalidate it on query changes/errors and
-revoke owned URLs on replacement/unmount, while preserving completed downloads
-across mode switches and call-choice edits. Test native downloads, exact text,
-failed preparation, stale responses and Scout compatibility. No new request,
-statistics, data source, model, storage or deployment.
+P1.9 is complete within its bounded local, descriptive scope. Assistive-technology,
+real-device, zoom and cross-browser coverage remain explicit release-readiness
+gaps; model/causal validity is not implied by UI tests.
+
+Begin P1.10 with one API-only container unit. Inspect the existing validation
+Docker/runtime patterns and available engine first, then package the current
+FastAPI app with an explicitly pinned base and reviewed dependency inputs,
+a non-root runtime and one worker. Read the operator-configured immutable PBP
+snapshot from a read-only mount; require its source label and verify startup as
+usual. Exclude raw data, local environments, credentials and research runtimes
+from the image/build context. Test synthetic startup, invalid/missing configuration,
+read-only snapshot access and both report/decision routes in CI without new
+analytics or runtime downloads. Document loopback-only local operation and cleanup.
+Frontend container packaging, acquisition scheduling and deployment are separate
+units. Existing API constraints pin versions but are not a wheel-hash/build-tool
+lock; resolve and document that boundary instead of claiming byte-reproducible
+images from version pins alone.

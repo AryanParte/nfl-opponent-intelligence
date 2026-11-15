@@ -24,6 +24,9 @@ contract/client, preserve Scout state and withhold a preferred call. Both modes
 offer optional field-position, pre-play score and period/clock filters, plus matched
 league comparisons and bounded exploratory game-bootstrap controls. Decision uses
 per-candidate parent/observed-EPA support and preserves all returned interval states.
+Both modes now offer original-response JSON downloads with independent resources;
+Decision exports preserve the full evidence and omit the local call choice.
+See [Decision download semantics](DECISION_WEB.md#download-the-current-decision-evidence).
 
 ![Local report view of the retrospective CAR 2024 cohort](examples/local-report-view.png)
 
@@ -731,9 +734,12 @@ Optional user Run/Pass selection now annotates fixed evidence rows beside the
 returned Pass-minus-Run descriptive contrast, with explicit unavailable reasons
 and mandatory abstention. Query edits clear choice/evidence; mode switches retain
 completed state. Selection never fetches, mutates evidence or reverses the contrast.
-Next: a Decision JSON download preserving the original decoded API text, independent
-of the local choice, with ready-only links, safe filenames and owned-URL cleanup.
-Test exact text/native downloads and retain Scout behavior. No models, storage or
-deployment belong in that slice.
+Decision downloads now preserve the original decoded API text, independent of the
+local choice, with ready-only links, distinct safe filenames and shared owned-URL
+cleanup. This closes P1.9's bounded local UI scope. Next: P1.10's API-only container
+with pinned/reviewed build inputs, non-root single-worker serving, a read-only
+operator-supplied snapshot, synthetic route/startup checks and local cleanup.
+Keep raw data, credentials and research runtimes out of the image; no runtime
+acquisition or public deployment. Frontend packaging follows separately.
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
 explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

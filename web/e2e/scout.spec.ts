@@ -901,3 +901,107 @@ test('a selected call never fills absent or empty contrast evidence from the rea
   await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible();
   await scanAccessibility(page, info, 'decision-choice-empty');
 });
+
+
+test('Decision JSON native download preserves exact evidence independently of call choice and Scout', async ({ page }, info) => {
+  await openViewer(page); await build(page);
+  const scoutLink = page.getByRole('link', { name: 'Download report JSON' });
+  await expect(scoutLink).toBeVisible(); const scoutUrl = await scoutLink.getAttribute('href');
+  const decision = await openDecision(page);
+  let requests = 0;
+  page.on('request', request => { if (new URL(request.url()).pathname === '/api/v1/decision') requests++; });
+  await decision.getByLabel('Maximum yards to goal').fill('20');
+  await decision.getByLabel('Minimum score difference').fill('-7');
+  await decision.getByLabel('Maximum score difference').fill('0');
+  await decision.getByRole('combobox', { name: 'Period', exact: true }).selectOption('Q4');
+  await decision.getByLabel('Maximum seconds remaining').fill('120');
+  await decision.getByLabel('Compare with other offenses').check();
+  await decision.getByLabel('Bootstrap repetitions', { exact: true }).fill('200');
+  await decision.getByLabel('Bootstrap seed', { exact: true }).fill('7');
+  const pass = decision.getByRole('radio', { name: 'Pass', exact: true }); await pass.check();
+  const response = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/decision');
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  const received = await response; expect(received.status()).toBe(200);
+  const bytes = await received.body(), data = JSON.parse(bytes.toString('utf8'));
+  const downloadLink = decision.getByRole('link', { name: 'Download decision JSON' });
+  await expect(downloadLink).toBeVisible(); const decisionUrl = await downloadLink.getAttribute('href');
+  await expect(downloadLink).toHaveAccessibleDescription(/Your local call choice is not included/);
+  expect(decisionUrl).not.toBe(scoutUrl);
+  expect(data.population).toEqual({ plays: 3, games: 1 });
+  expect(data.candidates[0]).toMatchObject({ candidate: 'run', plays: 2, epa_observations: 1, missing_epa: 1, epa_per_play: -.4 });
+  expect(data.candidates[1]).toMatchObject({ candidate: 'pass', plays: 1, epa_per_play: .8 });
+  expect(data.league_comparison.candidates[1].epa_per_play).toBe(3);
+  expect(data.comparison.preferred_candidate).toBeNull();
+  expect(data.comparison.descriptive_contrast.uncertainty).toEqual({ status: 'not_implemented', interval: null });
+  expect(data.uncertainty.candidates[0].selected.frequency.status).toBe('insufficient_games');
+  expect(data.source.label).toContain('SYNTHETIC browser integration fixture');
+
+  for (const choice of ['Pass', 'Run', 'clear']) {
+    if (choice === 'clear') await decision.getByRole('button', { name: 'Clear choice' }).click();
+    else await decision.getByRole('radio', { name: choice, exact: true }).check();
+    await expect(downloadLink).toHaveAttribute('href', decisionUrl!);
+    await downloadLink.focus(); await expect(downloadLink).toBeFocused();
+    const downloading = page.waitForEvent('download'); await downloadLink.press('Enter'); const download = await downloading;
+    expect(download.suggestedFilename()).toBe('nfl-di-CAR-2024-REG-before-week-3-down-1-distance-10-10.decision.json');
+    const saved = info.outputPath(`choice-${choice}.decision.json`); await download.saveAs(saved);
+    expect(await readFile(saved)).toEqual(bytes);
+    // An offline consumer reads the complete API response, not rounded display cells or the local annotation.
+    const fingerprint = execFileSync('python3', ['-c', 'import json,sys; d=json.load(open(sys.argv[1])); assert d["comparison"]["preferred_candidate"] is None; assert "decision_choice" not in d; print(d["source"]["sha256"])', saved],
+      { cwd: root, encoding: 'utf8', timeout: 10_000 });
+    expect(fingerprint.trim()).toBe(data.source.sha256);
+    expect(requests).toBe(1);
+  }
+  await scanAccessibility(page, info, 'decision-download');
+  await decision.getByRole('region', { name: 'Decision download', exact: true }).scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('decision-download.png') });
+  await page.getByRole('tab', { name: 'Scout' }).click(); await expect(scoutLink).toHaveAttribute('href', scoutUrl!);
+  await page.getByRole('tab', { name: 'Decision Lab' }).click(); await expect(downloadLink).toHaveAttribute('href', decisionUrl!);
+  expect(await page.locator('[id]').evaluateAll(nodes => new Set(nodes.map(node => node.id)).size === nodes.length)).toBe(true);
+  await decision.getByLabel('Before week', { exact: true }).fill('1'); await expect(downloadLink).toHaveCount(0);
+  const emptyResponse = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/decision');
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  const emptyBytes = await (await emptyResponse).body(); await expect(downloadLink).toBeVisible();
+  await expect(decision.getByRole('heading', { name: 'No eligible plays match this situation.' })).toBeVisible();
+  const downloading = page.waitForEvent('download'); await downloadLink.click(); const emptyDownload = await downloading;
+  expect(emptyDownload.suggestedFilename()).toBe('nfl-di-CAR-2024-REG-before-week-1-down-1-distance-10-10.decision.json');
+  const emptySaved = info.outputPath('empty.decision.json'); await emptyDownload.saveAs(emptySaved);
+  expect(await readFile(emptySaved)).toEqual(emptyBytes); expect(JSON.parse(emptyBytes.toString()).candidates[0].frequency).toBeNull();
+  expect(requests).toBe(2); await scanAccessibility(page, info, 'decision-download-empty');
+});
+
+test('Decision download failures and stale responses leave no old link while keeping valid evidence readable', async ({ page }, info) => {
+  await openViewer(page); const decision = await openDecision(page);
+  const downloadLink = decision.getByRole('link', { name: 'Download decision JSON' });
+  await page.evaluate(() => {
+    const create = URL.createObjectURL;
+    // Keep the failure active through StrictMode's development effect replay.
+    URL.createObjectURL = () => { throw new Error('/private/secret'); };
+    window.addEventListener('restore-json-download', () => { URL.createObjectURL = create; }, { once: true });
+  });
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  await expect(decision.getByRole('heading', { name: 'CAR · Run vs Pass' })).toBeVisible();
+  await expect(decision.getByRole('alert')).toContainText('decision evidence is still available to read');
+  await expect(decision.getByRole('alert')).not.toContainText('/private/secret'); await expect(downloadLink).toHaveCount(0);
+  await expect(decision.getByRole('heading', { name: 'No preferred call' })).toBeVisible();
+  await scanAccessibility(page, info, 'decision-download-preparation-error');
+  await page.evaluate(() => window.dispatchEvent(new Event('restore-json-download')));
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click(); await expect(downloadLink).toBeVisible();
+  await expect(decision.getByRole('alert')).toHaveCount(0);
+
+  let release!: () => void; const held = new Promise<void>(resolve => { release = resolve; });
+  let arrived!: () => void; const started = new Promise<void>(resolve => { arrived = resolve; });
+  let finished!: () => void; const settled = new Promise<void>(resolve => { finished = resolve; });
+  await page.route('**/api/v1/decision?*', async route => {
+    const upstream = await route.fetch(); arrived(); await held;
+    try { await route.fulfill({ response: upstream }); } finally { finished(); }
+  });
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click(); await started;
+  await expect(downloadLink).toHaveCount(0); await expect(decision.getByRole('status')).toContainText('Loading');
+  await decision.getByLabel('Minimum yards to go', { exact: true }).fill('9'); release(); await settled;
+  await expect(downloadLink).toHaveCount(0); await expect(decision.getByRole('article')).toHaveCount(0);
+  await page.unroute('**/api/v1/decision?*');
+  await page.route('**/api/v1/decision?*', route => route.fulfill({ status: 503, contentType: 'application/json', body: '{"error":{"code":"report_busy"}}' }));
+  await decision.getByRole('button', { name: 'Compare Run and Pass' }).click();
+  await expect(decision.getByRole('alert')).toContainText('Another report is being built');
+  await expect(downloadLink).toHaveCount(0); await scanAccessibility(page, info, 'decision-download-request-error');
+});
