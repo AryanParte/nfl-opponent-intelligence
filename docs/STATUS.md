@@ -1,123 +1,62 @@
 # Engineering status
 
-As of the manual PR integration on 2026-11-15, the long-term direction is
-**NFL Decision Intelligence**, with the current product preserved as **Scout /
-Analysis** and a first narrow **Decision Lab** UI. The offline Run/Pass
-builder and its local API include matched candidate baselines and opt-in
-candidate-level game support/exploratory intervals;
-no ranking or production model is claimed. A separate FTN charting snapshot is
-now audit-only, not a source consumed by these reports. The
-[architecture decision](DECISION_INTELLIGENCE.md)
-records shared pipeline boundaries, Run/Pass interpretation gates, an initial
-primary-source model/data review, AI policy and the justified no-database decision.
-P1.5–P1.9 now cover decision foundations, model evaluation, richer data audit, API
-and UI; the prior operational/case-study milestone is preserved as P1.10.
+As of the manual scope/finishing run on **2026-11-15**:
 
-P1.4's bounded surface is merged through PR #22; P1.5's descriptive foundation
-is merged through PR #27, including the [comparison/abstention policy](DECISION_POLICY.md).
-P1.6's [nfl4th](NFL4TH_AUDIT.md) and [fastrmodels](FASTRMODELS_AUDIT.md) audits
-are merged through PR #29; the [EP-only reference protocol](EP_REFERENCE_PROTOCOL.md)
-is merged through PR #30 and the [acquisition/object preflight](EP_ACQUISITION.md)
-through PR #31; the native XGBoost build/R source lock is merged through PR #32,
-and the full runtime/native lock/equality check through PR #33. The
-[actual R capture/export](EP_R_CAPTURE.md), merged through PR #34, closes the reference gate for all 25
-unchanged synthetic cases. Actual prediction inputs match the expected features;
-probabilities/EP pass the fixed protocol, singles/batch/untraced replay agree,
-and separate offline execution reproduces the capture and raw export byte-for-byte.
-The [independent Python candidate](EP_PYTHON_PARITY.md), merged through PR #35,
-passes the same fixed corpus with its own encoder, source-built runtime and exact
-offline replay.
-P1.6's bounded engineering evaluation is complete. Calibration, training lineage,
-historical availability and production model admission remain unverified/deferred.
+- **Core Scout and bounded Run/Pass Decision Lab: complete.** P1.1–P1.9's
+  existing pipeline, provenance, filters, metrics, matched baselines, support/
+  uncertainty, FastAPI, React UI, user call selection, original JSON downloads
+  and browser/CI verification are preserved.
+- **Local portfolio v1: finishing.** The goal is a polished reproducible local
+  artifact that a reviewer can clone, run and understand. It is not a hosted SaaS,
+  startup, continuously operating service or always-fresh NFL platform.
+- **API container: merged** in PR #45 at `ff155a3`. It remains an optional local
+  path, with pinned inputs and a read-only explicit snapshot; no further
+  containerization is required.
+- **This unit:** `scripts/start_local.py` starts the existing single-worker API
+  and Vite viewer together using explicit local snapshot/source configuration,
+  waits for readiness and cleans up only owned processes. [Setup](LOCAL_START.md)
+  covers dependencies, one-time acquisition, failures and Ctrl-C cleanup. It does
+  not install, download, refresh, mutate data or change analytics.
 
-The [FTN 2024 artifact/contract audit](FTN_CHARTING_AUDIT.md), merged through PR #36,
-retains separate immutable CSV/notices/manifest and raw key/schema evidence.
-The [offline PBP coverage audit](FTN_COVERAGE.md), merged through PR #37, completes P1.7's join slice:
-all 34,902 eligible PBP plays retained and uniquely matched, with explicit field
-issues across 2,280 offense/defense, team/week/candidate strata. Source inspection
-does not resolve field applicability. The [field admission policy](FTN_FIELD_POLICY.md), merged through PR #38,
-closes the bounded first-artifact review with explicit defer decisions for all 22
-contextual fields and regression coverage against accidental use. No serving
-enrichment or new play family is approved.
+## Required finish line and continuation
 
-P1.8's optional **GET `/v1/decision`**, merged through PR #39, reuses the shared
-immutable PBP snapshot and builder, bounded queries and one serving slot. P1.9's
-[typed browser contract/client](DECISION_WEB.md), merged through PR #40, now powers
-the rendered Decision Lab (mode and field controls merged through PR #41,
-score/time/league/uncertainty controls through PR #42, user-call choice through PR #43).
-Mode tabs retain drafts, completed results and
-independent Scout/Decision downloads, while query edits and mode changes cancel
-pending work and reject late responses. The narrow form selects offense/team/season/type/cutoff/exact down and
-inclusive distance, with optional field-position, pre-play score and period/clock
-filters. Shared controls preserve Scout behavior and independent mode state.
-Q1–Q4/OT and inclusive whole seconds require an explicit period for clock bounds;
-period-only selection can retain missing clocks, while an explicit 0–900 range
-excludes them. Effective bounds and ordered active field → score → period → clock →
-down → distance counts separate unknown context from outside values. Only final
-distance survivors supply candidate denominators. Score ends remain unbounded;
-field/clock omitted-end defaults differ. All zero values remain observed, not missing.
-The fixed Run/Pass table shows frequency, EPA, success, counts, games, denominators,
-missing states, flags, warnings and provenance; a preferred call is always withheld.
-An opt-in matched league view shows other offenses under identical contexts,
-per-call selected-minus-baseline differences, pooled denominators, team/game/shared
-coverage and ordered baseline exclusions. Empty/missing evidence never widens the
-cohort or invents a zero. Coverage includes plays without EPA and is not independent
-observed-EPA support. Optional bounded bootstrap controls now render candidate game
-support, exploratory intervals, draw counts and all five interval states. Frequency
-uses parent-game support; outcomes use games with observed candidate EPA. Shared
-presentation preserves Scout behavior, while comparison can change the resampling
-frame without changing point estimates. Sixty-nine actual synthetic Decision HTTP
-fixtures include five new uncertainty responses; all 64 prior values and 71 Scout
-fixtures remain unchanged. Optional user-call selection now labels fixed evidence
-rows beside the returned Pass-minus-Run descriptive contrast. Selection never
-fetches, changes the evidence or grades a call; any query edit clears it, while
-mode changes preserve it. Null reasons and the unimplemented contrast interval
-remain explicit. Original validated Decision JSON is now downloadable as UTF-8,
-with full returned evidence and no local call-choice annotation. Shared URL
-ownership preserves both modes, invalidates stale links and safely reports browser
-preparation failures while retaining readable evidence. Scout schema v2, controls,
-briefs and downloads are preserved. No new dependency, model execution, training,
-ranking, charting admission, database, deployment or automation change.
-Actual assistive-technology/cross-browser gaps remain in the
-[bounded accessibility review](ACCESSIBILITY.md), not a WCAG certification.
-P1.8 is complete within its single-worker, local PBP-only scope.
-P1.9's bounded local descriptive scope is complete. PR #44 merged at `265b657`
-on 2026-11-15. PR #45's API container branch now incorporates that main history,
-preserving both implementations and the November 13/14 learning records. This
-resolves the parallel branches' documentation conflicts without rewriting commits.
-The [API-only container](CONTAINER.md) supplies pinned build inputs, non-root
-single-worker serving, a read-only operator snapshot and synthetic container checks.
-Its optional runtime and both API contracts are unchanged by this integration.
+The [P1.10 checklist](../ROADMAP.md#p110--local-portfolio-finish-line) is the only
+remaining v1 work: simple startup, focused README/screenshots and a compact set
+of 2–3 defensible retrospective examples. This unit supplies startup and corrects
+scope; the presentation/example pass remains. Reuse the committed
+[CAR brief](examples/car-2024-reg-before-week-19.md), screenshots and
+[eight audited Run/Pass situations](DECISION_AUDIT.md). Link exact snapshot/cohort
+commands and visible numbers/denominators; add a representative Decision Lab
+screenshot and concise architecture/engineering explanation. No new product or
+football-model work is needed. A video outline is optional and filming is not a gate.
 
-Next: after PR #45 is reviewed/merged, sync main and package the existing React
-viewer with pinned build inputs and a same-origin proxy to the existing API on a
-private service network. Publish only the viewer on host loopback; retain one API
-worker and the explicit read-only snapshot. Verify both modes, native JSON downloads,
-browser-to-container requests and cleanup in CI. Reuse the npm lock and contracts.
-No database, model, new data/formulas, scheduled acquisition or public deployment
-in that unit. The broader P1.10 finish line still includes freshness/retry handling,
-real-workload measurement, deployment, the case study/demo and domain feedback.
-No historical-availability, production model, new data layer or deployment claim.
-The 8 AM automation is unchanged.
+After these required items are verified, mark **local portfolio v1 complete** here
+and in ROADMAP, with evidence links. Thereafter, do not implement, invent phases,
+reopen completed work, create no-change commits or select optional work in
+response to scheduled heartbeats. Further work requires an explicit new request
+from Aryan. The existing 8 AM automation settings remain unchanged.
 
-P1.3 remains complete within its PBP-only scope; personnel/motion enrichment is
-deferred under the [source decision](PERSONNEL_MOTION.md), not inferred from
-shotgun/no-huddle or text. P1.2 stays complete for the pinned snapshot. Calibration,
-cross-game dependence, opponent adjustment, historical information availability,
-assistive-technology/cross-browser coverage and deployment remain open. Reports are descriptive, not two-team
-projections or validated scouting recommendations.
+Public deployment, scheduled ingestion, continuous freshness/retry/failure
+operations, production load testing, databases, orchestration, expert feedback,
+video production, cross-browser/WCAG certification, richer play families,
+fourth-down/tracking/spatial work and further models are recorded as
+[future/optional](../ROADMAP.md#future--optional-work--explicit-aryan-request-required),
+not v1 blockers. Existing honest limitations remain: retrospective source/model
+availability, exploratory rather than calibrated intervals, incomplete wider
+accessibility coverage, no preferred-call/causal validation, and deferred charting
+admission. Preserve these disclosures; their existence does not expand scope.
+The detailed verification records below are historical evidence, not an active
+queue: older "next" instructions are superseded by this finish line.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/decision-call-choice`, created from fetched `origin/main`
-  (`45786b8`) on 2026-11-12 after [PR #42](https://github.com/AryanParte/nfl-opponent-intelligence/pull/42)
-  merged. Its merged tree equals prior head `b818b6a`; the stable clone was clean,
-  with no local-only work or open PRs/review feedback. Actual remote branches held
-  only main. [Merged-main CI](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43123201146)
-  passed all eight jobs on its first attempt. Baseline 453 core / 45 API tests passed
-  on Python 3.13 before edits. Preserve history; do not merge or enable auto-merge.
+- Working branch: `codex/local-portfolio-startup`, from fetched `origin/main`
+  `ff155a3` after PR #45 merged. The stable clone was clean and matched its previous
+  upstream 0/0; no open PRs/review work remained. Merged-main
+  [CI #43772242189](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43772242189)
+  passed. Preserve all previous commits and do not merge this finishing PR yourself.
 - Publication: consult this branch's PR for the exact pushed SHA, GitHub attribution
   and remote CI receipt. Local results below do not substitute for remote checks.
 - Previous Decision view/field review: [PR #41](https://github.com/AryanParte/nfl-opponent-intelligence/pull/41),
@@ -329,13 +268,65 @@ The initial clone matched the original files byte-for-byte excluding Git metadat
 and Python caches. Local/remote branch SHAs matched, and all 18 tests passed from
 the stable clone. Future work continues here; the old outputs checkout is retired.
 
-The existing `daily-sports-portfolio-engineering` task remains active at 8 AM
-America/New_York. Its prompt now requires remote sync, stable-clone recovery,
-verified commit identity, one meaningful unit, tests, complete-diff self-review,
-updated documents, commit, push, remote-SHA verification, and PR review.
-This run did not modify, duplicate, disable, or reschedule it.
+The existing `daily-sports-portfolio-engineering` 8 AM America/New_York
+configuration is unchanged by this run. The repository completion boundary above
+now governs continuation: finish only the remaining local v1 criteria, then stop
+new work until Aryan explicitly requests it. This is a documentation update, not
+an alteration, duplication, disablement or rescheduling of the automation.
 
 ## Verification
+
+### Local portfolio scope and one-terminal startup — 2026-11-15 (manual)
+
+Synced canonical origin/main `ff155a3` after PR #45 merged; main CI was green,
+no open PRs or outstanding PR #45 reviews/comments were present, and the prior
+branch was clean and 0/0 with upstream. Created `codex/local-portfolio-startup`
+from main. Existing analytical source, UI, fixtures, package/lock inputs,
+container files and their tests are unchanged.
+
+The roadmap now treats the core as complete and lists only local startup,
+presentation/examples and an explicit completion marker as required P1.10 work.
+Moved production/hosting, ingestion operations, orchestration, broader validation,
+expert feedback and model/data expansions to future/optional work. AGENTS and the
+daily continuation guide require no further autonomous implementation after v1
+completion unless Aryan explicitly asks. Historical learning/verification entries
+remain intact; their earlier next-task wording is superseded by current scope.
+
+The launcher uses the invoking Python environment and installed Node/Vite, current
+repository source and existing loopback ports/proxy. It rejects missing setup and
+occupied ports, waits up to 30 seconds per service, handles child failure and
+SIGINT/SIGTERM, and stops only its own POSIX process groups. No installs, downloads,
+restart loop, data writes, formula changes, new dependencies or Docker requirement.
+The existing browser CI job now runs its synthetic checks before Playwright.
+
+Verified locally:
+
+- **10 launcher checks**, warnings as errors: actual API/Vite/proxy responses and
+  independently expected synthetic Scout/Run/Pass counts, unchanged snapshot bytes,
+  invocation outside the checkout, paths with spaces, invalid config/dependencies/
+  Node versions, occupied-port ownership, corrupt snapshot, partial startup failure,
+  post-readiness service exit, timeout, graceful and forced cleanup. A closed output
+  pipe cannot prevent shutdown.
+- **453 core / 45 API tests** on Python 3.13 (API warnings as errors), dependency
+  consistency, **1,150 frontend tests**, TypeScript/build, and **40 desktop/narrow
+  Chromium cases**, including native JSON downloads. Owned test servers stopped.
+- Existing real snapshot `23370d5…` (acquired 2026-09-30), no acquisition: the
+  launcher served CAR REG before week 19 through Vite; Scout retained 984 plays,
+  and Decision first-and-ten retained 387 plays / 17 games (189 Run, 198 Pass).
+  SIGTERM stopped both services. These are startup/parity checks, not new football
+  findings or performance/load evidence.
+- Complete review preserved core/container inputs and historical records, checked
+  changed-document file links, removed stale mandatory-container continuation and
+  fixed shutdown logging before cleanup. Initial harness failures used Scout's
+  version key for Decision and omitted socket reuse after shutdown; corrected both
+  without weakening contracts or adding retries, then reran the relevant suite.
+
+Native Windows, universal browser/accessibility conformance and forced-parent-death
+cleanup are not claimed. Package installation/first data acquisition still require
+network access. The API container was not rebuilt locally in this unit; its existing
+CI job remains. Exact pushed SHA/attribution and final nine-job CI receipts belong
+in the PR, separate from these local results. Next is the presentation/example
+pass above, then mark v1 complete and stop autonomous expansion.
 
 ### PR #45 integration with merged Decision downloads — 2026-11-15
 
@@ -1958,63 +1949,19 @@ See docs/DATA_CONTRACT.md for the exact policy and source references.
 
 ## Follow-up
 
-Inspect current PR CI and reviews first; do not duplicate this unit while unmerged.
-P1.5 is complete within descriptive-only scope: request/cohorts, candidate metrics,
-matched league context, exploratory support/intervals, independent raw audit and
-comparison/abstention/opponent policy. Do not rebuild these or unlock ranking from
-counts, differences or nominal intervals. See [DECISION_POLICY.md](DECISION_POLICY.md).
-The bounded P1.6 [nfl4th](NFL4TH_AUDIT.md) and
-[fastrmodels EP/WP](FASTRMODELS_AUDIT.md) audits and
-[EP-only reference strategy/protocol](EP_REFERENCE_PROTOCOL.md) are complete;
-runtime use is deferred, not validated. The [EP acquisition/object preflight](EP_ACQUISITION.md)
-is complete, and the [full runtime/native lock](EP_RUNTIME.md) now verifies offline
-installation and installed-package EP equality. The [actual R capture](EP_R_CAPTURE.md)
-now passes the fixed corpus, actual matrix/loader checks and exact offline replay.
-The [independent Python candidate](EP_PYTHON_PARITY.md) also passes the unchanged
-parity protocol. P1.6's bounded evaluation is complete; production EP/WP/action
-values remain deferred. Do not redo setup, change pins/corpus/tolerances or infer
-that training scripts attest release binaries. The first [FTN source/contract
-audit](FTN_CHARTING_AUDIT.md) is now complete: separate immutable bytes, notices,
-manifest and raw key/encoding evidence. Its [offline join/coverage audit](FTN_COVERAGE.md)
-is complete: eligible-row retention, explicit unmatched/unknown/invalid states by
-role/team/week/candidate, independent reconciliation and pinned producer inspection.
-The [field admission/defer policy](FTN_FIELD_POLICY.md) is now complete, retaining
-all 22 contextual fields as audit-only and testing the PBP-only consumer boundary.
-P1.8's narrow optional decision endpoint is now implemented using contract v1,
-shared immutable snapshot serving, bounded computation and request/response/error/
-concurrency tests. P1.9's typed browser contract/client now preserves exact requests,
-null/withheld evidence, provenance and abstention using actual synthetic endpoint
-fixtures. Its first mode/form/candidate-evidence view is now implemented, preserving
-Scout state and keeping estimation in the core. Optional field-position bounds now
-show effective coordinates and ordered field/down/distance exclusions. Score
-controls preserve unbounded ends, pre-play signs and conditional missingness.
-Optional period/clock controls now add missing/zero/default semantics and active
-field → score → period → clock → down → distance accounting. Matched candidate
-league evidence now adds differences, coverage/shared games and separate baseline
-stage counts while preserving selected evidence and explicit unavailable states.
-Bounded candidate game-support/uncertainty controls and interval views now preserve
-parent versus observed-EPA game support and explicit interval states. Optional
-user-call selection now accompanies the fixed returned Pass-minus-Run descriptive
-contrast without grading or a preference claim. Decision JSON now exports the
-original validated response text and full evidence, excludes local choice and
-shares Scout's owned-URL cleanup. P1.9's bounded local scope is complete. The
-API-only container is implemented in PR #45, now reconciled with merged PR #44.
-Next: the local frontend container/proxy unit specified above, after PR #45 review.
-Deployment remains a separate unit.
-No play-family exposure or historical-availability assumptions. Participation and
-tracking source reviews remain later work rather than endpoint prerequisites.
-Preserve Scout schema v2 and the actual
-assistive-technology/release-readiness gaps in [ACCESSIBILITY.md](ACCESSIBILITY.md)
-without claiming conformance or restarting P1.4/browser CI.
-Do not add storage for this single-snapshot view or imply a public deployment.
-The API must not accept arbitrary paths or fetch per request.
-The brief and availability decision exist; do not rebuild them or silently add
-personnel/motion enrichment. See [PERSONNEL_MOTION.md](PERSONNEL_MOTION.md),
-[BRIEFS.md](BRIEFS.md), [METRICS.md](METRICS.md), and [UNCERTAINTY.md](UNCERTAINTY.md).
-Coverage simulation and improved cross-game/small-sample methods remain unverified.
-External schedule/gamebook reconciliation, historical availability, backup, and
-larger-than-memory ingestion remain documented limitations, not completed claims.
+Inspect this finishing PR and CI before duplicating work. After its review/merge,
+complete the required presentation/example pass at the top of this file, verify
+local replay and mark local portfolio v1 complete if all P1.10 criteria hold.
+Completed core phases remain closed. After v1 completion, no autonomous expansion:
+only Aryan's explicit new request permits further work. Optional limitations and
+future ideas do not become additional completion gates.
 
-The host's `/usr/bin/git` Xcode shim fails. The installed
-`/Library/Developer/CommandLineTools/usr/bin/git` works. An unrelated ancestor Git
-repository exists, so always verify the project root before staging anything.
+The API must retain an explicitly configured immutable local snapshot; no
+request-selected filesystem paths or downloads. Keep source/model provenance,
+denominators, missing states and mandatory abstention visible. See
+[metrics](METRICS.md), [uncertainty](UNCERTAINTY.md), [comparison policy](DECISION_POLICY.md)
+and [source admission](FTN_FIELD_POLICY.md) for existing boundaries.
+
+On this host use `/Library/Developer/CommandLineTools/usr/bin/git` if the system
+Xcode shim fails, and verify the canonical root before staging. Leave the existing
+8 AM automation configuration unchanged.

@@ -19,12 +19,19 @@ See docs/DAILY_WORKFLOW.md for the exact sync, recovery, and publishing procedur
 ## Scope and priorities
 
 - Build interview-defensible sports software and data engineering evidence.
-- Fix verified regressions or relevant review feedback first; otherwise continue
-  the next unchecked roadmap item. Finish one coherent unit per daily run.
-- Current focus: NFL Decision Intelligence in this same repository. Preserve the
-  existing Opponent Intelligence product as Scout; finish P1.4 before a small
-  Run vs Pass foundation slice. Read docs/DECISION_INTELLIGENCE.md for the two-mode
-  architecture, source/model gates and AI policy. Tracking/NBA remain deferred.
+- Current goal: a polished personal **local portfolio v1**, not SaaS, live-data
+  operations or a production service. Scout and bounded Run/Pass Decision Lab are
+  the completed core. Preserve P1.1–P1.9 and the optional API container.
+- Before choosing work, check the local v1 completion state in ROADMAP.md and
+  docs/STATUS.md. While finishing, select only one required P1.10 finishing item
+  or a verified regression that prevents that local experience. Do not select
+  optional production, model, data-enrichment or wider-portfolio work.
+- Once local portfolio v1 is marked complete, do not implement, expand phases,
+  create filler commits or begin another project in response to a heartbeat.
+  Further work requires Aryan's explicit new request. Leave the automation
+  configuration unchanged; report no new progress for an unchanged completed state.
+- Read docs/DECISION_INTELLIGENCE.md for the shared architecture and evidence gates;
+  model/charting research is retained but additional integration is optional.
 - Reuse ingestion, typed data, metrics, baselines and uncertainty. No unsupported
   play-family proxies, causal-optimality claims, invented model evidence or LLM
   dependency for branding/explanations. Calculations stay out of React.

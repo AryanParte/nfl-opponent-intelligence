@@ -1,5 +1,19 @@
 # Presentation plan
 
+For this repository, success means a reviewer can clone, run locally, explore
+Scout/Decision Lab and understand the evidence. Current core functionality is
+complete. The only finishing work is simple startup, focused README/screenshots
+and 2–3 reproducible retrospective examples. Reuse the committed CAR brief and
+[Run/Pass audit](DECISION_AUDIT.md); keep cohort cutoffs, denominators, hashes and
+limitations explicit. A short video outline can help but producing a video or
+obtaining domain feedback is not a completion gate. No public deployment,
+production operations or further model work is needed.
+
+After the [local v1 checklist](../ROADMAP.md#p110--local-portfolio-finish-line)
+is satisfied, mark it complete and stop autonomous development. Broader personal
+website/profile/resume and other-project ideas below require a separate explicit
+request; they must not become mandatory work for this repository's v1.
+
 Working positioning: “Software engineer building reproducible data systems and
 decision tools for football and basketball.” This is a direction, not a claim of
 employment with a team or production use by professional staff.

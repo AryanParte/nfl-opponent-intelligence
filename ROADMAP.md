@@ -1,53 +1,47 @@
 # Sports portfolio roadmap
 
-The original plan is a roughly 16-week direction at 10–15 hours/week, not a promise
-of delivery dates or a project-count target. Daily runs complete one coherent
-unit, preserve earlier work, and adjust estimates using evidence. The present
-implementation priority is Project 1. GitHub is the persistent source of truth:
-https://github.com/AryanParte/nfl-opponent-intelligence. Sync the canonical clone at
-`/Users/aryanparte/Documents/nfl-opponent-intelligence`, then read the status file
-and latest commits before choosing work. Do not recreate the project in new sessions.
+## Local portfolio v1 — current scope (2026-11-15)
 
-## Project 1 — NFL Decision Intelligence (same repository)
+This repository demonstrates sports analytics and software engineering through a
+polished, reproducible **personal local portfolio project**. A reviewer should be
+able to clone it, follow local setup, explore Scout and the bounded Run/Pass
+Decision Lab, download evidence, and understand the football methods and tests.
+It is not a hosted SaaS, startup, always-fresh NFL feed or production-operations
+project. The former 16-week direction is historical context, not remaining scope.
 
-Direction updated 2026-10-15: preserve the existing Opponent Intelligence product
-as **Scout / Analysis**, then add a narrow **Play Caller / Decision Lab**. Reuse
-the validated pipeline, metrics, baselines, uncertainty, API and React UI. No new
-repository, duplicated analytics or LLM branding layer. The differentiator is
-explainable football evidence, not a play-calling game or a clone of another site.
-See [direction, evidence layers and initial source review](docs/DECISION_INTELLIGENCE.md).
-Decision Lab's first narrow view and local API are implemented; richer controls follow in bounded units.
-P1.4's bounded local surface is complete;
-P1.5's offline contract, matched candidate baselines and exploratory uncertainty
-are implemented and independently reconciled on pinned retrospective cohorts.
-Its comparison/abstention policy closes the descriptive foundation: explicit
-Pass-minus-Run differences, no preferred-call label, opponent conditioning deferred.
-P1.6's [nfl4th](docs/NFL4TH_AUDIT.md) and
-[fastrmodels EP/WP](docs/FASTRMODELS_AUDIT.md) interface audits are complete with
-runtime integration deferred. The [EP-only reference strategy/protocol](docs/EP_REFERENCE_PROTOCOL.md)
-is now implemented with synthetic input/capture checks. The pinned EP container
-is acquired and inspected in an offline R sandbox. The
-[full reference runtime](docs/EP_RUNTIME.md) now installs offline with separately
-locked native dependencies and verifies installed EP byte equality. The
-[actual R capture](docs/EP_R_CAPTURE.md) now passes the unchanged synthetic corpus,
-single/batch checks and exact offline replay. The
-[independent Python candidate](docs/EP_PYTHON_PARITY.md) now passes the unchanged
-parity protocol with its own feature encoding and verified isolated runtime.
-P1.6's bounded evaluation is complete; production models remain explicitly deferred.
-P1.7's [FTN artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) and
-[offline PBP join/coverage audit](docs/FTN_COVERAGE.md) are complete.
-The [bounded field admission review](docs/FTN_FIELD_POLICY.md) is complete with
-all 22 contextual fields deferred from serving. P1.8's PBP-only decision API is
-implemented; unresolved charting does not block it or silently become serving
-evidence. P1.9's typed browser contract/client and first mode/form/evidence view
-are implemented, including optional field-position/score controls and ordered exclusions.
-Optional Decision period/clock controls, matched candidate league views and bounded
-support/uncertainty views, local user-call selection, descriptive contrast inspection
-and original Decision JSON download are implemented. P1.9's bounded local scope is
-complete. P1.10's API-only container is implemented in PR #45; its branch now
-includes merged PR #44. Frontend container packaging is next after PR #45 review.
-Model admission, assistive-technology/release readiness and public deployment
-remain separate gates.
+**Core product: complete. Local portfolio v1: finishing.** P1.1–P1.9's bounded
+contracts, UI, downloads and verification are built. Do not reopen those phases.
+PR #45's optional API container is merged at `ff155a3`; preserve it without making
+Docker or further orchestration a prerequisite. Existing model/charting audits
+remain useful evidence; deferred capabilities do not prevent v1 completion.
+
+Only the required checklist in [P1.10](#p110--local-portfolio-finish-line) remains.
+This run's single finishing unit is a small local launcher and its setup/cleanup
+checks, alongside this scope correction. README presentation and the compact
+retrospective example package are the subsequent finishing unit; reuse existing
+screenshots, briefs and independent cohort audits rather than build more product.
+
+**Stop condition:** when P1.10's required items are satisfied, mark local portfolio
+v1 **complete** here and in `docs/STATUS.md`, with verification/evidence links.
+After that, scheduled runs must not select optional work, add mandatory phases,
+create activity commits or start another project. Future work requires an explicit
+new request from Aryan. A heartbeat alone does not reopen the completed project.
+Do not change the existing 8 AM automation configuration in this scope update.
+
+GitHub is the source of truth: https://github.com/AryanParte/nfl-opponent-intelligence.
+Sync `/Users/aryanparte/Documents/nfl-opponent-intelligence`, inspect main/PRs/CI,
+and preserve history. [Daily continuation](docs/DAILY_WORKFLOW.md) applies this
+completion boundary before choosing work.
+
+## Completed core — NFL Decision Intelligence
+
+Scout provides offense/defense historical exploration. Decision Lab compares
+observed Run/Pass evidence for a selected offensive situation; it always withholds
+a preferred call. Both reuse verified play-by-play, shared filters, metrics,
+matched baselines, uncertainty and provenance through FastAPI and React.
+[Architecture and evidence gates](docs/DECISION_INTELLIGENCE.md) explain the design.
+The phase records below retain implementation and validation history; they are
+not invitations to enlarge the completed core.
 
 ### P1.1 — Measurement foundation (complete, 2026-09-28)
 
@@ -426,42 +420,58 @@ One local worker remains the supported scope; no cross-process capacity guarante
       coverage remain open in [ACCESSIBILITY.md](docs/ACCESSIBILITY.md); no conformance claim.
 - [x] No browser analytics or causal-optimality/coaching/guaranteed-performance claims.
 
-### P1.10 — Operational evidence and case study (preserved from former P1.5)
+### P1.10 — Local portfolio finish line
 
-- [x] API-only container (2026-11-14): pinned official Python base, hash-checked
-      CPython 3.13 runtime wheels for Linux amd64/arm64, a tested context allowlist,
-      non-root single-worker serving and an explicit read-only snapshot mount.
-      Eight real-container tests pass on native arm64 and emulated amd64, including
-      exact Scout/Decision parity, isolation, localhost publishing, invalid startup
-      and shutdown. A ninth CI job runs the amd64 container checks. Core/API and UI
-      behavior remain unchanged. See [operating instructions](docs/CONTAINER.md).
-- [ ] Frontend container and repeatable local whole-app operation.
-      **Next unit:** after PR #45 review/merge, sync main and package the existing React
-      viewer with pinned build inputs and a same-origin proxy to the existing API
-      on a private service network. Bind only the viewer to host loopback, keep the
-      explicit snapshot read-only and retain one API worker. Verify the actual
-      browser-to-container API path, both modes, JSON downloads and cleanup in CI.
-      Reuse current npm lock/contracts; no new data, formulas, database, ingestion
-      scheduling or public deployment. Preserve the merged Decision download behavior.
-- [ ] Scheduled ingestion with freshness checks, retries, failure reporting, and
-      immutable dataset manifests. Do not describe delayed releases as live feeds.
-- [ ] Deployment appropriate to measured needs; document costs and limitations.
-- [ ] Benchmark a realistic workload and preserve reproducible evidence.
-- [ ] Publish architecture, method, three evidence-backed football findings,
-      limitations, demo video, and portfolio case study.
-- [ ] Request domain feedback through Aryan and incorporate concrete review notes.
+Required for v1, and no more:
 
-### Later decision capabilities (gated, not immediate work)
+- [x] Simple repeatable local startup (2026-11-15): one understandable command starts the
+      existing API and React frontend for an explicitly chosen existing snapshot;
+      clear setup/failure messages and Ctrl-C cleanup. No automatic downloads,
+      dependency installation, container orchestration or background service.
+      `scripts/start_local.py` passes ten local integration/lifecycle checks; the
+      existing 40-case browser suite and pinned real-snapshot smoke also pass.
+      See [setup and cleanup](docs/LOCAL_START.md).
+- [ ] Portfolio-facing README: quickly explain the football question, Scout versus
+      Decision Lab, representative screenshots, concise architecture, strongest
+      engineering choices, local setup and honest data/statistical limitations.
+      Reuse existing evidence; avoid a chronological implementation diary at the top.
+- [ ] Compact retrospective example package: 2–3 defensible situations with exact
+      snapshot/cohort/commands, observed numbers, denominators and limitations.
+      Start from the committed CAR brief and pinned Run/Pass audit; do not invent
+      conclusions or require new data/models. Video outline is optional; producing
+      a video does not block code completion.
+- [ ] Mark **local portfolio v1 complete** once the three items above are verified.
+      Preserve the final checks, limitations and explicit stop condition in STATUS.
+      Optional work below must not keep v1 open.
 
-More specific play families, opponent-adjusted action modeling, historical replay,
-fourth-down go/punt/field-goal mode, EP/WP action grading, tracking/spatial/route/
-coverage features and richer predictive ranking require validated evidence first.
-Challenge/daily-scenario modes are optional later UX, not the product's foundation.
-No generative AI for input/explanations/marketing; learned methods require a defined
-football target, temporal splits, leakage protection, baseline comparison and
-calibration/error analysis where relevant. Keep the four evidence layers separate.
+Already complete and preserved: the API-only container, verified on Linux
+amd64/arm64 with pinned inputs, an explicit read-only snapshot, non-root serving
+and existing CI. It is an optional alternative to the Python local runtime, not a
+requirement to package the frontend or deploy the app.
 
-## GitHub and portfolio presentation (alongside Project 1)
+### Future / optional work — explicit Aryan request required
+
+These ideas remain recorded but are **not v1 acceptance criteria** and must not be
+selected automatically after v1 completion:
+
+- Public deployment/hosting, a continuously running service, costs/operating plans.
+- Scheduled ingestion, continuous freshness monitoring, production retry/failure
+  infrastructure, production load testing or realistic capacity benchmarks.
+- Frontend images, full container orchestration, databases or other infrastructure
+  justified by future access patterns rather than portfolio realism.
+- Domain-expert feedback, demo-video production, wider browser/device/screen-reader
+  evaluation or WCAG certification. Retain current keyboard/Chromium/axe coverage
+  and documented limitations; no conformance or universal-support claim.
+- Richer play families, opponent adjustment, historical replay, fourth-down
+  go/punt/field-goal modeling, EP/WP action grading, tracking/spatial/route/coverage
+  analysis, predictive/ranking/ML work and optional challenge scenarios.
+
+Future data/model additions still require direct semantics, licenses/provenance,
+release-time evidence, appropriate validation and leakage protection. No weak
+proxies, invented observations or generative-AI branding/explanations. None is a
+reason to reopen the existing completed Scout/Run-Pass core.
+
+## Broader portfolio ideas — optional, outside this repository’s v1
 
 - [x] Professional project README, honest current scope, and reproducible demo.
 - [x] Create the permanent GitHub repository and preserve the initial snapshot on
@@ -482,7 +492,7 @@ calibration/error analysis where relevant. Keep the four evidence layers separat
 - [ ] Assemble a resume, short demo, and review packet for Akhi after substantive
       work exists. No contacting others without Aryan's instruction.
 
-## Later projects (deferred)
+## Later projects — optional, explicit request required
 
 1. NFL tracking study: evaluate catch-window/coverage behavior on licensed Big
    Data Bowl data, establish simple baselines, split by game/time, quantify error,

@@ -1,109 +1,48 @@
 # NFL Decision Intelligence
 
-A reproducible foundation for weekly NFL opponent preparation: turn play-by-play
-data into offense tendencies and defense-side summaries with explicit sample sizes,
-metric definitions, source fingerprints, and a cutoff that excludes the week being
-prepared for. The existing Opponent Intelligence functionality is the **Scout /
-Analysis** mode. The same app now includes a narrow **Decision Lab**: define an
-offense, historical cutoff, exact down, inclusive distance and optional field-position
-and pre-play score bounds, plus period/clock selection, then inspect Run and Pass
-evidence with explicit denominators, missing states and optional matched league
-comparisons. An optional Run/Pass choice labels the two alternatives beside a fixed
-Pass-minus-Run descriptive contrast. No preferred call is selected. Ordered
-exclusion counts explain which plays reach the final sample.
-The existing builder, local API and typed browser client supply both modes.
-Repository/package/CLI names stay intact.
-See the [product and architecture direction](docs/DECISION_INTELLIGENCE.md).
+A personal local portfolio project for exploring NFL play-by-play evidence.
+**Scout** answers how a team's offense or opposing offenses behaved in a historical
+situation. **Decision Lab** compares observed Run and Pass frequency, EPA, success,
+league context and sample support for a selected offensive situation. You can mark
+your own call and download the evidence; the app always withholds a preferred call.
+These are retrospective descriptions, not proof of an optimal call or predictions.
 
-**Status:** the offline CSV/snapshot-to-JSON pipeline and immutable 2024 raw-data
-acquisition work. The recorded 2024 snapshot passes the adapter audit and selected
-cohort reconciliations. Reports can select a team's offense or defense while
-keeping EPA offense-relative, with optional pre-play field-position, score, and
-period/clock filters, matched league baselines, and opt-in exploratory game-level
-resampling intervals. A separate offline JSON-to-Markdown command produces a
-traceable historical brief. P1.3's availability audit is complete: personnel and
-motion measurements remain deferred because they require separate source
-integration; shotgun and no-huddle are not substitutes. An optional read-only
-FastAPI endpoint now serves schema v2 from one verified, operator-configured local
-snapshot, with bounded options and offline contract tests. A local React/TypeScript
-viewer now exposes basic cohort controls, metrics, warnings and provenance with
-explicit loading/error/empty states. Opt-in matched league comparisons now show
-baseline coverage, denominators, matching situations and percentage-point differences.
-Optional field-position, pre-play score and period/clock controls show effective
-filters and ordered selected/baseline missing-context exclusions. Bounded, opt-in
-game-bootstrap controls show exploratory intervals, per-metric game support and
-explicit unavailable/withheld states. The displayed report can be downloaded as
-its original validated JSON for offline brief replay, with full provenance and no
-new request or calculation. A synthetic Chromium integration suite connects the
-actual API, viewer, native download and offline brief in CI. A
-[bounded Scout accessibility review](docs/ACCESSIBILITY.md) adds field-linked error
-recovery, contrast and keyboard/reflow regressions; screen-reader and cross-browser
-coverage remain unverified. An [offline decision contract](docs/DECISION_CONTRACT.md)
-now selects exact down/distance situations and describes Run/Pass candidates using
-shared Scout filters and metrics. Opt-in same-role leave-team-out candidate
-baselines expose pooled evidence, coverage and explicit differences without changing
-selected evidence. Denominators, missing states and provenance stay visible, and
-a preferred call is always withheld. Optional candidate-level game support and
-exploratory paired intervals now reuse Scout's resampling engine. An
-[independent pinned-snapshot audit](docs/DECISION_AUDIT.md) reconciles eight
-retrospective situations and 144 interval entries directly from raw records;
-this verifies calculations, not statistical coverage or decision quality.
-The [comparison/abstention policy](docs/DECISION_POLICY.md) now exposes explicit
-Pass-minus-Run descriptive differences, null reasons and deferred opponent
-conditioning. It always withholds a preferred call, even for large samples or
-non-overlapping exploratory intervals. P1.5's descriptive foundation is complete.
-A [pinned nfl4th interface audit](docs/NFL4TH_AUDIT.md) now records input gaps,
-separate model/data dependencies and historical-availability limits. It defers
-runtime integration; fourth-down WP is not Run/Pass evidence. A separate
-[fastrmodels EP/WP audit](docs/FASTRMODELS_AUDIT.md) now records the artifact and
-nflfastR consumer pins, feature transformations, missing context, serialization,
-terms and unverified training lineage. It also defers runtime use. The
-[EP-only reference protocol](docs/EP_REFERENCE_PROTOCOL.md) now selects isolated R
-as the first reference, followed by Python reuse of the same verified bytes.
-Its synthetic corpus and capture checks are implemented. The
-[EP acquisition/preflight](docs/EP_ACQUISITION.md) now verifies the package container
-and inspects its raw object in a pinned, offline R sandbox. The
-[reference runtime](docs/EP_RUNTIME.md) now installs fully offline using 43 pinned
-R sources and seven separately locked native packages, with no base-package upgrades.
-Installed fastrmodels EP bytes match the acquired artifact and the environment
-receipt replays identically. The [actual R reference capture](docs/EP_R_CAPTURE.md)
-now verifies the 25 fixed synthetic cases, actual upstream features, single/batch
-agreement and exact offline replay, with a separately hashed raw EP export.
-The [independent Python candidate](docs/EP_PYTHON_PARITY.md) now passes the same
-fixed-corpus feature/probability/EP checks and exact offline replay in its separately
-locked environment. This completes bounded engineering parity, not football
-validation. Production EP/WP and Run/Pass action ranking remain deferred. A
-[separate FTN 2024 artifact/contract audit](docs/FTN_CHARTING_AUDIT.md) now verifies
-one immutable charting snapshot and its schema/keys/terms. An [offline PBP coverage
-audit](docs/FTN_COVERAGE.md) matches all 34,902 eligible plays while retaining field
-issues and separate source terms. The [field admission review](docs/FTN_FIELD_POLICY.md)
-retains all 22 contextual charting fields as audit-only, with explicit defer reasons
-and regression tests against accidental use. The optional `GET /v1/decision`
-endpoint now serves that PBP-only contract v1 from the same verified snapshot as
-Scout, with bounded requests, shared concurrency and explicit abstention.
-The [Decision Lab view and browser contract](docs/DECISION_WEB.md) now display that
-selected-offense evidence in the same app. Accessible mode tabs preserve drafts,
-completed results and Scout downloads; pending requests are cancelled and late
-responses discarded. The form covers season/type/cutoff/down/distance and optional field/score/period/clock filters;
-Run/Pass frequency, EPA, success, counts, missing states, warnings and provenance
-remain descriptive. An opt-in comparison shows other offenses under identical
-filters, candidate-specific differences, coverage and baseline exclusions. Optional
-bounded game-bootstrap controls now show per-candidate game support, exploratory
-intervals, draw counts and explicit unavailable/withheld states.
-Actual synthetic API fixtures and local browser integration verify the boundary.
-Scout's controls and original fixtures are preserved.
-Charting applicability and historical availability remain unverified.
-Call selection stays local, clears on query edits and preserves the returned evidence
-and fixed contrast direction. No call is graded; contrast intervals remain unavailable.
-Both modes now download their original validated JSON without another request;
-Decision exports retain all evidence and omit the local call choice. P1.9's bounded
-local interface is complete. Operational packaging, adjustment and deployment
-remain on the [roadmap](ROADMAP.md). This is an independent portfolio project,
-with no NFL or team affiliation or predictive-validation claim.
+The completed core shares one validated data pipeline, situational filters,
+metrics/baselines/uncertainty, FastAPI service and React/TypeScript app. Both modes
+retain explicit denominators, missing-data states and source fingerprints.
+No affiliation with the NFL or a team is claimed.
 
-[GitHub](https://github.com/AryanParte/nfl-opponent-intelligence) is the permanent
-source of truth. The daily workflow preserves existing work and follows the roadmap,
-with tests, self-review, learning notes, and pushed commits for each completed unit.
+**Local portfolio v1 is finishing.** Scout, bounded Run/Pass Decision Lab,
+original-response JSON downloads, browser/CI verification and the optional API
+container are built. This branch adds simple local startup. Remaining required
+work is focused README/screenshots and 2–3 reproducible retrospective examples. Public
+hosting, live-data operations, further models, orchestration and certification
+are optional future ideas, not v1 requirements. See the finite
+[finish line and stop condition](ROADMAP.md#p110--local-portfolio-finish-line).
+Once v1 is complete, further work requires Aryan's explicit request.
+
+## Run Scout and Decision Lab
+
+Follow the [one-time local setup](docs/LOCAL_START.md) for Python 3.11–3.13,
+Node 24.19.0 and an explicitly acquired immutable 2024 snapshot. Then one terminal
+starts both existing services:
+
+```sh
+.venv/local/bin/python scripts/start_local.py \
+  --snapshot '/absolute/path/to/your/immutable-snapshot-directory' \
+  --source-label 'nflverse 2024 retrospective snapshot; acquired YYYY-MM-DD UTC'
+```
+
+Replace the placeholders with your snapshot and accurate acquisition date.
+Open **http://127.0.0.1:5173/** after **Ready**. **Ctrl-C stops both services**.
+The launcher installs nothing, downloads no data and refuses occupied ports.
+The [API container](docs/CONTAINER.md) remains an optional alternative, not a setup
+requirement. macOS/Linux are supported by the launcher; Windows users can use WSL.
+
+[Architecture and source/model boundaries](docs/DECISION_INTELLIGENCE.md),
+[metric definitions](docs/METRICS.md), [engineering status](docs/STATUS.md) and
+[independent Run/Pass reconciliation](docs/DECISION_AUDIT.md) explain the evidence.
+The core-only synthetic CLI walkthrough below needs no package installation.
 
 ## Try it
 
@@ -402,13 +341,10 @@ response is separate from Scout schema v2 and its brief/download workflow.
 
 ### Open the local report viewer
 
-With the API running on loopback and Node 24.19.0 selected:
-
-```sh
-cd web
-npm ci
-npm run dev
-```
+Use the [one-terminal launcher](docs/LOCAL_START.md) above. If you deliberately
+run the API separately (including the optional container), start only the viewer
+with `npm --prefix web run dev` after installing its locked dependencies. Do not
+run a second API on the same port.
 
 Open `http://127.0.0.1:5173/`, choose a cohort and select **Build report**.
 [Setup, connection policy, screenshot and verification](docs/WEB.md) explains the
@@ -448,10 +384,9 @@ paired differences, distinct game support and why withheld bounds are not certai
 
 ## The football decision
 
-The eventual user is an analyst preparing an opponent brief: how often does an
-offense drop back in comparable situations, how effective are those plays, and
-how much evidence supports each observation? This first increment establishes
-the measurement contract needed to answer those questions reliably.
+The football question is: how often does an offense drop back in comparable situations, how effective are those plays, and
+how much evidence supports each observation? Scout explores those historical
+patterns; Decision Lab compares the Run/Pass evidence in a specific situation.
 
 Dropbacks include sacks and scrambles. Kneels, spikes, conversion attempts, and
 non-run/pass plays are excluded. Missing EPA still contributes to the play-call
@@ -514,8 +449,8 @@ inclusion policy and why the current output is descriptive rather than a forecas
     missing states and the strict separation between arithmetic and ranking.
 
 The pure analytical functions serve both the CLI and the optional FastAPI adapter.
-The first React view consumes that API; richer product controls remain unfinished
-and storage needs remain unproven.
+The completed Scout and bounded Decision Lab views consume that API. Calculations
+stay in Python; no database is required for this immutable local snapshot.
 The reporting core has no database, runtime API dependency, or trained
 model; only the explicit acquisition command contacts GitHub.
 
@@ -536,6 +471,7 @@ model; only the explicit acquisition command contacts GitHub.
 - [FTN charting artifact, key inventory and admission limits](docs/FTN_CHARTING_AUDIT.md)
 - [FTN/PBP join coverage, field issues and source applicability limits](docs/FTN_COVERAGE.md)
 - [FTN field admission/defer decisions and tested PBP isolation](docs/FTN_FIELD_POLICY.md)
+- [One-terminal local setup and cleanup](docs/LOCAL_START.md)
 - [Optional local API contract and setup](docs/API.md)
 - [Pinned API container, localhost operation and verification](docs/CONTAINER.md)
 - [Local browser viewer and verification](docs/WEB.md)

@@ -19,15 +19,21 @@ for every Git and development command. A new chat or workspace is not a new proj
    branch is behind its own upstream and the working tree is clean, fast-forward
    it. If it is ahead, retain that history. Resolve divergence carefully in the
    feature branch, without resets, forced updates, or guessing about user changes.
-4. Start each new implementation unit on a fresh `codex/` branch from updated
-   origin/main. Preserve unpublished and unmerged work; do not duplicate it on a
-   new branch. If a unit depends on an unmerged PR, select independent in-scope
-   work or report that dependency. Never branch from an old initial snapshot.
-5. Read AGENTS.md, README.md, ROADMAP.md, docs/STATUS.md, and LEARNING_LOG.md from
-   this checkout. Choose one coherent unfinished unit, prioritizing regressions
-   and relevant review feedback. Follow the two-mode direction and evidence gates
-   in [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md): Scout first, then a
-   small Decision Lab slice. Do not change the existing 8 AM automation settings.
+4. Read AGENTS.md, README.md, ROADMAP.md, docs/STATUS.md and the latest learning
+   record before creating a branch. Check **local portfolio v1** completion first.
+   Scout and bounded Run/Pass Decision Lab are built. While v1 is finishing, only
+   required P1.10 local-startup/presentation/example tasks or verified regressions
+   blocking that experience are eligible. Optional items are not an automatic queue.
+5. If v1 is complete, stop development unless Aryan explicitly requests new work.
+   Do not invent phases, reopen completed milestones, begin another project or
+   commit repeated no-change logs. A scheduled heartbeat is not authorization to
+   expand a completed v1. No new actionable state means no progress notification.
+6. For an eligible unfinished unit, create a fresh `codex/` branch from updated
+   origin/main. Preserve unpublished/unmerged work; do not duplicate a pending PR.
+   If the needed finishing work is already in review, report that dependency only
+   when new/actionable. Never branch from an old initial snapshot. Retain the
+   evidence gates in [DECISION_INTELLIGENCE.md](DECISION_INTELLIGENCE.md).
+   Do not change the existing 8 AM automation settings.
 
 Use the installed `/Library/Developer/CommandLineTools/usr/bin/git` when the
 system `/usr/bin/git` Xcode shim fails. Do not change global developer settings.

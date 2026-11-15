@@ -432,13 +432,12 @@ expected JSON simply to accept a regression. Final results are in [STATUS](STATU
 
 P1.9 is complete within its bounded local, descriptive scope. Assistive-technology,
 real-device, zoom and cross-browser coverage remain explicit release-readiness
-gaps; model/causal validity is not implied by UI tests.
+limitations, not local v1 blockers; model/causal validity is not implied by UI tests.
 
-P1.10's [API-only container](CONTAINER.md) is implemented in PR #45; its branch now
-includes merged PR #44's Decision downloads. After that PR is reviewed/merged,
-sync main and package the current React viewer with pinned build inputs and a
-same-origin API proxy on a private service network. Expose only the viewer on host
-loopback, retain one API worker and mount the explicit snapshot read-only. Test
-both modes, native JSON downloads, the browser-to-container API path and cleanup
-in CI, reusing the existing npm lock and contracts. Scheduled acquisition,
-real-workload measurement and public deployment remain separate units.
+The API-only container is merged and remains optional. Finish the local portfolio
+with the [small launcher](LOCAL_START.md), focused README/screenshots and 2–3
+reproducible retrospective examples using existing data and reports. Wider browser
+or assistive-technology evaluation, certification, frontend orchestration,
+deployment, operational infrastructure and more models are future/optional work,
+not required to complete v1. The [roadmap](../ROADMAP.md) defines the finite
+acceptance checklist and stop condition; do not expand the completed core.

@@ -43,24 +43,17 @@ supports Node 24.15+ within major 24; project-local engine enforcement rejects
 unsupported versions. No global Node/npm settings are modified. Install/select
 the runtime with your normal version manager, then check `node --version`.
 
-First start the API using [the existing snapshot setup](API.md#install-and-start)
-in one terminal. Its explicitly configured snapshot must already exist. Keep the
-API on `127.0.0.1:8000`; the canonical pinned snapshot is still the example in that
-guide, not a guarantee that today's upstream bytes match it.
+Use the [one-terminal local setup and launcher](LOCAL_START.md) to start the
+existing API and viewer together. It requires an existing explicit snapshot and
+source label, waits for startup, refuses occupied ports and stops owned services
+on Ctrl-C. The default path needs no Docker, frontend image or orchestration.
 
-In a second terminal, from the repository root:
-
-```sh
-cd web
-npm ci
-npm run dev
-```
-
-Open `http://127.0.0.1:5173/`, optionally check **Compare with other teams in the
-same role**, and select **Build report**. Installation needs package
-network access. Once dependencies and the snapshot exist, normal operation is
-local: no hosted assets, remote fonts, acquisition or background report requests.
-Stop the two terminal processes with Ctrl-C when finished.
+Alternatively, start [the API separately](API.md#install-and-start), then run
+`npm --prefix web run dev` from the repository root (after `npm --prefix web ci`).
+Use this separate-terminal path with the optional API container; stop each process
+you started when finished. Both paths open `http://127.0.0.1:5173/` and retain the
+same loopback-only proxy. Dependencies and initial snapshot acquisition require
+network access; normal local analysis does not acquire data or use hosted assets.
 
 The UI starts with CAR / 2024 / before week 19 / offense / REG as editable
 example controls, not preloaded observations. A different configured season
@@ -736,11 +729,10 @@ and mandatory abstention. Query edits clear choice/evidence; mode switches retai
 completed state. Selection never fetches, mutates evidence or reverses the contrast.
 Decision downloads now preserve the original decoded API text, independent of the
 local choice, with ready-only links, distinct safe filenames and shared owned-URL
-cleanup. This closes P1.9's bounded local UI scope. P1.10's API-only container is
-implemented in PR #45, now reconciled with merged PR #44. Next, after PR #45 review,
-package the current viewer and same-origin API proxy with pinned inputs, a private
-service network, host-loopback publishing and the existing read-only snapshot/API
-worker constraints. Verify both modes, downloads and the actual container request
-path in CI. Acquisition scheduling, benchmarking and deployment remain separate.
+cleanup. This closes P1.9's bounded local UI scope. The optional API container is
+merged. Local portfolio v1 needs only the
+[launcher](LOCAL_START.md), focused README presentation and a small reproducible
+retrospective example package. Frontend packaging, deployment and operations are
+[future/optional work](../ROADMAP.md#future--optional-work--explicit-aryan-request-required).
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
-explicit gaps; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).
+documented optional coverage, not v1 blockers; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

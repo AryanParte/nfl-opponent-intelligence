@@ -1,6 +1,11 @@
 # Development and review
 
-Start with the README and current roadmap. Python 3.11+ is required. Use
+Start with the README and current roadmap. Scout and bounded Decision Lab are
+complete; only the finite local portfolio finish line is required. Once v1 is
+complete, further work requires Aryan's explicit request, not a scheduled heartbeat.
+Do not turn optional future work into new mandatory phases.
+
+Python 3.11+ is required. Use
 `PYTHONPATH=src python3 -m unittest discover -s tests -v` for the offline suite.
 The README includes the command-line demo. Tests use only temporary directories
 and synthetic fixtures; they must never depend on current upstream data.
@@ -10,6 +15,11 @@ Keep the core suite dependency-free; never make CI download NFL data.
 For browser changes, use Node 24.19.0 and run `npm ci`, `npm test` and `npm run build`
 inside `web/`. Run the API suite too: it checks the browser's synthetic fixtures
 against actual endpoint output. See [local viewer checks](docs/WEB.md#verification).
+
+For local-launcher changes, run the synthetic integration/lifecycle suite in
+[LOCAL_START.md](docs/LOCAL_START.md#verify-the-launcher). It needs the optional API
+packages and existing Node/Vite dependencies; it is separate from the core-only
+suite and runs in the existing browser CI job.
 
 Keep a change tied to one observable behavior. Define the football cohort and
 denominator before adding a metric. Add regression tests that fail for the actual

@@ -1,5 +1,13 @@
 # NFL Decision Intelligence — direction and architecture
 
+**Scope update, 2026-11-15:** the core Scout and bounded Run/Pass Decision Lab are
+built. This is a personal local portfolio artifact; finish startup, presentation
+and a compact reproducible example package, then mark v1 complete and stop
+scheduled expansion. Hosted services, production operations, enrichment and
+additional models below are optional directions requiring Aryan's explicit
+request, not acceptance criteria. The [current roadmap](../ROADMAP.md) overrides
+historical sequencing here. Preserve the completed architecture and its evidence.
+
 Decision recorded 2026-10-15. This evolves **the existing repository**, not a new
 product implementation. Scout works today; the first offline Decision Lab evidence
 contract was implemented on 2026-10-17, with matched candidate league baselines on
@@ -362,7 +370,7 @@ Lab. The 2026-10-16 [bounded accessibility review](ACCESSIBILITY.md) closes the 
 surface boundary, with actual screen-reader/cross-browser coverage still unverified.
 P1.5's offline contract, baselines and support/uncertainty are independently
 reconciled; its comparison/opponent policy completes the descriptive foundation,
-not prediction, causal or preferred-call validation. Preserve operational
-evidence/case-study goals as P1.10; model/enrichment gates may explicitly defer an
-integration so they do not force unvalidated features into the basic decision product.
+not prediction, causal or preferred-call validation. P1.10 now contains only the
+local portfolio finish line. Production operations, deployment and additional
+model/enrichment integration are optional; their deferral does not keep v1 open.
 No deployment, automatic merges or 8 AM automation changes are authorized here.

@@ -86,6 +86,11 @@ jobs:
       - name: Install locked browser test dependencies
         working-directory: web
         run: npm ci
+      - name: Local launcher startup, proxy and cleanup contracts
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -W error -m unittest discover -s tests_local -v
       - name: Install pinned Chromium and system dependencies
         working-directory: web
         run: npx playwright install --with-deps chromium
