@@ -370,7 +370,10 @@ Lab. The 2026-10-16 [bounded accessibility review](ACCESSIBILITY.md) closes the 
 surface boundary, with actual screen-reader/cross-browser coverage still unverified.
 P1.5's offline contract, baselines and support/uncertainty are independently
 reconciled; its comparison/opponent policy completes the descriptive foundation,
-not prediction, causal or preferred-call validation. P1.10 now contains only the
-local portfolio finish line. Production operations, deployment and additional
-model/enrichment integration are optional; their deferral does not keep v1 open.
+not prediction, causal or preferred-call validation. P1.10's local portfolio
+finish line is complete (2026-11-16): [startup](LOCAL_START.md), focused README,
+actual screenshots and [three reproducible examples](CASE_STUDY.md). No further
+architecture unit is queued without Aryan's explicit request. Production operations,
+deployment and additional model/enrichment integration are optional; their deferral
+does not keep v1 open.
 No deployment, automatic merges or 8 AM automation changes are authorized here.

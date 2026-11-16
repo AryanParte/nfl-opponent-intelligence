@@ -8,9 +8,11 @@ process cleanup is not supported). Use Python **3.11–3.13** and Node **24.19.0
 
 ## One-time setup
 
-From the repository root, after cloning:
+Clone the existing repository, then run setup from its root:
 
 ```sh
+git clone https://github.com/AryanParte/nfl-opponent-intelligence.git
+cd nfl-opponent-intelligence
 python3 -m venv .venv/local
 .venv/local/bin/python -m pip install -c requirements/api-constraints.txt '.[api]'
 npm --prefix web ci

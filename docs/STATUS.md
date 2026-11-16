@@ -1,62 +1,55 @@
 # Engineering status
 
-As of the manual scope/finishing run on **2026-11-15**:
+As of **2026-11-16**:
 
-- **Core Scout and bounded Run/Pass Decision Lab: complete.** P1.1–P1.9's
-  existing pipeline, provenance, filters, metrics, matched baselines, support/
-  uncertainty, FastAPI, React UI, user call selection, original JSON downloads
-  and browser/CI verification are preserved.
-- **Local portfolio v1: finishing.** The goal is a polished reproducible local
-  artifact that a reviewer can clone, run and understand. It is not a hosted SaaS,
-  startup, continuously operating service or always-fresh NFL platform.
-- **API container: merged** in PR #45 at `ff155a3`. It remains an optional local
-  path, with pinned inputs and a read-only explicit snapshot; no further
-  containerization is required.
-- **This unit:** `scripts/start_local.py` starts the existing single-worker API
-  and Vite viewer together using explicit local snapshot/source configuration,
-  waits for readiness and cleans up only owned processes. [Setup](LOCAL_START.md)
-  covers dependencies, one-time acquisition, failures and Ctrl-C cleanup. It does
-  not install, download, refresh, mutate data or change analytics.
+- **Local portfolio v1: complete on this branch; review/merge pending.** A reviewer
+  can clone, follow the [local setup](LOCAL_START.md), run Scout and the bounded
+  Run/Pass Decision Lab, inspect/download evidence and reproduce the methodology.
+- **Core product and local startup: complete and preserved.** P1.1–P1.9's pipeline,
+  provenance, filters, metrics, matched baselines, support/uncertainty, FastAPI,
+  React, call selection and original-response downloads are unchanged. PR #45's
+  optional API container and PR #46's one-terminal launcher are merged.
+- **Final finishing unit:** a focused [README](../README.md), actual Scout/Decision
+  screenshots and [three retrospective walkthroughs](CASE_STUDY.md), with exact
+  source/request/artifact evidence. The old README's detailed commands and code map
+  remain in [CLI_GUIDE.md](CLI_GUIDE.md). No runtime, tests, dependencies, analytics,
+  data acquisition or infrastructure were added or changed.
 
 ## Required finish line and continuation
 
-The [P1.10 checklist](../ROADMAP.md#p110--local-portfolio-finish-line) is the only
-remaining v1 work: simple startup, focused README/screenshots and a compact set
-of 2–3 defensible retrospective examples. This unit supplies startup and corrects
-scope; the presentation/example pass remains. Reuse the committed
-[CAR brief](examples/car-2024-reg-before-week-19.md), screenshots and
-[eight audited Run/Pass situations](DECISION_AUDIT.md). Link exact snapshot/cohort
-commands and visible numbers/denominators; add a representative Decision Lab
-screenshot and concise architecture/engineering explanation. No new product or
-football-model work is needed. A video outline is optional and filming is not a gate.
+All required [P1.10 items](../ROADMAP.md#p110--local-portfolio-finish-line) are
+satisfied: simple startup, presentation/screenshots and 2–3 reproducible examples.
+**There is no next implementation unit.** Aryan reviews/merges this completion PR.
+Do not duplicate pending work; after merge, retain the completed v1 state.
 
-After these required items are verified, mark **local portfolio v1 complete** here
-and in ROADMAP, with evidence links. Thereafter, do not implement, invent phases,
-reopen completed work, create no-change commits or select optional work in
-response to scheduled heartbeats. Further work requires an explicit new request
-from Aryan. The existing 8 AM automation settings remain unchanged.
+Scheduled heartbeats must not implement optional ideas, invent phases, reopen
+completed work, create no-change commits or start another project. Further work
+requires an explicit new request from Aryan. The existing 8 AM automation settings
+are unchanged. This is a local portfolio scope milestone, not a hosted release or
+a claim that operational/model validation is complete.
 
-Public deployment, scheduled ingestion, continuous freshness/retry/failure
-operations, production load testing, databases, orchestration, expert feedback,
-video production, cross-browser/WCAG certification, richer play families,
-fourth-down/tracking/spatial work and further models are recorded as
-[future/optional](../ROADMAP.md#future--optional-work--explicit-aryan-request-required),
-not v1 blockers. Existing honest limitations remain: retrospective source/model
-availability, exploratory rather than calibrated intervals, incomplete wider
-accessibility coverage, no preferred-call/causal validation, and deferred charting
-admission. Preserve these disclosures; their existence does not expand scope.
-The detailed verification records below are historical evidence, not an active
-queue: older "next" instructions are superseded by this finish line.
+Public hosting, scheduled ingestion, continuous freshness/retry/failure operations,
+production load testing, databases, orchestration, domain-expert feedback, video
+production, cross-browser/WCAG certification, richer play families, fourth-down,
+tracking/spatial work and further models remain [future/optional](../ROADMAP.md#future--optional-work--explicit-aryan-request-required).
+
+Limits remain explicit: exact replay needs the original snapshot/manifest; today's
+upstream release may differ. The data/model availability is retrospective,
+intervals are exploratory with uncalibrated coverage, candidate calls are observed
+categories and ranking/causal/opponent validation is absent. Wider accessibility
+coverage and charting admission remain deferred. None is an unfinished local v1
+requirement. Older verification/learning records retain history; their earlier
+"next" instructions are superseded by this completion boundary.
 
 ## Canonical repository and migration
 
 - Remote: https://github.com/AryanParte/nfl-opponent-intelligence
 - Stable clone: `/Users/aryanparte/Documents/nfl-opponent-intelligence`
-- Working branch: `codex/local-portfolio-startup`, from fetched `origin/main`
-  `ff155a3` after PR #45 merged. The stable clone was clean and matched its previous
-  upstream 0/0; no open PRs/review work remained. Merged-main
-  [CI #43772242189](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43772242189)
-  passed. Preserve all previous commits and do not merge this finishing PR yourself.
+- Working branch: `codex/local-portfolio-v1`, from fetched `origin/main`
+  `656e996` after PR #46 merged. The stable clone was clean and matched its previous
+  upstream 0/0; no open PRs or PR #46 reviews/comments remained. Merged-main
+  [CI #43775059282](https://github.com/AryanParte/nfl-opponent-intelligence/actions/runs/43775059282)
+  passed all nine jobs. Preserve all previous commits; Aryan merges the finishing PR.
 - Publication: consult this branch's PR for the exact pushed SHA, GitHub attribution
   and remote CI receipt. Local results below do not substitute for remote checks.
 - Previous Decision view/field review: [PR #41](https://github.com/AryanParte/nfl-opponent-intelligence/pull/41),
@@ -275,6 +268,47 @@ new work until Aryan explicitly requests it. This is a documentation update, not
 an alteration, duplication, disablement or rescheduling of the automation.
 
 ## Verification
+
+### Local portfolio presentation and v1 completion — 2026-11-16
+
+One documentation/evidence unit on the synced PR #46 base. A 150-line README
+introduces the football question, modes, real screenshots, local setup, shared
+architecture, strongest engineering choices and limitations. The prior detailed
+README walkthrough/code map is preserved in CLI_GUIDE with relative links fixed.
+CASE_STUDY curates three existing CAR cohorts without introducing a football model
+or a new analytics path. A capture receipt records full source provenance, exact
+requests, application commit and hashes for saved JSON and unedited screenshots.
+
+Real-source verification used the existing `23370d5…` snapshot acquired 2026-09-30;
+no new data was fetched. The launcher served the API and viewer together:
+
+- Scout CAR REG before week 19 reproduces the full committed report (984 plays /
+  17 games) as parsed JSON, including baselines and 1,000-draw seeded uncertainty.
+- Decision first-and-ten (189 Run / 198 Pass) and third-and-four before week 10
+  (3 Run / 10 Pass) reproduce the existing independent audit's selected values.
+  Both actual browser downloads equal the saved decoded API response bytes.
+- The independent eight-case raw-record audit replays the complete receipt exactly:
+  34,902 eligible identities and 144 interval entries. It checks arithmetic and
+  implementation, not causal interpretation, model accuracy or nominal coverage.
+- Actual 1440 × 1100 screenshots were visually inspected; all three browser queries
+  produced no page errors. The sparse example retains three-game insufficient
+  EPA support, null Run bounds and the mandatory no-preferred-call policy.
+- Demo services were stopped through their verified owned launcher; test servers
+  are separately created from synthetic snapshots. No existing service is reused.
+
+Local verification: **453 core / 45 API tests** on Python 3.13 with warnings as
+errors, **1,150 frontend tests**, TypeScript/build, **10 launcher checks** and
+**40 desktop/narrow Chromium cases** pass. Owned demo/test servers stopped.
+The optional container inputs are unchanged; no local Docker rebuild is claimed. The PR's remote CI
+covers all nine jobs, including core/API Python 3.11–3.13 and the container.
+
+Complete-diff review verifies report/screenshot hashes, table values/denominators,
+relative links, preserved command content and historical logs, and consistent
+completion/stop instructions. It keeps the raw snapshot in the local cache,
+distinguishes the original acquisition from current upstream revisions, and avoids
+interpreting interval overlap or positive means as a preferred-call test. See the
+PR for final pushed SHA, attribution and remote CI; local checks do not prove
+publication or a merge. No automation settings changed.
 
 ### Local portfolio scope and one-terminal startup — 2026-11-15 (manual)
 

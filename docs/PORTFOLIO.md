@@ -2,16 +2,15 @@
 
 For this repository, success means a reviewer can clone, run locally, explore
 Scout/Decision Lab and understand the evidence. Current core functionality is
-complete. The only finishing work is simple startup, focused README/screenshots
-and 2–3 reproducible retrospective examples. Reuse the committed CAR brief and
-[Run/Pass audit](DECISION_AUDIT.md); keep cohort cutoffs, denominators, hashes and
-limitations explicit. A short video outline can help but producing a video or
-obtaining domain feedback is not a completion gate. No public deployment,
-production operations or further model work is needed.
+complete. **Local portfolio v1 is complete (2026-11-16)** with
+[one-terminal startup](LOCAL_START.md), focused [README](../README.md), actual
+screenshots and [three retrospective examples plus a demo outline](CASE_STUDY.md).
+The examples reuse the CAR brief and [Run/Pass audit](DECISION_AUDIT.md), retaining
+cutoffs, denominators, hashes and limitations. Video production and domain feedback
+are optional, as are public deployment, operations and further models.
 
-After the [local v1 checklist](../ROADMAP.md#p110--local-portfolio-finish-line)
-is satisfied, mark it complete and stop autonomous development. Broader personal
-website/profile/resume and other-project ideas below require a separate explicit
+The [local v1 checklist](../ROADMAP.md#p110--local-portfolio-finish-line) is satisfied;
+stop autonomous development. Broader personal website/profile/resume and other-project ideas below require a separate explicit
 request; they must not become mandatory work for this repository's v1.
 
 Working positioning: “Software engineer building reproducible data systems and
@@ -23,7 +22,8 @@ reproducible demo, tested football definitions, and honest scope in this repo.
 Before a case study can claim football findings, verify real data, document the
 cohort, and show uncertainty and failure cases.
 
-The earlier public review identified these useful foundations:
+The earlier public review identified these optional foundations for a separately
+requested portfolio pass:
 
 - [API Integration Hub](https://github.com/AryanParte/API-Integration-Hub-Notification-Service):
   explain queues, idempotency, retry behavior, audit logs, and test evidence.
@@ -36,7 +36,7 @@ older conversation without checking current implementation and verification.
 The existing FantasyFootball notebook can remain as historical coursework;
 archiving, deleting, or replacing repositories is not part of today's increment.
 
-When ready, each sports project needs a problem statement, intended user, data
-provenance, definitions, architecture, validation, actual findings, limitations,
+For any future separately requested project, useful presentation includes a problem
+statement, intended user, data provenance, definitions, architecture, validation, actual findings, limitations,
 reproducible demo, and code link. Add screenshots once a working interface exists.
 Publish focused work on a feature branch/PR before changing presentation broadly.
