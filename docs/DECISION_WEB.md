@@ -434,10 +434,12 @@ P1.9 is complete within its bounded local, descriptive scope. Assistive-technolo
 real-device, zoom and cross-browser coverage remain explicit release-readiness
 limitations, not local v1 blockers; model/causal validity is not implied by UI tests.
 
-The API-only container is merged and remains optional. Finish the local portfolio
-with the [small launcher](LOCAL_START.md), focused README/screenshots and 2–3
-reproducible retrospective examples using existing data and reports. Wider browser
-or assistive-technology evaluation, certification, frontend orchestration,
+The API-only container is merged and remains optional. Local portfolio v1 is
+complete with the [small launcher](LOCAL_START.md), focused [README](../README.md),
+actual screenshots and [three reproducible examples](CASE_STUDY.md) from existing
+reports. No next UI unit is queued; further work requires Aryan's explicit request.
+Wider browser or assistive-technology evaluation, certification, frontend
+orchestration,
 deployment, operational infrastructure and more models are future/optional work,
 not required to complete v1. The [roadmap](../ROADMAP.md) defines the finite
 acceptance checklist and stop condition; do not expand the completed core.

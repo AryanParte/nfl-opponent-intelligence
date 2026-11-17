@@ -1,0 +1,137 @@
+{
+  "kind": "retrospective_local_portfolio_capture",
+  "captured_on": "2026-11-16",
+  "application_commit": "656e996911bf210516088577bbd2304b29aa1566",
+  "source": {
+    "label": "nflverse 2024 retrospective snapshot; acquired 2026-09-30 UTC",
+    "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+    "snapshot": {
+      "archive": {
+        "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+        "size_bytes": 19362351
+      },
+      "decoded_csv": {
+        "sha256": "6ae564c2c49378ec531303292966caee596982278b9fcdad9c9dd0a0dc16bfa7",
+        "size_bytes": 99483794
+      },
+      "license": {
+        "attribution": "nflverse play-by-play data",
+        "identifier": "CC-BY-4.0",
+        "modifications": "Archive retained byte-for-byte; no data transformations.",
+        "source_url": "https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "retrieved_at_utc": "2026-09-30T00:19:00.168819+00:00",
+      "schema_version": 1,
+      "season": 2024,
+      "source": {
+        "asset_id": 512957856,
+        "asset_name": "play_by_play_2024.csv.gz",
+        "asset_updated_at_utc": "2026-08-13T12:26:27Z",
+        "download_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+        "release_api_url": "https://api.github.com/repos/nflverse/nflverse-data/releases/tags/pbp",
+        "release_id": 58152862,
+        "release_tag": "pbp",
+        "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+        "size_bytes": 19362351
+      }
+    }
+  },
+  "scope": "Derived aggregates and unaltered UI screenshots; no raw rows. Descriptive software evidence, not model or policy validation.",
+  "cases": [
+    {
+      "id": "car-full-scout",
+      "route": "/api/v1/report",
+      "query": {
+        "team": "CAR",
+        "season": 2024,
+        "compare_league": true,
+        "before_week": 19,
+        "bootstrap_repetitions": 1000,
+        "bootstrap_seed": 20261006
+      },
+      "artifact": "car-2024-reg-before-week-19.report.json",
+      "screenshot": "portfolio-scout.png"
+    },
+    {
+      "id": "car-full-first-ten",
+      "route": "/api/v1/decision",
+      "query": {
+        "team": "CAR",
+        "season": 2024,
+        "compare_league": true,
+        "before_week": 19,
+        "down": 1,
+        "distance_min": 10,
+        "distance_max": 10,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17
+      },
+      "artifact": "portfolio-first-and-ten.decision.json",
+      "screenshot": "portfolio-decision.png"
+    },
+    {
+      "id": "car-midseason-third-four",
+      "route": "/api/v1/decision",
+      "query": {
+        "team": "CAR",
+        "season": 2024,
+        "compare_league": true,
+        "before_week": 10,
+        "down": 3,
+        "distance_min": 4,
+        "distance_max": 4,
+        "bootstrap_repetitions": 200,
+        "bootstrap_seed": 17
+      },
+      "artifact": "portfolio-third-and-four.decision.json"
+    }
+  ],
+  "query_defaults": {
+    "season_type": "REG",
+    "side": "offense (Scout; Decision is always offense)",
+    "minimum_plays": 30,
+    "optional_context": "No field, score, period or clock bounds"
+  },
+  "screenshots": {
+    "viewport_width": 1440,
+    "viewport_height": 1100,
+    "device_scale_factor": 1,
+    "browser": "Chromium via Playwright 1.64.1",
+    "capture": "Viewport at the result article, 24px top margin; no image edits."
+  },
+  "artifacts": [
+    {
+      "path": "car-2024-reg-before-week-19.report.json",
+      "sha256": "30b03e7436333be6082830f371eaaeb65035064c801ca2a864a3baa879512395",
+      "size_bytes": 70067
+    },
+    {
+      "path": "portfolio-first-and-ten.decision.json",
+      "sha256": "da0d1589b524a04e94d3b5330499d2679670f82314eb2f11e4d99c4e6c61d417",
+      "size_bytes": 13706
+    },
+    {
+      "path": "portfolio-third-and-four.decision.json",
+      "sha256": "8e1d776ab35cd901c74d98a0005bbdcda58ce1977cabcaf2f00b71f8710574fb",
+      "size_bytes": 13363
+    },
+    {
+      "path": "portfolio-scout.png",
+      "sha256": "186afa4cdb901d939d13421f95452a9809a37facee6d8df3f0c2ff83cdf18b87",
+      "size_bytes": 145000
+    },
+    {
+      "path": "portfolio-decision.png",
+      "sha256": "2f52829685c9c27eb2ac51332a4225f9aa050d4c1abbdb77a55e60aef72b3a4a",
+      "size_bytes": 170428
+    }
+  ],
+  "verification": [
+    "Scout parsed JSON equals the existing reference report.",
+    "Both Decision responses and native browser downloads equal their saved response bytes.",
+    "Existing independent eight-case decision audit receipt replays exactly.",
+    "Screenshots visually inspected; no page errors during all three queries."
+  ],
+  "replay": "../CASE_STUDY.md#reproduce-the-artifacts"
+}

@@ -1,6 +1,6 @@
 # Sports portfolio roadmap
 
-## Local portfolio v1 — current scope (2026-11-15)
+## Local portfolio v1 — complete (2026-11-16)
 
 This repository demonstrates sports analytics and software engineering through a
 polished, reproducible **personal local portfolio project**. A reviewer should be
@@ -9,24 +9,24 @@ Decision Lab, download evidence, and understand the football methods and tests.
 It is not a hosted SaaS, startup, always-fresh NFL feed or production-operations
 project. The former 16-week direction is historical context, not remaining scope.
 
-**Core product: complete. Local portfolio v1: finishing.** P1.1–P1.9's bounded
+**Core product: complete. Local portfolio v1: complete.** P1.1–P1.9's bounded
 contracts, UI, downloads and verification are built. Do not reopen those phases.
 PR #45's optional API container is merged at `ff155a3`; preserve it without making
 Docker or further orchestration a prerequisite. Existing model/charting audits
 remain useful evidence; deferred capabilities do not prevent v1 completion.
 
-Only the required checklist in [P1.10](#p110--local-portfolio-finish-line) remains.
-This run's single finishing unit is a small local launcher and its setup/cleanup
-checks, alongside this scope correction. README presentation and the compact
-retrospective example package are the subsequent finishing unit; reuse existing
-screenshots, briefs and independent cohort audits rather than build more product.
+All required [P1.10](#p110--local-portfolio-finish-line) items are satisfied on
+this branch. PR #46 supplied the local launcher; the final presentation unit adds
+a focused README, actual Scout/Decision screenshots and a reproducible
+[three-case walkthrough](docs/CASE_STUDY.md). See [verification](docs/STATUS.md).
+PR review/merge remains Aryan's action; no additional implementation unit is queued.
 
-**Stop condition:** when P1.10's required items are satisfied, mark local portfolio
-v1 **complete** here and in `docs/STATUS.md`, with verification/evidence links.
-After that, scheduled runs must not select optional work, add mandatory phases,
-create activity commits or start another project. Future work requires an explicit
-new request from Aryan. A heartbeat alone does not reopen the completed project.
-Do not change the existing 8 AM automation configuration in this scope update.
+**Stop condition reached:** after publication, scheduled runs must not select
+optional work, add mandatory phases, create activity commits or start another
+project. While this completion PR is pending, do not duplicate it. After merge,
+keep v1 complete. Future work requires an explicit new request from Aryan; a
+heartbeat alone does not reopen the project. The existing 8 AM automation
+configuration is unchanged.
 
 GitHub is the source of truth: https://github.com/AryanParte/nfl-opponent-intelligence.
 Sync `/Users/aryanparte/Documents/nfl-opponent-intelligence`, inspect main/PRs/CI,
@@ -431,18 +431,19 @@ Required for v1, and no more:
       `scripts/start_local.py` passes ten local integration/lifecycle checks; the
       existing 40-case browser suite and pinned real-snapshot smoke also pass.
       See [setup and cleanup](docs/LOCAL_START.md).
-- [ ] Portfolio-facing README: quickly explain the football question, Scout versus
-      Decision Lab, representative screenshots, concise architecture, strongest
-      engineering choices, local setup and honest data/statistical limitations.
-      Reuse existing evidence; avoid a chronological implementation diary at the top.
-- [ ] Compact retrospective example package: 2–3 defensible situations with exact
-      snapshot/cohort/commands, observed numbers, denominators and limitations.
-      Start from the committed CAR brief and pinned Run/Pass audit; do not invent
-      conclusions or require new data/models. Video outline is optional; producing
-      a video does not block code completion.
-- [ ] Mark **local portfolio v1 complete** once the three items above are verified.
-      Preserve the final checks, limitations and explicit stop condition in STATUS.
-      Optional work below must not keep v1 open.
+- [x] Portfolio-facing README (2026-11-16): football question, two modes, actual
+      Scout/Decision screenshots, concise shared architecture, engineering choices,
+      clone/setup and statistical/data limitations. The detailed commands and code
+      map are preserved in [CLI_GUIDE.md](docs/CLI_GUIDE.md).
+- [x] Compact retrospective example package (2026-11-16): [three CAR cases](docs/CASE_STUDY.md)
+      from the existing pinned snapshot and audit—season-level Scout, first-and-ten
+      and thin third-and-four evidence. Exact UI/API inputs, source and artifact
+      hashes, saved JSON, honest interpretations and an optional demo outline.
+      Audit receipt replay, actual UI/download comparisons and visual review passed.
+- [x] **Local portfolio v1 complete (2026-11-16).** Required local startup,
+      presentation and case-study work is verified; [STATUS](docs/STATUS.md)
+      retains checks, limitations and the stop condition. No further required v1
+      unit remains. Optional ideas below do not reopen the project.
 
 Already complete and preserved: the API-only container, verified on Linux
 amd64/arm64 with pinned inputs, an explicit read-only snapshot, non-root serving

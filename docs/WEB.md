@@ -730,9 +730,11 @@ completed state. Selection never fetches, mutates evidence or reverses the contr
 Decision downloads now preserve the original decoded API text, independent of the
 local choice, with ready-only links, distinct safe filenames and shared owned-URL
 cleanup. This closes P1.9's bounded local UI scope. The optional API container is
-merged. Local portfolio v1 needs only the
-[launcher](LOCAL_START.md), focused README presentation and a small reproducible
-retrospective example package. Frontend packaging, deployment and operations are
+merged. Local portfolio v1 is now complete with the
+[launcher](LOCAL_START.md), focused [README](../README.md), actual screenshots and
+[three reproducible retrospective examples](CASE_STUDY.md). No next UI unit is
+queued; further work requires Aryan's explicit request. Frontend packaging,
+deployment and operations are
 [future/optional work](../ROADMAP.md#future--optional-work--explicit-aryan-request-required).
 Screen-reader, real-device, browser-zoom and cross-browser evaluation remain
 documented optional coverage, not v1 blockers; see [the follow-up checklist](ACCESSIBILITY.md#remaining-coverage).

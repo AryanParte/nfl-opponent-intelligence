@@ -3637,3 +3637,66 @@ screenshot; a video outline is optional. Once verified, mark local portfolio v1
 complete in roadmap/status and stop autonomous implementation until Aryan explicitly
 requests more. The 8 AM automation configuration is unchanged. No new mandatory
 production, modeling or enrichment phases, PR merge or auto-merge.
+
+## 2026-11-16 — Local portfolio v1 presentation and completion
+
+**Built / why:** finished the finite local portfolio with a focused README, actual
+Scout/Decision Lab screenshots and three reproducible retrospective walkthroughs.
+Preserved the former README's detailed CLI/API commands and code map in
+`docs/CLI_GUIDE.md`. Reused the existing CAR brief and two independently audited
+Run/Pass cohorts, retaining exact inputs, denominators, saved responses and hashes.
+Updated roadmap/status and related continuation guides to mark local portfolio v1
+complete; no further implementation unit is queued. PR review/merge remains Aryan's
+action. This packages evidence a reviewer can inspect instead of expanding scope.
+
+**Review files:** `README.md`, `docs/CASE_STUDY.md`, `docs/CLI_GUIDE.md`,
+`docs/examples/portfolio-replay.json`, the two new Decision JSON examples and
+Scout/Decision screenshots, `ROADMAP.md`, `docs/STATUS.md`. Existing runtime,
+analytics, API/UI, tests, dependencies, source snapshots and container are unchanged.
+
+**Sports analytics concepts:** the full-season CAR Scout cohort (984 plays /
+17 games) and exact first-and-ten cohort (189 Run / 198 Pass) answer different
+questions. League baselines exclude CAR in the same role and compare the matching
+candidate. On third-and-four before week 10, Run has only 3 plays in 3 games;
+frequency uses the 13-play/8-game parent, while EPA needs observed candidate
+support. A larger league sample cannot fill missing team evidence. Pass includes
+sacks/scrambles; observed categories do not identify the intended call.
+
+**Software/statistical concepts / learn:** distinguish reproducible presentation
+from new analysis. Original response downloads and source/artifact hashes make a
+screenshot traceable. Preserve long-form technical detail while giving reviewers
+a short entry point. Independent raw-record arithmetic checks validate code, not
+EPA's underlying model, causality, bootstrap coverage or a preferred play. Keep
+retrospective acquisition timing explicit and do not substitute current upstream
+bytes for a pinned example. A finite definition of done prevents optional future
+ideas from becoming endless mandatory work.
+
+**Three review questions:**
+
+1. Why can CAR's season-level EPA be negative while both first-and-ten candidate averages are positive, without either result identifying an optimal call?
+2. Why does the third-and-four Run frequency have eight supporting games while Run EPA has three, and what does its null interval mean?
+3. How would you reproduce a saved case and verify its source/download identity, and what should you do if today's upstream snapshot differs?
+
+**Verification / self-review:** the existing eight-case independent audit receipt
+replays exactly (34,902 eligible identities, 144 interval entries). All three actual
+HTTP responses match saved reports; both Decision native browser downloads equal
+their decoded response bytes. Visually reviewed two unedited 1440 × 1100 screenshots;
+all three queries produced no page errors. 453 core / 45 API tests pass on Python
+3.13 with warnings as errors; 1,150 frontend tests, TypeScript/build, ten launcher
+checks and 40 desktop/narrow Chromium cases pass. Demo/test services were stopped.
+The unchanged API container was not rebuilt locally; remote CI supplies that check.
+
+Complete-diff review checked table values, candidate/parent denominators, interval
+states, provenance and artifact hashes; verified relative paths/anchors, preserved
+CLI command content, completed phases and historical learning/status records; and
+kept the no-preferred-call policy and uncalibrated/retrospective limitations clear.
+Fixed capture-selector matching for a select control, clarified Playwright versus
+browser version metadata, and removed stale current continuation prose. No product
+bug or statistical change was needed. The PR records publication, SHA/attribution
+and final remote CI, separate from these local results.
+
+**Remaining / next:** Aryan reviews/merges this finishing PR. No required local v1
+work remains. Do not duplicate a pending completion PR; after merge, keep v1
+complete and stop autonomous development unless Aryan explicitly requests more.
+Optional production/model/enrichment/portfolio ideas remain documented, not queued.
+The existing 8 AM automation configuration is unchanged. No merge or auto-merge.
